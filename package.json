@@ -1,6 +1,7 @@
 {
   "name": "create-next-example-app",
   "scripts": {
+    "cypress:open":"cypress open",
     "dev": "next",
     "build": "next build",
     "start": "next start"
@@ -9,5 +10,8 @@
     "next": "^9.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "cypress": "^3.4.1"
   }
 }
