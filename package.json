@@ -1,7 +1,7 @@
 {
   "name": "create-next-example-app",
   "scripts": {
-    "cypress:open":"cypress open",
+    "cypress:open": "cypress open",
     "dev": "next",
     "build": "next build",
     "start": "next start"
