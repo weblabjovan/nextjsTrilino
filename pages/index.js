@@ -21,7 +21,7 @@ const Home = () => {
       <Nav />
 
       <div className="hero">
-        <h1 className="title">This web site is under construction 2</h1>
+        <h1 className="title">This web site is under construction 3</h1>
         <p className="description">
           To get started, edit the <code>pages/index.js</code> or <code>pages/api/date.js</code> files, then save to reload.
         </p>
