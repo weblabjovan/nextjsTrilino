@@ -6,6 +6,7 @@ import Nav from '../components/nav'
 const Home = () => {
   const [date, setDate] = useState(null);
 
+
   useEffect(() => {
     async function getDate() {
       const res = await fetch('/api/date');
@@ -31,6 +32,7 @@ const Home = () => {
             ? <span><b>{date.date}</b></span>
             : <span className="loading"></span>}
         </p>
+        <span>{process.env.NODE_ENV}</span>
 
         <div className='row'>
           <Link href='https://github.com/zeit/next.js#setup'>
