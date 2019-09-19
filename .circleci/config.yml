@@ -46,7 +46,7 @@ jobs:
                         now --token $ZEIT_TOKEN --local-config .now/now.staging.json
                         now --token $ZEIT_TOKEN --local-config .now/now.staging.json alias
                     else
-                        echo here!
+                        echo here "${CIRCLE_BRANCH}"!
                     fi
 workflows:
     version: 2
