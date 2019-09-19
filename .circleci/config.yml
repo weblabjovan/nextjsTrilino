@@ -56,6 +56,8 @@ workflows:
         jobs:
             - checkout
             - cypress/run:
-                record: true
-                start: npm start
+                requires:
+                    - checkout
             - deploy
+              requires:
+                    - cypress/run
