@@ -40,7 +40,7 @@ jobs:
                 name: Install Dependencies
                 command: npm ci
             - save_cache:
-                - npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
+                key: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
                 # cache NPM modules and the folder with the Cypress binary
                 paths:
                   - ~/.npm
