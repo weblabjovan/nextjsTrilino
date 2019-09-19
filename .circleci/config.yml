@@ -39,7 +39,7 @@ jobs:
                 command: npm install cypress
             - run:
                 name: lbk Install
-                command:  $ sudo apt install libgtk-3-0
+                command: npm install libgtk-3-0
             - run:
                 name: Unit Test
                 command: $(npm bin)/cypress run
