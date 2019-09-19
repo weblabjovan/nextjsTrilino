@@ -3,7 +3,9 @@ defaults: &defaults
         - image: circleci/node:8.10.0
     working_directory: ~/tmp/circlci-now
 
-version: 2
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.2.0
 jobs:
     checkout:
         <<: *defaults
@@ -26,14 +28,6 @@ jobs:
             - persist_to_workspace:
                 root: .
                 paths: .
-    unit-test:
-        <<: *defaults
-        steps:
-            - attach_workspace:
-                at: ~/tmp/circlci-now
-            - run:
-                name: Unit Test
-                command: $(npm bin)/cypress run
     deploy:
         <<: *defaults
         steps:
@@ -61,9 +55,7 @@ workflows:
     test-deploy-purge:
         jobs:
             - checkout
-            - unit-test:
-                requires:
-                    - checkout
-            - deploy:
-                requires:
-                    - unit-test
+            - cypress/run:
+                record: true
+                start: npm start
+            - deploy
