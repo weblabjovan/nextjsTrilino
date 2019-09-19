@@ -1,6 +1,5 @@
 {
     "name": "circleci-with-zeith-now-staging",
-    "type": "npm",
-    "forwardNpm": true,
+    "version": 2,
     "alias": ["test.trilino.com"]
 }
