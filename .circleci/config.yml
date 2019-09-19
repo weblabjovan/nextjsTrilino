@@ -31,21 +31,18 @@ jobs:
         steps:
             - attach_workspace:
                 at: ~/tmp/circlci-now
-            - restore_cache:
-                keys:
-                    - npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
-                    - npm-cache-{{ .Branch }}
-                    - npm-cache-
             - run:
-                name: Install Dependencies
-                command: npm ci
-            - save_cache:
-                key: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
-                # cache NPM modules and the folder with the Cypress binary
-                paths:
-                  - ~/.npm
-                  - ~/.cache
-            - run: $(npm bin)/cypress run
+                name: NPM Install
+                command: npm install
+            - run:
+                name: Cypress Install
+                command: npm install cypress
+            - run:
+                name: gtk Install
+                command: npm i node-gtk
+            - run:
+                name: Unit Test
+                command: $(npm bin)/cypress run
     deploy:
         <<: *defaults
         steps:
