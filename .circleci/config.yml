@@ -46,9 +46,7 @@ jobs:
                         now --token $ZEIT_TOKEN --local-config .now/now.staging.json
                         now --token $ZEIT_TOKEN --local-config .now/now.staging.json alias
                     else
-                        .now/now.feature.sh
-                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json
-                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json alias
+                        echo here!
                     fi
 workflows:
     version: 2
