@@ -58,3 +58,4 @@ workflows:
             - cypress/run:
                 requires:
                     - checkout
+            . deploy
