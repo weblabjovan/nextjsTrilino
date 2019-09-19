@@ -35,6 +35,9 @@ jobs:
                 name: NPM Install
                 command: npm install
             - run:
+                name: Cypress Install
+                command: npm install cypress
+            - run:
                 name: Unit Test
                 command: $(npm bin)/cypress run
     deploy:
