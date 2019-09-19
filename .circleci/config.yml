@@ -2,8 +2,6 @@ defaults: &defaults
     docker:
         - image: circleci/node:8.10.0
     working_directory: ~/tmp/circlci-now
-    - image: cypress/base:8
-    working_directory: ~/tmp/cypress
 
 version: 2
 jobs:
@@ -32,7 +30,7 @@ jobs:
         <<: *defaults
         steps:
             - attach_workspace:
-                at: ~/tmp/cypress
+                at: ~/tmp/circlci-now
             - restore_cache:
                 keys:
                   - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
