@@ -1,26 +1,60 @@
-version: 2
-jobs:
-  build:
+defaults: &defaults
     docker:
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    working_directory: ~/app
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-            - v1-deps-{{ .Branch }}
-            - v1-deps
-      - run:
-          name: Install Dependencies
-          command: npm ci
-      - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          # cache NPM modules and the folder with the Cypress binary
-          paths:
-            - ~/.npm
-            - ~/.cache
-      - run: $(npm bin)/cypress run
+        - image: circleci/node:8.10.0
+    working_directory: ~/tmp/circlci-now
+
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.2.0
+jobs:
+    checkout:
+        <<: *defaults
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ~/tmp/circlci-now
+            - restore_cache:
+                keys:
+                    - npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
+                    - npm-cache-{{ .Branch }}
+                    - npm-cache-
+            - run:
+                name: NPM Install
+                command: npm install
+            - save_cache:
+                key: npm-cache-{{ .Branch }}-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
+            - persist_to_workspace:
+                root: .
+                paths: .
+    deploy:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+                at: ~/tmp/circlci-now
+            - run:
+                name: Install Now CLI
+                command: sudo npm install --global --unsafe-perm now
+            - deploy:
+                name: Deploy & Alias
+                command: |
+                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        now --token $ZEIT_TOKEN --local-config .now/now.production.json
+                        now --token $ZEIT_TOKEN --local-config .now/now.production.json alias
+                    elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+                        now --token $ZEIT_TOKEN --local-config .now/now.staging.json
+                        now --token $ZEIT_TOKEN --local-config .now/now.staging.json alias
+                    else
+                        ./.now/now.feature.sh
+                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json
+                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json alias
+                    fi
+workflows:
+    version: 2
+    test-deploy-purge:
+        jobs:
+            - checkout
+            - cypress/run:
+                requires:
+                    - checkout
