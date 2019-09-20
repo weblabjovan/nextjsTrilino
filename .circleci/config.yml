@@ -44,7 +44,6 @@ jobs:
                         now --token ${ZEIT_TOKET} --local-config .now/now.production.json alias
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
                         now --token ${ZEIT_TOKET} --local-config .now/now.staging.json
-                        now --token ${ZEIT_TOKET} --local-config .now/now.staging.json alias
                     else
                         echo here!
                     fi
