@@ -1,6 +1,6 @@
 defaults: &defaults
     docker:
-        - image: circleci/node:8.10.0
+        - image: circleci/node:10.16.3
     working_directory: ~/tmp/circlci-now
 
 version: 2.1
@@ -40,15 +40,12 @@ jobs:
                 name: Deploy & Alias
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --token $ZEIT_TOKEN --local-config .now/now.production.json
-                        now --token $ZEIT_TOKEN --local-config .now/now.production.json alias
-                    elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-                        now --token $ZEIT_TOKEN --local-config .now/now.staging.json
-                        now --token $ZEIT_TOKEN --local-config .now/now.staging.json alias
+                        now --token ${ZEIT_TOKET} --local-config .now/now.production.json
+                        now --token ${ZEIT_TOKET} --local-config .now/now.production.json alias
+                    elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
+                        now --token ${ZEIT_TOKET} --local-config .now/now.staging.json
                     else
-                        ./.now/now.feature.sh
-                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json
-                        now --token $ZEIT_TOKEN --local-config .now/now.feature.json alias
+                        echo here!
                     fi
 workflows:
     version: 2
@@ -58,3 +55,6 @@ workflows:
             - cypress/run:
                 requires:
                     - checkout
+            - deploy:
+                requires:
+                    - cypress/run
