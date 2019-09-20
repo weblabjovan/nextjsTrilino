@@ -22,7 +22,7 @@ const Home = () => {
       <Nav />
 
       <div className="hero">
-        <h1 className="title">Stage promena 1</h1>
+        <h1 className="title">Master promena</h1>
         <p className="description">
           To get started, edit the <code>pages/index.js</code> or <code>pages/api/date.js</code> files, then save to reload.
         </p>
@@ -32,7 +32,6 @@ const Home = () => {
             ? <span><b>{date.date}</b></span>
             : <span className="loading"></span>}
         </p>
-        <span>{process.env.NODE_ENV}</span>
 
         <div className='row'>
           <Link href='https://github.com/zeit/next.js#setup'>
