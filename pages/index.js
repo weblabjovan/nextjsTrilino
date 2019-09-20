@@ -9,7 +9,7 @@ const Home = () => {
 
   useEffect(() => {
     async function getDate() {
-      const res = await fetch('/api/date');
+      const res = await fetch('https://apitrilino.jovansutic.now.sh/api/date');
       const newDate = await res.json();
       setDate(newDate);
     }
