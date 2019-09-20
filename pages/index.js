@@ -22,7 +22,7 @@ const Home = () => {
       <Nav />
 
       <div className="hero">
-        <h1 className="title">Master promena 3</h1>
+        <h1 className="title">Finalna promena stage</h1>
         <p className="description">
           To get started, edit the <code>pages/index.js</code> or <code>pages/api/date.js</code> files, then save to reload.
         </p>
