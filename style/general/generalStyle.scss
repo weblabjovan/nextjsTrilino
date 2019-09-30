@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Istok+Web:400,700|Roboto:300,400,700&display=swap&subset=latin-ext" rel="stylesheet"');
+
+$headFont: 'Istok Web', sans-serif;
+$regFont: 'Roboto', sans-serif;
+
+.middle{
+	text-align: center;
+}
+
+h1, h2, h3, h4{
+	font-family: $headFont;
+	font-weight: 600;
+}
+
+.intro{
+	margin-top: 80px;
+
+	h1, h2, h3, h4{
+		margin-bottom: 40px;
+		@media only screen and (max-width: 600px) {
+  			font-size: 28px;
+  			line-height: 30px;
+		}
+	}
+}
