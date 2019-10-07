@@ -1,3 +1,47 @@
 .container{
 	max-width: 90%;
 }
+
+.navbar-toggler{
+	padding: 5px 10px;
+}
+
+.navbar{
+	background-color: #fff;
+	border-bottom: 1px solid #eaeaea;
+
+	button:focus{
+		outline: none;
+	}
+
+	.navbar-nav{
+		hr{
+			width: 100%;
+			background-color: #ccc;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+	}
+
+	.btn-secondary{
+		color: #000;
+	    background-color: #fff !important;
+	    border: none;
+	    outline: none;
+	    transition: 125000;
+	    box-shadow: none;
+	}
+
+	.btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle{
+		color: #000;
+	    background-color: #fff !important;
+	    border: none;
+	}
+
+	.btn-secondary:not(:disabled):not(.disabled).active:focus, .btn-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-secondary.dropdown-toggle:focus{
+		box-shadow: none;
+	}
+	.dropdown-menu{
+		min-width: 20px;
+	}
+}
