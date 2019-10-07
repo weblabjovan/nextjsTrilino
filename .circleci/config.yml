@@ -46,16 +46,21 @@ jobs:
                         now --token ${ZEIT_TOKET} --local-config .now/now.staging.json
                         now --token ${ZEIT_TOKET} --local-config .now/now.staging.json alias
                     else
-                        echo here!
+                        now --token ${ZEIT_TOKET} --local-config .now/now.staging.json alias
                     fi
 workflows:
     version: 2
     test-deploy-purge:
         jobs:
             - checkout
+            if [ "${CIRCLE_BRANCH}" == "master" ||  "${CIRCLE_BRANCH}" == "master"]; than
             - cypress/run:
                 requires:
                     - checkout
+            fi
             - deploy:
+                 if [ "${CIRCLE_BRANCH}" == "master" ||  "${CIRCLE_BRANCH}" == "master"]; than
                 requires:
                     - cypress/run
+                fi
+                
