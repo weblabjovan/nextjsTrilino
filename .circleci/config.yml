@@ -35,7 +35,7 @@ jobs:
                 at: ~/tmp/circlci-now
             - run:
                 name: Install Now CLI
-                command: sudo npm install --global --unsafe-perm now@16.1.4-canary.8
+                command: sudo npm install --global --unsafe-perm now@16.1.4-canary.16
             - deploy:
                 name: Deploy & Alias
                 command: |
@@ -44,7 +44,6 @@ jobs:
                         now --token ${ZEIT_TOKET} --local-config .now/now.production.json alias
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
                         now --token ${ZEIT_TOKET} --local-config .now/now.staging.json
-                        now --token ${ZEIT_TOKET} --local-config .now/now.staging.json alias
                     else
                         echo here!
                     fi
