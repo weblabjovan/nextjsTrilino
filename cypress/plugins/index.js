@@ -14,10 +14,6 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  const url = process.env.NODE_ENV === 'production' ? 'https://www.test.trilino.com' : 'http://localhost:3000';
-
-  // modify config values
-  config.env.URL = url;
 
   // return config
   return config
