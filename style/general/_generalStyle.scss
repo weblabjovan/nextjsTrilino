@@ -5,6 +5,35 @@ $regFont: 'Roboto', sans-serif;
 
 .totalWrapper{
 	background-color: #f9f9f9;
+
+	img{
+		max-width: 100%;
+	}
+}
+
+.colorWhite{
+	background-color: #fff;
+}
+
+.colorGrey{
+	background-color: #e0e0e0;
+}
+
+.bigPadDown{
+	padding-bottom: 50px;
+
+	@media only screen and (max-width: 600px){
+		padding-bottom: 20px;
+	}
+}
+
+.plainInput{
+	color: #444;
+    width: 100%;
+    font-size: 16px;
+    padding: 6px 10px;
+    border: solid #ccc 1px;
+    border-radius: 5px;
 }
 
 .middle{
@@ -14,6 +43,17 @@ $regFont: 'Roboto', sans-serif;
 h1, h2, h3, h4{
 	font-family: $headFont;
 	font-weight: 600;
+}
+
+p, span{
+	margin: 0px;
+	font-family: $regFont;
+}
+
+@media only screen and (max-width: 600px) {
+  	h2{
+  		font-size: 26px;
+  	}
 }
 
 .intro{

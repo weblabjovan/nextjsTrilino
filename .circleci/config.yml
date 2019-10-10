@@ -54,9 +54,6 @@ workflows:
         jobs:
             - checkout
             - cypress/run:
-                branches:
-                    only:
-                        -stage
                 requires:
                     - checkout
             - deploy:
