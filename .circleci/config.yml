@@ -43,7 +43,7 @@ jobs:
                         now --token ${ZEIT_TOKET} --local-config .now/now.production.json
                         now --token ${ZEIT_TOKET} --local-config .now/now.production.json alias
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --name circleci-with-zeith-now-staging --prod
+                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --prod
                     else
                         echo here!
                     fi
