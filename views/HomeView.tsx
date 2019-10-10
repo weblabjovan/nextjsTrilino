@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import queryString  from 'query-string';
 import { Container, Row, Col, Button } from 'reactstrap';
 import Select from 'react-select';
-import sr from 'date-fns/locale/sr';
+import hr from 'date-fns/locale/hr';
 import enUS from 'date-fns/locale/en-US';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { setUserLanguage } from '../actions/user-actions';
@@ -48,7 +48,7 @@ class HomeView extends React.Component <MyProps, MyState>{
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
        date: new Date(),
-      locale: 'sr',
+      locale: 'hr',
 
     };
 
@@ -57,8 +57,8 @@ class HomeView extends React.Component <MyProps, MyState>{
       registerLocale('en-us', enUS);
       this.setState({locale: 'en-us'})
     }else{
-      registerLocale('sr', sr);
-      this.setState({locale: 'sr'})
+      registerLocale('hr', hr);
+      this.setState({locale: 'hr'})
     }
   }
 
