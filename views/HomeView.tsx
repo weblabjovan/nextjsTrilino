@@ -290,7 +290,7 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12">
                 <h4>Imate igraonicu?</h4>
-                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. Vidi se promena</p>
+                <p>Novi feature There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. Vidi se promena</p>
                 <Button color="success">Saznajte više</Button>
               </Col>
                 
