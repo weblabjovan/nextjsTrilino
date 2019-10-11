@@ -1,21 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import queryString  from 'query-string';
 import { Container, Row, Col, Button } from 'reactstrap';
 import Select from 'react-select';
-import hr from 'date-fns/locale/hr';
-import enUS from 'date-fns/locale/en-US';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import PlainInput from '../components/form/input';
 import Footer from '../components/navigation/footer';
+import 'react-day-picker/lib/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-datepicker/dist/react-datepicker.css";
 import '../style/style.scss';
+
 
 interface MyProps {
   // using `interface` is also ok
@@ -31,7 +30,6 @@ interface MyState {
 	dictionary: object;
 	isMobile: boolean;
   date: Date;
-  locale: string;
 };
 
 class HomeView extends React.Component <MyProps, MyState>{
@@ -40,7 +38,7 @@ class HomeView extends React.Component <MyProps, MyState>{
     super(props);
 
     this.dateChange = this.dateChange.bind(this);
-    this.localize = this.localize.bind(this);
+    this.formatDate = this.formatDate.bind(this);
   }
 
 	state: MyState = {
@@ -48,24 +46,19 @@ class HomeView extends React.Component <MyProps, MyState>{
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
        date: new Date(),
-      locale: 'hr',
 
     };
 
-  localize(){
-    if (this.props.lang === 'en') {
-      registerLocale('en-us', enUS);
-      this.setState({locale: 'en-us'})
-    }else{
-      registerLocale('hr', hr);
-      this.setState({locale: 'hr'})
-    }
-  }
-
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-    this.localize();
 	}
+
+  formatDate(date, format, locale) {
+    if (this.props.lang === 'en') {
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    }
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  }
 
   dateChange = date => {
     this.setState({ date });
@@ -93,20 +86,26 @@ class HomeView extends React.Component <MyProps, MyState>{
         <div className="homescreen colorWhite">
           <Container>
             <Row>
-                <Col xs='12' sm="6">
+                <Col xs='12' sm="12" lg="6">
                   <div className="homeSearchWrapper">
                       <div className="box">
                         <h2>{ this.state.dictionary['homeTitle'] }</h2>
                         <form>
                           <Select options={options} instanceId="homeCity" className="homeInput" placeholder={ this.state.dictionary['uniCity'] }/>
                           <Select options={options} instanceId="homeDistrict" className="homeInput" placeholder={ this.state.dictionary['uniDistrict'] } />
-                          <DatePicker 
-                            selected={ this.state.date } 
-                            onChange={date => this.dateChange(date)} 
-                            className="homeInput" 
-                            locale={ this.state.locale }
-                            minDate={new Date()}
-                            />
+                          <DayPickerInput 
+                            value={ this.state.date }
+                            formatDate={ this.formatDate }
+                            placeholder="Izaberite datum"
+                            onDayChange= { this.dateChange }
+                            format="dd/mm/yyyy"
+                            dayPickerProps={{
+                              todayButton: datePickerLang[this.props.lang]['today'],
+                              selectedDays: [ this.state.date ],
+                              weekdaysShort: datePickerLang[this.props.lang]['daysShort'],
+                              months: datePickerLang[this.props.lang]['months']
+                            }}
+                           />
                         </form>
                         <Button color="success">{ this.state.dictionary['uniSearch'] }</Button>
                       </div>
@@ -115,7 +114,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <h3>{ this.state.dictionary['homeHeader_1'] }</h3>
                   </div>
                 </Col>
-                <Col sm="6" className="hidden-xs">
+                <Col lg="6" className="hidden-xs">
                   <img src="/static/home_1.jpg" alt={ this.state.dictionary['homeImg_1'] } ></img>
                 </Col>
               </Row>
@@ -127,7 +126,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
                 <Col xs="12">
-                  <div className="homeHeading hidden-sm">
+                  <div className="homeHeading hidden-xs-up">
                     <h3>{ this.state.dictionary['homeHeader_1'] }</h3>
                   </div>
                 </Col>
@@ -154,7 +153,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
                 <Col xs="12" sm="6" className="homeWhatImage">
-                  <div className="homeWhatImageInsert hidden-sm">
+                  <div className="homeWhatImageInsert hidden-xs-up">
                     <h4>{ this.state.dictionary['homeWhatBenTitle'] }</h4>
                     <p>{ this.state.dictionary['homeWhatBenMini'] }</p>
                   </div>
@@ -239,9 +238,9 @@ class HomeView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <p>There are many variations of passages of Lorem Ipsuma available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                        <p>{ this.state.dictionary['homeComment_1'] }</p>
                         <div className="signature">
-                          <p>Petar Živković</p>
+                          <p>{ this.state.dictionary['homeCommentName_1'] }</p>
                         </div>
                       </Col>
                     </Row>
@@ -255,9 +254,9 @@ class HomeView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                        <p>{ this.state.dictionary['homeComment_2'] }</p>
                         <div className="signature">
-                          <p>Petar Živković</p>
+                          <p>{ this.state.dictionary['homeCommentName_2'] }</p>
                         </div>
                       </Col>
                     </Row>
@@ -271,9 +270,9 @@ class HomeView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                        <p>{ this.state.dictionary['homeComment_3'] }</p>
                         <div className="signature">
-                          <p>Petar Živković</p>
+                          <p>{ this.state.dictionary['homeCommentName_3'] }</p>
                         </div>
                       </Col>
                     </Row>
@@ -289,9 +288,9 @@ class HomeView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
               <Col xs="12">
-                <h4>Imate igraonicu?</h4>
-                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. Vidi se promena</p>
-                <Button color="success">Saznajte više</Button>
+                <h4>{ this.state.dictionary['homeHeader_4'] }</h4>
+                <p>{ this.state.dictionary['homePartner'] }</p>
+                <Button color="success">{ this.state.dictionary['uniMore'] }</Button>
               </Col>
                 
             </Row>
