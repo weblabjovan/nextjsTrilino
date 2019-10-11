@@ -5,7 +5,7 @@ defaults: &defaults
 
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.2.0
+  cypress: cypress-io/cypress@1.10.0
 jobs:
     checkout:
         <<: *defaults
