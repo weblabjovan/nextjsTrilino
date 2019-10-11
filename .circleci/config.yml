@@ -52,6 +52,8 @@ workflows:
         jobs:
             - checkout
             - cypress/run:
+                executor: cypress/base-8
+                start: 'npm start'
                 requires:
                     - checkout
             - deploy:

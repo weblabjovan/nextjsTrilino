@@ -1,7 +1,7 @@
 
 describe('My First Test', function() {
     beforeEach(()=>{
-        cy.visit();
+        cy.visit('http://localhost:3000');
     })
   it('changes the language', function() {
     cy.get('button.btn-secondary').click();
