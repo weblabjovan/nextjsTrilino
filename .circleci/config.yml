@@ -53,8 +53,7 @@ workflows:
             - checkout
             - cypress/run:
                 executor: cypress/base-8
-                start: npm run dev
-                wait-on: 'http://localhost:3000'
+                start: npm run dev & wait-on http://localhost:3000
                 requires:
                     - checkout
             - deploy:
