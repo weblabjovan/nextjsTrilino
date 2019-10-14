@@ -21,7 +21,7 @@ const english: LanguageInterface = {
 	homeHeader_3: 'Testimonials',
 	homeHeader_4: 'You have a space for kids?',
 	homeHeader_5: 'How it works?',
-	homeWhatDescribe: 'English english Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Why do we use it? It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+	homeWhatDescribe: 'Trilino is a reliable internet service which enables you to organize a childrens celebration in an easy and fast way with the help of your desktop or mobile device.',
 	homeWhatBenTitle: 'Short title in english language',
 	homeWhatBen: 'Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work.',
 	homeWhatBenMini: 'Short explanation of the benefits that needs a little work.',

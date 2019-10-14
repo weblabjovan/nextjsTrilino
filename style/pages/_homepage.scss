@@ -3,7 +3,7 @@
 		font-size: 36px;
 		margin: 25px 0px;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 577px) {
 	    	margin: 20px 0px;
     		font-size: 32px;
 		}   
@@ -17,7 +17,7 @@
 }
 
 .homescreen{
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 577px) {
     	background-image: linear-gradient(to bottom, rgba(99, 99, 99, 0.52), rgba(36, 36, 36, 0.73)), url("/static/home_1_mob.jpg");
     	background-size: cover;
     	background-repeat: no-repeat;
@@ -30,17 +30,24 @@
 .homeStripe{
 	padding: 40px 20px;
 
-	@media only screen and (max-width: 600px){
+	@media only screen and (max-width: 577px){
 		padding: 15px 15px;
 	}
 
 	p{
-		font-size: 24px;
-		text-align: justify;
-		font-weight: 500;
+	    font-size: 30px;
+	    text-align: justify;
+	    font-weight: 500;
+	    line-height: 42px;
 
-		@media only screen and (max-width: 600px){
-			font-size: 14px;
+	    @media only screen and (max-width: 992px){
+			font-size: 24px;
+			line-height: 34px;
+		}
+
+		@media only screen and (max-width: 577px){
+			font-size: 18px;
+			line-height: 24px;
 			font-weight: 400;
 		}
 	}
@@ -51,9 +58,14 @@
 	h2{
 		margin-bottom: 30px;
 		color: #fff;
-		@media only screen and (max-width: 600px){
+		@media only screen and (max-width: 577px){
 			color: #fff;
 			text-shadow: 2px 2px 2px #110805;
+		}
+
+		@media only screen and (max-width: 1334px) {
+	    	font-size: 28px;
+	    	margin-bottom: 20px;
 		}
 	}
 
@@ -67,7 +79,18 @@
 	    border-radius: 20px;
 	    background-color: #8c3ebf;
 
-	    @media only screen and (max-width: 600px) {
+	    @media only screen and (max-width: 1334px) {
+	    	padding: 30px 20px;
+	    	margin-top: 5%;
+  			width: 90%;
+		}
+
+		@media only screen and (max-width: 992px) {
+	    	margin-top: 5%;
+	    	margin-bottom: 50px;
+		}
+
+		@media only screen and (max-width: 577px) {
 	    	margin-top: 10%;
   			width: 90%;
   			padding: 0px;
@@ -88,6 +111,11 @@
 .bottomPos{
 	position: absolute;
 	bottom: 3%;
+
+	@media only screen and (max-width: 1334px) {
+    	bottom: 0%;
+	}
+
 }
 
 .homeWhat{
@@ -95,10 +123,21 @@
 		margin-top: 15%;
 	    font-size: 32px;
 	    margin-bottom: 25px;
+
+	    @media only screen and (max-width: 992px){
+	    	margin-top: 10%;
+		    font-size: 26px;
+		    line-height: 32px;
+		    margin-bottom: 20px;
+	    }
 	}
 
 	p{
 		font-size: 20px;
+
+		@media only screen and (max-width: 992px){
+			font-size: 18px;
+		}
 	}
 }
 
@@ -108,7 +147,13 @@
 	img{
 		max-width: 80%;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 992px) {
+	    	max-width: 110%;
+	    	height: auto;
+	    	overflow: hidden;
+		}
+
+		@media only screen and (max-width: 577px) {
 	    	max-width: 120%;
 	    	height: auto;
 	    	overflow: hidden;
@@ -135,7 +180,7 @@
 .homeWhatLine{
 	margin-top: 30px;
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 577px) {
     	margin-top: 15px;
 	}
 
@@ -144,7 +189,7 @@
 		margin-bottom: 50px;
 		text-align: center;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 577px) {
 	    	
 	    	margin-bottom: 30px;
 		}
@@ -154,7 +199,7 @@
 			img{
 				width: 25%;
 
-				@media only screen and (max-width: 600px) {
+				@media only screen and (max-width: 577px) {
 			    	max-width: 40%;
 				}
 
@@ -171,7 +216,13 @@
 			    width: 60%;
 			    margin: auto;
 
-			    @media only screen and (max-width: 600px) {
+			    @media only screen and (max-width: 992px) {
+			    	font-size: 21px;
+				    line-height: 27px;
+				    width: 80%;
+				}
+
+			    @media only screen and (max-width: 577px) {
 			    	width: 100%;
 			    	font-size: 20px;
 				}
@@ -189,7 +240,7 @@
 		width: 100%;
 		height: 250px;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 577px) {
 	    	height: 120px;
 		}
 	}
@@ -213,7 +264,7 @@
 		margin-top: 20px;
 		padding: 0px 10px;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 577px) {
 	    	font-size: 14px;
 	    	margin-top: 15px;
 		}
@@ -255,7 +306,7 @@
 	padding: 60px 0px;
 	text-align: center;
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 992px) {
     	padding: 40px 0px;
 	}
 
@@ -264,7 +315,7 @@
 	    font-size: 44px;
 	    margin-bottom: 50px;
 
-	    @media only screen and (max-width: 600px) {
+	    @media only screen and (max-width: 992px) {
 	    	font-size: 34px;
 	    	margin-bottom: 30px;
 		}
@@ -277,7 +328,13 @@
 		font-size: 30px;
 		margin-bottom: 40px;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 992px) {
+			width: 90%;
+	    	font-size: 24px;
+	    	margin-bottom: 30px;
+		}
+
+		@media only screen and (max-width: 577px) {
 			width: 100%;
 	    	font-size: 18px;
 	    	margin-bottom: 30px;

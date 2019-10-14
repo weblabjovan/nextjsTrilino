@@ -131,7 +131,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <h3>{ this.state.dictionary['homeHeader_1'] }</h3>
                   </div>
                 </Col>
-                <Col lg="6" className="hidden-xs">
+                <Col lg="6" className="hidden-sm">
                   <img src="/static/home_1.jpg" alt={ this.state.dictionary['homeImg_1'] } ></img>
                 </Col>
               </Row>
@@ -166,7 +166,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div className="">
           <Container>
             <Row>
                 <Col xs="12" sm="6" className="homeWhatImage">
@@ -189,7 +189,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div className="">
           <Container>
             <Row>
                 <Col xs="12">
@@ -202,7 +202,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div>
           <Container>
             <Row>
                 <Col xs="12" sm="6">
@@ -221,20 +221,20 @@ class HomeView extends React.Component <MyProps, MyState>{
 
                         <div className="item">
                           <div className="photo">
-                            <img src="/static/savings.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>Naša usluga je za vas u potpunosti besplatna.</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
-
-                        <div className="item">
-                          <div className="photo">
                             <img src="/static/color-wheel.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
                             <p>U našoj raznovrsnoj ponudi sigurno ćete pronaći ono što je najbolje za vas i vaše dete.</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
+                        
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/savings.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>Naš sistem i usluga koju nudimo je za vas u potpunosti besplatna.</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -286,7 +286,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -299,12 +299,15 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div >
           <Container>
             <Row>
                 <Col xs="12">
-                  <div className="homeInfographicWrapper">
+                  <div className="homeInfographicWrapper hidden-xs">
                     <img src="/static/infographic.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                  </div>
+                  <div className="homeInfographicWrapper hidden-xs-up">
+                    <img src="/static/infographicsMob.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                   </div>
                 </Col>
               </Row>
@@ -312,7 +315,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -328,7 +331,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
           </Container>
         </div>
-        <div className="colorWhite">
+        <div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -341,10 +344,10 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-         <div className="colorWhite bigPadDown">
+         <div className=" bigPadDown">
           <Container>
             <Row>
-                <Col xs="12" sm="4">
+                <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
@@ -360,7 +363,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="4">
+                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
@@ -376,7 +379,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="4">
+                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">

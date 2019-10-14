@@ -21,7 +21,7 @@ const serbian: LanguageInterface = {
 	homeHeader_3: 'Šta kažu o nama?',
 	homeHeader_4: 'Imate prostor za decu?',
 	homeHeader_5: 'Kako funkcioniše?',
-	homeWhatDescribe: 'Srpski srpski Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Why do we use it? It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+	homeWhatDescribe: 'Trilino je pouzdani internet servis koji vam omogućuje da brzo i jednostavno organizujete dečiju proslavu uz pomoć vašeg računara ili mobilnog telefona.',
 	homeWhatBenTitle: 'Neki naslov koji treba da se menja',
 	homeWhatBen: 'Samo kratko objašnjenje o onome što treba da piše u ovom naslovu i još po nešto u vezi sa tim. Samo kratko objašnjenje o onome što treba da piše u ovom naslovu i još po nešto u vezi sa tim. Samo kratko objašnjenje o onome što treba da piše u ovom naslovu i još po nešto u vezi sa tim.',
 	homeWhatBenMini: 'Samo kratko objašnjenje o onome što treba da piše u ovom naslovu i još po nešto u vezi sa tim.',
