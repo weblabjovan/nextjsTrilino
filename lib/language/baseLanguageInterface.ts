@@ -23,6 +23,12 @@ export default interface LanguageInterface {
 	homeWhatBenTitle: string;
 	homeWhatBen: string;
 	homeWhatBenMini: string;
+	homeWhy1: string;
+	homeWhy2: string;
+	homeWhy3: string;
+	homeWhy4: string;
+	homeWhy5: string;
+	homeWhy6: string;
 	homeComment_1: string;
 	homeComment_2: string;
 	homeComment_3: string;

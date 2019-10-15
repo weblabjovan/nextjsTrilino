@@ -32,6 +32,12 @@ const serbian: LanguageInterface = {
 	homeCommentName_2: 'Petar Živković',
 	homeCommentName_3: 'Petar Živković',
 	homePartner: "Na srpskom jeziku nešto napisano za saradnju sa igraonicama. Na srpskom jeziku nešto napisano za saradnju sa igraonicama. Na srpskom jeziku nešto napisano za saradnju sa igraonicama. Na srpskom jeziku nešto napisano za saradnju sa igraonicama.",
+	homeWhy1: 'Naš sistem vam štedi vreme i omogućuje da organizujete dečiji rođendan za svega nekoliko minuta.',
+	homeWhy2: 'U našoj raznovrsnoj ponudi sigurno ćete pronaći ono što je najbolje za vas i vaše dete.',
+	homeWhy3: 'Naš sistem i usluga koju nudimo je za vas u potpunosti besplatna.',
+	homeWhy4: 'Trudimo se da proces ogranizacije dečijih rodjendana učinimo jednostavnim.',
+	homeWhy5: 'Pružamo vam sve informacije koje su vam neophodne da donesete kvalitetnu odluku.',
+	homeWhy6: 'Dajemo vam mogućnost da ocenite vaše iskustvo i saznate iskustva drugih.',
 
 	partnershipTitle: 'Ovo je stranica saradnja',
 	loginTitle: 'Ovo je stranica prijava',

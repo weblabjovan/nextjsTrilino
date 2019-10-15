@@ -214,7 +214,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/clock.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>Naš sistem vam štedi vreme i omogućuje da organizujete dečiji rođendan za svega nekoliko minuta.</p>
+                            <p>{ this.state.dictionary['homeWhy1'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -224,7 +224,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/color-wheel.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>U našoj raznovrsnoj ponudi sigurno ćete pronaći ono što je najbolje za vas i vaše dete.</p>
+                            <p>{ this.state.dictionary['homeWhy2'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -234,7 +234,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/savings.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>Naš sistem i usluga koju nudimo je za vas u potpunosti besplatna.</p>
+                            <p>{ this.state.dictionary['homeWhy3'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -252,7 +252,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/button.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>Trudimo se da proces ogranizacije dečijih rodjendana učinimo jednostavnim.</p>
+                            <p>{ this.state.dictionary['homeWhy4'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -262,7 +262,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/brochure.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>Pružamo vam sve informacije koje su vam neophodne da donesete kvalitetnu odluku.</p>
+                            <p>{ this.state.dictionary['homeWhy5'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -272,7 +272,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             <img src="/static/positive-comment.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
                           </div>
                           <div className="text">
-                            <p>Dajemo vam mogućnost da ocenite vaše iskustvo i saznate iskustva drugih.</p>
+                            <p>{ this.state.dictionary['homeWhy6'] }</p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -304,10 +304,10 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
                 <Col xs="12">
                   <div className="homeInfographicWrapper hidden-xs">
-                    <img src="/static/infographic.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                    <img src={`/static/infographic-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
                   </div>
                   <div className="homeInfographicWrapper hidden-xs-up">
-                    <img src="/static/infographicsMob.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                    <img src={`/static/infographicsMob-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
                   </div>
                 </Col>
               </Row>
