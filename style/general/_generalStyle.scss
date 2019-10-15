@@ -50,7 +50,7 @@ p, span{
 	font-family: $regFont;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 577px) {
   	h2{
   		font-size: 26px;
   	}
@@ -61,7 +61,7 @@ p, span{
 
 	h1, h2, h3, h4{
 		margin-bottom: 40px;
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 577px) {
   			font-size: 28px;
   			line-height: 30px;
 		}

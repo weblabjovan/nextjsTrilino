@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button } from 'reactstrap';
+import YouTube from 'react-youtube';
 import Select from 'react-select';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { datePickerLang } from '../lib/language/dateLanguage';
@@ -39,6 +40,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
     this.dateChange = this.dateChange.bind(this);
     this.formatDate = this.formatDate.bind(this);
+    this._onReady = this._onReady.bind(this);
   }
 
 	state: MyState = {
@@ -63,6 +65,11 @@ class HomeView extends React.Component <MyProps, MyState>{
   dateChange = date => {
     this.setState({ date });
   };
+
+   _onReady(event) {
+    // access to player in all event handlers via event.target
+    event.target.pauseVideo();
+  }
 	
   render() {
     const options = [
@@ -70,6 +77,14 @@ class HomeView extends React.Component <MyProps, MyState>{
       { value: 'strawberry', label: 'Strawberry' },
       { value: 'vanilla', label: 'Vanilla' }
     ];
+
+    const opts = {
+      height: this.state.isMobile ? '320' : '690',
+      width: '100%',
+      playerVars: { // https://developers.google.com/youtube/player_parameters
+        autoplay: 1
+      }
+    };
 
     return(
     	<div className="totalWrapper">
@@ -99,6 +114,8 @@ class HomeView extends React.Component <MyProps, MyState>{
                             placeholder="Izaberite datum"
                             onDayChange= { this.dateChange }
                             format="dd/mm/yyyy"
+                            hideOnDayClick={ true }
+                            keepFocus={ false }
                             dayPickerProps={{
                               todayButton: datePickerLang[this.props.lang]['today'],
                               selectedDays: [ this.state.date ],
@@ -114,7 +131,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <h3>{ this.state.dictionary['homeHeader_1'] }</h3>
                   </div>
                 </Col>
-                <Col lg="6" className="hidden-xs">
+                <Col lg="6" className="hidden-sm">
                   <img src="/static/home_1.jpg" alt={ this.state.dictionary['homeImg_1'] } ></img>
                 </Col>
               </Row>
@@ -149,7 +166,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div className="">
           <Container>
             <Row>
                 <Col xs="12" sm="6" className="homeWhatImage">
@@ -172,7 +189,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div className="">
           <Container>
             <Row>
                 <Col xs="12">
@@ -185,26 +202,80 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div>
           <Container>
             <Row>
                 <Col xs="12" sm="6">
-                  <Container>
+                  <Container fluid>
                     <Row>
-                      <Col xs="12" className="homeWhatItem">
-                        <div className="photo num_1"></div>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                      <Col xs="12" className="homeWhatLine">
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/clock.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy1'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
+
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/color-wheel.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy2'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
+                        
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/savings.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy3'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
                       </Col>
                     </Row>
                   </Container>
                 </Col>
 
                  <Col xs="12" sm="6">
-                  <Container>
+                  <Container fluid >
                     <Row>
-                      <Col xs="12" className="homeWhatItem">
-                        <div className="photo num_2"></div>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                      <Col xs="12" className="homeWhatLine">
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/button.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy4'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
+
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/brochure.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy5'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
+
+                        <div className="item">
+                          <div className="photo">
+                            <img src="/static/positive-comment.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
+                          </div>
+                          <div className="text">
+                            <p>{ this.state.dictionary['homeWhy6'] }</p>
+                          </div>
+                          <div style={{'clear': 'both'}}></div>
+                        </div>
                       </Col>
                     </Row>
                   </Container>
@@ -215,7 +286,52 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorWhite">
+        <div >
+          <Container>
+            <Row>
+                <Col xs="12">
+                  <div className="homeHeading">
+                    <h3>{ this.state.dictionary['homeHeader_5'] }</h3>
+                  </div>
+                </Col>
+              </Row>
+
+          </Container>
+        </div>
+
+        <div >
+          <Container>
+            <Row>
+                <Col xs="12">
+                  <div className="homeInfographicWrapper hidden-xs">
+                    <img src={`/static/infographic-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
+                  </div>
+                  <div className="homeInfographicWrapper hidden-xs-up">
+                    <img src={`/static/infographicsMob-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
+                  </div>
+                </Col>
+              </Row>
+
+          </Container>
+        </div>
+
+        <div >
+          <Container>
+            <Row>
+                <Col xs="12">
+                  <div className="homeInfographicWrapper">
+                    <YouTube
+                      videoId="Mu0yftdkJvM"
+                      opts={opts}
+                      onReady={this._onReady}
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+          </Container>
+        </div>
+        <div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -228,10 +344,10 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-         <div className="colorWhite bigPadDown">
+         <div className=" bigPadDown">
           <Container>
             <Row>
-                <Col xs="12" sm="4">
+                <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
@@ -247,7 +363,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="4">
+                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
@@ -263,7 +379,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="4">
+                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">

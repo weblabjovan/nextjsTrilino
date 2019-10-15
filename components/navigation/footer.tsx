@@ -36,7 +36,7 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		         <Col xs='12' sm="6" >
 		          	<div className="leftWrap">
 		          		<div className="logo">
-			          		<a href={`/?language=${this.props.language.toLowerCase()}`}><img src="/static/logo.jpg" alt="trilino-logo"></img></a>
+			          		<a href={`/?language=${this.props.language.toLowerCase()}`}><img src="/static/logo.png" alt="trilino-logo"></img></a>
 			          	</div>
 			          	<div className="socialWrapper">
 			          		<a href="https://www.instagram.com/?hl=en"><img src="/static/inst.jpg" alt="trilino-instagram"></img></a>

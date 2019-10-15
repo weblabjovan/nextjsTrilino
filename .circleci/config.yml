@@ -44,7 +44,7 @@ jobs:
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
                         now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --prod
                     else
-                        now --token ${ZEIT_TOKET} --name new-feature
+                        now --token ${ZEIT_TOKET} --name new-feature --prod
                     fi
 workflows:
     version: 2
