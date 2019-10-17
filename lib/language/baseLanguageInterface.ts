@@ -9,6 +9,12 @@ export default interface LanguageInterface {
 	uniDistrict: string;
 	uniSearch: string;
 	uniMore: string;
+	uniEmail: string;
+	uniPass: string;
+	uniLogin: string;
+	uniRegister: string;
+	uniForgotPass: string;
+	uniTerms: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -36,6 +42,19 @@ export default interface LanguageInterface {
 	homeCommentName_2: string;
 	homeCommentName_3: string;
 	homePartner: string;
+
+	partnerLogTitle: string;
+	partnerRegTitle: string;
+	partnerLogExplanation: string;
+	partnerRegExplanation: string;
+	partnerRegName: string;
+	partnerRegTax: string;
+	partnerRegContactPerson: string;
+	partnerRegContactEmail: string;
+	partnerRegContactPhone: string;
+	partnerRegFinalWarning: string;
+	partnerLogFinalWarning: string;
+	partnerLogThank: string;
 
 	partnershipTitle: string;
 	loginTitle: string;

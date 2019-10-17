@@ -1,0 +1,75 @@
+.registrationWrapper{
+	padding: 50px 0px;
+
+	.middle{
+		width: 80%;
+		margin: auto;
+	    font-size: 22px;
+    	font-weight: 500;
+    	margin-top: 40px;
+
+    	@media only screen and (max-width: 577px){
+	    	width: 100%;
+			font-size: 20px;
+	    }
+
+    	a{
+    		color: #6ebf81;
+    		text-decoration: underline;
+
+    	}
+	}
+
+	.box{
+		width: 45%;
+		padding: 40px;
+		margin: auto;
+		border-radius: 20px;
+	    background-color: #8c3ebf;
+
+	    @media only screen and (max-width: 992px){
+	    	width: 70%;
+			padding: 30px;
+	    }
+
+	    @media only screen and (max-width: 577px){
+	    	width: 100%;
+			padding: 30px;
+	    }
+
+	    h2{
+	    	font-size: 32px;
+	    	text-align: center;
+	    	color: #fff;
+	    }
+
+	    p{
+	    	text-align: center;
+	    	font-size: 18px;
+	    	color: #fff;
+	    	font-weight: 300;
+	    	margin-bottom: 30px;
+	    }
+
+	    .logInput{
+	    	margin-bottom: 20px;
+	    }
+
+	    .middle{
+	    	margin-top: 20px;
+	    }
+
+	    .marginSmall{
+	    	margin-top: 0px;
+	    	margin-bottom: 30px;
+
+	    	a{
+	    		font-size: 16px;
+	    		color: #fff;
+	    		font-style: italic;
+	    		text-decoration: underline;
+	    	}
+	    }
+	}
+
+}

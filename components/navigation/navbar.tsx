@@ -1,10 +1,12 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
+import { changeLanguagePath } from '../../lib/helpers/generalFunctions';
 
 type MyProps = {
 	isMobile: boolean;
   language: string;
   page: string;
+  fullPath: string;
   login: string;
   search: string;
   faq: string;
@@ -68,10 +70,10 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   <hr/>
 
                   <NavItem>
-                    <NavLink href={`${this.props.page}?language=sr`} >SR</NavLink>
+                    <NavLink href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href={`${this.props.page}?language=en`} >EN</NavLink>
+                    <NavLink href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</NavLink>
                   </NavItem>
 
 		            </Nav>
@@ -94,8 +96,8 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     { this.props.language }
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem ><a href={`${this.props.page}?language=sr`}>SR</a></DropdownItem>
-                    <DropdownItem ><a href={`${this.props.page}?language=en`}>EN</a></DropdownItem>
+                    <DropdownItem ><a href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</a></DropdownItem>
+                    <DropdownItem ><a href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</a></DropdownItem>
                   </DropdownMenu>
                 </UncontrolledButtonDropdown>
 		          </Navbar>

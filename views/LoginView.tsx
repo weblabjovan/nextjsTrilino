@@ -18,6 +18,7 @@ interface MyProps {
   setUserLanguage(language: string): string;
   userAgent: string;
   path: string;
+  fullPath: string;
   lang: string;
 };
 interface MyState {
@@ -44,6 +45,7 @@ class LoginView extends React.Component <MyProps, MyState>{
     		<NavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
+          fullPath={ this.props.fullPath }
     			page={ this.props.path ? this.props.path : '' }
     			contact={ this.state.dictionary['navigationContact'] }
     			login={ this.state.dictionary['navigationLogin'] }
