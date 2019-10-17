@@ -9,3 +9,22 @@ export const isMobile = (userAgent: string): boolean => {
 
 	return isMobile;
 }
+
+export const changeLanguagePath = (path: string, lang: string, newLang: string): string =>{
+	if (path === '/') {
+		return `/?language=${newLang}`;
+	}else{
+		let newPath = path;
+
+		if (path.indexOf('language=') !== -1) {
+			if (lang === 'sr') {
+				newPath = path.replace("language=sr", `language=${newLang}`);
+			}
+			if (lang === 'en') {
+				newPath = path.replace("language=en", `language=${newLang}`);
+			}
+		}
+
+		return newPath;
+	} 
+}

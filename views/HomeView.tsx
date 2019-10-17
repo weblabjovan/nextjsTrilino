@@ -10,7 +10,6 @@ import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
-import PlainInput from '../components/form/input';
 import Footer from '../components/navigation/footer';
 import 'react-day-picker/lib/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,6 +23,7 @@ interface MyProps {
   setUserLanguage(language: string): string;
   userAgent: string;
   lang: string;
+  fullPath: string;
   path: string;
 };
 interface MyState {
@@ -73,9 +73,9 @@ class HomeView extends React.Component <MyProps, MyState>{
 	
   render() {
     const options = [
-      { value: 'chocolate', label: 'Chocolate' },
-      { value: 'strawberry', label: 'Strawberry' },
-      { value: 'vanilla', label: 'Vanilla' }
+      { value: '1', label: 'Beograd' },
+      { value: '2', label: 'Novi sad' },
+      { value: '3', label: 'Niš' }
     ];
 
     const opts = {
@@ -91,6 +91,7 @@ class HomeView extends React.Component <MyProps, MyState>{
     		<NavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
+          fullPath={ this.props.fullPath }
     			page={ this.props.path ? this.props.path : '' }
     			contact={ this.state.dictionary['navigationContact'] }
     			login={ this.state.dictionary['navigationLogin'] }

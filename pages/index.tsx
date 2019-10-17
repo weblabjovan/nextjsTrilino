@@ -22,7 +22,7 @@ const Home : NextPage<Props> = ({ userAgent }) => {
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <HomeView userAgent={userAgent} query={router.query} lang={ lang } />
+      <HomeView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
     </div>
   )
 }
