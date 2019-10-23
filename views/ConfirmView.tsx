@@ -14,12 +14,15 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  page: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
+  error: boolean;
+  router: any;
 };
 interface MyState {
 	language: string;
@@ -27,7 +30,7 @@ interface MyState {
 	isMobile: boolean;
 };
 
-class PartnershipView extends React.Component <MyProps, MyState>{
+class ConfirmView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
       language: this.props.lang.toUpperCase(),
@@ -36,6 +39,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
     };
 
 	componentDidMount(){
+		if (this.props.error) {
+			this.props.router.push(`/confirm?language=${this.props.lang}&page=error`);
+		}
 		this.props.setUserLanguage(this.props.lang);
 	}
 	
@@ -54,22 +60,36 @@ class PartnershipView extends React.Component <MyProps, MyState>{
     			faq={ this.state.dictionary['navigationFaq'] }
     		/>
     		<Container>
-		        <Row>
-		          <Col xs='12' className="middle">
-		            <img src="/static/construction.gif" ></img>
-		          </Col>
-		        </Row>
-
-		        <div className="intro">
-		            <Row>
-		              <Col xs='12' className="middle">
-		                <h1 className="middle">{ this.state.dictionary['partnershipTitle'] }</h1>
+    			{
+    				this.props.page === 'partner_registration' 
+    				? 
+    				(
+    					<div className="confirmRegistration">
+	    					<Row>
+		              <Col xs='12'>
+		                <h2 className="middle">{ this.state.dictionary['confirmPartnerRegTitle'] }</h2>
+		                <p>{ this.state.dictionary['confirmPartnerRegContent'] }<br/><br/><br/><br/></p>
+		                <p className="middle">{ this.state.dictionary['uniCheckEmail'] }</p>
 		              </Col>
 		            </Row>
-		        </div>
-
-            <a href={`/partnershipLogin?language=${this.props.lang}&page=login`} >Login as partner</a>
-            <a href={`/partnershipLogin?language=${this.props.lang}&page=register`} >Register as partner</a>
+	            </div>
+    				) : null
+    			}
+            
+          {
+    				this.props.page === 'error' 
+    				? 
+    				(
+    					<div className="confirmRegistration">
+	    					<Row>
+		              <Col xs='12'>
+		                <h2 className="middle">Error</h2>
+		                <p className="middle">You are trying to reach page that does not exist. Please go back or go to Home page.</p>
+		              </Col>
+		            </Row>
+	            </div>
+    				) : null
+    			}
 		    </Container>
 
 		    <Footer 
@@ -101,4 +121,4 @@ const matchDispatchToProps = (dispatch) => {
   dispatch);
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(PartnershipView)
+export default connect(mapStateToProps, matchDispatchToProps)(ConfirmView)

@@ -17,6 +17,7 @@ const serbian: LanguageInterface = {
 	uniRegister: 'registrujte se',
 	uniForgotPass: 'zaboravili ste lozinku?',
 	uniTerms: 'Uslovi korišćenja',
+	uniCheckEmail: 'Proverite vaš email.',
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
 	homeImg_1: 'Trilino-dečije-slavlje-homepage',
@@ -57,6 +58,16 @@ const serbian: LanguageInterface = {
 	partnerRegFinalWarning: 'Ukoliko ste već Trilino partner molimo vas ',
 	partnerLogFinalWarning: 'Ukoliko još niste a želite da postanete Trilino partner molimo vas ',
 	partnerLogThank: '. Hvala vam.',
+	partnerRegAlertName: 'Naziv lokala je obavezno polje. Molimo vas unesite naziv lokala.',
+	partnerRegAlertTax: 'PIB je obavezno polje. Molimo vas unesite validan PIB.',
+	partnerRegAlertCity: 'Grad je obavezno polje. Molimo vas izaberite grad.',
+	partnerRegAlertPerson: 'Kontakt osoba je obavezno polje. Molimo vas unesite kontakt osobu.',
+	partnerRegAlertEmail: 'Kontakt email je obavezno polje. Molimo vas unesite validan email.',
+	partnerRegAlertPhone: 'Kontakt telefon je obavezno polje. Molimo vas unesite validan kontakt telefon (samo brojeve).',
+	partnerRegAlertDuplicate: 'Partner sa ovim PIB-om je već registrovan. Molimo vas promenite registracione podatke ili se prijavite.',
+
+	confirmPartnerRegTitle: 'Čestitamo uspešno ste se registrovali kao partner',
+	confirmPartnerRegContent: 'Pre nego što počnete da koristite sve fukncionalnosti koje su dostupne Trilino partnerima potrebno je da verifikujete vašu registraciju. Naime, na kontakt email koji ste prethodno upisali poslali smo vam verifikacioni link. Klikom na taj link izvršićete verifikaciju vaše registracije i dobićete pristup vašem partnerskom profilu.',
 
 	partnershipTitle: 'Ovo je stranica saradnja',
 	loginTitle: 'Ovo je stranica prijava',

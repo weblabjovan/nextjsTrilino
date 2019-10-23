@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/keys/dev.ts
 
 # production
 /build

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
 import HomeView from '../views/HomeView'
+import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -15,14 +16,27 @@ const Home : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = 'sr'
-  if (router.asPath !== router.route) {
-    lang = router.query['language'] as string;
+  let error = false;
+
+  if (router.query['language'] !== undefined) {
+    let stringLang = router.query['language'] as string;
+    if (pages['language'].indexOf(stringLang) !== -1) {
+      lang = stringLang;
+    }
+  }else{
+    error = true;
   }
 
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <HomeView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
+      <HomeView 
+        userAgent={userAgent} 
+        path={router.pathname} 
+        fullPath={ router.asPath } 
+        lang={ lang } 
+        router={ router } 
+        error={ error } />
     </div>
   )
 }

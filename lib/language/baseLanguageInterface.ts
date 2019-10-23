@@ -15,6 +15,7 @@ export default interface LanguageInterface {
 	uniRegister: string;
 	uniForgotPass: string;
 	uniTerms: string;
+	uniCheckEmail: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -55,6 +56,16 @@ export default interface LanguageInterface {
 	partnerRegFinalWarning: string;
 	partnerLogFinalWarning: string;
 	partnerLogThank: string;
+	partnerRegAlertName: string;
+	partnerRegAlertTax: string;
+	partnerRegAlertCity: string;
+	partnerRegAlertPerson: string;
+	partnerRegAlertEmail: string;
+	partnerRegAlertPhone: string;
+	partnerRegAlertDuplicate: string;
+
+	confirmPartnerRegTitle: string;
+	confirmPartnerRegContent: string;
 
 	partnershipTitle: string;
 	loginTitle: string;

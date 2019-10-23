@@ -1,4 +1,5 @@
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, apiEndpoint } from '../lib/helpers/generalFunctions';
+import apiRoot  from '../lib/constants/api';
 
 
 interface DispatchObj {
@@ -33,5 +34,23 @@ export function setUserLanguage(language: string) {
       type: userLanguageActionTypes.SUCCESS,
       payload: language,
     });
+  };
+}
+
+export const testingApiActionTypes = {
+  START: 'TESTING_API_START',
+  ERROR: 'TESTING_API_ERROR',
+  SUCCESS: 'TESTING_API_SUCCESS',
+};
+
+export function testingApi(brand:string, user:number) {
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      apiRoot.TEST,
+      { brand, user },
+      testingApiActionTypes
+    );
   };
 }

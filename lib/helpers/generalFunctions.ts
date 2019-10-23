@@ -1,3 +1,5 @@
+import request from 'superagent';
+
 export const isMobile = (userAgent: string): boolean => {
 
 	let isMobile = false;
@@ -27,4 +29,65 @@ export const changeLanguagePath = (path: string, lang: string, newLang: string):
 
 		return newPath;
 	} 
+}
+
+export const apiEndpoint = (
+  dispatch: any,
+  endpoint: string,
+  data: any,
+  actionTypes: any,
+  callback: any = null,
+  isFileRequest: any = false,
+  requestType: string = "POST"): any =>
+{
+
+  dispatch({ type: actionTypes.START });
+
+  const req = requestType == "POST" ? request.post(endpoint) : request.get(endpoint);
+
+  if (isFileRequest) {
+    const files = [...data.files];
+    files.map((file) => {
+      req.attach('uploadFiles', file, file.name);
+    });
+  } else if (requestType == "GET"){
+	  req.query(data).send();
+  } else {
+	  req.send(data);
+  }
+  return req.set('Accept', 'application/json')
+  .end((error, res) => {
+    if (error) {
+      dispatch({
+        type: actionTypes.ERROR,
+        payload: error,
+        requestData : data
+      });
+
+    } else if (res) {
+      const response = JSON.parse(res.text);
+      if (res.error) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: 'Unexpected error!',
+          requestData : data
+        });
+      } else if (res.text.length === 0) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: 'Error: Empty response!',
+          requestData : data
+        });
+      } else {
+        dispatch({
+          type: actionTypes.SUCCESS,
+          payload: isFileRequest ? { data, response } : response,
+          requestData : data
+        });
+        if (typeof callback === 'function') {
+          callback(response);
+        }
+      }
+    }
+  });
 }

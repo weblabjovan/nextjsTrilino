@@ -17,6 +17,7 @@ const english: LanguageInterface = {
 	uniRegister: 'register',
 	uniForgotPass: 'forgot password?',
 	uniTerms: 'Terms and Conditions',
+	uniCheckEmail: 'Check your email.',
 
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
@@ -57,6 +58,16 @@ const english: LanguageInterface = {
 	partnerRegFinalWarning: 'If you are already Trilino partner please proceed and ',
 	partnerLogFinalWarning: 'If you are not Trilino partner yet but you will like to become one please go first to ',
 	partnerLogThank: '. Thank you.',
+	partnerRegAlertName: 'Venue name is required field. Please insert venue name.',
+	partnerRegAlertTax: 'Tax identification number is requered field. Please insert your valid tax identification number.',
+	partnerRegAlertCity: 'City is requered field. Please choose your city.',
+	partnerRegAlertPerson: 'Contact person is required field. Please insert contact person.',
+	partnerRegAlertEmail: 'Contact email is required field. Please insert contact email.',
+	partnerRegAlertPhone: 'Contact phone number is required field. Please insert contact phone number (only numbers).',
+	partnerRegAlertDuplicate: 'Partner with this Tax Number already exists in our records. Please change registration data or procees to login.',
+
+	confirmPartnerRegTitle: 'Congrats you successfully registrated as a partner',
+	confirmPartnerRegContent: 'Before you can start using all functionalities that are available to Trilino partners you have to verify your registration. We sent a verification link to the contact email you have provided. By clicking on that link you will verify your registration and you will gain access to your partner profile.',
 
 	partnershipTitle: 'This is Partnership Page',
 	loginTitle: 'This is Login Page',
