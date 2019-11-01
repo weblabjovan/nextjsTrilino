@@ -96,7 +96,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
       if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
         setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
-        this.props.router.push(`/partnerProfile?language=${this.props.lang}`);
+        window.location.href = `http://localhost:3000/partnerProfile?language=${this.props.lang}`;
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
@@ -114,6 +114,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
+    console.log(this.props.router)
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }

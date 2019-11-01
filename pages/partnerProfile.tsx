@@ -39,7 +39,8 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 	const allCookies = nextCookie(ctx);
 	const token = allCookies['trilino-partner-token'];
-	const parsedUrl = parseUrl(req.url);
+	console.log(ctx);
+	const parsedUrl = parseUrl(ctx.asPath);
 
 	try{
 		const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
