@@ -13,7 +13,7 @@ describe('Partner login page layout test', function() {
   	cy.get('input[placeholder="Kontakt telefon"]');
   	cy.get('#loginRedirection').click();
   	cy.url().should('eq', 'http://localhost:3000/partnershipLogin?language=sr&page=login');
-  	cy.get('input[placeholder="Email"]');
+  	cy.get('input[placeholder="PIB"]');
   	cy.get('input[placeholder="Lozinka"]');
   })
 
@@ -29,12 +29,12 @@ describe('Partner login page layout test', function() {
   	cy.get('input[placeholder="Contact phone"]');
   	cy.get('#loginRedirection').click();
   	cy.url().should('eq', 'http://localhost:3000/partnershipLogin?language=en&page=login');
-  	cy.get('input[placeholder="Email"]');
+  	cy.get('input[placeholder="Tax identification number"]');
   	cy.get('input[placeholder="Password"]');
   	cy.get('button.btn-secondary').click();
     cy.get('.dropdown-menu button:nth-of-type(1)').click();
     cy.url().should('eq', 'http://localhost:3000/partnershipLogin?language=sr&page=login');
-    cy.get('input[placeholder="Email"]');
+    cy.get('input[placeholder="PIB"]');
   	cy.get('input[placeholder="Lozinka"]');
   	cy.get('#registrationRedirection').click();
   	cy.url().should('eq', 'http://localhost:3000/partnershipLogin?language=sr&page=register');
