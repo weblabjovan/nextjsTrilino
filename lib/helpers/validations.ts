@@ -67,3 +67,33 @@ export const isPib = (value: number, country: string): boolean => {
 	}
    return false;
 };
+
+export const isMoreThan = (value: string, limit: number): boolean =>{
+	if (value.length > limit) {
+		return true;
+	}
+
+	return false;
+}
+
+export const isLessThan = (value: string, limit: number): boolean =>{
+	if (value.length < limit) {
+		return true;
+	}
+
+	return false;
+}
+
+export const isOfRightCharacter = (pass: string): boolean => {
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm;
+
+	return regex.test(pass);
+}
+
+export const isMatch = (one: string, two: string): boolean => {
+	if (one === two) {
+		return true;
+	}
+
+	return false;
+}

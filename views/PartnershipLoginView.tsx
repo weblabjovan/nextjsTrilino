@@ -6,9 +6,9 @@ import Loader from '../components/loader';
 import Select from 'react-select';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
-import { registratePartner } from '../actions/partner-actions';
+import { registratePartner, loginPartner } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -21,15 +21,19 @@ interface MyProps {
   router: any;
   setUserLanguage(language: string): string;
   registratePartner(data: object): any;
+  loginPartner(data: object): any;
   userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
   page: string;
   error: boolean;
-  partnerRegStart: boolean,
-  partnerRegError: object,
-  partnerRegSuccess: any, 
+  partnerRegStart: boolean;
+  partnerRegError: object;
+  partnerRegSuccess: any;
+  partnerLoginStart: boolean;
+  partnerLoginError: object | boolean;
+  partnerLoginSuccess: null | object;
 };
 
 interface MyState {
@@ -37,12 +41,12 @@ interface MyState {
 	dictionary: object;
 	isMobile: boolean;
   name: string;
-  taxNum: number;
+  taxNum: null | number;
   city: string | object;
   contactPerson: string;
   contactEmail: string;
   contactPhone: string;
-  logEmail: string;
+  logTax: null | number;
   logPass: string;
   errorMessages: object;
   regBtnDisabled: boolean;
@@ -55,7 +59,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handleLogEmailChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData'];
+    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handlelogTaxChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData', 'sendLoginData'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -75,9 +79,9 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       contactPerson: '',
       contactEmail: '',
       contactPhone: '',
-      logEmail: '',
+      logTax: null,
       logPass: '',
-      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logEmail: false,  logPass: false, regDuplicate: false }},
+      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false }},
       regBtnDisabled: false,
     };
 
@@ -90,6 +94,11 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+      if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
+        setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
+        this.props.router.push(`/partnerProfile?language=${this.props.lang}`);
+      }
+
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
         this.props.router.push(`/confirm?language=${this.props.lang}&page=partner_registration`)
       }
@@ -154,10 +163,10 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }else{
         errorCopy['fields']['logPass'] = false;
       }
-      if (!isEmail(this.state.logEmail)) {
-        errorCopy['fields']['logEmail'] = true;
+      if (!isPib(this.state.logTax, 'sr')) {
+        errorCopy['fields']['logTax'] = true;
       }else{
-        errorCopy['fields']['logEmail'] = false;
+        errorCopy['fields']['logTax'] = false;
       }
     }
 
@@ -174,8 +183,20 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     });
   }
 
+  sendLoginData(){
+     if (!this.state.errorMessages['show']) {
+       this.setState({ regBtnDisabled: true }, () => {
+         const data = {
+          taxNum: this.state.logTax,
+          password: this.state.logPass,
+        }
+        this.props.loginPartner(data);
+      })
+     }
+   }
+
   handleLogin(){
-    this.validateFormData(this.sendRegistrationData);
+    this.validateFormData(this.sendLoginData);
   }
 
    sendRegistrationData(){
@@ -225,8 +246,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   handlePhoneChange(event){
     this.handleInputChange('contactPhone', event.target.value);
   }
-  handleLogEmailChange(event){
-    this.handleInputChange('logEmail', event.target.value);
+  handlelogTaxChange(event){
+    this.handleInputChange('logTax', event.target.value);
   }
   handleLogPassChange(event){
     this.handleInputChange('logPass', event.target.value);
@@ -349,18 +370,18 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     					<Row>
 			              <Col xs='12'>
                       <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
-                        <p hidden={ !this.state.errorMessages['fields']['logEmail']} >Email je obavezno polje. Molimo vas unesite validan email.</p>
+                        <p hidden={ !this.state.errorMessages['fields']['logTax']} >Email je obavezno polje. Molimo vas unesite validan email.</p>
                         <p hidden={ !this.state.errorMessages['fields']['logPass']} >Lozinka je obavezno polje. Molimo vas unesite vašu lozinku.</p>
                       </Alert>
 			              	<div className="box">
 			              		<h2>{this.state.dictionary['partnerLogTitle']}</h2>
 			              		<p>{this.state.dictionary['partnerLogExplanation']}</p>
           							<PlainInput 
-                          placeholder={this.state.dictionary['uniEmail']} 
-                          className={`${this.state.errorMessages['fields']['logEmail'] ? "borderWarrning" : ''} logInput`} 
-                          onChange={this.handleLogEmailChange} 
-                          value={this.state.logEmail}
-                          type="email" />
+                          placeholder={this.state.dictionary['partnerRegTax']} 
+                          className={`${this.state.errorMessages['fields']['logTax'] ? "borderWarrning" : ''} logInput`} 
+                          onChange={this.handlelogTaxChange} 
+                          value={this.state.logTax}
+                          type="text" />
 
           							<PlainInput 
                           placeholder={this.state.dictionary['uniPass']} 
@@ -375,7 +396,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     							</div>
 
     							<div className="middle">
-    								<Button color="success" onClick={this.handleLogin} >{this.state.dictionary['uniLogin']}</Button>
+    								<Button color="success" disabled={ this.state.regBtnDisabled } onClick={this.handleLogin} >{this.state.dictionary['uniLogin']}</Button>
     							</div>
 
     							
@@ -431,6 +452,11 @@ const mapStateToProps = (state) => ({
   partnerRegStart: state.PartnerReducer.partnerRegStart,
   partnerRegError: state.PartnerReducer.partnerRegError,
   partnerRegSuccess: state.PartnerReducer.partnerRegSuccess,
+
+  partnerLoginStart: state.PartnerReducer.partnerLoginStart,
+  partnerLoginError: state.PartnerReducer.partnerLoginError,
+  partnerLoginSuccess: state.PartnerReducer.partnerLoginSuccess,
+
 });
 
 
@@ -438,6 +464,7 @@ const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
     registratePartner,
+    loginPartner,
   },
   dispatch);
 };

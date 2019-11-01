@@ -18,6 +18,9 @@ const english: LanguageInterface = {
 	uniForgotPass: 'forgot password?',
 	uniTerms: 'Terms and Conditions',
 	uniCheckEmail: 'Check your email.',
+	uniConfirmPass: 'Confirm Password',
+	uniSave: 'Save',
+	uniSafetyCode: 'Safety Code',
 
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
@@ -66,8 +69,28 @@ const english: LanguageInterface = {
 	partnerRegAlertPhone: 'Contact phone number is required field. Please insert contact phone number (only numbers).',
 	partnerRegAlertDuplicate: 'Partner with this Tax Number already exists in our records. Please change registration data or procees to login.',
 
+	emailVerificationPartnerVerificTitle: 'Your verification is in progress',
+	emailValidationPartnerVerificArticle: 'Please wait this will take just a few seconds. Thanks you.',
+	emailVerificationPartnerPassTitle: 'Your registration have been verified',
+	emailValidationPartnerPassArticle: 'Before you proceed on setting up your partner profile we need you to create your unique password so you can safely login during next visits to our site.',
+	emailVerificationPartnerPassButton: 'Create password',
+	emailVerificationPartnerLogTitle: 'Your registration is verified and you password is set',
+	emailValidationPartnerLogArticle: 'You have probably clicked on an older link that was part of the registration process. Please, login to your partner account and continue with using Trilino partner profile.',
+	emailVerificationPartnerLogButton: 'Login',
+	emailVerificationPartnerErrorTitle: 'There is a problem with this link',
+	emailValidationPartnerErrorArticle: 'The link that you are trying to use is not valid. Please, contact your partner support for more information and help.',
+	emailVerificationPartnerErrorButton: 'Partner Support',
+
 	confirmPartnerRegTitle: 'Congrats you successfully registrated as a partner',
 	confirmPartnerRegContent: 'Before you can start using all functionalities that are available to Trilino partners you have to verify your registration. We sent a verification link to the contact email you have provided. By clicking on that link you will verify your registration and you will gain access to your partner profile.',
+
+	passwordTitle: 'New Password',
+	passwordExplanation: 'Type in your password in the second field and than confirm it in the third field. Your password needs to be between 8 and 16 characters long, containing at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character. Content of second and third field should match.',
+	passwordUpdateTitle: 'Your new password has been saved',
+	passwordUpdateExplanation: 'IF you want to access your profile you can click on the link bellow and login using your new password.',
+	passwordAlertPass: 'Password is required field  and needs to be between 8 and 16 characters long, containing at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character. Please insert valid password.',
+	passwordAlertCode: 'Safety code is required field. Please insert valid safety code that has been sent to your email.',
+	passwordAlertConfirm: 'Password confirmation is required field and the content of this field has to be same as the content of the password field. Please confirm your password.',
 
 	partnershipTitle: 'This is Partnership Page',
 	loginTitle: 'This is Login Page',

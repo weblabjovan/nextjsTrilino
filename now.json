@@ -1,5 +1,7 @@
 {
 	"env":{
-		"MONGO_URI":"@mongo-uri"
+		"MONGO_URI":"@mongo-uri",
+		"EMAIL_API_KEY":"@email-api-key",
+		"JWT_SECRET":"@jwt-secret",
 	}
 }
