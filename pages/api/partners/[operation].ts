@@ -141,7 +141,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const match = await bcrypt.compare(password, partner.password);
 						
 						if (match) {
-							const token = await setToken('partner', decodeId(generateString, partner._id));
+							const token = setToken('partner', decodeId(generateString, partner._id));
 							return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, token: token });
 						}else{
 							return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 2, error: 'selection error', message: 'Provided password is not valid for this partner.' });
@@ -164,7 +164,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		if (!isEmpty(token)) {
 				
 			try{
-				const decoded = await verifyToken(token);
+				const decoded = verifyToken(token);
 				const partnerId = encodeId(decoded['sub']); 
 				const partner = await Partner.findById(partnerId, '-password');
 				if (partner) {

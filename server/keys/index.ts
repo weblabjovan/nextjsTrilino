@@ -1,19 +1,6 @@
-type keyType = {
-	mongoURI: string;
-	EMAIL_API_KEY: string;
-	JWT_SECRET: string;
-}
+import prod from './prod';
 
-let getKeys = async (): Promise<any> => {
-	if (process.env.NODE_ENV === 'production') {
-		return await import('./prod');
-	}else{
-		return await import('./dev');
-	}
-}
+const keys = prod;
 
 
-
-
-
-export default getKeys();
+export default keys;

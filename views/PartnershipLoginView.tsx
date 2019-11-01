@@ -115,7 +115,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    Keys.then(val => console.log(val.default));
+    console.log(Keys.mongoURI);
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }

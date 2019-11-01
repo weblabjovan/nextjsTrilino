@@ -11,12 +11,10 @@ type emailSMTP = {
 
 export const sendEmail = async (email: emailSMTP ): Promise<any> => {
 	const defaultClient = SibApiV3Sdk.ApiClient.instance;
-	const resolveKeys = await Keys;
-  	const myKeys = resolveKeys.default;
 
 	// Configure API key authorization: api-key
 	const apiKey = defaultClient.authentications['api-key'];
-	apiKey.apiKey = myKeys['EMAIL_API_KEY'];
+	apiKey.apiKey = Keys.EMAIL_API_KEY;
 	// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 	//apikey.apiKeyPrefix = 'Token';
 
