@@ -9,6 +9,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
+import Keys from '../server/keys';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -114,7 +115,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    console.log(this.props.router)
+    Keys.then(val => console.log(val.default));
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }

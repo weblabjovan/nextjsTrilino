@@ -35,22 +35,28 @@ export const encodeId = (id: string): string => {
 	return id.slice(8, (id.length - 7));
 }
 
-export const setToken = (type: string, id: string): object => {
+export const setToken = async (type: string, id: string): Promise<object> => {
   let token = {};
+  const resolveKeys = await Keys;
+  const myKeys = resolveKeys.default;
+
   if (type === 'partner') {
     token = jwt.sign({
       iss: 'Trilino',
       sub: id,
       iat: new Date().getTime(),
       exp: new Date().setDate(new Date().getDate() + 7),
-    }, Keys.JWT_SECRET);
+    }, myKeys['JWT_SECRET']);
   }
 
   return token;
 }
 
-export const verifyToken = (value: string): object => {
-  const token = jwt.verify(value, Keys.JWT_SECRET);
+export const verifyToken = async (value: string): Promise<object> => {
+  const resolveKeys = await Keys;
+  const myKeys = resolveKeys.default;
+
+  const token = jwt.verify(value, myKeys['JWT_SECRET']);
 
   return token;
 }

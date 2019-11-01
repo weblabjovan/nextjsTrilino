@@ -35,7 +35,7 @@ jobs:
                 at: ~/tmp/circlci-now
             - run:
                 name: Install Now CLI
-                command: sudo npm install --global --unsafe-perm now@16.1.4-canary.16
+                command: sudo npm install --global --unsafe-perm now@16.1.4-canary.29
             - deploy:
                 name: Deploy & Alias
                 command: |
