@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/server/keys/dev
+server/keys/dev.ts
 
 # testing
 /coverage
