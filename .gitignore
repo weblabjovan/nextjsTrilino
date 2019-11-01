@@ -2,10 +2,10 @@
 
 # dependencies
 /node_modules
+/server/keys/dev.ts
 
 # testing
 /coverage
-/server/keys/dev.ts
 
 # production
 /build
