@@ -9,7 +9,6 @@ import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
-import Keys from '../server/keys';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -29,6 +28,7 @@ interface MyProps {
   lang: string;
   page: string;
   error: boolean;
+  link: object;
   partnerRegStart: boolean;
   partnerRegError: object;
   partnerRegSuccess: any;
@@ -97,7 +97,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
       if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
         setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
-        window.location.href = `http://localhost:3000/partnerProfile?language=${this.props.lang}`;
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnerProfile?language=${this.props.lang}`;
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
@@ -115,7 +115,6 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    console.log(Keys.mongoURI);
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }

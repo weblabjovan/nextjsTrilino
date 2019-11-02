@@ -10,3 +10,7 @@ export interface IpartnerModel{
 	verified: boolean;
 	created: Date;
 }
+
+export interface IlinkClass {
+	getParsedUrl(): object;
+}
