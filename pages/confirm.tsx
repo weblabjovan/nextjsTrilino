@@ -2,7 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
-import PartnershipView from '../views/PartnershipView'
+import ConfirmView from '../views/ConfirmView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 
-const Partnership : NextPage<Props> = ({ userAgent }) => {
+const Confirm : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = 'sr'
@@ -23,17 +23,33 @@ const Partnership : NextPage<Props> = ({ userAgent }) => {
     }
   }
 
+  let error = false;
+  let page = router.query['page'] as string;
+
+  if (router.query['page'] === undefined || pages['confirm'].indexOf(page) === -1) {
+  	error = true;
+  }
+
+
+
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <PartnershipView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
+      <ConfirmView 
+      	userAgent={userAgent} 
+      	router={router}
+      	page={ router.query['page']}  
+      	path={router.pathname} 
+      	fullPath={ router.asPath } 
+      	error={ error } 
+      	lang={ lang } />
     </div>
   )
 }
 
-Partnership.getInitialProps = async ({ req }) => {
+Confirm.getInitialProps = async ({ req }) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   return { userAgent}
 }
 
-export default withRedux(Partnership)
+export default withRedux(Confirm)

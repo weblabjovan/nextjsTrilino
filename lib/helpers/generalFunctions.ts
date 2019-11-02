@@ -1,3 +1,6 @@
+import request from 'superagent';
+import cookie from 'js-cookie';
+
 export const isMobile = (userAgent: string): boolean => {
 
 	let isMobile = false;
@@ -27,4 +30,87 @@ export const changeLanguagePath = (path: string, lang: string, newLang: string):
 
 		return newPath;
 	} 
+}
+
+export const parseUrl = (url:string):object => {
+  const result = {path:'', query:{}};
+  const initial = url.split('?');
+  result.path = initial[0];
+  result.query = {};
+  const second = initial[1].split('&');
+  second.forEach((query) => {
+      const ar = query.split('=');
+      result.query[ar[0]] = ar[1];
+  });
+
+  return result;
+}
+
+export const apiEndpoint = (
+  dispatch: any,
+  endpoint: string,
+  data: any,
+  actionTypes: any,
+  callback: any = null,
+  isFileRequest: any = false,
+  requestType: string = "POST",
+  auth: any = null ): any =>
+{
+
+  dispatch({ type: actionTypes.START });
+
+  const req = requestType == "POST" ? request.post(endpoint) : request.get(endpoint);
+
+  if (isFileRequest) {
+    const files = [...data.files];
+    files.map((file) => {
+      req.attach('uploadFiles', file, file.name);
+    });
+  } else if (requestType == "GET"){
+	  req.query(data).send();
+  } else {
+	  req.send(data);
+  }
+  if (auth) {
+    req.set('Authorization: Bearer jovansjzrhbsgtgzsjkaoutesvbshdj');
+  }
+  return req.set('Accept', 'application/json')
+  .end((error, res) => {
+    if (error) {
+      dispatch({
+        type: actionTypes.ERROR,
+        payload: error,
+        requestData : data
+      });
+
+    } else if (res) {
+      const response = JSON.parse(res.text);
+      if (res.error) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: 'Unexpected error!',
+          requestData : data
+        });
+      } else if (res.text.length === 0) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: 'Error: Empty response!',
+          requestData : data
+        });
+      } else {
+        dispatch({
+          type: actionTypes.SUCCESS,
+          payload: isFileRequest ? { data, response } : response,
+          requestData : data
+        });
+        if (typeof callback === 'function') {
+          callback(response);
+        }
+      }
+    }
+  });
+}
+
+export const setCookie = (data: any, name: string, expires: number): void => {
+  cookie.set(name, data, { expires });
 }

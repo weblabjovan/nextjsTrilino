@@ -1,5 +1,0 @@
-{
-    "name": "circleci-with-zeith-now-staging",
-    "version": 2,
-    "alias": ["test.trilino.com"]
-}

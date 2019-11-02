@@ -25,7 +25,10 @@ interface MyProps {
   lang: string;
   fullPath: string;
   path: string;
+  error: boolean;
+  router: any;
 };
+
 interface MyState {
 	language: string;
 	dictionary: object;
@@ -52,6 +55,9 @@ class HomeView extends React.Component <MyProps, MyState>{
     };
 
 	componentDidMount(){
+    if (this.props.error) {
+      this.props.router.push(`/?language=${this.props.lang}`);
+    }
 		this.props.setUserLanguage(this.props.lang);
 	}
 

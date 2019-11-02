@@ -15,6 +15,10 @@ export default interface LanguageInterface {
 	uniRegister: string;
 	uniForgotPass: string;
 	uniTerms: string;
+	uniCheckEmail: string;
+	uniConfirmPass: string;
+	uniSave: string;
+	uniSafetyCode: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -55,6 +59,36 @@ export default interface LanguageInterface {
 	partnerRegFinalWarning: string;
 	partnerLogFinalWarning: string;
 	partnerLogThank: string;
+	partnerRegAlertName: string;
+	partnerRegAlertTax: string;
+	partnerRegAlertCity: string;
+	partnerRegAlertPerson: string;
+	partnerRegAlertEmail: string;
+	partnerRegAlertPhone: string;
+	partnerRegAlertDuplicate: string;
+
+	emailVerificationPartnerVerificTitle: string;
+	emailValidationPartnerVerificArticle: string;
+	emailVerificationPartnerPassTitle: string;
+	emailValidationPartnerPassArticle: string;
+	emailVerificationPartnerPassButton: string;
+	emailVerificationPartnerLogTitle: string;
+	emailValidationPartnerLogArticle: string;
+	emailVerificationPartnerLogButton: string;
+	emailVerificationPartnerErrorTitle: string;
+	emailValidationPartnerErrorArticle: string;
+	emailVerificationPartnerErrorButton: string;
+
+	confirmPartnerRegTitle: string;
+	confirmPartnerRegContent: string;
+
+	passwordTitle: string;
+	passwordExplanation: string;
+	passwordUpdateTitle: string;
+	passwordUpdateExplanation: string;
+	passwordAlertPass: string;
+	passwordAlertCode: string;
+	passwordAlertConfirm: string;
 
 	partnershipTitle: string;
 	loginTitle: string;

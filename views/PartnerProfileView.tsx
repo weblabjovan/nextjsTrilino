@@ -27,7 +27,7 @@ interface MyState {
 	isMobile: boolean;
 };
 
-class PartnershipView extends React.Component <MyProps, MyState>{
+class PartnerProfileView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
       language: this.props.lang.toUpperCase(),
@@ -63,13 +63,10 @@ class PartnershipView extends React.Component <MyProps, MyState>{
 		        <div className="intro">
 		            <Row>
 		              <Col xs='12' className="middle">
-		                <h1 className="middle">{ this.state.dictionary['partnershipTitle'] }</h1>
+		                <h1 className="middle">Ovo je partner profil stranica</h1>
 		              </Col>
 		            </Row>
 		        </div>
-
-            <a href={`/partnershipLogin?language=${this.props.lang}&page=login`} >Login as partner</a>
-            <a href={`/partnershipLogin?language=${this.props.lang}&page=register`} >Register as partner</a>
 		    </Container>
 
 		    <Footer 
@@ -101,4 +98,4 @@ const matchDispatchToProps = (dispatch) => {
   dispatch);
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(PartnershipView)
+export default connect(mapStateToProps, matchDispatchToProps)(PartnerProfileView)

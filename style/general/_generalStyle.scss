@@ -85,3 +85,31 @@ p, span{
 		}
 	}
 }
+
+.borderWarrning{
+	border: 1px solid red;
+}
+
+button:disabled{
+	cursor: not-allowed;
+}
+
+.loader{
+	background-color: rgba(0, 0, 0, 0.66);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+  	display: inline-block;
+    z-index: 9999;
+
+    .spinerHolder{
+        width: 300px;
+	    margin: auto;
+	    position: absolute;
+	    top: 46%;
+	    left: 46%;
+    }
+
+}
