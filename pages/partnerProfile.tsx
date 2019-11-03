@@ -39,7 +39,6 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 	const allCookies = nextCookie(ctx);
 	const token = allCookies['trilino-partner-token'];
-	console.log(ctx);
 	const parsedUrl = parseUrl(ctx.asPath);
 
 	try{
