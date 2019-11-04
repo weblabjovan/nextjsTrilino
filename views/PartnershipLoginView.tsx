@@ -6,7 +6,7 @@ import Loader from '../components/loader';
 import Select from 'react-select';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
-import { registratePartner, loginPartner } from '../actions/partner-actions';
+import { registratePartner, loginPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
@@ -22,6 +22,7 @@ interface MyProps {
   setUserLanguage(language: string): string;
   registratePartner(data: object): any;
   loginPartner(data: object): any;
+  changeSinglePartnerField(field: string, value: any): any;
   userAgent: string;
   path: string;
   fullPath: string;
@@ -41,6 +42,7 @@ interface MyState {
 	language: string;
 	dictionary: object;
 	isMobile: boolean;
+  baseErrorMessage: string;
   name: string;
   taxNum: null | number;
   city: string | object;
@@ -74,6 +76,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       language: this.props.lang.toUpperCase(),
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
+      baseErrorMessage: '',
       name: '',
       taxNum: null,
       city: '',
@@ -82,7 +85,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       contactPhone: '',
       logTax: null,
       logPass: '',
-      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false }},
+      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false }},
       regBtnDisabled: false,
     };
 
@@ -95,6 +98,14 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+
+      if (this.props.partnerLoginError && !prevProps.partnerLoginError && !this.props.partnerLoginStart) {
+        const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
+        errorCopy['show'] = true;
+        errorCopy['fields']['baseError'] = true;
+        this.setState({regBtnDisabled: false, errorMessages: errorCopy, baseErrorMessage: this.props.partnerLoginError['message'] });
+      }
+
       if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
         setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
         window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnerProfile?language=${this.props.lang}`;
@@ -159,6 +170,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     }
 
     if (this.props.page === 'login') {
+      this.props.changeSinglePartnerField('partnerLoginError', false);
       if (isEmpty(this.state.logPass)) {
         errorCopy['fields']['logPass'] = true;
       }else{
@@ -169,6 +181,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }else{
         errorCopy['fields']['logTax'] = false;
       }
+
+      errorCopy['fields']['baseError'] = false;
     }
 
     let showVal = false;
@@ -179,7 +193,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }
     })
     errorCopy['show'] = showVal;
-    this.setState({errorMessages: errorCopy}, () => {
+    this.setState({errorMessages: errorCopy, baseErrorMessage: ''}, () => {
       callback();
     });
   }
@@ -371,8 +385,9 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     					<Row>
 			              <Col xs='12'>
                       <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
-                        <p hidden={ !this.state.errorMessages['fields']['logTax']} >Email je obavezno polje. Molimo vas unesite validan email.</p>
-                        <p hidden={ !this.state.errorMessages['fields']['logPass']} >Lozinka je obavezno polje. Molimo vas unesite vašu lozinku.</p>
+                        <p hidden={ !this.state.errorMessages['fields']['logTax']} >{ this.state.dictionary['partnerRegAlertTax'] }</p>
+                        <p hidden={ !this.state.errorMessages['fields']['logPass']} >{ this.state.dictionary['partnerLogAlertPass'] }</p>
+                        <p hidden={ !this.state.errorMessages['fields']['baseError']} >{this.state.baseErrorMessage}</p>
                       </Alert>
 			              	<div className="box">
 			              		<h2>{this.state.dictionary['partnerLogTitle']}</h2>
@@ -466,6 +481,7 @@ const matchDispatchToProps = (dispatch) => {
     setUserLanguage,
     registratePartner,
     loginPartner,
+    changeSinglePartnerField,
   },
   dispatch);
 };

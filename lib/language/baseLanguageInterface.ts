@@ -66,6 +66,7 @@ export default interface LanguageInterface {
 	partnerRegAlertEmail: string;
 	partnerRegAlertPhone: string;
 	partnerRegAlertDuplicate: string;
+	partnerLogAlertPass: string;
 
 	emailVerificationPartnerVerificTitle: string;
 	emailValidationPartnerVerificArticle: string;
@@ -92,5 +93,29 @@ export default interface LanguageInterface {
 
 	partnershipTitle: string;
 	loginTitle: string;
+
+
+
+
+	//////////////////////API
+
+
+
+	apiPartnerSaveCode2: string;
+	apiPartnerSaveCode5: string;
+
+	apiPartnerGetCode2: string;
+
+	apiPartnerUpdateVeriCode2: string;
+	apiPartnerUpdatePassCode2: string;
+	apiPartnerUpdatePassCode3: string;
+
+	apiPartnerLoginCode2: string;
+	apiPartnerLoginCode3: string;
+	apiPartnerLoginCode4: string;
+	apiPartnerLoginCode5: string;
+
+	apiPartnerAuthCode1: string;
+	apiPartnerAuthCode2: string;
 
 }

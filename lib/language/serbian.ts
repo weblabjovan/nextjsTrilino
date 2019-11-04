@@ -68,6 +68,7 @@ const serbian: LanguageInterface = {
 	partnerRegAlertEmail: 'Kontakt email je obavezno polje. Molimo vas unesite validan email.',
 	partnerRegAlertPhone: 'Kontakt telefon je obavezno polje. Molimo vas unesite validan kontakt telefon (samo brojeve).',
 	partnerRegAlertDuplicate: 'Partner sa ovim PIB-om je već registrovan. Molimo vas promenite registracione podatke ili se prijavite.',
+	partnerLogAlertPass: 'Lozinka je obavezno polje. Molimo vas unesite vašu lozinku.',
 
 	emailVerificationPartnerVerificTitle: 'Vaša verifikacija je u toku',
 	emailValidationPartnerVerificArticle: 'Molimo vas sačekajte nekoliko skundi. Hvala vam.',
@@ -94,6 +95,30 @@ const serbian: LanguageInterface = {
 
 	partnershipTitle: 'Ovo je stranica saradnja',
 	loginTitle: 'Ovo je stranica prijava',
+
+
+
+
+	//////////////////////API
+
+
+
+	apiPartnerSaveCode2: 'Partner sa ovim PIB-om je već registrovan. Molimo vas da se ulogujete.',
+	apiPartnerSaveCode5: 'Upisani podaci nisu validni, molimo vas pokušajte još jednom.',
+
+	apiPartnerGetCode2: 'Ne postoji partner sa traženim id-jem.',
+
+	apiPartnerUpdateVeriCode2: 'Ne postoji partner sa traženim id-jem.',
+	apiPartnerUpdatePassCode2: 'Upisani podaci nisu validirani.',
+	apiPartnerUpdatePassCode3: 'Ne postoji partner sa traženim PIB-om i sigurnosnim kodom.',
+
+	apiPartnerLoginCode2: 'Upisana lozinka nije validna za ovog partnera.',
+	apiPartnerLoginCode3: 'Ne postoji partner sa traženim PIB-om.',
+	apiPartnerLoginCode4: 'Upisani podaci nisu validni.',
+	apiPartnerLoginCode5: 'Partner sa ovim PIB-om nije do kraja verifikovan. Molimo vas verifikute se.',
+
+	apiPartnerAuthCode1: 'Validan token proslat.',
+	apiPartnerAuthCode2: 'Nema validnog tokena.',
 }
 
 export default serbian;

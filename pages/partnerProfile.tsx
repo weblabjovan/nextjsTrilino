@@ -3,7 +3,7 @@ import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
-import { parseUrl } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnerProfileView from '../views/PartnerProfileView';
 import pages from '../lib/constants/pages';
@@ -12,10 +12,11 @@ import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
+  link?: object;
 }
 
 
-const PartnerProfile : NextPage<Props> = ({userAgent}) => {
+const PartnerProfile : NextPage<Props> = ({userAgent, link}) => {
 
   const router = useRouter();
   let lang = 'sr'
@@ -29,7 +30,12 @@ const PartnerProfile : NextPage<Props> = ({userAgent}) => {
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <PartnerProfileView userAgent={ userAgent }  path={router.pathname} fullPath={ router.asPath } lang={ lang } />
+      <PartnerProfileView 
+      	userAgent={ userAgent }  
+      	path={router.pathname} 
+      	fullPath={ router.asPath } 
+      	lang={ lang }
+      	link={ link } />
     </div>
   )
 }
@@ -39,11 +45,10 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 	const allCookies = nextCookie(ctx);
 	const token = allCookies['trilino-partner-token'];
-	const parsedUrl = parseUrl(ctx.asPath);
+	const link = setUpLinkBasic('', {path: ctx.asPath, host: req.headers.host});
 
 	try{
-		const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-		const apiUrl = `${protocol}${req.headers.host}/api/partners/auth/`;
+		const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/auth/?language=${link['queryObject']['language']}`;
 	  	const response = await fetch(apiUrl, {
 		  credentials: 'include',
 		  headers: {
@@ -52,17 +57,17 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 		});
 
 		if (response.status !== 200) {
-			ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${parsedUrl['query']['language']}&page=login`});
+			ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
 			ctx.res.end();
 		}
 	}catch(err){
-		ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${parsedUrl['query']['page']}&page=login`});
+		ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
 		ctx.res.end();
 	}
 
 	
 
-  return { userAgent }
+  return { userAgent, link }
 }
 
 export default withRedux(PartnerProfile)

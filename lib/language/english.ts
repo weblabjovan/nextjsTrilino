@@ -68,6 +68,7 @@ const english: LanguageInterface = {
 	partnerRegAlertEmail: 'Contact email is required field. Please insert contact email.',
 	partnerRegAlertPhone: 'Contact phone number is required field. Please insert contact phone number (only numbers).',
 	partnerRegAlertDuplicate: 'Partner with this Tax Number already exists in our records. Please change registration data or procees to login.',
+	partnerLogAlertPass: 'Password is requested field. Please insert your password.',
 
 	emailVerificationPartnerVerificTitle: 'Your verification is in progress',
 	emailValidationPartnerVerificArticle: 'Please wait this will take just a few seconds. Thanks you.',
@@ -94,6 +95,30 @@ const english: LanguageInterface = {
 
 	partnershipTitle: 'This is Partnership Page',
 	loginTitle: 'This is Login Page',
+
+
+
+
+	//////////////////////API
+
+
+
+	apiPartnerSaveCode2: 'Partner with this Tax Number already exists in our records. Please procees to login.',
+	apiPartnerSaveCode5: 'Entered data is not valid, please try again.',
+
+	apiPartnerGetCode2: 'There is no partner with requested id.',
+
+	apiPartnerUpdateVeriCode2: 'There is no partner with requested id.',
+	apiPartnerUpdatePassCode2: 'Sent data is not validated.',
+	apiPartnerUpdatePassCode3: 'There is no partner with requested id and safety code.',
+
+	apiPartnerLoginCode2: 'Provided password is not valid for this partner.',
+	apiPartnerLoginCode3: 'There is no partner with requested identification number.',
+	apiPartnerLoginCode4: 'Sent data is not valid.',
+	apiPartnerLoginCode5: 'This partner is not completly verified.',
+
+	apiPartnerAuthCode1: 'Valid token provided.',
+	apiPartnerAuthCode2: 'No authorization token.',
 }
 
 export default english;

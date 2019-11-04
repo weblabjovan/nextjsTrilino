@@ -1,5 +1,6 @@
 import request from 'superagent';
 import cookie from 'js-cookie';
+import LinkClass from '../classes/Link';
 
 export const isMobile = (userAgent: string): boolean => {
 
@@ -113,4 +114,15 @@ export const apiEndpoint = (
 
 export const setCookie = (data: any, name: string, expires: number): void => {
   cookie.set(name, data, { expires });
+}
+
+export const unsetCookie = (name: string): void => {
+  cookie.remove(name);
+}
+
+export const setUpLinkBasic = (url: string, ctx: boolean | object = false): object => {
+  const linkClass = new LinkClass(url, ctx);
+  const link = linkClass.getParsedUrl();
+
+  return link;
 }
