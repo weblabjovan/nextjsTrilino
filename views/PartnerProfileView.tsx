@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile } from '../lib/helpers/generalFunctions';
-import NavigationBar from '../components/navigation/navbar';
+import PartnerNavigationBar from '../components/navigation/partnerNavbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -20,6 +20,7 @@ interface MyProps {
   path: string;
   fullPath: string;
   lang: string;
+  link: object;
 };
 interface MyState {
 	language: string;
@@ -42,16 +43,11 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
   render() {
     return(
     	<div className="totalWrapper">
-    		<NavigationBar 
+    		<PartnerNavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
           fullPath={ this.props.fullPath }
-    			page={ this.props.path ? this.props.path : '' }
-    			contact={ this.state.dictionary['navigationContact'] }
-    			login={ this.state.dictionary['navigationLogin'] }
-    			search={ this.state.dictionary['navigationSearch'] }
-    			partnership={ this.state.dictionary['navigationPartnership'] }
-    			faq={ this.state.dictionary['navigationFaq'] }
+    			link={ this.props.link }
     		/>
     		<Container>
 		        <Row>

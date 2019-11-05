@@ -1,9 +1,11 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
+import fetch from 'isomorphic-unfetch';
+import nextCookie from 'next-cookies';
 import Head from '../components/head';
 import PartnershipLoginView from '../views/PartnershipLoginView';
-import LinkClass from '../lib/classes/Link';
+import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -49,14 +51,31 @@ const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
   )
 }
 
-PartnershipLogin.getInitialProps = async ({ req }) => {
-  let link = null;
-  if (req.headers.referer) {
-    const linkClass = new LinkClass(req.headers.referer);
-    link = linkClass.getParsedUrl();
+PartnershipLogin.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
+  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const allCookies = nextCookie(ctx);
+  const token = allCookies['trilino-partner-token'];
+  const link = setUpLinkBasic('', {path: ctx.asPath, host: req.headers.host});
+
+  
+  try{
+    const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/auth/?language=${link['queryObject']['language']}`;
+      const response = await fetch(apiUrl, {
+      credentials: 'include',
+      headers: {
+        Authorization: `${token}`
+      }
+    });
+
+    if (response.status === 200) {
+      ctx.res.writeHead(302, {Location: `/partnerProfile?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
+  }catch(err){
+    ctx.res.end();
   }
 
-  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   return { userAgent, link}
 }
 

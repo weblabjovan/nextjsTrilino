@@ -3,16 +3,19 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, parseUrl, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib } from '../../../lib/helpers/validations';
+import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
+import { getLanguage } from '../../../lib/language';
 
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'save') {
-		const parsedUrl = parseUrl(req.headers.referer);
-		const userlanguage = parsedUrl['query']['language'] ? parsedUrl['query']['language'] : 'sr';
+		const link = setUpLinkBasic(req.headers.referer);
+		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const dictionary = getLanguage(userlanguage);
 
 		const { name, taxNum, city, contactPerson, contactEmail, contactPhone } = req.body;
 
@@ -22,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   		try{
   			const replica = await Partner.findOne({ taxNum });
   			if (replica) {
-		    	return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 2, error: 'validation error', message: `Partner with this Tax Number already exists in our records. Please procees to login.` });
+		    	return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode2'] });
 				}else{
 		    	try{
 		    		const country = 'Serbia';
@@ -58,7 +61,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   			return res.status(500).send({ endpoint: 'partners', operation: 'save', success: false, code: 4, error: 'db error', message: err  });
   		}
 		}else{
-	    return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 3, error: 'validation error', message: `Entered data are not valid, please try again.`  });
+	    return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 3, error: 'validation error', message: dictionary['apiPartnerSaveCode5']  });
 		}
 	  	
 	}
@@ -66,10 +69,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'get'){
 		await connectToDb();
 
-		const parsedUrl = parseUrl(req.url);
-		let partnerId = parsedUrl['query']['partner']
+		const link = setUpLinkBasic(req.url);
+		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const dictionary = getLanguage(userlanguage);
+		let partnerId = link['queryObject']['partner']
 
-		if (parsedUrl['query']['encoded']) {
+		if (link['queryObject']['encoded']) {
 			partnerId = encodeId(partnerId);
 		}
 
@@ -78,7 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			if (partner) {
 				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
 			}else{
-				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: 'There is no partner with requested id.' });
+				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerGetCode2'] });
 			}
 		}catch(err){
 			return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
@@ -88,6 +93,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'update'){
 		await connectToDb();
 		const { param, data, type } = req.body;
+		const link = setUpLinkBasic(req.headers.referer);
+		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const dictionary = getLanguage(userlanguage);
 
 		if (type === 'verification') {
 			try{
@@ -97,7 +105,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				if (partner) {
 					return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, partner: partner });
 				}else{
-					return res.status(404).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'selection error', message: 'There is no partner with requested id.' });
+					return res.status(404).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
 				}
 			}catch(err){
 				return res.status(500).send({ endpoint: 'partners', operation: 'update', success: false, code: 3, error: 'db error', message: err  });
@@ -106,7 +114,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		if (type === 'password') {
 			if (isEmpty(data.password) || !isMoreThan(data.password, 7) || !isLessThan(data.password, 17) || !isOfRightCharacter(data.password) || isEmpty(data.confirmation) || !isMatch(data.password, data.confirmation) || isEmpty(data.code)) {
-				return res.status(500).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'password data validation error', message: 'Sent data is not validated' });
+				return res.status(500).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'password data validation error', message: dictionary['apiPartnerUpdatePassCode2'] });
 			}else{
 				try{
 					const salt = await bcrypt.genSalt(10);
@@ -116,7 +124,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, partner: partner });
 					}else{
-						return res.status(404).json({ endpoint: 'partners', operation: 'update', success: false, code: 3, error: 'selection error', message: 'There is no partner with requested id and safety code.' });
+						return res.status(404).json({ endpoint: 'partners', operation: 'update', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerUpdatePassCode3'] });
 					}
 				}catch(err){
 					return res.status(500).send({ endpoint: 'partners', operation: 'update', success: false, code: 4, error: 'db error', message: err  });
@@ -130,9 +138,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'login') {
 		await connectToDb();
 		const { taxNum, password } = req.body;
+		const link = setUpLinkBasic(req.headers.referer);
+		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const dictionary = getLanguage(userlanguage);
 
 		if (!isPib(taxNum, 'sr') || isEmpty(password)) {
-			res.status(400).send({ endpoint: 'partners', operation: 'login', success: false, code: 4, error: 'validation error', message: 'Sent data are not valid'  });
+			res.status(400).send({ endpoint: 'partners', operation: 'login', success: false, code: 4, error: 'validation error', message: dictionary['apiPartnerLoginCode4']  });
 		}else{
 			try{
 				const partner = await Partner.findOne({taxNum});
@@ -144,13 +155,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							const token = setToken('partner', decodeId(generateString, partner._id));
 							return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, token: token });
 						}else{
-							return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 2, error: 'selection error', message: 'Provided password is not valid for this partner.' });
+							return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerLoginCode2'] });
 						}
 					}else{
-						return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 5, error: 'selection error', message: 'This partner is not completly verified.' });
+						return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 5, error: 'selection error', message: dictionary['apiPartnerLoginCode5'] });
 					}
 				}else{
-					return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 3, error: 'selection error', message: 'There is no partner with requested identification number' });
+					return res.status(404).json({ endpoint: 'partners', operation: 'login', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerLoginCode3'] });
 				}
 			}catch(err){
 				return res.status(500).send({ endpoint: 'partners', operation: 'login', success: false, code: 6, error: 'db error', message: err  });
@@ -160,6 +171,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'auth') {
 		await connectToDb();
+		
+		const link = setUpLinkBasic(req.url);
+		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const dictionary = getLanguage(userlanguage);
+
 		const token = req.headers.authorization;
 		if (!isEmpty(token)) {
 				
@@ -168,16 +184,16 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const partnerId = encodeId(decoded['sub']); 
 				const partner = await Partner.findById(partnerId, '-password');
 				if (partner) {
-					return res.status(200).json({ endpoint: 'partners', operation: 'auth', success: true, code: 1, error: 'selection error', message: 'Valid token provided.' });
+					return res.status(200).json({ endpoint: 'partners', operation: 'auth', success: true, code: 1, error: 'selection error', message: dictionary['apiPartnerAuthCode1'] });
 				}else{
-					return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: 'No authorizatopn token.' });
+					return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 				}
 			}catch(err){
-				return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 3, error: 'selection error', message: 'No authorizatopn token.' });
+				return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 			}
 			
 		}else{
-			return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 4, error: 'selection error', message: 'No authorizatopn token.' });
+			return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 		}
 	}
 
