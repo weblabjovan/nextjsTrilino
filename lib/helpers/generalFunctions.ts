@@ -120,8 +120,15 @@ export const unsetCookie = (name: string): void => {
   cookie.remove(name);
 }
 
-export const setUpLinkBasic = (url: string, ctx: boolean | object = false): object => {
-  const linkClass = new LinkClass(url, ctx);
+export const setUpLinkBasic = (url: string | object): object => {
+  const linkClass = new LinkClass();
+
+  if (typeof url === 'string') {
+    linkClass.generateLinkFromUrl(url);
+  }else{
+    linkClass.generateLinkFromContext(url);
+  }
+  
   const link = linkClass.getParsedUrl();
 
   return link;

@@ -204,6 +204,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
          const data = {
           taxNum: this.state.logTax,
           password: this.state.logPass,
+          language: this.props.lang
         }
         this.props.loginPartner(data);
       })
@@ -224,6 +225,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           contactPerson: this.state.contactPerson,
           contactEmail: this.state.contactEmail,
           contactPhone: this.state.contactPhone,
+          language: this.props.lang,
 
         }
         this.props.registratePartner(data);

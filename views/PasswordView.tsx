@@ -142,6 +142,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 		  		code: this.state.code,
 			    password: this.state.password,
 					confirmation: this.state.confirmation,
+          language: this.props.lang,
 		  	}
 	  		this.props.changePasswordPartner('_id', data)
 	  	});

@@ -66,7 +66,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		if (this.props.resolution === 1) {
-      const data = {id: this.props.page, options:{"verified": true} };
+      const data = {id: this.props.page, options:{"verified": true}, language: this.props.lang };
       this.props.verifyPartner('_id', data);
     }else{
       this.setState({ loader: false });
@@ -133,7 +133,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
                       <h2 className="middle">{this.state.dictionary['emailVerificationPartnerLogTitle']}</h2>
                       <p className="middle">{this.state.dictionary['emailValidationPartnerLogArticle']}</p>
                       <div className="middle">
-                        <Button color="success" href={`/password?language=${this.props.lang}&page=login`}>{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
+                        <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
                       </div>
                     </Col>
                   </Row>

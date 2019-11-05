@@ -18,17 +18,34 @@ class LinkClass {
 	private url: string;
 	private linkObject: objectLink;
 
-	constructor(urlVal: string, ctx: boolean | object = false){
-		let url = urlVal;
-		if (ctx) {
-			const protocol = ctx['host'] === 'localhost:3000' ? 'http://' : 'https://';
-			url = `${protocol}${ctx['host']}${ctx['path']}`;
-			// code...
-		}
+	constructor(){
+		this.linkObject = {
+			fullUrl: '',
+			protocol: '',
+			host: '',
+			path: '',
+			fullPath: '',
+			queryString: '',
+			queryObject: {}
+		};
+		this.url = '';
+	}
+
+	public generateLinkFromUrl(urlVal: string){
+		this.linkObject = this.createLinkObject(urlVal);
+		this.url = urlVal;
+	}
+
+	public generateLinkFromContext(ctx: object){
+		const protocol = ctx['host'] === 'localhost:3000' ? 'http://' : 'https://';
+		const url = `${protocol}${ctx['host']}${ctx['path']}`;
 
 		this.linkObject = this.createLinkObject(url);
 		this.url = url;
-		
+	}
+
+	public generateLinkFromHeader(header: object){
+		return header;
 	}
 
 	private createLinkObject(url: string): objectLink{

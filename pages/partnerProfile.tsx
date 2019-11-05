@@ -45,7 +45,7 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 	const allCookies = nextCookie(ctx);
 	const token = allCookies['trilino-partner-token'];
-	const link = setUpLinkBasic('', {path: ctx.asPath, host: req.headers.host});
+	const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
 	try{
 		const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/auth/?language=${link['queryObject']['language']}`;
