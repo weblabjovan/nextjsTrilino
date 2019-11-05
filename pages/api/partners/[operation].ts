@@ -138,7 +138,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'login') {
 		await connectToDb();
 		const { taxNum, password } = req.body;
-		console.log(req.headers.referer);
+		console.log(req);
 		const link = setUpLinkBasic(req.headers.referer);
 		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
 		const dictionary = getLanguage(userlanguage);
