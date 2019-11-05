@@ -15,6 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'save') {
 
 		const { name, taxNum, city, contactPerson, contactEmail, contactPhone, language } = req.body;
+		const userlanguage = language;
 		const dictionary = getLanguage(language);
 
 		await connectToDb();
@@ -32,7 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		    		const verified = false;
 		    		const passSafetyCode = generateString(8);
 
-		    		const newPartner = new Partner({ name, taxNum, city, contactPerson, contactEmail, contactPhone, verified, country, created, passProvided, language, passSafetyCode });
+		    		const newPartner = new Partner({ name, taxNum, city, contactPerson, contactEmail, contactPhone, verified, country, created, passProvided, userlanguage, passSafetyCode });
 		    		
 		    		const par = await newPartner.save();
 
@@ -54,7 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		    	}catch(err){
 		    		return res.status(500).send({ endpoint: 'partners', operation: 'save', success: false, code: 5, error: 'db error', message: err  });
 		    	}
-				}
+			}
   		}catch(err){
   			return res.status(500).send({ endpoint: 'partners', operation: 'save', success: false, code: 4, error: 'db error', message: err  });
   		}
