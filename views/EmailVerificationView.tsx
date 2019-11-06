@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { verifyPartner } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,7 +16,7 @@ interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
   page: string;
-  verifyPartner(param: string, data: object): any;
+  verifyPartner(param: string, data: object, link: object): any;
   setUserLanguage(language: string): string;
   partnerVerificationStart: boolean;
   partnerVerificationError: boolean | object;
@@ -66,8 +66,9 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		if (this.props.resolution === 1) {
+      const link = setUpLinkBasic(window.location.href);
       const data = {id: this.props.page, options:{"verified": true}, language: this.props.lang };
-      this.props.verifyPartner('_id', data);
+      this.props.verifyPartner('_id', data, link);
     }else{
       this.setState({ loader: false });
     }

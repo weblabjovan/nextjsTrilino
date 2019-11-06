@@ -20,8 +20,8 @@ interface MyProps {
   userLanguage: string;
   router: any;
   setUserLanguage(language: string): string;
-  registratePartner(data: object): any;
-  loginPartner(data: object): any;
+  registratePartner(data: object, link: object): any;
+  loginPartner(data: object, link: object): any;
   changeSinglePartnerField(field: string, value: any): any;
   userAgent: string;
   path: string;
@@ -206,7 +206,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           password: this.state.logPass,
           language: this.props.lang
         }
-        this.props.loginPartner(data);
+        this.props.loginPartner(data, this.props.link);
       })
      }
    }
@@ -228,7 +228,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           language: this.props.lang,
 
         }
-        this.props.registratePartner(data);
+        this.props.registratePartner(data, this.props.link);
       })
      }
    }

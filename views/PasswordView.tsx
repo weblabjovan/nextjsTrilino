@@ -7,7 +7,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { changePasswordPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -19,7 +19,7 @@ interface MyProps {
   userLanguage: string;
   page: string;
   changeSinglePartnerField(field: string, value: any): any;
-  changePasswordPartner(param: string, data: object): object;
+  changePasswordPartner(param: string, data: object, link: object): object;
   setUserLanguage(language: string): string;
   partnerPassChangeStart: boolean;
   partnerPassChangeError: boolean | object;
@@ -137,6 +137,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
   sendPass(){
   	if (!this.state.errorMessages['show']) {
   		this.setState({ loader: true }, () => {
+        const link = setUpLinkBasic(window.location.href);
 	  		const data = {
 		  		id: this.props.page,
 		  		code: this.state.code,
@@ -144,7 +145,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 					confirmation: this.state.confirmation,
           language: this.props.lang,
 		  	}
-	  		this.props.changePasswordPartner('_id', data)
+	  		this.props.changePasswordPartner('_id', data, link);
 	  	});
   	}
   }

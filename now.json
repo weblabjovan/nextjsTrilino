@@ -10,11 +10,5 @@
 			"EMAIL_API_KEY":"@email-api-key",
 			"JWT_SECRET":"@jwt-secret"
 	    }
-	},
-	"routes":[
-		{
-	      "src": "/api/(.*)",
-	      "dest": "/api/$1"
-	    }
-	]
+	}
 }

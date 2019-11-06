@@ -2,6 +2,14 @@ import request from 'superagent';
 import cookie from 'js-cookie';
 import LinkClass from '../classes/Link';
 
+
+export const setApiBasLink = (linkObj: object, route: string): string => {
+  const base = `${linkObj['protocol']}${linkObj['host']}/api`;
+  const url = `${base}${route}`;
+
+  return url;
+}
+
 export const isMobile = (userAgent: string): boolean => {
 
 	let isMobile = false;
