@@ -10,6 +10,7 @@ import { registratePartner, loginPartner, changeSinglePartnerField } from '../ac
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
+import Keys from '../server/keys';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -126,6 +127,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
+    console.log(Keys.EMAIL_API_KEY);
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }
