@@ -31,7 +31,7 @@ export const registratePartnerActionTypes = {
 };
 
 export function registratePartner(data: object, link: object) {
-  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_LOGIN);
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_SAVE);
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
