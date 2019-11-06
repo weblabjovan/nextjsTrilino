@@ -13,7 +13,7 @@ import { getLanguage } from '../../../lib/language';
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'save') {
-
+		console.log('pvde bre')
 		const { name, taxNum, city, contactPerson, contactEmail, contactPhone, language } = req.body;
 		const userlanguage = language;
 		const dictionary = getLanguage(language);
