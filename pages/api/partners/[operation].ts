@@ -13,7 +13,6 @@ import { getLanguage } from '../../../lib/language';
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'save') {
-		console.log('pvde bre')
 		const { name, taxNum, city, contactPerson, contactEmail, contactPhone, language } = req.body;
 		const userlanguage = language;
 		const dictionary = getLanguage(language);
@@ -43,9 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	  				const templateId = 2;
 
 	  				const page = decodeId(generateString, par._id);
-	  				const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-	  				const linkPath = `${protocol}${req.headers.host}`;
-	  				const link = `${linkPath}/emailVerification?language=${language}&page=${page}&type=partner`;
+	  				const link = `${req.headers.origin}/emailVerification?language=${language}&page=${page}&type=partner`;
 
 	  				const params = { title: "Registracija partnera", text: `Testni tekst za slanje emaila, jednokratni sigurnosni kod:  ${passSafetyCode}`, link: link};
 	  				const email = { sender, to, bcc, templateId, params };
