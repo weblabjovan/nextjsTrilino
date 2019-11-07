@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
-import { parseUrl } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import PasswordView from '../views/PasswordView'
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -44,13 +44,13 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 
 Password.getInitialProps = async ({ req }) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-	const parsedUrl = parseUrl(req.url);
+  const link = setUpLinkBasic(req.url);
 	const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
 	let verifyObject = { };
 	let error = true;
 
-	if (parsedUrl['query']['type'] === 'partner') {
-		const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${parsedUrl['query']['page']}&encoded=true`);
+	if (link['queryObject']['type'] === 'partner') {
+		const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
 	  	verifyObject = await res.json();
 		if (verifyObject['success']) {
 			error = false;
@@ -58,7 +58,7 @@ Password.getInitialProps = async ({ req }) => {
 	}
 	
   
-  return { userAgent, error, verifyObject}
+  return { userAgent, error, verifyObject }
 }
 
 export default withRedux(Password)

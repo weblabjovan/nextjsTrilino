@@ -13,11 +13,9 @@ import { getLanguage } from '../../../lib/language';
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'save') {
-		const link = setUpLinkBasic(req.headers.referer);
-		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
-		const dictionary = getLanguage(userlanguage);
-
-		const { name, taxNum, city, contactPerson, contactEmail, contactPhone } = req.body;
+		const { name, taxNum, city, contactPerson, contactEmail, contactPhone, language } = req.body;
+		const userlanguage = language;
+		const dictionary = getLanguage(language);
 
 		await connectToDb();
 
@@ -44,9 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	  				const templateId = 2;
 
 	  				const page = decodeId(generateString, par._id);
-	  				const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-	  				const linkPath = `${protocol}${req.headers.host}`;
-	  				const link = `${linkPath}/emailVerification?language=${userlanguage}&page=${page}&type=partner`;
+	  				const link = `${req.headers.origin}/emailVerification?language=${language}&page=${page}&type=partner`;
 
 	  				const params = { title: "Registracija partnera", text: `Testni tekst za slanje emaila, jednokratni sigurnosni kod:  ${passSafetyCode}`, link: link};
 	  				const email = { sender, to, bcc, templateId, params };
@@ -56,7 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		    	}catch(err){
 		    		return res.status(500).send({ endpoint: 'partners', operation: 'save', success: false, code: 5, error: 'db error', message: err  });
 		    	}
-				}
+			}
   		}catch(err){
   			return res.status(500).send({ endpoint: 'partners', operation: 'save', success: false, code: 4, error: 'db error', message: err  });
   		}
@@ -69,12 +65,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'get'){
 		await connectToDb();
 
-		const link = setUpLinkBasic(req.url);
-		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
 		const dictionary = getLanguage(userlanguage);
-		let partnerId = link['queryObject']['partner']
+		let partnerId = req['query']['partner'].toString();
 
-		if (link['queryObject']['encoded']) {
+		if (req['query']['encoded']) {
 			partnerId = encodeId(partnerId);
 		}
 
@@ -93,9 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'update'){
 		await connectToDb();
 		const { param, data, type } = req.body;
-		const link = setUpLinkBasic(req.headers.referer);
-		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
-		const dictionary = getLanguage(userlanguage);
+		const dictionary = getLanguage(data.language);
 
 		if (type === 'verification') {
 			try{
@@ -137,10 +130,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'login') {
 		await connectToDb();
-		const { taxNum, password } = req.body;
-		const link = setUpLinkBasic(req.headers.referer);
-		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
-		const dictionary = getLanguage(userlanguage);
+		const { taxNum, password, language } = req.body;
+
+		const dictionary = getLanguage(language);
 
 		if (!isPib(taxNum, 'sr') || isEmpty(password)) {
 			res.status(400).send({ endpoint: 'partners', operation: 'login', success: false, code: 4, error: 'validation error', message: dictionary['apiPartnerLoginCode4']  });
@@ -171,9 +163,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'auth') {
 		await connectToDb();
-		
-		const link = setUpLinkBasic(req.url);
-		const userlanguage = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+
+		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
 		const dictionary = getLanguage(userlanguage);
 
 		const token = req.headers.authorization;

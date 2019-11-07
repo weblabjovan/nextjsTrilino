@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Keys from '../keys';
+import LinkClass from '../../lib/classes/Link';
 
 export const generateString = (length: number):string => {
 	let str = '';
@@ -53,4 +54,12 @@ export const verifyToken = (value: string): object => {
   const token = jwt.verify(value, Keys.JWT_SECRET);
 
   return token;
+}
+
+export const setUpLinkReq = (header: object): object => {
+  const linkClass = new LinkClass();
+  linkClass.generateLinkFromHeader(header);
+  const link = linkClass.getParsedUrl();
+
+  return link;
 }

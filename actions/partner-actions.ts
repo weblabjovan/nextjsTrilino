@@ -1,4 +1,4 @@
-import { isMobile, apiEndpoint } from '../lib/helpers/generalFunctions';
+import { isMobile, apiEndpoint, setApiBasLink } from '../lib/helpers/generalFunctions';
 import apiRoot  from '../lib/constants/api';
 
 
@@ -30,12 +30,12 @@ export const registratePartnerActionTypes = {
   SUCCESS: 'PARTNER_REGISTRATE_SUCCESS',
 };
 
-export function registratePartner(data: object) {
-
+export function registratePartner(data: object, link: object) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_SAVE);
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
-      apiRoot.PARTNERS_SAVE,
+      endpoint,
       data,
       registratePartnerActionTypes
     );
@@ -48,12 +48,12 @@ export const loginPartnerActionTypes = {
   SUCCESS: 'PARTNER_LOGIN_SUCCESS',
 };
 
-export function loginPartner(data: object) {
-
+export function loginPartner(data: object, link: object) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_LOGIN);
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
-      apiRoot.PARTNERS_LOGIN,
+      endpoint,
       data,
       loginPartnerActionTypes
     );
@@ -66,8 +66,9 @@ export const getPartnerActionTypes = {
   SUCCESS: 'PARTNER_GET_SUCCESS',
 };
 
-export function getPartner(id: string, encoded: boolean) {
-  const endpoint = `${apiRoot.PARTNERS_GET}?partner=${id}&encoded=${encoded}`;
+export function getPartner(id: string, encoded: boolean, link: object) {
+  const point = setApiBasLink(link, apiRoot.PARTNERS_GET);
+  const endpoint = `${point}?partner=${id}&encoded=${encoded}`;
 
   return function (dispatch: dispatch) {
     apiEndpoint(
@@ -88,12 +89,13 @@ export const verificationPartnerActionTypes = {
   SUCCESS: 'PARTNER_VERIFICATION_SUCCESS',
 };
 
-export function verifyPartner(param: string, data: object) {
+export function verifyPartner(param: string, data: object, link: object) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
   const sendBody = { param, data, type: 'verification' };
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
-      apiRoot.PARTNERS_UPDATE,
+      endpoint,
       sendBody,
       verificationPartnerActionTypes
     );
@@ -106,13 +108,14 @@ export const passChangePartnerActionTypes = {
   SUCCESS: 'PARTNER_PASS_CHANGE_SUCCESS',
 };
 
-export function changePasswordPartner(param: string, data: object) {
+export function changePasswordPartner(param: string, data: object, link: object) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
   const sendBody = { param, data, type: 'password' };
-  console.log('ovde sam');
+
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
-      apiRoot.PARTNERS_UPDATE,
+      endpoint,
       sendBody,
       passChangePartnerActionTypes
     );

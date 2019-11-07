@@ -1,22 +1,16 @@
 import {
-  userDeviceActionTypes, testingApiActionTypes
+  userDeviceActionTypes, userLanguageActionTypes
 } from '../actions/user-actions';
 
 interface initialState {
 	isMobile: boolean;
 	language: string;
-  testingStart: boolean;
-  testingError: boolean;
-  testingSuccess: object;
 }
 
 const initialState: initialState  = {
   isMobile: false,
   language: 'sr',
 
-  testingStart: false,
-  testingError: false,
-  testingSuccess: {},
 };
 
 const actionsMap = {
@@ -28,24 +22,10 @@ const actionsMap = {
     };
   },
 
-  [testingApiActionTypes.START]: (state) => {
+  [userLanguageActionTypes.SUCCESS]: (state, action) => {
     return {
       ...state,
-      testingStart: true,
-    };
-  },
-  [testingApiActionTypes.ERROR]: (state, action) => {
-    return {
-      ...state,
-      testingStart: false,
-      testingError: true,
-    };
-  },
-  [testingApiActionTypes.SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      testingSuccess: action.payload,
-      testingStart: false,
+      language: action.payload,
     };
   },
 };

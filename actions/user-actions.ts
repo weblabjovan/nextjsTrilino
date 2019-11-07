@@ -36,21 +36,3 @@ export function setUserLanguage(language: string) {
     });
   };
 }
-
-export const testingApiActionTypes = {
-  START: 'TESTING_API_START',
-  ERROR: 'TESTING_API_ERROR',
-  SUCCESS: 'TESTING_API_SUCCESS',
-};
-
-export function testingApi(brand:string, user:number) {
-
-  return function (dispatch: dispatch) {
-    apiEndpoint(
-      dispatch,
-      apiRoot.TEST,
-      { brand, user },
-      testingApiActionTypes
-    );
-  };
-}

@@ -5,7 +5,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import EmailVerificationView from '../views/EmailVerificationView';
 import pages from '../lib/constants/pages';
-import { parseUrl } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -48,13 +48,13 @@ const EmailVerification : NextPage<Props> = ({ userAgent, verifyObject, resoluti
 
 EmailVerification.getInitialProps = async ({ req }) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const parsedUrl = parseUrl(req.url);
+  const link = setUpLinkBasic(req.url);
   let verifyObject = { };
   let resolution = 0;
 
-  if (parsedUrl['query']['type'] === 'partner') {
+  if (link['queryObject']['type'] === 'partner') {
     const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-  	const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${parsedUrl['query']['page']}&encoded=true`);
+  	const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
   	verifyObject = await res.json();
   	if (verifyObject['success']) {
   		if (verifyObject['partner']['verified']) {

@@ -2,6 +2,14 @@ import request from 'superagent';
 import cookie from 'js-cookie';
 import LinkClass from '../classes/Link';
 
+
+export const setApiBasLink = (linkObj: object, route: string): string => {
+  const base = `${linkObj['protocol']}${linkObj['host']}/api`;
+  const url = `${base}${route}`;
+
+  return url;
+}
+
 export const isMobile = (userAgent: string): boolean => {
 
 	let isMobile = false;
@@ -120,8 +128,15 @@ export const unsetCookie = (name: string): void => {
   cookie.remove(name);
 }
 
-export const setUpLinkBasic = (url: string, ctx: boolean | object = false): object => {
-  const linkClass = new LinkClass(url, ctx);
+export const setUpLinkBasic = (url: string | object): object => {
+  const linkClass = new LinkClass();
+
+  if (typeof url === 'string') {
+    linkClass.generateLinkFromUrl(url);
+  }else{
+    linkClass.generateLinkFromContext(url);
+  }
+  
   const link = linkClass.getParsedUrl();
 
   return link;

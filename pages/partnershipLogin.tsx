@@ -53,10 +53,11 @@ const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
 
 PartnershipLogin.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
+  
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const allCookies = nextCookie(ctx);
   const token = allCookies['trilino-partner-token'];
-  const link = setUpLinkBasic('', {path: ctx.asPath, host: req.headers.host});
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   
   try{

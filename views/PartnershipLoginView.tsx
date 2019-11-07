@@ -10,6 +10,7 @@ import { registratePartner, loginPartner, changeSinglePartnerField } from '../ac
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
+import Keys from '../server/keys';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,8 +21,8 @@ interface MyProps {
   userLanguage: string;
   router: any;
   setUserLanguage(language: string): string;
-  registratePartner(data: object): any;
-  loginPartner(data: object): any;
+  registratePartner(data: object, link: object): any;
+  loginPartner(data: object, link: object): any;
   changeSinglePartnerField(field: string, value: any): any;
   userAgent: string;
   path: string;
@@ -126,6 +127,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
+    console.log(Keys.EMAIL_API_KEY);
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }
@@ -204,8 +206,9 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
          const data = {
           taxNum: this.state.logTax,
           password: this.state.logPass,
+          language: this.props.lang
         }
-        this.props.loginPartner(data);
+        this.props.loginPartner(data, this.props.link);
       })
      }
    }
@@ -224,9 +227,10 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           contactPerson: this.state.contactPerson,
           contactEmail: this.state.contactEmail,
           contactPhone: this.state.contactPhone,
+          language: this.props.lang,
 
         }
-        this.props.registratePartner(data);
+        this.props.registratePartner(data, this.props.link);
       })
      }
    }
