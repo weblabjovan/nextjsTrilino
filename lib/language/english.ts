@@ -21,6 +21,7 @@ const english: LanguageInterface = {
 	uniConfirmPass: 'Confirm Password',
 	uniSave: 'Save',
 	uniSafetyCode: 'Safety Code',
+	uniSend: 'Send',
 
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
@@ -48,6 +49,29 @@ const english: LanguageInterface = {
 	homeWhy4: 'We make organization of children celebration a simple and easy process.',
 	homeWhy5: 'We offer information that you need for making a relevant customer decision.',
 	homeWhy6: 'With us you can rate your customer experience and use experiences of others.',
+
+	partnershipTitle: 'Organize more parties with Trilino',
+	partnershipTitle_1: 'Professional support for your business growth',
+	partnershipDescription_1: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing',
+	partnershipStripe_1: 'You want to be a part of Trilino?',
+	partnershipSubTitle_1: 'Additional sales channel',
+	partnershipSubDescription_1: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipSubTitle_2: 'Internet visibility',
+	partnershipSubDescription_2: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipSubTitle_3: 'Process optimization',
+	partnershipSubDescription_3: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipTitle_2: 'Unique system able to answer specific request of your business',
+	partnershipStripe_2: 'Join us in just 3 simple steps',
+	partnershipStepsTitle_1: 'Registration',
+	partnershipStepsDescription_1: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStepsTitle_2: 'Multimedia',
+	partnershipStepsDescription_2: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStepsTitle_3: 'Activation',
+	partnershipStepsDescription_3: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStripe_3: 'Make your first step',
+	partnershipContactTitle: 'You need more information?',
+	partnershipContactDescription: 'We can share more detailed information about Trilino functionalities and answer all your questions about the product. Send us an email on ',
+	partnershipPartner: 'If you are already Trilino partner',
 
 	partnerLogTitle: 'Partner login',
 	partnerRegTitle: 'Partner registration',
@@ -93,7 +117,13 @@ const english: LanguageInterface = {
 	passwordAlertCode: 'Safety code is required field. Please insert valid safety code that has been sent to your email.',
 	passwordAlertConfirm: 'Password confirmation is required field and the content of this field has to be same as the content of the password field. Please confirm your password.',
 
-	partnershipTitle: 'This is Partnership Page',
+	passwordRequestTitle: 'Password change',
+	passwordRequestExplanation: 'Input your tax identification number and your contact email. If the input data is valid we will send you security code and link for creating your new password.',
+	passwordUpdateRequestTitle: 'Succefully sent',
+	passwordUpdateRequestExplanation: 'Data that you need to change your current password are sent to your email. Please, check your email in few minutes.',
+	passwordUpdateRequestError: 'You are thying to change password as a logged user or link in the address bar is not right. Please sign out and check the link in your address bar.',
+
+
 	loginTitle: 'This is Login Page',
 
 
@@ -110,7 +140,8 @@ const english: LanguageInterface = {
 
 	apiPartnerUpdateVeriCode2: 'There is no partner with requested id.',
 	apiPartnerUpdatePassCode2: 'Sent data is not validated.',
-	apiPartnerUpdatePassCode3: 'There is no partner with requested id and safety code.',
+	apiPartnerUpdatePassCode3: 'Your security code is not matching your tax identification number. Maybe you are using old security code which is not valid anymore.',
+	apiPartnerUpdateReqPassCode3: 'Partner with this email and Tax Identification Number was not found. Please check the information you have inputted.',
 
 	apiPartnerLoginCode2: 'Provided password is not valid for this partner.',
 	apiPartnerLoginCode3: 'There is no partner with requested identification number.',

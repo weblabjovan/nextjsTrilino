@@ -21,6 +21,7 @@ const serbian: LanguageInterface = {
 	uniConfirmPass: 'Potvrdite lozinku',
 	uniSave: 'Sačuvaj',
 	uniSafetyCode: 'Sigurnosni kod',
+	uniSend: 'Pošaljite',
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
 	homeImg_1: 'Trilino-dečije-slavlje-homepage',
@@ -48,6 +49,31 @@ const serbian: LanguageInterface = {
 	homeWhy4: 'Trudimo se da proces ogranizacije dečijih rodjendana učinimo jednostavnim.',
 	homeWhy5: 'Pružamo vam sve informacije koje su vam neophodne da donesete kvalitetnu odluku.',
 	homeWhy6: 'Dajemo vam mogućnost da ocenite vaše iskustvo i saznate iskustva drugih.',
+
+
+	partnershipTitle: 'Organizujte veći broj proslava sa Trilinom',
+	partnershipTitle_1: 'Profesionalna podrška u razvijanju vašeg biznisa',
+	partnershipDescription_1: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing',
+	partnershipStripe_1: 'Želite da postanete deo Trilina?',
+	partnershipSubTitle_1: 'Dodatni kanal prodaje',
+	partnershipSubDescription_1: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipSubTitle_2: 'Vidljivost na internetu',
+	partnershipSubDescription_2: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipSubTitle_3: 'Optimizacija procesa',
+	partnershipSubDescription_3: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing',
+	partnershipTitle_2: 'Jedinstven sistem napravljen da odgovori na specifične zahteve vašeg biznisa',
+	partnershipStripe_2: 'Pridružite nam se u samo 3 jednostavna koraka',
+	partnershipStepsTitle_1: 'Registracija',
+	partnershipStepsDescription_1: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStepsTitle_2: 'Multimedija',
+	partnershipStepsDescription_2: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStepsTitle_3: 'Aktivacija',
+	partnershipStepsDescription_3: 'It has survived not only five centuries, but also the leap into electronic',
+	partnershipStripe_3: 'Napravite prvi korak',
+	partnershipContactTitle: 'Potrebne su vam dodatne informacije?',
+	partnershipContactDescription: 'Možemo vas detaljnije uputiti u Trilino funkcionalnosti ili odgovoriti na vaša pitanja. Pišite nam na',
+	partnershipPartner: 'Ukoliko ste već Trilino partner',
+
 
 	partnerLogTitle: 'Partnerska prijava',
 	partnerRegTitle: 'Partnerska registracija',
@@ -93,7 +119,12 @@ const serbian: LanguageInterface = {
 	passwordAlertCode: 'Sigurnosni kod je obavezno polje. Molimo vas unesite sigurnosni kod koji vam je poslat na email.',
 	passwordAlertConfirm: 'Potvrda lozinke je obavezno polje i njen sadržaj mora biti isti kao i sadržaj polja lozinka. Molimo vas potvrdite lozinku.',
 
-	partnershipTitle: 'Ovo je stranica saradnja',
+	passwordRequestTitle: 'Promena lozinke',
+	passwordRequestExplanation: 'Upišite vaš PIB i validnu email adresu. Ukoliko su podaci ispravni na email će vam stići link i sigurnosni kod za promenu lozinke.',
+	passwordUpdateRequestTitle: 'Uspešno poslato',
+	passwordUpdateRequestExplanation: 'Podaci potrebni za promenu lozinke su vam poslati na email. Molimo vas proverite email za nekoliko minuta.',
+	passwordUpdateRequestError: 'Pokušavate da pristupite opciji promene lozinke kao prijavljeni partner ili koristite nepotpun link. Molimo vas odajvite se ukoliko ste prijavljeni i proverite link u adres baru.',
+
 	loginTitle: 'Ovo je stranica prijava',
 
 
@@ -110,7 +141,8 @@ const serbian: LanguageInterface = {
 
 	apiPartnerUpdateVeriCode2: 'Ne postoji partner sa traženim id-jem.',
 	apiPartnerUpdatePassCode2: 'Upisani podaci nisu validirani.',
-	apiPartnerUpdatePassCode3: 'Ne postoji partner sa traženim PIB-om i sigurnosnim kodom.',
+	apiPartnerUpdatePassCode3: 'Vaš sigurnosni kod se ne slaže sa vašim PIB-om. Možda koristite sigurnosni kod koji je istekao.',
+	apiPartnerUpdateReqPassCode3: 'Partner sa traženim PIB-om i email-om ne postoji. Molimo vas, proverite upisane podatke.',
 
 	apiPartnerLoginCode2: 'Upisana lozinka nije validna za ovog partnera.',
 	apiPartnerLoginCode3: 'Ne postoji partner sa traženim PIB-om.',

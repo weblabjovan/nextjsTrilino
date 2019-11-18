@@ -1,5 +1,5 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes,
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes,
 } from '../actions/partner-actions';
 
 
@@ -25,6 +25,10 @@ interface initialState {
   partnerPassChangeError: object | boolean;
   partnerPassChangeSuccess: null | object;
 
+  partnerPassChangeRequestStart: boolean;
+  partnerPassChangeRequestError: object | boolean;
+  partnerPassChangeRequestSuccess: null | object;
+
   
 }
 
@@ -49,6 +53,10 @@ const initialState: initialState  = {
   partnerPassChangeStart: false,
   partnerPassChangeError: false,
   partnerPassChangeSuccess: null,
+
+  partnerPassChangeRequestStart: false,
+  partnerPassChangeRequestError: false,
+  partnerPassChangeRequestSuccess: null,
 
 };
 
@@ -171,6 +179,27 @@ const actionsMap = {
       ...state,
       partnerPassChangeSuccess: action.payload,
       partnerPassChangeStart: false,
+    };
+  },
+
+  [passChangeRequestPartnerActionTypes.START]: (state) => {
+    return {
+      ...state,
+      partnerPassChangeRequestStart: true,
+    };
+  },
+  [passChangeRequestPartnerActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      partnerPassChangeRequestStart: false,
+      partnerPassChangeRequestError: action.payload.response.body,
+    };
+  },
+  [passChangeRequestPartnerActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      partnerPassChangeRequestSuccess: action.payload,
+      partnerPassChangeRequestStart: false,
     };
   },
 };

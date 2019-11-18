@@ -58,7 +58,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
               <Col xs="12">
-                <h1>Organizujte veći broj proslava sa Trilinom</h1>
+                <h1>{ this.state.dictionary['partnershipTitle'] }</h1>
               </Col>
                 
             </Row>
@@ -70,8 +70,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
               <Col xs="12">
-                <h3>Profesionalna podrška u razvijanju vašeg biznisa</h3>
-                <p> It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing</p>
+                <h3>{ this.state.dictionary['partnershipTitle_1'] }</h3>
+                <p> { this.state.dictionary['partnershipDescription_1'] }</p>
               </Col>
                 
             </Row>
@@ -84,8 +84,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
             <Row>
                 <Col xs="12">
                   <div className="partnershipStripe">
-                    <h2> Želite da postanete deo Trilina?</h2>
-                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=register`}>registrujte se</Button>
+                    <h2>{ this.state.dictionary['partnershipStripe_1'] }</h2>
+                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=register`}>{this.state.dictionary['uniRegister']}</Button>
                   </div>
                   
                 </Col>
@@ -105,8 +105,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <h4>Dodatni kanal prodaje</h4>
-                        <p> It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing</p>
+                        <h4>{ this.state.dictionary['partnershipSubTitle_1'] }</h4>
+                        <p>{ this.state.dictionary['partnershipSubDescription_1'] }</p>
                         
                       </Col>
                     </Row>
@@ -120,8 +120,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <h4>Vidljivost na internetu</h4>
-                        <p> It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing</p>
+                        <h4>{ this.state.dictionary['partnershipSubTitle_2'] }</h4>
+                        <p>{ this.state.dictionary['partnershipSubDescription_2'] }</p>
                       </Col>
                     </Row>
                   </Container>
@@ -134,8 +134,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                         <div className="face">
                           <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
-                        <h4>Optimizacija procesa</h4>
-                        <p> It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing</p>
+                        <h4>{ this.state.dictionary['partnershipSubTitle_3'] }</h4>
+                        <p>{ this.state.dictionary['partnershipSubDescription_3'] }</p>
                         
                       </Col>
                     </Row>
@@ -167,7 +167,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                   <Container>
                     <Row>
                       <Col xs="12" className="partnerWhatItem no-margin">
-                        <h5>Jedinstven sistem napravljen da odgovori na specifične zahteve vašeg biznisa</h5>
+                        <h5>{this.state.dictionary['partnershipTitle_2']}</h5>
                       </Col>
                     </Row>
                   </Container>
@@ -184,7 +184,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12">
                 <div className="headline">
-                  <h2>Pridružite nam se u samo 3 jednostavna koraka</h2>
+                  <h2>{this.state.dictionary['partnershipStripe_2']}</h2>
                 </div>
               </Col>
             </Row>
@@ -196,9 +196,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                       
                       <div className="double">
                         <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
-                        <h4>Registracija</h4>
+                        <h4>{this.state.dictionary['partnershipStepsTitle_1']}</h4>
                        </div>
-                      <p> It has survived not only five centuries, but also the leap into electronic</p>
+                      <p>{this.state.dictionary['partnershipStepsDescription_1']}</p>
                       
                     </Col>
                   </Row>
@@ -211,9 +211,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Col xs="12" className="partnerWhatItem">
                       <div className="double">
                         <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
-                        <h4>Multimedija</h4>
+                        <h4>{this.state.dictionary['partnershipStepsTitle_2']}</h4>
                        </div>
-                      <p> It has survived not only five centuries, but also the leap into electronic</p>
+                      <p>{this.state.dictionary['partnershipStepsDescription_2']}</p>
                     </Col>
                   </Row>
                 </Container>
@@ -225,9 +225,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Col xs="12" className="partnerWhatItem">
                       <div className="double">
                         <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
-                        <h4>Aktivacija</h4>
+                        <h4>{this.state.dictionary['partnershipStepsTitle_3']}</h4>
                       </div>
-                      <p> It has survived not only five centuries, but also the leap into electronic</p>
+                      <p>{this.state.dictionary['partnershipStepsDescription_3']}</p>
                       
                     </Col>
                   </Row>
@@ -244,8 +244,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
             <Row>
                 <Col xs="12">
                   <div className="partnershipStripe">
-                    <h2 className="white">Napravite prvi korak</h2>
-                    <a href={`/partnershipLogin?language=${this.props.lang}&page=register`} className="white link">registrujte se</a>
+                    <h2 className="white">{this.state.dictionary['partnershipStripe_3']}</h2>
+                    <a href={`/partnershipLogin?language=${this.props.lang}&page=register`} className="white link">{this.state.dictionary['uniRegister']}</a>
                   </div>
                   
                 </Col>
@@ -259,8 +259,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
           <Container>
             <Row>
               <Col xs="12">
-                <h3>Potrebne su vam dodatne informacije?</h3>
-                <p>Možemo vas detaljnije uputiti u Trilino funkcionalnosti ili odgovoriti na vaša pitanja. Pišite nam na <span className="colorLink">support@trilino.com</span> </p>
+                <h3>{this.state.dictionary['partnershipContactTitle']}</h3>
+                <p>{this.state.dictionary['partnershipContactDescription']}<span className="colorLink">support@trilino.com</span> </p>
               </Col>
                 
             </Row>
@@ -274,8 +274,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
             <Row>
                 <Col xs="12">
                   <div className="partnershipStripe">
-                    <h2>Ukoliko ste već Trilino partner</h2>
-                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>prijavite se</Button>
+                    <h2>{this.state.dictionary['partnershipPartner']}</h2>
+                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>{this.state.dictionary['uniLogin']}</Button>
                   </div>
                   
                 </Col>

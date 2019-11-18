@@ -102,6 +102,26 @@ export function verifyPartner(param: string, data: object, link: object) {
   };
 }
 
+export const passChangeRequestPartnerActionTypes = {
+  START: 'PARTNER_PASS_REQUEST_CHANGE_START',
+  ERROR: 'PARTNER_PASS_REQUEST_CHANGE_ERROR',
+  SUCCESS: 'PARTNER_PASS_REQUEST_CHANGE_SUCCESS',
+};
+
+export function changePasswordRequestPartner(param: string, data: object, link: object) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
+  const sendBody = { param, data, type: 'passwordChange' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      passChangeRequestPartnerActionTypes
+    );
+  };
+}
+
 export const passChangePartnerActionTypes = {
   START: 'PARTNER_PASS_CHANGE_START',
   ERROR: 'PARTNER_PASS_CHANGE_ERROR',

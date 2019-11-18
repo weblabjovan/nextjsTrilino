@@ -53,26 +53,30 @@ EmailVerification.getInitialProps = async ({ req }) => {
   let resolution = 0;
 
   if (link['queryObject']['type'] === 'partner') {
-    const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-  	const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
-  	verifyObject = await res.json();
-  	if (verifyObject['success']) {
-  		if (verifyObject['partner']['verified']) {
-  			if (verifyObject['partner']['passProvided']) {
-  				resolution = 3; //verified with password
-  			}else{
-  				resolution = 2; //verified without password
-  			}
-  		}else{
-  			resolution = 1; //not verified
-  		}
-  		
-  	}else{
-  		resolution = 4; //error no provided id
-  	}
+    try{
+      const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
+      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
+      verifyObject = await res.json();
+      if (verifyObject['success']) {
+        if (verifyObject['partner']['verified']) {
+          if (verifyObject['partner']['passProvided']) {
+            resolution = 3; //verified with password
+          }else{
+            resolution = 2; //verified without password
+          }
+        }else{
+          resolution = 1; //not verified
+        }
+        
+      }else{
+        resolution = 4; //error no provided id
+      }
+    }catch(err){
+      console.log(err);
+      resolution = 4; //error no provided id
+    }
+    
   }
-
-  
 
   return { userAgent, verifyObject, resolution }
 }
