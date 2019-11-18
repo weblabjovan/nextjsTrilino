@@ -413,7 +413,7 @@ class HomeView extends React.Component <MyProps, MyState>{
               <Col xs="12">
                 <h4>{ this.state.dictionary['homeHeader_4'] }</h4>
                 <p>{ this.state.dictionary['homePartner'] }</p>
-                <Button color="success">{ this.state.dictionary['uniMore'] }</Button>
+                <Button color="success" href={`/partnership?language=${this.props.lang}`} >{ this.state.dictionary['uniMore'] }</Button>
               </Col>
                 
             </Row>

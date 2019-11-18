@@ -127,7 +127,6 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    console.log(Keys.EMAIL_API_KEY);
     if (this.props.error) {
       this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
     }
@@ -412,7 +411,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                           max={ 22 } />
 
     							<div className="middle marginSmall">
-    								<a href="/">{this.state.dictionary['uniForgotPass']}</a>
+    								<a href={`/passwordChange?language=${this.props.lang}&page=partner`}>{this.state.dictionary['uniForgotPass']}</a>
     							</div>
 
     							<div className="middle">

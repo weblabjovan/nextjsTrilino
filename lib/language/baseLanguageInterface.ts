@@ -19,6 +19,7 @@ export default interface LanguageInterface {
 	uniConfirmPass: string;
 	uniSave: string;
 	uniSafetyCode: string;
+	uniSend: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -46,6 +47,30 @@ export default interface LanguageInterface {
 	homeCommentName_2: string;
 	homeCommentName_3: string;
 	homePartner: string;
+
+	partnershipTitle: string;
+	partnershipTitle_1: string;
+	partnershipDescription_1: string;
+	partnershipStripe_1: string;
+	partnershipSubTitle_1: string;
+	partnershipSubDescription_1: string;
+	partnershipSubTitle_2: string;
+	partnershipSubDescription_2: string;
+	partnershipSubTitle_3: string;
+	partnershipSubDescription_3: string;
+	partnershipTitle_2: string;
+	partnershipStripe_2: string;
+	partnershipStepsTitle_1: string;
+	partnershipStepsDescription_1: string;
+	partnershipStepsTitle_2: string;
+	partnershipStepsDescription_2: string;
+	partnershipStepsTitle_3: string;
+	partnershipStepsDescription_3: string;
+	partnershipStripe_3: string;
+	partnershipContactTitle: string;
+	partnershipContactDescription: string;
+	partnershipPartner: string;
+
 
 	partnerLogTitle: string;
 	partnerRegTitle: string;
@@ -91,7 +116,12 @@ export default interface LanguageInterface {
 	passwordAlertCode: string;
 	passwordAlertConfirm: string;
 
-	partnershipTitle: string;
+	passwordRequestTitle: string;
+	passwordRequestExplanation: string;
+	passwordUpdateRequestTitle: string;
+	passwordUpdateRequestExplanation: string;
+	passwordUpdateRequestError: string;
+
 	loginTitle: string;
 
 
@@ -109,6 +139,7 @@ export default interface LanguageInterface {
 	apiPartnerUpdateVeriCode2: string;
 	apiPartnerUpdatePassCode2: string;
 	apiPartnerUpdatePassCode3: string;
+	apiPartnerUpdateReqPassCode3: string;
 
 	apiPartnerLoginCode2: string;
 	apiPartnerLoginCode3: string;

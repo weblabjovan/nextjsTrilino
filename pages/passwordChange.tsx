@@ -4,7 +4,7 @@ import fetch from 'isomorphic-unfetch';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import PasswordView from '../views/PasswordView'
+import PasswordChangeView from '../views/PasswordChangeView'
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 
-const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
+const PasswordChange : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 
   const router = useRouter();
   let lang = 'sr'
@@ -27,10 +27,14 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
     }
   }
 
+  if (router.query['page'] !== 'partner' && router.query['page'] !== 'user') {
+  	error = true;
+  }
+
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <PasswordView 
+      <PasswordChangeView 
       	error={ error }
       	verifyObject={ verifyObject }
       	userAgent={ userAgent }
@@ -42,27 +46,28 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
   )
 }
 
-Password.getInitialProps = async ({ req }) => {
+PasswordChange.getInitialProps = async ({ req }) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic(req.url);
 	const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
 	let verifyObject = { };
-	let error = true;
+	let error = false;
 
 	if (link['queryObject']['type'] === 'partner') {
-    try{
-      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
-      verifyObject = await res.json();
-      if (verifyObject['success']) {
-        error = false;
-      }
-    }catch(err){
-      console.log(err);
-    }
+		try{
+			const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
+		  	verifyObject = await res.json();
+			if (verifyObject['success']) {
+				error = true;
+			}
+		}catch(err){
+			console.log(err);
+		}
 		
 	}
+	
   
   return { userAgent, error, verifyObject }
 }
 
-export default withRedux(Password)
+export default withRedux(PasswordChange)
