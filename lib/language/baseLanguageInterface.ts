@@ -4,6 +4,14 @@ export default interface LanguageInterface {
 	navigationFaq: string;
 	navigationPartnership: string;
 	navigationContact: string;
+
+	navigationPartnerGeneral: string;
+	navigationPartnerCatering: string;
+	navigationPartnerDecoration: string;
+	navigationPartnerOffer: string;
+	navigationPartnerCalendar: string;
+	navigationPartnerPreview: string;
+	navigationPartnerLogout: string;
 	
 	uniCity: string;
 	uniDistrict: string;

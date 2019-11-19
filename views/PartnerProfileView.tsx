@@ -7,7 +7,8 @@ import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile } from '../lib/helpers/generalFunctions';
 import PartnerNavigationBar from '../components/navigation/partnerNavbar';
-import Footer from '../components/navigation/footer';
+import PartnerProfileScreen from '../components/partnerProfile/partnerProfileScreen';
+import Footer from '../components/navigation/partnerFooter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -26,15 +27,45 @@ interface MyState {
 	language: string;
 	dictionary: object;
 	isMobile: boolean;
+  activeScreen: string;
 };
 
 class PartnerProfileView extends React.Component <MyProps, MyState>{
 
+  constructor(props){
+    super(props);
+
+    this.componentObjectBinding = this.componentObjectBinding.bind(this);
+
+    const bindingFunctions = ['changeScreen', 'changeLanguage' ];
+    this.componentObjectBinding(bindingFunctions);
+  }
+
+  componentObjectBinding(array){
+    array.map( item => {
+      this[item] = this[item].bind(this);
+    })
+  }
+
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
+      language: this.props.lang,
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
+      activeScreen: 'general',
     };
+
+  changeScreen(event){
+    this.setState({ activeScreen: event.target.id});
+  }
+
+  changeLanguage(lang){
+    let language = 'sr';
+    if (lang === 'en') {
+      language = 'en';
+    }
+
+    this.setState({ language })
+  }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
@@ -48,22 +79,16 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     			language={ this.state.language } 
           fullPath={ this.props.fullPath }
     			link={ this.props.link }
+          changeScreen={ this.changeScreen }
+          activeScreen={ this.state.activeScreen }
+          changeLanguage={ this.changeLanguage }
     		/>
-    		<Container>
-		        <Row>
-		          <Col xs='12' className="middle">
-		            <img src="/static/construction.gif" ></img>
-		          </Col>
-		        </Row>
+    		<PartnerProfileScreen
+          lang={ this.state.language } 
+          link={ this.props.link }
+          screen={ this.state.activeScreen }
 
-		        <div className="intro">
-		            <Row>
-		              <Col xs='12' className="middle">
-		                <h1 className="middle">Ovo je partner profil stranica</h1>
-		              </Col>
-		            </Row>
-		        </div>
-		    </Container>
+        />
 
 		    <Footer 
     			isMobile={ this.state.isMobile } 
