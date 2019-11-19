@@ -6,6 +6,14 @@ const serbian: LanguageInterface = {
 	navigationFaq: "Najčešća pitanja",
 	navigationPartnership: "Saradnja",
 	navigationContact: "Kontakt",
+
+	navigationPartnerGeneral: 'Osnovno',
+	navigationPartnerCatering: 'Hrana i piće',
+	navigationPartnerDecoration: 'Dekoracija',
+	navigationPartnerOffer: 'Ponuda',
+	navigationPartnerCalendar: 'Kalendar',
+	navigationPartnerPreview: 'Pregled',
+	navigationPartnerLogout: 'Odjava',
 	
 	uniCity: 'Grad',
 	uniDistrict: 'Opština',

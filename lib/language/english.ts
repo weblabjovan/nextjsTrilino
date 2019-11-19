@@ -6,6 +6,14 @@ const english: LanguageInterface = {
 	navigationFaq: "FAQ",
 	navigationPartnership: "Partnership",
 	navigationContact: "Contact",
+
+	navigationPartnerGeneral: 'General',
+	navigationPartnerCatering: 'Catering',
+	navigationPartnerDecoration: 'Decoration',
+	navigationPartnerOffer: 'Offer',
+	navigationPartnerCalendar: 'Calendar',
+	navigationPartnerPreview: 'Preview',
+	navigationPartnerLogout: 'Logout',
 	
 	uniCity: 'City',
 	uniDistrict: 'District',
