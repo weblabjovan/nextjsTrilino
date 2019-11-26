@@ -81,7 +81,7 @@ export const apiEndpoint = (
 	  req.send(data);
   }
   if (auth) {
-    req.set('Authorization: Bearer jovansjzrhbsgtgzsjkaoutesvbshdj');
+    req.set('Authorization', `${auth}` );
   }
   return req.set('Accept', 'application/json')
   .end((error, res) => {

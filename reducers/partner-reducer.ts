@@ -1,9 +1,13 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes,
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes,
 } from '../actions/partner-actions';
+import { IpartnerRoomItem, IpartnerGeneral } from '../lib/constants/interfaces';
+import { setUpGeneralRoomsForFront } from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
+
+  partner: null | object;
 
   partnerRegStart: boolean;
   partnerRegError: object | boolean;
@@ -15,7 +19,6 @@ interface initialState {
 
   partnerGetStart: boolean;
   partnerGetError: object | boolean;
-  partnerGetSuccess: null | object;
 
   partnerVerificationStart: boolean;
   partnerVerificationError: object | boolean;
@@ -29,10 +32,20 @@ interface initialState {
   partnerPassChangeRequestError: object | boolean;
   partnerPassChangeRequestSuccess: null | object;
 
+  updateActionGeneralStart: boolean;
+  updateActionGeneralError: object | boolean;
+  updateActionGeneralSuccess: null | number;
+
+  partnerGeneral: IpartnerGeneral;
+
+  partnerRooms: Array<IpartnerRoomItem>;
+
   
 }
 
 const initialState: initialState  = {
+
+  partner: null,
 
   partnerRegStart: false,
   partnerRegError: {},
@@ -44,7 +57,6 @@ const initialState: initialState  = {
 
   partnerGetStart: false,
   partnerGetError: false,
-  partnerGetSuccess: null,
 
   partnerVerificationStart: false,
   partnerVerificationError: false,
@@ -57,6 +69,80 @@ const initialState: initialState  = {
   partnerPassChangeRequestStart: false,
   partnerPassChangeRequestError: false,
   partnerPassChangeRequestSuccess: null,
+
+  updateActionGeneralStart: false,
+  updateActionGeneralError: false,
+  updateActionGeneralSuccess: null,
+
+  partnerGeneral: {
+    size: null,
+    playSize: null,
+    description: '',
+    address: '',
+    ageFrom: '',
+    ageTo: '',
+    mondayFrom: '',
+    mondayTo: '',
+    tuesdayFrom: '',
+    tuesdayTo: '',
+    wednesdayFrom: '',
+    wednesdayTo: '',
+    thursdayFrom: '',
+    thursdayTo: '',
+    fridayFrom: '',
+    fridayTo: '',
+    saturdayFrom: '',
+    saturdayTo: '',
+    sundayFrom: '',
+    sundayTo: '',
+    parking: '',
+    yard: '',
+    balcon: '',
+    pool: '',
+    wifi: '',
+    animator: '',
+    food: '',
+    drink: '',
+    cake: '',
+    selfFood: '',
+    selfDrink: '',
+    selfCake: '',
+    duration: '',
+    cancelation: '',
+    roomNumber: '',
+  },
+
+  partnerRooms: [
+    {
+      name: '', 
+      size: null,
+      capKids: null,
+      capAdults: null,
+      terms:{
+        monday:[
+          {from: '', to: '', price: null },
+        ],
+        tuesday:[
+          {from: '', to: '', price: null },
+        ],
+        wednesday:[
+          {from: '', to: '', price: null },
+        ],
+        thursday:[
+          {from: '', to: '', price: null },
+        ],
+        friday:[
+          {from: '', to: '', price: null },
+        ],
+        saturday:[
+          {from: '', to: '', price: null },
+        ],
+        sunday:[
+          {from: '', to: '', price: null },
+        ],
+      }
+    }
+  ]
 
 };
 
@@ -117,23 +203,24 @@ const actionsMap = {
   },
 
 
-  [getPartnerActionTypes.START]: (state) => {
+  [getPartnerProfileActionTypes.START]: (state) => {
     return {
       ...state,
       partnerGetStart: true,
     };
   },
-  [getPartnerActionTypes.ERROR]: (state, action) => {
+  [getPartnerProfileActionTypes.ERROR]: (state, action) => {
     return {
       ...state,
       partnerGetStart: false,
       partnerGetError: action.payload.response.body,
     };
   },
-  [getPartnerActionTypes.SUCCESS]: (state, action) => {
+  [getPartnerProfileActionTypes.SUCCESS]: (state, action) => {
     return {
       ...state,
-      partnerGetSuccess: action.payload,
+      partnerRooms: setUpGeneralRoomsForFront(action.payload['partner']['general']['rooms']),
+      partner: action.payload['partner'],
       partnerGetStart: false,
     };
   },
@@ -200,6 +287,28 @@ const actionsMap = {
       ...state,
       partnerPassChangeRequestSuccess: action.payload,
       partnerPassChangeRequestStart: false,
+    };
+  },
+
+  [updateGeneralPartnerActionTypes.START]: (state) => {
+    return {
+      ...state,
+      updateActionGeneralStart: true,
+    };
+  },
+  [updateGeneralPartnerActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      updateActionGeneralStart: false,
+      updateActionGeneralError: action.payload.response.body,
+    };
+  },
+  [updateGeneralPartnerActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      updateActionGeneralSuccess: action.payload.code,
+      partner: action.payload.partner,
+      updateActionGeneralStart: false,
     };
   },
 };

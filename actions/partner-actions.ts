@@ -141,3 +141,51 @@ export function changePasswordPartner(param: string, data: object, link: object)
     );
   };
 }
+
+export const updateGeneralPartnerActionTypes = {
+  START: 'PARTNER_GENERAL_UPDATE_START',
+  ERROR: 'PARTNER_GENERAL_UPDATE_ERROR',
+  SUCCESS: 'PARTNER_GENERAL_UPDATE_SUCCESS',
+};
+
+export function updateGeneralPartner(param: string, data: object, link: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
+  const sendBody = { param, data, type: 'general' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      updateGeneralPartnerActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const getPartnerProfileActionTypes = {
+  START: 'PARTNER_PROFILE_GET_START',
+  ERROR: 'PARTNER_PROFILE_GET_ERROR',
+  SUCCESS: 'PARTNER_PROFILE_GET_SUCCESS',
+};
+
+export function getPartnerProfile(link: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_GET);
+  const sendBody = { type: 'profile' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      getPartnerProfileActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

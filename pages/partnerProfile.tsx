@@ -13,10 +13,11 @@ import '../style/style.scss';
 interface Props {
   userAgent?: string;
   link?: object;
+  token?: string | undefined;
 }
 
 
-const PartnerProfile : NextPage<Props> = ({userAgent, link}) => {
+const PartnerProfile : NextPage<Props> = ({userAgent, link, token}) => {
 
   const router = useRouter();
   let lang = 'sr'
@@ -35,7 +36,8 @@ const PartnerProfile : NextPage<Props> = ({userAgent, link}) => {
       	path={router.pathname} 
       	fullPath={ router.asPath } 
       	lang={ lang }
-      	link={ link } />
+      	link={ link }
+      	token={ token } />
     </div>
   )
 }
@@ -67,7 +69,7 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 
 	
 
-  return { userAgent, link }
+  return { userAgent, link, token }
 }
 
 export default withRedux(PartnerProfile)

@@ -1,18 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Container, Row, Col } from 'reactstrap';
-import { setUserLanguage } from '../../actions/user-actions';
 import { getLanguage } from '../../lib/language';
-import { isMobile } from '../../lib/helpers/generalFunctions';
+import GeneralScreen from './GeneralScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
-  link: string;
+  link: object;
   lang: string;
   screen: string;
+  closeLoader(): void;
+  openLoader(): void;
+  token?: string | undefined;
+  loader: boolean;
 };
 interface MyState {
 	dictionary: object;
@@ -30,10 +31,6 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
       this.setState({ dictionary });
     }
   }
-
-	componentDidMount(){
-
-	}
 	
   render() {
     return(
@@ -43,11 +40,13 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
     				this.props.screen === 'general'
     				?
     				(
-    					<Row>
-	              <Col xs='12' className="middle">
-	                <h1 className="middle">{this.state.dictionary['navigationPartnerGeneral']}</h1>
-	              </Col>
-	            </Row>
+    					<GeneralScreen 
+                lang={this.props.lang}
+                closeLoader={this.props.closeLoader}
+                openLoader={this.props.openLoader}
+                token={ this.props.token }
+                loader={ this.props.loader }
+              />
     				)
     				:
     				this.props.screen === 'catering'
@@ -111,16 +110,4 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
   }
 }
 
-const mapStateToProps = (state) => ({
-
-});
-
-
-const matchDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-
-  },
-  dispatch);
-};
-
-export default connect(mapStateToProps, matchDispatchToProps)(PartnerScreenView)
+export default PartnerScreenView;

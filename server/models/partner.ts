@@ -15,6 +15,7 @@ const partnerSchema = new Schema({
 	userlanguage: {type: String, required: true},
 	verified: {type: Boolean, required: true},
 	created: {type: Date, required: true},
+	general:{ type: Object},
 });
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);

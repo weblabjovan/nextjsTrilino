@@ -5,7 +5,7 @@ import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid } from '../../../server/helpers/validations';
+import { isPartnerRegDataValid, isGeneralDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
@@ -57,10 +57,33 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 	if (req.query.operation === 'get'){
-		
-
+		const { type } = req.body;
 		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
 		const dictionary = getLanguage(userlanguage);
+
+		if (type === 'profile') {
+			const token = req.headers.authorization;
+			if (!isEmpty(token)) {
+				try{
+					await connectToDb();
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']);
+					const partner = await Partner.findById(partnerId, '-password -_id -passSafetyCode -passProvided -verified');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+					}else{
+						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 3, error: 'auth error', message: err });
+				}
+			}else{
+				return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+		
+
+		
 		let partnerId = req['query']['partner'].toString();
 
 		if (req['query']['encoded']) {
@@ -154,6 +177,30 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				}
 			}
 		}
+
+		if (type == 'general') {
+			const token = req.headers.authorization;
+			if (!isEmpty(token)) {
+				if (!isGeneralDataValid(data['general'])) {
+					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
+				}
+				try{
+					await connectToDb();
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']);
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'] } }, { new: true }).select('-password -_id');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'update general', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+					}else{
+						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(401).json({ endpoint: 'partners', operation: 'update general', success: false, code: 3, error: 'auth error', message: err });
+				}
+			}else{
+				return res.status(401).json({ endpoint: 'partners', operation: 'update general', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
 	}
 
 	if (req.query.operation === 'login') {
@@ -202,7 +249,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const partnerId = encodeId(decoded['sub']); 
 				const partner = await Partner.findById(partnerId, '-password');
 				if (partner) {
-					return res.status(200).json({ endpoint: 'partners', operation: 'auth', success: true, code: 1, error: 'selection error', message: dictionary['apiPartnerAuthCode1'] });
+					return res.status(200).json({ endpoint: 'partners', operation: 'auth', success: true, code: 1, message: dictionary['apiPartnerAuthCode1'] });
 				}else{
 					return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 				}
