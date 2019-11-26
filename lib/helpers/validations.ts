@@ -23,8 +23,14 @@ export const isNumeric = (value: any): boolean => {
 }
 
 export const isEmpty = (value: any): boolean => {
-	if (value === null || value.toString().trim().length === 0 || value === '') {
-		return true;
+	if (typeof value === 'string') {
+		if (value.toString().trim().length === 0 || value === '') {
+			return true;
+		}
+	}else{
+		if (value === null || value === undefined) {
+			return true;
+		}
 	}
   return false;
 }

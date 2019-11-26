@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Istok+Web:400,700|Roboto:300,400,700&display=swap&subset=latin-ext" rel="stylesheet"');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 $headFont: 'Istok Web', sans-serif;
 $regFont: 'Roboto', sans-serif;
+$actionCol: #5c9ee2;
+$cancelCol: #e85d5d;
 
 .totalWrapper{
 	background-color: #f9f9f9;
@@ -19,8 +22,24 @@ $regFont: 'Roboto', sans-serif;
 	background-color: #e0e0e0;
 }
 
+.maxWidth{
+  width: 100%;
+}
+
+.flex{
+  display: flex;
+}
+
 .colorPurple{
 	background-color: #8c3ebf;
+}
+
+.bigMarginSeparation{
+  margin: 50px 0px;
+
+  @media only screen and (max-width: 600px){
+    margin: 30px 0px;
+  }
 }
 
 .bigPadDown{
@@ -29,6 +48,44 @@ $regFont: 'Roboto', sans-serif;
 	@media only screen and (max-width: 600px){
 		padding-bottom: 20px;
 	}
+}
+
+.smallButton{
+  background: transparent;
+  border: 1px solid #5f5f5f;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #5f5f5f;
+  text-transform: uppercase;
+  padding: 2px 20px;
+  margin-bottom: 5px;
+
+  &:hover{
+    color: #fff;
+    background: #5f5f5f;
+  }
+}
+
+.btnAction{
+  background: $actionCol;
+  border: 1px solid $actionCol;
+  color: #fff;
+
+   &:hover{
+    color: $actionCol;
+    background: #fff;
+  }
+}
+
+.btnCancel{
+  background: #e85d5d;
+  border: 1px solid #e85d5d;
+  color: #fff;
+
+   &:hover{
+    color: #e85d5d;
+    background: #fff;
+  }
 }
 
 .plainInput{
@@ -116,4 +173,43 @@ button:disabled{
 	    left: 46%;
     }
 
+}
+
+
+
+.React__checkbox--input {
+  display: none;
+}
+
+.React__checkbox--input {
+  + span {
+    color: red;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    background: #5f5f5f;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 5px;
+    border: 0px solid #fff;
+    box-sizing: border-box;
+    transition: all 150ms;
+  }
+  &:checked {
+    + span {
+      border-width: 30px / 2;
+      &::before {
+        content: 'check';
+        font-family: 'Material Icons';
+        font-size: 30px;
+        color: #fff;
+      }
+    }
+  }
+  &:disabled {
+    + span {
+      background: rgba(0, 0, 0, .35);
+    }
+  }
 }

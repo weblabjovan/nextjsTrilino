@@ -9,6 +9,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
+import genOptions from '../lib/constants/generalOptions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import Keys from '../server/keys';
 import NavigationBar from '../components/navigation/navbar';
@@ -279,12 +280,6 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 	
   render() {
 
-  	const options = [
-      { value: '1', label: 'Beograd' },
-      { value: '2', label: 'Novi sad' },
-      { value: '3', label: 'Niš' }
-    ];
-
     return(
     	<div className="totalWrapper">
         <Loader  show={ this.state.regBtnDisabled } />
@@ -331,7 +326,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                           className={`${this.state.errorMessages['fields']['taxNum'] ? "borderWarrning" : ''} logInput`} />
 
           							<Select 
-                          options={options} 
+                          options={genOptions['cities']} 
                           value={ this.state.city } 
                           onChange={this.handleCityChange} 
                           instanceId="homeCity" 

@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import queryString  from 'query-string';
+import Loader from '../components/loader';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
+import { getPartnerProfile } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
+import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isMobile } from '../lib/helpers/generalFunctions';
 import PartnerNavigationBar from '../components/navigation/partnerNavbar';
 import PartnerProfileScreen from '../components/partnerProfile/partnerProfileScreen';
@@ -17,17 +19,20 @@ interface MyProps {
   userLanguage: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
+  getPartnerProfile(link: object, auth: string): object;
   userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
   link: object;
+  token?: string | undefined;
 };
 interface MyState {
 	language: string;
 	dictionary: object;
 	isMobile: boolean;
   activeScreen: string;
+  loader: boolean;
 };
 
 class PartnerProfileView extends React.Component <MyProps, MyState>{
@@ -37,7 +42,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen', 'changeLanguage' ];
+    const bindingFunctions = ['changeScreen', 'changeLanguage', 'openLoader', 'closeLoader' ];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -52,6 +57,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
       activeScreen: 'general',
+      loader: true,
     };
 
   changeScreen(event){
@@ -67,13 +73,24 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     this.setState({ language })
   }
 
+  openLoader(){
+    this.setState({ loader: true });
+  }
+
+  closeLoader(){
+    this.setState({ loader: false});
+  }
+
 	componentDidMount(){
+    const link = setUpLinkBasic(window.location.href);
+    this.props.getPartnerProfile(link, this.props.token)
 		this.props.setUserLanguage(this.props.lang);
 	}
 	
   render() {
     return(
     	<div className="totalWrapper">
+        <Loader  show={ this.state.loader } />
     		<PartnerNavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
@@ -87,7 +104,10 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
           lang={ this.state.language } 
           link={ this.props.link }
           screen={ this.state.activeScreen }
-
+          openLoader={ this.openLoader }
+          closeLoader={ this.closeLoader }
+          token={ this.props.token }
+          loader={ this.state.loader }
         />
 
 		    <Footer 
@@ -115,6 +135,7 @@ const mapStateToProps = (state) => ({
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
+    getPartnerProfile,
   },
   dispatch);
 };
