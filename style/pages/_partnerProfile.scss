@@ -3,7 +3,7 @@
 	left: 220px;
 	width: calc(100% - 220px);
 
-	@media only screen and (max-width: 577px) {
+	@media only screen and (max-width: 1024px) {
 		position: relative;
 		left: 0px;
 		width: 100%;
@@ -15,6 +15,10 @@
 
 		.pageHeader{
 			margin-bottom: 30px;
+
+			@media only screen and (max-width: 577px) {
+				margin-bottom: 15px;
+			}
 
 			h2{
 				text-align: center;
@@ -90,5 +94,256 @@
 				padding-right: 15px;
 			}
 		}
+	}
+
+	.partnerProflePage.preview{
+		.mainPhoto{
+			background-color: #ccc;
+			width: 100%;
+			height: 280px;
+
+			@media only screen and (max-width: 768px) {
+				height: 215px;
+			}
+
+			@media only screen and (max-width: 577px) {
+				height: 200px;
+			}
+		}
+
+		.supportPhoto{
+			background-color: #ccc;
+			width: 100%;
+			height: 132px;
+
+			@media only screen and (max-width: 768px) {
+				height: 100px;
+			}
+
+			@media only screen and (max-width: 577px) {
+				height: 200px;
+			}
+		}
+
+		.smallColPadd{
+			padding-left: 7.5px;
+			padding-right: 7.5px;
+
+			@media only screen and (max-width: 577px) {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+		}
+
+		.generalFirst{
+			h3{
+				line-height: 53px;
+    			font-size: 40px;
+
+    			@media only screen and (max-width: 577px) {
+					line-height: 38px;
+    				font-size: 28px;
+				}
+
+				&.fadedPrev{
+					font-size: 32px;
+				}
+			}
+
+			h5{
+				font-size: 24px;
+			    line-height: 34px;
+			    font-weight: 300;
+
+			    @media only screen and (max-width: 577px) {
+					line-height: 28px;
+    				font-size: 20px;
+				}
+
+				&.fadedPrev{
+					font-size: 20px;
+				}
+			}
+
+			p{
+				font-size: 16px;
+			    line-height: 26px;
+			    font-weight: 400;
+			    @media only screen and (max-width: 577px) {
+					line-height: 22px;
+    				font-size: 14px;
+				}
+
+				&.fadedPrev{
+					font-size: 15px;
+				}
+			}
+		}
+
+		.generalSecond{
+			ul{
+				list-style-type: none;
+
+				@media only screen and (max-width: 577px) {
+					padding: 0px;
+				}
+
+				li{
+					margin-bottom: 10px;
+				    font-size: 18px;
+				    font-weight: 700;
+				    text-transform: none;
+
+				    @media only screen and (max-width: 577px) {
+						font-size: 16px;
+					}
+
+					&.fadedPrev{
+						font-size: 16px;
+					}
+				}
+			}
+		}
+
+		.iconHolder{
+			text-align: center;
+			border: solid 1px #252525;
+		    padding: 2px;
+		    box-sizing: border-box;
+		    margin-top: 20px;
+
+			p{
+				font-size: 16px;
+				font-weight: 400;
+
+				@media only screen and (max-width: 1024px) {
+					font-size: 13px;
+				}
+				@media only screen and (max-width: 768px) {
+					font-size: 16px;
+				}
+			}
+
+			.icon{
+				display: block;
+				text-align: center;
+				width: 100%;
+				font-family: 'Material Icons';
+		        font-size: 40px;
+		        line-height: 50px;
+		        color: #252525;
+			}
+
+			.parking:before{
+				content: 'local_parking';
+			}
+			.yard:before{
+				content: 'deck';
+			}
+			.balcon:before{
+				content: 'storefront';
+			}
+			.animator:before{
+				content: 'accessibility';
+			}
+			.food:before{
+				content: 'restaurant';
+			}
+			.pool:before{
+				content: 'pool';
+			}
+			.wifi:before{
+				content: 'wifi';
+			}
+			.cake:before{
+				content: 'cake';
+			}
+			.drink:before{
+				content: 'local_bar';
+			}
+			.smoking:before{
+				content: 'smoking_rooms';
+			}
+		}
+
+		.selfRemarks{
+			padding: 10px 0px;
+			margin: 30px 0px;
+			border-top: solid 1px #ccc;
+			border-bottom: solid 1px #ccc;
+
+			@media only screen and (max-width: 577px) {
+				margin: 20px 0px;
+			}
+
+			h5{
+				font-size: 20px;
+				font-weight: 300;
+				line-height: 25px;
+
+				@media only screen and (max-width: 577px) {
+					font-size: 16px;
+				}
+
+				&.fadedPrev{
+					font-size: 18px;
+					font-weight: 400;
+				}
+			}
+		}
+
+		.contentFree{
+			padding: 30px 0px;
+			h3{
+				font-size: 22px;
+			}
+
+			.item{
+				line-height: 25px;
+
+				span{
+					display: inline;
+				}
+
+				span:nth-of-type(1){
+					&:before{
+						content: 'check';
+				        font-family: 'Material Icons';
+				        font-size: 30px;
+				        font-weight: 800;
+				        vertical-align: middle;
+				        color: $purple;
+					}
+				}
+
+				span:nth-of-type(2){
+					line-height: 14px;
+				    font-size: 16px;
+				    margin-left: 10px;
+				    vertical-align: sub;
+				}
+				
+			}
+
+			.payRemark{
+			    font-size: 12px;
+			    font-style: italic;
+			    font-weight: 600;
+			    padding-left: 30px;
+			    line-height: 18px;
+			}
+
+			.col-6{
+				padding: 5px 0px;
+				margin-bottom: 5px;
+				border-bottom: solid 1px #ccc;
+			}
+		}
+
+		.fadedPrev{
+			font-style: italic;
+			color: #afafaf;
+		}
+		
 	}
 }

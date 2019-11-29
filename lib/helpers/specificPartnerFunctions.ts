@@ -178,9 +178,10 @@ export const setUpGeneralRoomsForFront = (rooms: Array<object>): Array<object> =
 	return partnerRooms;
 }
 
-export const setUpMainGeneralState = (state: object, general: object, language: string): object => {
-	const newState = JSON.parse(JSON.stringify(state));
+export const setUpMainGeneralState = (state: null | object, general: object, language: string): object => {
 	const newGen = JSON.parse(JSON.stringify(general));
+	const newState = state !== null ? JSON.parse(JSON.stringify(state)) : getProfileGeneralStructure(newGen);
+	
 	const generalKeys = Object.keys(newGen);
 	const plainInputs = ['size', 'description', 'playSize', 'address'];
 	for(let key in newState){
@@ -200,12 +201,22 @@ export const setUpMainGeneralState = (state: object, general: object, language: 
 	return newState;
 }
 
+const getProfileGeneralStructure = (general: object): object => {
+	const structure = {};
+	for(let key in general){
+		structure[key] = "";
+	}
+
+	return structure;
+}
+
 const assembleForSelect = (key: string, value: number | string, language: string): object => {
 	const forItemDuration = ['duration'];
 	const forAges = ['ageFrom', 'ageTo'];
 	const forTimes = ['mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo' ];
-	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake' ];
+	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake', 'smoking' ];
 	const forCancelation = ['cancelation'];
+	const forType = ['spaceType'];
 
 	if (forItemDuration.indexOf(key) !== -1) {
 		const res = genOptions[`itemDuration_${language}`].filter((item) => { return item['value'] === value; });
@@ -223,10 +234,42 @@ const assembleForSelect = (key: string, value: number | string, language: string
 		const res = genOptions[`dual_${language}`].filter((dual) => { return dual['value'] === value; });
 		return res[0];
 	}
+	if (forType.indexOf(key) !== -1) {
+		const res = genOptions[`spaceType_${language}`].filter((dual) => { return dual['value'] === value; });
+		return res[0];
+	}
 	if (forCancelation.indexOf(key) !== -1) {
 		const res = genOptions[`cancel_${language}`].filter((dual) => { return dual['value'] === value; });
 		return res[0];
 	}
 
 	return { value: value, label: value };
+}
+
+export const isFieldInObject = (object: object, field: string, subObject: null | string = null): boolean => {
+	if (object) {
+		if (subObject) {
+			if (object[subObject]) {
+				if (object[subObject][field]) {
+					return true;
+				}
+			}
+		}else{
+			if (object[field]) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+export const getGeneralOptionLabelByValue = (options: Array<object>, value: string | number): string => {
+	for (var i = 0; i < options.length; ++i) {
+		if (options[i]['value'] === value) {
+			return options[i]['label']; 
+		}
+	}
+
+	return '';
 }

@@ -104,7 +104,12 @@
 	width: 220px;
 	border: none;
 
+	@media only screen and (max-width: 1024px) {
+		display: none;
+	}
+
 	@media only screen and (max-width: 577px) {
+		display: block;
 		width: 100%;
 	}
 

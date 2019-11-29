@@ -2,7 +2,7 @@ import {
   registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes,
 } from '../actions/partner-actions';
 import { IpartnerRoomItem, IpartnerGeneral } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront } from '../lib/helpers/specificPartnerFunctions';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState } from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -79,6 +79,7 @@ const initialState: initialState  = {
     playSize: null,
     description: '',
     address: '',
+    spaceType: '',
     ageFrom: '',
     ageTo: '',
     mondayFrom: '',
@@ -107,6 +108,8 @@ const initialState: initialState  = {
     selfFood: '',
     selfDrink: '',
     selfCake: '',
+    smoking: '',
+    selfAnimator: '',
     duration: '',
     cancelation: '',
     roomNumber: '',
@@ -217,9 +220,11 @@ const actionsMap = {
     };
   },
   [getPartnerProfileActionTypes.SUCCESS]: (state, action) => {
+    const lang = action.payload['partner']['userlanguage'] ? action.payload['partner']['userlanguage'] : 'sr';
     return {
       ...state,
       partnerRooms: setUpGeneralRoomsForFront(action.payload['partner']['general']['rooms']),
+      partnerGeneral: setUpMainGeneralState(null, action.payload['partner']['general'], lang),
       partner: action.payload['partner'],
       partnerGetStart: false,
     };

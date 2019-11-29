@@ -44,6 +44,7 @@ export interface IpartnerGeneral {
 	playSize: number | null;
 	description: string;
 	address: string;
+	spaceType: string | object;
 	ageFrom: string | object;
 	ageTo: string | object;
 	mondayFrom: string | object;
@@ -74,5 +75,7 @@ export interface IpartnerGeneral {
 	selfCake: string | object;
 	duration: string | object;
 	cancelation: string | object;
+	smoking: string | object;
+	selfAnimator: string | object;
 	roomNumber: string | object;
 }

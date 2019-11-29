@@ -5,6 +5,7 @@ $headFont: 'Istok Web', sans-serif;
 $regFont: 'Roboto', sans-serif;
 $actionCol: #5c9ee2;
 $cancelCol: #e85d5d;
+$purple: #8c3ebf;
 
 .totalWrapper{
 	background-color: #f9f9f9;
@@ -31,7 +32,7 @@ $cancelCol: #e85d5d;
 }
 
 .colorPurple{
-	background-color: #8c3ebf;
+	background-color: $purple;
 }
 
 .bigMarginSeparation{
@@ -39,6 +40,12 @@ $cancelCol: #e85d5d;
 
   @media only screen and (max-width: 600px){
     margin: 30px 0px;
+  }
+}
+
+.mobileHide{
+  @media only screen and (max-width: 577px){
+    display: none;
   }
 }
 

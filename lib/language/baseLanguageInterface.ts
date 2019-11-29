@@ -137,6 +137,8 @@ export default interface LanguageInterface {
 	partnerProfileGeneralItemDescriptionPlaceholder: string;
 	partnerProfileGeneralItemAddress: string;
 	partnerProfileGeneralItemAddressPlaceholder: string;
+	partnerProfileGeneralItemType: string;
+	partnerProfileGeneralItemTypePlaceholder: string;
 	partnerProfileGeneralItemSize: string;
 	partnerProfileGeneralItemSizePlaceholder: string;
 	partnerProfileGeneralItemPlaysize: string;
@@ -181,6 +183,9 @@ export default interface LanguageInterface {
 	partnerProfileGeneralItemSelfdrinkPlaceholder: string;
 	partnerProfileGeneralItemSelfcake: string;
 	partnerProfileGeneralItemSelfcakePlaceholder: string;
+	partnerProfileGeneralItemSelfanimator: string;
+	partnerProfileGeneralItemSmoking: string;
+	partnerProfileGeneralItemSmokingPlaceholder: string;
 	partnerProfileGeneralItemDuration: string;
 	partnerProfileGeneralItemDurationPlaceholder: string;
 	partnerProfileGeneralItemCancelation: string;
@@ -217,6 +222,39 @@ export default interface LanguageInterface {
 	partnerProfileGeneralAlert_error_no_5: string;
 	partnerProfileGeneralRemark: string;
 	partnerProfileGeneralSaveButton: string;
+
+
+	partnerProfilePreviewTitle: string;
+	partnerProfilePreviewDescription: string;
+	partnerProfilePreviewNonName: string;
+	partnerProfilePreviewNonAddress: string;
+	partnerProfilePreviewNonDescription: string;
+	partnerProfilePreviewNonSize: string;
+	partnerProfilePreviewNonPlaysize: string;
+	partnerProfilePreviewNonAges: string;
+	partnerProfilePreviewSideSize: string;
+	partnerProfilePreviewSidePlaysize: string;
+	partnerProfilePreviewSideAges: string;
+	partnerProfilePreviewIconParking: string;
+	partnerProfilePreviewIconYard: string;
+	partnerProfilePreviewIconBalcon: string;
+	partnerProfilePreviewIconPool: string;
+	partnerProfilePreviewIconWifi: string;
+	partnerProfilePreviewIconAnimator: string;
+	partnerProfilePreviewIconFood: string;
+	partnerProfilePreviewIconDrink: string;
+	partnerProfilePreviewIconCake: string;
+	partnerProfilePreviewIconSmoking: string;
+	partnerProfilePreviewSelfremarkFoodYes: string;
+	partnerProfilePreviewSelfremarkFoodNo: string;
+	partnerProfilePreviewSelfremarkDrinkYes: string;
+	partnerProfilePreviewSelfremarkDrinkNo: string;
+	partnerProfilePreviewSelfremarkCakeYes: string;
+	partnerProfilePreviewSelfremarkCakeNo: string;
+	partnerProfilePreviewSelfremarkAnimatorYes: string;
+	partnerProfilePreviewSelfremarkAnimatorNo: string;
+
+
 	
 	loginTitle: string;
 

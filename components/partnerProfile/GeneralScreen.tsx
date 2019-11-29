@@ -187,7 +187,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput"
             	/>
             </Col>
-            <Col xs='12'>
+            <Col xs='12' sm="6">
             	<label>{this.state.dictionary['partnerProfileGeneralItemAddress']}</label>
             	<PlainInput
             		placeholder={this.state.dictionary['partnerProfileGeneralItemAddressPlaceholder']} 
@@ -196,6 +196,16 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput"
                 type="text"
             	/>
+            </Col>
+            <Col xs='12' sm="6">
+              <label>{this.state.dictionary['partnerProfileGeneralItemType']}</label>
+              <Select 
+                options={genOptions[`spaceType_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['spaceType'] } 
+                onChange={(val) => this.uniInputHandler(val, 'spaceType')} 
+                instanceId="ageFromInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemTypePlaceholder']}/>
             </Col>
             <Col xs='6' sm='3'>
             	<label>{this.state.dictionary['partnerProfileGeneralItemSize']}</label>
@@ -358,10 +368,11 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralDaysTo']}/>
             </Col>
-            <Col xs='6' sm="3" className="partnerDays">
+            
             	
-            </Col>
+            </Row>
 
+            <Row>
 
             <Col xs='12'>
             	<h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubCharacteristics']}</h4>
@@ -490,6 +501,29 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 placeholder={this.state.dictionary['partnerProfileGeneralItemSelfcakePlaceholder']}/>
             </Col>
 
+            <Col xs='6' sm="3">
+               <label>{this.state.dictionary['partnerProfileGeneralItemSelfanimator']}</label>
+              <Select 
+                options={genOptions[`dual_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['selfAnimator'] } 
+                onChange={(val) => this.uniInputHandler(val, 'selfAnimator')} 
+                instanceId="selfAnimatorInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemAnimatorPlaceholder']}/>
+            </Col>
+            <Col xs='6' sm="3">
+               <label>{this.state.dictionary['partnerProfileGeneralItemSmoking']}</label>
+              <Select 
+                options={genOptions[`dual_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['smoking'] } 
+                onChange={(val) => this.uniInputHandler(val, 'smoking')} 
+                instanceId="smokingInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemSmokingPlaceholder']}/>
+            </Col>
+            </Row>
+
+            <Row>
 
             <Col xs='12'>
             	<h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubRooms']}</h4>
