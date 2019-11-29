@@ -25,6 +25,7 @@ interface MyProps {
   fullPath: string;
   lang: string;
   link: object;
+  partnerObject: object;
   token?: string | undefined;
 };
 interface MyState {
@@ -56,7 +57,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
       language: this.props.lang,
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
-      activeScreen: 'general',
+      activeScreen: 'preview',
       loader: true,
     };
 
@@ -99,6 +100,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
           changeScreen={ this.changeScreen }
           activeScreen={ this.state.activeScreen }
           changeLanguage={ this.changeLanguage }
+          partner={ this.props.partnerObject ? this.props.partnerObject['name'] : '' }
     		/>
     		<PartnerProfileScreen
           lang={ this.state.language } 
@@ -129,6 +131,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  partnerObject: state.PartnerReducer.partner,
 });
 
 

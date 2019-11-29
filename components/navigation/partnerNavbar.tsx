@@ -11,6 +11,7 @@ type MyProps = {
   changeScreen(event: any): any;
   changeLanguage(lang: string): void;
   activeScreen: string;
+  partner: string | undefined;
   // using `interface` is also ok
 };
 type MyState = {
@@ -128,7 +129,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     <a onClick={() => this.props.changeLanguage('sr')} >SR</a>
                     <a onClick={() => this.props.changeLanguage('en')} >EN</a>
                   </span>
-                  <span>Adalgo</span>
+                  <span>{this.props.partner}</span>
                 </li>
                 <li 
                   className={this.props.activeScreen === 'general' ? 'active' : ''}

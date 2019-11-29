@@ -9,7 +9,8 @@ interface IGenOptions {
 	cancel_en: Array<object>;
 	cancel_sr: Array<object>;
 	firstDeca: Array<object>;
-
+  spaceType_sr: Array<object>;
+  spaceType_en: Array<object>;
 }
 
 const generalOptions: IGenOptions = {
@@ -27,6 +28,20 @@ const generalOptions: IGenOptions = {
       { value: '1', label: 'Beograd' },
       { value: '2', label: 'Novi Sad' },
       { value: '3', label: 'Niš' }
+    ],
+    spaceType_sr:[
+      { value: '1', label: 'Igraonica' },
+      { value: '2', label: 'Restoran' },
+      { value: '3', label: 'Kafić' },
+      { value: '4', label: 'Sportski objekat' },
+      { value: '5', label: 'Ostalo' }
+    ],
+    spaceType_en:[
+      { value: '1', label: 'Playroom' },
+      { value: '2', label: 'Restaurant' },
+      { value: '3', label: 'Cafe' },
+      { value: '4', label: 'Sport facility' },
+      { value: '5', label: 'Other' }
     ],
     ages: [
       { value: '1', label: '1' },
