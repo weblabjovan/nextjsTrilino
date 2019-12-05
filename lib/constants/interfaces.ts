@@ -67,6 +67,8 @@ export interface IpartnerGeneral {
 	pool: string | object;
 	wifi: string | object;
 	animator: string | object;
+	movie: string | object;
+	gaming: string | object;
 	food: string | object;
 	drink: string | object;
 	cake: string | object;

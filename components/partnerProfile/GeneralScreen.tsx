@@ -72,7 +72,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
     if (!this.props.partnerGetStart && prevProps.partnerGetStart && !this.props.partnerGetError) {
     	if (this.props.partnerObject) {
     		if (this.props.partnerObject['general']) {
-	    		const newGeneral = setUpMainGeneralState( this.props.partnerGeneral, this.props.partnerObject['general'], this.props.lang);
+	    		const newGeneral = setUpMainGeneralState( this.props.partnerGeneral, this.props.partnerObject, this.props.lang);
 	    		this.props.changeSinglePartnerField('partnerGeneral', newGeneral);
 	    		this.setState({loader: false }, () => {
 	    			this.props.closeLoader();
@@ -439,6 +439,28 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemAnimatorPlaceholder']}/>
             </Col>
+
+            <Col xs='6' sm="3">
+               <label>{this.state.dictionary['partnerProfileGeneralItemMovie']}</label>
+              <Select 
+                options={genOptions[`dual_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['movie'] } 
+                onChange={(val) => this.uniInputHandler(val, 'movie')} 
+                instanceId="movieInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemMoviePlaceholder']}/>
+            </Col>
+            <Col xs='6' sm="3">
+               <label>{this.state.dictionary['partnerProfileGeneralItemGaming']}</label>
+              <Select 
+                options={genOptions[`dual_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['gaming'] } 
+                onChange={(val) => this.uniInputHandler(val, 'gaming')} 
+                instanceId="animatorInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemGamingPlaceholder']}/>
+            </Col>
+
             <Col xs='6' sm="3">
              	<label>{this.state.dictionary['partnerProfileGeneralItemFood']}</label>
             	<Select 
@@ -572,7 +594,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
             
 
-            <Row>
+          <Row>
             <Col xs="12">
             	<div className="middle bigMarginSeparation">
 								<Button color="success"  onClick={ this.validateSave } >{this.state.dictionary['partnerProfileGeneralSaveButton']}</Button>

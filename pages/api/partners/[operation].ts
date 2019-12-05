@@ -201,6 +201,30 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				return res.status(401).json({ endpoint: 'partners', operation: 'update general', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
 			}
 		}
+
+		if (type == 'offer') {
+			const token = req.headers.authorization;
+			if (!isEmpty(token)) {
+				if (!Array.isArray(data['offer']) || !Array.isArray(data['addon'])) {
+					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
+				}
+				try{
+					await connectToDb();
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']);
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { contentOffer: data['offer'], contentAddon: data['addon'] } }, { new: true }).select('-password -_id');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'update offer', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+					}else{
+						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(401).json({ endpoint: 'partners', operation: 'update offer', success: false, code: 3, error: 'auth error', message: err });
+				}
+			}else{
+				return res.status(401).json({ endpoint: 'partners', operation: 'update offer', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
 	}
 
 	if (req.query.operation === 'login') {

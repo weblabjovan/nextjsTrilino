@@ -166,6 +166,30 @@ export function updateGeneralPartner(param: string, data: object, link: object, 
   };
 }
 
+export const updateOfferPartnerActionTypes = {
+  START: 'PARTNER_OFFER_UPDATE_START',
+  ERROR: 'PARTNER_OFFER_UPDATE_ERROR',
+  SUCCESS: 'PARTNER_OFFER_UPDATE_SUCCESS',
+};
+
+export function updateOfferPartner(param: string, data: object, link: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
+  const sendBody = { param, data, type: 'offer' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      updateOfferPartnerActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
 export const getPartnerProfileActionTypes = {
   START: 'PARTNER_PROFILE_GET_START',
   ERROR: 'PARTNER_PROFILE_GET_ERROR',

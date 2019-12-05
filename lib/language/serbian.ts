@@ -175,6 +175,10 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralItemWifiPlaceholder: 'wifi',
 	partnerProfileGeneralItemAnimator: 'Da li se gostima nudi animator?',
 	partnerProfileGeneralItemAnimatorPlaceholder: 'animator',
+	partnerProfileGeneralItemMovie: 'Da li se gostima nudi bioskop?',
+	partnerProfileGeneralItemMoviePlaceholder: 'bioskop',
+	partnerProfileGeneralItemGaming: 'Da li se gostima nudi gaming soba?',
+	partnerProfileGeneralItemGamingPlaceholder: 'gaming',
 	partnerProfileGeneralItemFood: 'Da li se gostima nudi hrana?',
 	partnerProfileGeneralItemFoodPlaceholder: 'hrana',
 	partnerProfileGeneralItemDrink: 'Da li se gostima nudi piće?',
@@ -245,6 +249,8 @@ const serbian: LanguageInterface = {
 	partnerProfilePreviewIconPool: 'Bazen',
 	partnerProfilePreviewIconWifi: 'WiFi',
 	partnerProfilePreviewIconAnimator: 'Animator',
+	partnerProfilePreviewIconMovie: 'Bioskop',
+	partnerProfilePreviewIconGaming: 'Gaming',
 	partnerProfilePreviewIconFood: 'Hrana',
 	partnerProfilePreviewIconDrink: 'Piće',
 	partnerProfilePreviewIconCake: 'Torta',
@@ -257,6 +263,29 @@ const serbian: LanguageInterface = {
 	partnerProfilePreviewSelfremarkCakeNo: 'Ovaj lokal ne dozvoljava organizatorima proslave da donose svoju tortu na proslavu. Morate koristiti njihovu tortu.',
 	partnerProfilePreviewSelfremarkAnimatorYes: 'Ovaj lokal dozvoljava organizatorima proslave da organizuju svog animatora.',
 	partnerProfilePreviewSelfremarkAnimatorNo: 'Ovaj lokal ne dozvoljava organizatorima proslave da organizuju svog animatora. Morate koristiti njihovog animatora.',
+
+
+
+	partnerProfileOfferTitle: 'Informacije o zabavnom sadržaju',
+	partnerProfileOfferDescription: 'U nastavku dodajte zabavne sadrćaje koje nudite vašim gostima. Zabavni sadrćaji su podeljeni u dve grupe: besplatni i uz doplatu. Zabavni sadržaji predstavljaju sve što gosti mogu koristiti da bi se igrali, rekreirali, zabavili, animirali i uživali u proslavi. Besplatni sadržaj je ono što vašim gostima nudite bez nadoknade, dok su sadržaji uz doplatu oni za koje je potrebno dodatno platiti.',
+	partnerProfileOfferSubFree: 'Besplatni sadržaji:',
+	partnerProfileOfferNoItemsFree: 'Trenutno nemate sačuvane besplatne zabavne sadržaje',
+	partnerProfileOfferButtonTagAddFree: '+',
+	partnerProfileOfferButtonTagRemoveFree: '-',
+	partnerProfileOfferSubPay: 'Sadržaji uz doplatu:',
+	partnerProfileOfferNoItemsPay: 'Trenutno nemate sačuvane zabavne sadržaje uz doplatu',
+	partnerProfileOfferAddonName: 'Naziv sadržaja:',
+	partnerProfileOfferAddonNamePlaceholder: 'naziv',
+	partnerProfileOfferAddonPrice: 'Cena:',
+	partnerProfileOfferAddonPricePlaceholder: 'cena',
+	partnerProfileOfferAddonComment: 'Komentar u vezi sa sadržajem:',
+	partnerProfileOfferAddonCommentPlaceholder: 'komentar',
+	partnerProfileOfferAddonButton: 'Dodati',
+	partnerProfileOfferAddonAlertName: 'Naziv sadržaja je obavezan. Molimo vas upišite naziv sadržaja uz doplatu.',
+	partnerProfileOfferAddonAlertPrice: 'Cena sadržaja je obavezan. Molimo vas upišite cenu sadržaja uz doplatu.',
+	partnerProfileOfferSaveButton: 'Sačuvajte podatke o zabavnom sadržaju',
+
+
 
 
 	loginTitle: 'Ovo je stranica prijava',

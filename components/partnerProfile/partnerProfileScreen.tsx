@@ -3,6 +3,8 @@ import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import GeneralScreen from './GeneralScreen';
 import PreviewScreen from './PreviewScreen';
+import OfferScreen from './OfferScreen';
+import FoodScreen from './FoodScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
@@ -53,11 +55,12 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
             this.props.screen === 'catering'
             ?
             (
-              <Row>
-                <Col xs='12' className="middle">
-                  <h1 className="middle">{this.state.dictionary['navigationPartnerCatering']}</h1>
-                </Col>
-              </Row>
+              <FoodScreen
+                lang={this.props.lang}
+                closeLoader={this.props.closeLoader}
+                openLoader={this.props.openLoader}
+                token={ this.props.token }
+              />
             )
             :
             this.props.screen === 'decoration'
@@ -73,11 +76,12 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
             this.props.screen === 'offer'
             ?
             (
-              <Row>
-                <Col xs='12' className="middle">
-                  <h1 className="middle">{this.state.dictionary['navigationPartnerOffer']}</h1>
-                </Col>
-              </Row>
+              <OfferScreen
+                lang={this.props.lang}
+                closeLoader={this.props.closeLoader}
+                openLoader={this.props.openLoader}
+                token={ this.props.token }
+              />
             )
             :
             this.props.screen === 'calendar'

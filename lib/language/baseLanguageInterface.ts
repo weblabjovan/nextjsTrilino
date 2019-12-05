@@ -171,6 +171,10 @@ export default interface LanguageInterface {
 	partnerProfileGeneralItemWifiPlaceholder: string;
 	partnerProfileGeneralItemAnimator: string;
 	partnerProfileGeneralItemAnimatorPlaceholder: string;
+	partnerProfileGeneralItemMovie: string;
+	partnerProfileGeneralItemMoviePlaceholder: string;
+	partnerProfileGeneralItemGaming: string;
+	partnerProfileGeneralItemGamingPlaceholder: string;
 	partnerProfileGeneralItemFood: string;
 	partnerProfileGeneralItemFoodPlaceholder: string;
 	partnerProfileGeneralItemDrink: string;
@@ -241,6 +245,8 @@ export default interface LanguageInterface {
 	partnerProfilePreviewIconPool: string;
 	partnerProfilePreviewIconWifi: string;
 	partnerProfilePreviewIconAnimator: string;
+	partnerProfilePreviewIconMovie: string;
+	partnerProfilePreviewIconGaming: string;
 	partnerProfilePreviewIconFood: string;
 	partnerProfilePreviewIconDrink: string;
 	partnerProfilePreviewIconCake: string;
@@ -253,6 +259,26 @@ export default interface LanguageInterface {
 	partnerProfilePreviewSelfremarkCakeNo: string;
 	partnerProfilePreviewSelfremarkAnimatorYes: string;
 	partnerProfilePreviewSelfremarkAnimatorNo: string;
+
+
+	partnerProfileOfferTitle: string;
+	partnerProfileOfferDescription: string;
+	partnerProfileOfferSubFree: string;
+	partnerProfileOfferNoItemsFree: string;
+	partnerProfileOfferButtonTagAddFree: string;
+	partnerProfileOfferButtonTagRemoveFree: string;
+	partnerProfileOfferSubPay: string;
+	partnerProfileOfferNoItemsPay: string;
+	partnerProfileOfferAddonName: string;
+	partnerProfileOfferAddonNamePlaceholder: string;
+	partnerProfileOfferAddonPrice: string;
+	partnerProfileOfferAddonPricePlaceholder: string;
+	partnerProfileOfferAddonComment: string;
+	partnerProfileOfferAddonCommentPlaceholder: string;
+	partnerProfileOfferAddonButton: string;
+	partnerProfileOfferAddonAlertName: string;
+	partnerProfileOfferAddonAlertPrice: string;
+	partnerProfileOfferSaveButton: string;
 
 
 	

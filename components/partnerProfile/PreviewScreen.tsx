@@ -267,6 +267,40 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
             }
 
             {
+              isFieldInObject(this.props.partnerObject, 'movie', 'general')
+              ?
+              this.props.partnerObject['general']['movie'] === '1'
+              ?
+              (<Col xs="4" sm="2" lg="1" className="smallColPadd">
+                <div className="iconHolder">
+                  <span className="icon movie" />
+                  <p>{this.state.dictionary['partnerProfilePreviewIconMovie']}</p>
+                </div>
+              </Col>)
+              :
+              null
+              :
+              null
+            }
+
+            {
+              isFieldInObject(this.props.partnerObject, 'gaming', 'general')
+              ?
+              this.props.partnerObject['general']['gaming'] === '1'
+              ?
+              (<Col xs="4" sm="2" lg="1" className="smallColPadd">
+                <div className="iconHolder">
+                  <span className="icon gaming" />
+                  <p>{this.state.dictionary['partnerProfilePreviewIconGaming']}</p>
+                </div>
+              </Col>)
+              :
+              null
+              :
+              null
+            }
+
+            {
               isFieldInObject(this.props.partnerObject, 'food', 'general')
               ?
               this.props.partnerObject['general']['food'] === '1'
@@ -418,30 +452,21 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 <Col xs="12" className="no-pading">
                   <h3>Besplatni sadržaji:</h3>
                 </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Laser tag</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Trampolina</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Dvorac na naduvavanje</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Face painting</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Jump arena</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Veliki teren za košarku</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Dvorac na naduvavanje</span></div>
-                </Col>
-                <Col xs="12" sm="6">
-                  <div className="item"><span></span><span>Fudbalski teren</span></div>
-                </Col>
+                {
+                  isFieldInObject(this.props.partnerObject, 'contentOffer')
+                  ?
+                  this.props.partnerObject['contentOffer'].map( (offer, index) => {
+                    return(
+                      <Col xs="12" sm="6" key={`offerKey_${index}`}>
+                        <div className="item"><span></span><span>{getGeneralOptionLabelByValue(generalOptions[`contentOffer_${this.props.lang}`], offer.toString())}</span></div>
+                      </Col>
+                     )
+                  })
+                  :
+                  (<Col xs="12">
+                    <h5 className="fadedPrev">Besplatni sadržaji još uvek nisu upisani.</h5>
+                  </Col>)
+                }
               </Row>
             </Col>
 
@@ -450,18 +475,22 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 <Col xs="12" className="no-pading">
                   <h3>Sadržaji uz doplatu:</h3>
                 </Col>
-                <Col xs="12">
-                  <div className="item"><span></span><span>Laser tag / cena: 2800 rsd</span></div>
-                  <div className="payRemark">*cena je za 20 min igranja i maximum 16 igrača po jednoj igri</div>
-                </Col>
-                <Col xs="12">
-                  <div className="item"><span></span><span>Trampolina / cena: 2800 rsd</span></div>
-                  <div className="payRemark">*cena je za 20 min igranja i maximum 16 igrača po jednoj igri</div>
-                </Col>
-                <Col xs="12">
-                  <div className="item"><span></span><span>Dvorac na naduvavanje / cena: 2800 rsd</span></div>
-                  <div className="payRemark">*cena je za 20 min igranja i maximum 16 igrača po jednoj igri</div>
-                </Col>
+                {
+                  isFieldInObject(this.props.partnerObject, 'contentAddon')
+                  ?
+                  this.props.partnerObject['contentAddon'].map( (addon, index) => {
+                    return(
+                      <Col xs="12" key={`addonKey_${index}`}>
+                        <div className="item"><span></span><span>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${addon['price']} rsd`}</span></div>
+                        <div className="payRemark">{addon['comment'] ? `*${addon['comment']}` : ''}</div>
+                      </Col>
+                     )
+                  })
+                  :
+                  (<Col xs="12">
+                    <h5 className="fadedPrev">Sadržaji uz doplatu još uvek nisu upisani.</h5>
+                  </Col>)
+                }
               </Row>
             </Col>
           </Row> 
