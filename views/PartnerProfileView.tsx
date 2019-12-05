@@ -57,7 +57,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
       language: this.props.lang,
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
-      activeScreen: 'preview',
+      activeScreen: 'offer',
       loader: true,
     };
 

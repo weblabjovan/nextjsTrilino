@@ -16,6 +16,8 @@ const partnerSchema = new Schema({
 	verified: {type: Boolean, required: true},
 	created: {type: Date, required: true},
 	general:{ type: Object},
+	contentOffer:[{ type: Number }],
+	contentAddon:[{ type: Object }],
 });
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);

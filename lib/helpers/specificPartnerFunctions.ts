@@ -161,44 +161,62 @@ const getNumberOfEmpty = (term: object): number => {
 	return empty;
 }
 
-export const setUpGeneralRoomsForFront = (rooms: Array<object>): Array<object> => {
+export const setUpGeneralRoomsForFront = (partner: object): Array<object> => {
 	const partnerRooms = [];
 
-	for (var i = 0; i < rooms.length; ++i) {
-		const room = {
-			name: rooms[i]['name'],
-			size: parseInt(rooms[i]['size']),
-			capKids: parseInt(rooms[i]['capKids']),
-			capAdults: parseInt(rooms[i]['capAdults']),
-			terms: assembleRoomTerms(rooms[i])
+	if (partner['general']) {
+		if (partner['general']['rooms']) {
+			if (Array.isArray(partner['general']['rooms'])) {
+				const rooms = partner['general']['rooms'];
+				for (var i = 0; i < rooms.length; ++i) {
+					const room = {
+						name: rooms[i]['name'],
+						size: parseInt(rooms[i]['size']),
+						capKids: parseInt(rooms[i]['capKids']),
+						capAdults: parseInt(rooms[i]['capAdults']),
+						terms: assembleRoomTerms(rooms[i])
+					}
+					partnerRooms.push(room);
+				}
+			}
 		}
-		partnerRooms.push(room);
 	}
 
 	return partnerRooms;
 }
 
-export const setUpMainGeneralState = (state: null | object, general: object, language: string): object => {
-	const newGen = JSON.parse(JSON.stringify(general));
-	const newState = state !== null ? JSON.parse(JSON.stringify(state)) : getProfileGeneralStructure(newGen);
-	
-	const generalKeys = Object.keys(newGen);
-	const plainInputs = ['size', 'description', 'playSize', 'address'];
-	for(let key in newState){
-		if (generalKeys.indexOf(key) !== -1) {
-			if (plainInputs.indexOf(key) !== -1) {
-				newState[key] = newGen[key];
-			}else{
-				if (newGen[key]) {
-					newState[key] = assembleForSelect(key, newGen[key], language);
-					
-				}
-			}
-			
-		}
-	}
+export const setUpMainGeneralState = (state: null | object, partner: object, language: string): object => {
+	let res = {};
 
-	return newState;
+	if (partner['general']) {
+		const general = partner['general'];
+
+		const newGen = JSON.parse(JSON.stringify(general));
+		const newState = state !== null ? JSON.parse(JSON.stringify(state)) : getProfileGeneralStructure(newGen);
+		
+		const generalKeys = Object.keys(newGen);
+		const plainInputs = ['size', 'description', 'playSize', 'address'];
+		for(let key in newState){
+			if (generalKeys.indexOf(key) !== -1) {
+				if (plainInputs.indexOf(key) !== -1) {
+					newState[key] = newGen[key];
+				}else{
+					if (newGen[key]) {
+						newState[key] = assembleForSelect(key, newGen[key], language);
+						
+					}
+				}
+				
+			}
+		}
+
+		res = newState;
+	}else{
+		res = genOptions['partnerGeneralStructure'];
+	}
+	
+
+	return res;
 }
 
 const getProfileGeneralStructure = (general: object): object => {
@@ -214,7 +232,7 @@ const assembleForSelect = (key: string, value: number | string, language: string
 	const forItemDuration = ['duration'];
 	const forAges = ['ageFrom', 'ageTo'];
 	const forTimes = ['mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo' ];
-	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake', 'smoking' ];
+	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake', 'smoking', 'selfAnimator', 'movie', 'gaming' ];
 	const forCancelation = ['cancelation'];
 	const forType = ['spaceType'];
 
@@ -272,4 +290,50 @@ export const getGeneralOptionLabelByValue = (options: Array<object>, value: stri
 	}
 
 	return '';
+}
+
+export const setArrayWithLabelAndValue = (genField: string, partner: Array<number>): Array<object> => {
+	const options = genOptions[genField];
+	const arr = [];
+
+	if (partner['contentOffer']) {
+		const offers = partner['contentOffer'];
+
+		for (var i = 0; i < options.length; ++i) {
+			if (offers.indexOf(parseInt(options[i]['value'])) !== -1) {
+				arr.push(options[i]);
+			}
+		}
+	}
+	
+	return arr;
+}
+
+export const getOnlyValues = (options: Array<object>): Array<number> => {
+	const arr = JSON.parse(JSON.stringify(options));
+	
+	return arr.map(item => { return parseInt(item['value']) });
+}
+
+export const fillPickedOffers = (picked: object, offers: Array<number>, lang: string): object => {
+	const res = JSON.parse(JSON.stringify(picked));
+
+	for (var i = 0; i < offers.length; ++i) {
+		if (!isInPicked(offers[i], res) ) {
+			const label = getGeneralOptionLabelByValue(genOptions[`contentOffer_${lang}`], offers[i].toString());
+			res[label.toLowerCase()] = true;
+		}
+	}
+
+	return res;
+}
+
+const isInPicked = (offer: number, picked: object): boolean => {
+	for(let key in picked){
+		if (parseInt(picked[key]) === offer) {
+			return true;
+		}
+	}
+
+	return false;
 }

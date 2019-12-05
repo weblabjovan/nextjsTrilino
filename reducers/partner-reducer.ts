@@ -1,8 +1,8 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes,
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes
 } from '../actions/partner-actions';
 import { IpartnerRoomItem, IpartnerGeneral } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront, setUpMainGeneralState } from '../lib/helpers/specificPartnerFunctions';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue } from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -36,9 +36,17 @@ interface initialState {
   updateActionGeneralError: object | boolean;
   updateActionGeneralSuccess: null | number;
 
+  updateActionOfferStart: boolean;
+  updateActionOfferError: object | boolean;
+  updateActionOfferSuccess: null | number;
+
   partnerGeneral: IpartnerGeneral;
 
   partnerRooms: Array<IpartnerRoomItem>;
+
+  partnerOffer: Array<object>;
+
+  partnerAddon: Array<object>;
 
   
 }
@@ -74,6 +82,10 @@ const initialState: initialState  = {
   updateActionGeneralError: false,
   updateActionGeneralSuccess: null,
 
+  updateActionOfferStart: false,
+  updateActionOfferError: false,
+  updateActionOfferSuccess: null,
+
   partnerGeneral: {
     size: null,
     playSize: null,
@@ -102,6 +114,8 @@ const initialState: initialState  = {
     pool: '',
     wifi: '',
     animator: '',
+    movie: '',
+    gaming: '',
     food: '',
     drink: '',
     cake: '',
@@ -145,7 +159,15 @@ const initialState: initialState  = {
         ],
       }
     }
-  ]
+  ],
+
+  partnerOffer: [
+
+  ],
+
+  partnerAddon: [
+
+  ],
 
 };
 
@@ -223,8 +245,10 @@ const actionsMap = {
     const lang = action.payload['partner']['userlanguage'] ? action.payload['partner']['userlanguage'] : 'sr';
     return {
       ...state,
-      partnerRooms: setUpGeneralRoomsForFront(action.payload['partner']['general']['rooms']),
-      partnerGeneral: setUpMainGeneralState(null, action.payload['partner']['general'], lang),
+      partnerRooms: setUpGeneralRoomsForFront(action.payload['partner']),
+      partnerGeneral: setUpMainGeneralState(null, action.payload['partner'], lang),
+      partnerOffer: setArrayWithLabelAndValue(`contentOffer_${lang}`, action.payload['partner']),
+      partnerAddon: action.payload['partner']['contentAddon'] ? action.payload['partner']['contentAddon'] : [],
       partner: action.payload['partner'],
       partnerGetStart: false,
     };
@@ -314,6 +338,28 @@ const actionsMap = {
       updateActionGeneralSuccess: action.payload.code,
       partner: action.payload.partner,
       updateActionGeneralStart: false,
+    };
+  },
+
+  [updateOfferPartnerActionTypes.START]: (state) => {
+    return {
+      ...state,
+      updateActionOfferStart: true,
+    };
+  },
+  [updateOfferPartnerActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      updateActionOfferStart: false,
+      updateActionOfferError: action.payload.response.body,
+    };
+  },
+  [updateOfferPartnerActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      updateActionOfferSuccess: action.payload.code,
+      partner: action.payload.partner,
+      updateActionOfferStart: false,
     };
   },
 };

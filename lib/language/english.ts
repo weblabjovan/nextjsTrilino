@@ -173,6 +173,10 @@ const english: LanguageInterface = {
 	partnerProfileGeneralItemWifiPlaceholder: 'wifi',
 	partnerProfileGeneralItemAnimator: 'Do you offer inhouse animator?',
 	partnerProfileGeneralItemAnimatorPlaceholder: 'animator',
+	partnerProfileGeneralItemMovie: 'Do you offer inhouse movie theater?',
+	partnerProfileGeneralItemMoviePlaceholder: 'theater',
+	partnerProfileGeneralItemGaming: 'Do you offer gaming room?',
+	partnerProfileGeneralItemGamingPlaceholder: 'gaming',
 	partnerProfileGeneralItemFood: 'Do you offer inhouse food?',
 	partnerProfileGeneralItemFoodPlaceholder: 'food',
 	partnerProfileGeneralItemDrink: 'Do you offer inhouse drinks?',
@@ -243,6 +247,8 @@ const english: LanguageInterface = {
 	partnerProfilePreviewIconPool: 'Pool',
 	partnerProfilePreviewIconWifi: 'WiFi',
 	partnerProfilePreviewIconAnimator: 'Animator',
+	partnerProfilePreviewIconMovie: 'Thearer',
+	partnerProfilePreviewIconGaming: 'Gaming',
 	partnerProfilePreviewIconFood: 'Food',
 	partnerProfilePreviewIconDrink: 'Drinks',
 	partnerProfilePreviewIconCake: 'Cake',
@@ -255,6 +261,31 @@ const english: LanguageInterface = {
 	partnerProfilePreviewSelfremarkCakeNo: 'This venue does not allow celebration organizers to bring their own cake. You have to use their cake.',
 	partnerProfilePreviewSelfremarkAnimatorYes: 'This venue does allow celebration organizers to organize their own animator.',
 	partnerProfilePreviewSelfremarkAnimatorNo: 'This venue does not allow celebration organizers to organize their own animator. You have to use their animator.',
+
+
+
+
+	partnerProfileOfferTitle: 'Entertainment content information',
+	partnerProfileOfferDescription: 'U nastavku dodajte zabavne sadrćaje koje nudite vašim gostima. Zabavni sadrćaji su podeljeni u dve grupe: besplatni i uz doplatu. Zabavni sadržaji predstavljaju sve što gosti mogu koristiti da bi se igrali, rekreirali, zabavili, animirali i uživali u proslavi. Besplatni sadržaj je ono što vašim gostima nudite bez nadoknade, dok su sadržaji uz doplatu oni za koje je potrebno dodatno platiti.',
+	partnerProfileOfferSubFree: 'Free content:',
+	partnerProfileOfferNoItemsFree: 'Currently cou do not have saved free contents',
+	partnerProfileOfferButtonTagAddFree: 'add',
+	partnerProfileOfferButtonTagRemoveFree: 'remove',
+	partnerProfileOfferSubPay: 'Payed content:',
+	partnerProfileOfferNoItemsPay: 'Currently cou do not have saved payed contents',
+	partnerProfileOfferAddonName: 'Content name:',
+	partnerProfileOfferAddonNamePlaceholder: 'name',
+	partnerProfileOfferAddonPrice: 'Price:',
+	partnerProfileOfferAddonPricePlaceholder: 'price',
+	partnerProfileOfferAddonComment: 'Content comment:',
+	partnerProfileOfferAddonCommentPlaceholder: 'comment',
+	partnerProfileOfferAddonButton: 'Add',
+	partnerProfileOfferAddonAlertName: 'Content name is required. Please, fill out content name.',
+	partnerProfileOfferAddonAlertPrice: 'Content price is required. Please, fill out content price.',
+	partnerProfileOfferSaveButton: 'Save entertaiment content information',
+
+
+
 
 
 	loginTitle: 'This is Login Page',
