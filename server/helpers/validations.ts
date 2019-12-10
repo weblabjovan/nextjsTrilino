@@ -92,3 +92,22 @@ const isDayTermsValid = (day: Array<object>): boolean => {
 
 	return true;
 }
+
+export const isCateringDataValid = (data: object): boolean => {
+	if (!data['deals'] || !data['drinkCard']) {
+		return false;
+	}else{
+		if (!Array.isArray(data['deals']) || !Array.isArray(data['drinkCard'])) {
+			return false;
+		}else{
+			for (var i = 0; i < data['deals'].length; ++i) {
+				if (typeof data['deals'][i]['price'] !== 'number' || typeof data['deals'][i]['min'] !== 'number' || !isNumeric(data['deals'][i]['type'])) {
+					console.log('data 3');
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}

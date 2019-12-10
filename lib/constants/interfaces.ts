@@ -81,3 +81,24 @@ export interface IpartnerGeneral {
 	selfAnimator: string | object;
 	roomNumber: string | object;
 }
+
+interface IdrinkCardItem {
+	name: string;
+	price: string;
+	quantity: string;
+	scale: string;
+	type: string;
+}
+
+interface IdealsItem {
+	price: string;
+	type: string | object;
+	min: null | number;
+	currentItem: string;
+	items: Array<string>;
+}
+
+export interface IpartnerCatering {
+	drinkCard: Array<IdrinkCardItem>;
+	deals: Array<IdealsItem>;
+}

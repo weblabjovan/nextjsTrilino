@@ -259,6 +259,21 @@ export default interface LanguageInterface {
 	partnerProfilePreviewSelfremarkCakeNo: string;
 	partnerProfilePreviewSelfremarkAnimatorYes: string;
 	partnerProfilePreviewSelfremarkAnimatorNo: string;
+	partnerProfilePreviewOfferFreeSub: string;
+	partnerProfilePreviewOfferFreeEmpty: string;
+	partnerProfilePreviewOfferPayedSub: string;
+	partnerProfilePreviewOfferPayedEmpty: string;
+	partnerProfilePreviewCateringDealsSub: string;
+	partnerProfilePreviewCateringDealsPer: string;
+	partnerProfilePreviewCateringDealsEmpty: string;
+	partnerProfilePreviewCateringCardSub: string;
+	partnerProfilePreviewCateringCardEmpty: string;
+	partnerProfilePreviewCateringCardPillarNon: string;
+	partnerProfilePreviewCateringCardPillarNonEmpty: string;
+	partnerProfilePreviewCateringCardPillarAlco: string;
+	partnerProfilePreviewCateringCardPillarAlcoEmpty: string;
+	partnerProfilePreviewCateringCardPillarHot: string;
+	partnerProfilePreviewCateringCardPillarHotEmpty: string;
 
 
 	partnerProfileOfferTitle: string;
@@ -279,6 +294,41 @@ export default interface LanguageInterface {
 	partnerProfileOfferAddonAlertName: string;
 	partnerProfileOfferAddonAlertPrice: string;
 	partnerProfileOfferSaveButton: string;
+
+
+	partnerProfileCateringTitle: string;
+	partnerProfileCateringDescription: string;
+	partnerProfileCateringDealsSub: string;
+	partnerProfileCateringDealsAddDealButton: string;
+	partnerProfileCateringDealsDealCont: string;
+	partnerProfileCateringDealsDeal: string;
+	partnerProfileCateringDealsType: string;
+	partnerProfileCateringDealsPrice: string;
+	partnerProfileCateringDealsMin: string;
+	partnerProfileCateringDealsEmptyDeal: string;
+	partnerProfileCateringDealsFoodName: string;
+	partnerProfileCateringDealsFoodButton: string;
+	partnerProfileCateringCardSub: string;
+	partnerProfileCateringCardAlertName: string;
+	partnerProfileCateringCardAlertQuant: string;
+	partnerProfileCateringCardAlertScale: string;
+	partnerProfileCateringCardAlertPrice: string;
+	partnerProfileCateringCardAlertType: string;
+	partnerProfileCateringCardDisplayInfo: string;
+	partnerProfileCateringCardNonPillar: string;
+	partnerProfileCateringCardAlcoPillar: string;
+	partnerProfileCateringCardHotPillar: string;
+	partnerProfileCateringCardEmpty: string;
+	partnerProfileCateringCardFormInfo: string;
+	partnerProfileCateringCardFormName: string;
+	partnerProfileCateringCardFormScale: string;
+	partnerProfileCateringCardFormPrice: string;
+	partnerProfileCateringCardFormType: string;
+	partnerProfileCateringCardFormQuant: string;
+	partnerProfileCateringCardFormButton: string;
+	partnerProfileCateringDealsAlert: string;
+	partnerProfileCateringSaveButton: string;
+
 
 
 	

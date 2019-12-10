@@ -5,7 +5,7 @@ import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid, isGeneralDataValid } from '../../../server/helpers/validations';
+import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
@@ -225,7 +225,32 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				return res.status(401).json({ endpoint: 'partners', operation: 'update offer', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
 			}
 		}
+
+		if (type == 'catering') {
+			const token = req.headers.authorization;
+			if (!isEmpty(token)) {
+				if (!isCateringDataValid(data['catering'])) {
+					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
+				}
+				try{
+					await connectToDb();
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']);
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { catering: data['catering'] } }, { new: true }).select('-password -_id');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'update catering', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+					}else{
+						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(401).json({ endpoint: 'partners', operation: 'update catering', success: false, code: 3, error: 'auth error', message: err });
+				}
+			}else{
+				return res.status(401).json({ endpoint: 'partners', operation: 'update catering', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
 	}
+	
 
 	if (req.query.operation === 'login') {
 		

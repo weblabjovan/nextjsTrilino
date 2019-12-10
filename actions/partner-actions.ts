@@ -190,6 +190,30 @@ export function updateOfferPartner(param: string, data: object, link: object, au
   };
 }
 
+export const updateCateringPartnerActionTypes = {
+  START: 'PARTNER_CATERING_UPDATE_START',
+  ERROR: 'PARTNER_CATERING_UPDATE_ERROR',
+  SUCCESS: 'PARTNER_CATERING_UPDATE_SUCCESS',
+};
+
+export function updateCateringPartner(param: string, data: object, link: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
+  const sendBody = { param, data, type: 'catering' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      updateCateringPartnerActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
 export const getPartnerProfileActionTypes = {
   START: 'PARTNER_PROFILE_GET_START',
   ERROR: 'PARTNER_PROFILE_GET_ERROR',

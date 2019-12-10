@@ -13,6 +13,11 @@ interface IGenOptions {
   spaceType_en: Array<object>;
   contentOffer_sr: Array<object>;
   contentOffer_en: Array<object>;
+  drinkScale: Array<object>;
+  drinkType_sr: Array<object>;
+  drinkType_en: Array<object>;
+  dealType_sr: Array<object>;
+  dealType_en: Array<object>;
   partnerGeneralStructure: object;
 }
 
@@ -226,6 +231,29 @@ const generalOptions: IGenOptions = {
       {value: '46', label: 'Bubble fudbal'},
       {value: '47', label: 'Bazen sa lopticama'},
       {value: '48', label: 'Lego kocke'},
+    ],
+    drinkScale: [
+      {value: '1', label: 'ml'},
+      {value: '2', label: 'dl'},
+      {value: '3', label: 'l'},
+    ],
+    drinkType_sr: [
+      {value: '1', label: 'Bezalkoholna pića'},
+      {value: '2', label: 'Alkoholna pića'},
+      {value: '3', label: 'Topli napitci'},
+    ],
+    drinkType_en: [
+      {value: '1', label: 'Non alcoholic drinks'},
+      {value: '2', label: 'Alcoholic drinks'},
+      {value: '3', label: 'Hot drinks'},
+    ],
+    dealType_sr: [
+      {value: '1', label: 'Za decu'},
+      {value: '2', label: 'Za odrasle'},
+    ],
+    dealType_en: [
+      {value: '1', label: 'For kids'},
+      {value: '2', label: 'For adults'},
     ],
     partnerGeneralStructure: {
     size: null,

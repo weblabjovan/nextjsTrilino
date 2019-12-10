@@ -230,3 +230,26 @@ button:disabled{
     }
   }
 }
+
+.closeIcon{
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 25px;
+  line-height: 26px;
+  font-weight: 800;
+  vertical-align: middle;
+  color: $cancelCol;
+  cursor: pointer;
+
+  &:before{
+    content: 'close';
+    font-family: 'Material Icons';
+        
+  }
+
+}
+.closeIcon.small{
+  font-size: 18px;
+  line-height: 18px;
+}

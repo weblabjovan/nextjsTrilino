@@ -328,6 +328,16 @@ export const fillPickedOffers = (picked: object, offers: Array<number>, lang: st
 	return res;
 }
 
+export const isInArrayOfObjects = (field: string, value: string | number, arr: Array<any>): boolean => {
+	for (var i = 0; i < arr.length; ++i) {
+		if (arr[i][field] === value) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 const isInPicked = (offer: number, picked: object): boolean => {
 	for(let key in picked){
 		if (parseInt(picked[key]) === offer) {
@@ -336,4 +346,84 @@ const isInPicked = (offer: number, picked: object): boolean => {
 	}
 
 	return false;
+}
+
+export const setCateringForBack = (catering: object): object => {
+	const newCat = JSON.parse(JSON.stringify(catering));
+	let deals = removeEmpty(newCat['deals'], isDealEmpty);
+	deals = typeTheDeals(deals);
+	const drinkCard = newCat['drinkCard'];
+
+	return { deals, drinkCard };
+}
+
+const removeEmpty = (deals: Array<object>, isEmpty: (item: object) => boolean): Array<any> => {
+	const removeIndex = [];
+	for (var i = 0; i < deals.length; ++i) {
+
+		if (isEmpty(deals[i])) {
+			removeIndex.push(i);
+		}
+	}
+
+	for (var i = removeIndex.length - 1; i >= 0; i--) {
+		deals.splice(removeIndex[i],1);
+	}
+
+	return deals;
+}
+
+const typeTheDeals = (deals: Array<object>): Array<object>  => {
+	for (var i = 0; i < deals.length; ++i) {
+		deals[i]['price'] = parseInt(deals[i]['price']);
+		deals[i]['min'] = parseInt(deals[i]['min']);
+		deals[i]['type'] = deals[i]['type']['value'];
+	}
+
+	return deals;
+}
+
+const isDealEmpty = (deal: object): boolean => {
+	if (!deal['type'] && !deal['price'] && !deal['min'] && !deal['items'].length) {
+		return true;
+	}
+
+	return false;
+}
+
+export const setUpMainCateringState = (partner: object, lang: string): object => {
+	const res = {};
+	const newPartner = JSON.parse(JSON.stringify(partner));
+	if (newPartner['catering']) {
+		const catering = newPartner['catering'];
+		res['drinkCard'] = catering['drinkCard'];
+		if (!catering['deals'].length) {
+			res['deals'] = [ { type: '', price: '', min: null, items: [], currentItem: ''} ];
+		}else{
+			catering['deals'].map( deal => {
+				deal['type'] = {value: deal['type'], label: getGeneralOptionLabelByValue(genOptions[`dealType_${lang}`], deal['type'].toString()) };
+				deal['price'] = deal['price'].toString();
+				deal['min'] = deal['min'].toString();
+			});
+
+			res['deals'] = catering['deals'];
+		}
+	}else{
+		res['deals'] = [ { type: '', price: '', min: null, items: [], currentItem: ''} ];
+		res['drinkCard'] = [];
+	}
+	
+
+	return res;
+}
+
+export const isolateByArrayFieldValue = (mainArr: Array<object>, field: string, value: string | number): Array<object> => {
+	const arr = [];
+	for (var i = 0; i < mainArr.length; ++i) {
+		if (mainArr[i][field] === value) {
+			arr.push(mainArr[i]);
+		}
+	}
+
+	return arr;
 }
