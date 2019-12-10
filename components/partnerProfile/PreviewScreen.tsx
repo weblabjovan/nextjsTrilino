@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
-import { isFieldInObject, getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
@@ -450,7 +450,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
             <Col xs="12" sm="6">
               <Row>
                 <Col xs="12" className="no-pading">
-                  <h3>Besplatni sadržaji:</h3>
+                  <h3>{this.state.dictionary['partnerProfilePreviewOfferFreeSub']}</h3>
                 </Col>
                 {
                   isFieldInObject(this.props.partnerObject, 'contentOffer')
@@ -464,7 +464,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                   })
                   :
                   (<Col xs="12">
-                    <h5 className="fadedPrev">Besplatni sadržaji još uvek nisu upisani.</h5>
+                    <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferFreeEmpty']}</h5>
                   </Col>)
                 }
               </Row>
@@ -473,7 +473,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
             <Col xs="12" sm="6">
               <Row>
                 <Col xs="12" className="no-pading">
-                  <h3>Sadržaji uz doplatu:</h3>
+                  <h3>{this.state.dictionary['partnerProfilePreviewOfferPayedSub']}</h3>
                 </Col>
                 {
                   isFieldInObject(this.props.partnerObject, 'contentAddon')
@@ -488,12 +488,155 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                   })
                   :
                   (<Col xs="12">
-                    <h5 className="fadedPrev">Sadržaji uz doplatu još uvek nisu upisani.</h5>
+                    <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferPayedEmpty']}</h5>
                   </Col>)
                 }
               </Row>
             </Col>
           </Row> 
+
+          <Row className="subHeadPr">
+            <Col xs="12">
+              <h3>{this.state.dictionary['partnerProfilePreviewCateringDealsSub']}</h3>
+            </Col>
+          </Row>
+
+          {
+            isFieldInObject(this.props.partnerObject, 'deals', 'catering')
+            ?
+            this.props.partnerObject['catering']['deals'].length
+            ?
+            this.props.partnerObject['catering']['deals'].map( (deal, index) => {
+              return(
+                <Row className="cateringDealsPr" key={`cateringDealKey_${index}`}>
+                  <Col xs="12" sm="4" lg="3">
+                    <h6>{`${this.state.dictionary['partnerProfileCateringDealsDeal']} ${index+1}`}</h6>
+                    <h6>{getGeneralOptionLabelByValue(generalOptions[`dealType_${this.props.lang}`], deal['type'].toString())}</h6>
+                    <h6>{`${deal['price']} ${this.state.dictionary['partnerProfilePreviewCateringDealsPer']}`}</h6>
+                  </Col>
+                  <Col xs="12" sm="8" lg="9">
+                    <Row>
+                      <Col xs="12">
+                        <div className="middle">
+                          <p className="sub-sm">{this.state.dictionary['partnerProfileCateringDealsDealCont']}</p>
+                        </div>
+                      </Col>
+                      {
+                        deal['items'].map((item, index) => {
+                          return(
+                            <Col xs="12" sm="6" lg="4" className="pillars" key={`dealItem_${index}`}>
+                              <div>
+                                <span className="icon bullet"></span>
+                                <p>{item}</p>
+                              </div>
+                            </Col>
+                           )
+                        })
+                      }
+
+                    </Row>
+                  </Col>
+                </Row>
+               )
+            })
+            :
+            (<Row><Col xs="12">
+              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringDealsEmpty']}</h5>
+            </Col></Row>)
+            :
+            (<Row><Col xs="12">
+              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringDealsEmpty']}</h5>
+            </Col></Row>)
+          }
+
+          <Row className="subHeadPr">
+            <Col xs="12">
+              <h3>{this.state.dictionary['partnerProfilePreviewCateringCardSub']}</h3>
+            </Col>
+          </Row>
+
+
+          <Row className="cateringCardPr">
+            {
+              isFieldInObject(this.props.partnerObject, 'drinkCard', 'catering')
+              ?
+              this.props.partnerObject['catering']['drinkCard'].length
+              ?
+              (
+                <Col xs="12">
+                <Row>
+                  <Col xs="12" sm="4">
+                    <div className="middle">
+                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarNon']}</h5>
+                    </div>
+                    {
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '1').length
+                      ?
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '1').map( (drink, index) => {
+                        return(
+                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+                         )
+                      })
+                      :
+                      <div className="middle">
+                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarNonEmpty']}</h6>
+                      </div>
+                    }
+                  </Col>
+                  <Col xs="12" sm="4">
+                    <div className="middle">
+                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarAlco']}</h5>
+                    </div>
+                    {
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '2').length
+                      ?
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '2').map( (drink, index) => {
+                        return(
+                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+                         )
+                      })
+                      :
+                      <div className="middle">
+                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarAlcoEmpty']}</h6>
+                      </div>
+                    }
+                  </Col>
+                  <Col xs="12" sm="4">
+                    <div className="middle">
+                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarHot']}</h5>
+                    </div>
+                    {
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '3').length
+                      ?
+                      isolateByArrayFieldValue(this.props.partnerObject['catering']['drinkCard'], 'type', '3').map( (drink, index) => {
+                        return(
+                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+                         )
+                      })
+                      :
+                      <div className="middle">
+                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarHotEmpty']}</h6>
+                      </div>
+                     
+                    }
+                  </Col>
+                </Row>
+                </Col>
+              )
+              :
+              (<Col xs="12">
+              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardEmpty']}</h5>
+              </Col>)
+              :
+              (<Col xs="12">
+              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardEmpty']}</h5>
+              </Col>)
+            }
+            
+          </Row>
+
+
+          
         </Container>    
     	</div>
     	

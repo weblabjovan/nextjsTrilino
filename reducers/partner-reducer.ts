@@ -1,8 +1,8 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes
 } from '../actions/partner-actions';
-import { IpartnerRoomItem, IpartnerGeneral } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue } from '../lib/helpers/specificPartnerFunctions';
+import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering } from '../lib/constants/interfaces';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState } from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -40,6 +40,10 @@ interface initialState {
   updateActionOfferError: object | boolean;
   updateActionOfferSuccess: null | number;
 
+  updateActionCateringStart: boolean;
+  updateActionCateringError: object | boolean;
+  updateActionCateringSuccess: null | number;
+
   partnerGeneral: IpartnerGeneral;
 
   partnerRooms: Array<IpartnerRoomItem>;
@@ -47,6 +51,9 @@ interface initialState {
   partnerOffer: Array<object>;
 
   partnerAddon: Array<object>;
+
+  partnerCatering: object;
+
 
   
 }
@@ -85,6 +92,10 @@ const initialState: initialState  = {
   updateActionOfferStart: false,
   updateActionOfferError: false,
   updateActionOfferSuccess: null,
+
+  updateActionCateringStart: false,
+  updateActionCateringError: false,
+  updateActionCateringSuccess: null,
 
   partnerGeneral: {
     size: null,
@@ -169,6 +180,13 @@ const initialState: initialState  = {
 
   ],
 
+  partnerCatering: {
+    drinkCard:[],
+    deals: [
+      { type: '', price: '', min: null, items: [], currentItem: ''},
+    ],
+  },
+
 };
 
 const actionsMap = {
@@ -249,6 +267,7 @@ const actionsMap = {
       partnerGeneral: setUpMainGeneralState(null, action.payload['partner'], lang),
       partnerOffer: setArrayWithLabelAndValue(`contentOffer_${lang}`, action.payload['partner']),
       partnerAddon: action.payload['partner']['contentAddon'] ? action.payload['partner']['contentAddon'] : [],
+      partnerCatering: setUpMainCateringState(action.payload['partner'], lang),
       partner: action.payload['partner'],
       partnerGetStart: false,
     };
@@ -360,6 +379,28 @@ const actionsMap = {
       updateActionOfferSuccess: action.payload.code,
       partner: action.payload.partner,
       updateActionOfferStart: false,
+    };
+  },
+
+  [updateCateringPartnerActionTypes.START]: (state) => {
+    return {
+      ...state,
+      updateActionCateringStart: true,
+    };
+  },
+  [updateCateringPartnerActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      updateActionCateringStart: false,
+      updateActionCateringError: action.payload.response.body,
+    };
+  },
+  [updateCateringPartnerActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      updateActionCateringSuccess: action.payload.code,
+      partner: action.payload.partner,
+      updateActionCateringStart: false,
     };
   },
 };

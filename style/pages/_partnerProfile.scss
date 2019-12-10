@@ -13,6 +13,30 @@
 	.partnerProflePage{
 		padding: 40px 0px;
 
+		.sub-sm{
+			font-size: 14px !important;
+			font-weight: 300 !important;
+			font-style: italic !important;
+			color: #afafaf;
+		}
+
+		.buttonAdd{
+			text-align: center;
+			background-color: $actionCol;
+			text-transform: uppercase;
+			color: #fff;
+			padding: 5px 15px;
+			border: solid 1px $actionCol;
+			border-radius: 5px;
+			margin-top: 15px;
+			margin-bottom: 25px;
+		}
+
+		.fadedPrev{
+			font-style: italic;
+			color: #afafaf;
+		}
+
 		.pageHeader{
 			margin-bottom: 30px;
 
@@ -97,6 +121,7 @@
 	}
 
 	.partnerProflePage.preview{
+
 		.mainPhoto{
 			background-color: #ccc;
 			width: 100%;
@@ -132,6 +157,16 @@
 			@media only screen and (max-width: 577px) {
 				padding-left: 15px;
 				padding-right: 15px;
+			}
+		}
+
+		.subHeadPr{
+			.col-12{
+				padding: 0px;
+			}
+			
+			h3{
+				font-size: 22px;
 			}
 		}
 
@@ -180,6 +215,8 @@
 			}
 		}
 
+
+
 		.generalSecond{
 			ul{
 				list-style-type: none;
@@ -205,6 +242,16 @@
 			}
 		}
 
+		.icon{
+			display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+	        font-size: 40px;
+	        line-height: 50px;
+	        color: #252525;
+		}
+
 		.iconHolder{
 			text-align: center;
 			border: solid 1px #252525;
@@ -222,16 +269,6 @@
 				@media only screen and (max-width: 768px) {
 					font-size: 16px;
 				}
-			}
-
-			.icon{
-				display: block;
-				text-align: center;
-				width: 100%;
-				font-family: 'Material Icons';
-		        font-size: 40px;
-		        line-height: 50px;
-		        color: #252525;
 			}
 
 			.parking:before{
@@ -300,6 +337,9 @@
 
 		.contentFree{
 			padding: 30px 0px;
+			margin-bottom: 40px;
+			border-bottom: solid 1px #ccc;
+
 			h3{
 				font-size: 22px;
 			}
@@ -343,6 +383,86 @@
 				padding: 5px 0px;
 				margin-bottom: 5px;
 				border-bottom: solid 1px #ccc;
+			}
+		}
+
+		.cateringDealsPr{
+			padding-bottom: 25px;
+		    border-bottom: solid 1px #ccc;
+		    margin-bottom: 50px;
+
+			h3{
+				font-size: 22px;
+			}
+
+			h6{
+				font-size: 20px;
+				text-transform: uppercase;
+				font-weight: 400;
+				line-height: 34px;
+
+				&:nth-of-type(2){
+					color: $purple;
+				}
+
+				&:nth-of-type(3){
+					font-size: 17px;
+					font-weight: 700;
+					font-style: italic;
+				}
+			}
+
+			.sub-sm{
+				margin-bottom: 15px;
+			}
+
+			.pillars{
+				border-left: solid 1px #ccc;
+				margin-bottom: 0px;
+				padding-bottom: 5px;
+
+				@media only screen and (max-width: 577px) {
+					border: none;				}
+
+				div{
+					padding: 5px 0px;
+				}
+
+				p{
+					font-style: italic;
+					font-size: 16px;
+					line-height: 22px;
+					font-family: $headFont;
+					display: contents;
+				}
+
+				.icon{
+					display: initial;
+					font-size: 16px;
+					line-height: 22px;
+					color: $purple;
+					vertical-align: text-top;
+				}
+
+				.bullet:before{
+					content: 'arrow_right';
+				}
+			}
+		}
+
+		.cateringCardPr{
+			h5{
+				font-size: 18px;
+			    font-weight: 600;
+			    color: #353535;
+			    margin-bottom: 25px;
+			}
+
+			p{
+				font-size: 16px;
+			    line-height: 26px;
+			    margin-bottom: 10px;
+			    font-style: italic;
 			}
 		}
 
@@ -514,19 +634,116 @@
 			.buttonAdd{
 				font-size: 16px;
 				line-height: 24px;
-				text-align: center;
-				background-color: $actionCol;
-				text-transform: uppercase;
-				color: #fff;
-				padding: 5px 15px;
-				border: solid 1px $actionCol;
-				border-radius: 5px;
 				font-weight: 700;
-				margin-top: 15px;
-				margin-bottom: 25px;
+			}
+		}
+	}
+
+	.partnerProflePage.food{
+		.drinkCard{
+			margin-top: 30px;
+			border-top: solid 1px #ccc;
+    		padding-top: 30px;
+
+			.drinkList{
+				.item{
+					position: relative;
+					padding-right: 30px;
+					padding-left: 10px;
+
+					span{
+						position: absolute;
+						top: 0px;
+						right: 10px;
+						cursor: pointer;
+
+						&:before{
+							content: 'close';
+					        font-family: 'Material Icons';
+					        font-size: 20px;
+					        font-weight: 800;
+					        vertical-align: middle;
+					        color: #000;
+						}
+					}
+
+					label{
+						font-size: 16px;
+					    font-weight: 400;
+					    line-height: 24px;
+					    margin-bottom: 8px;
+					}
+				}
+
+				h6{
+					font-size: 18px;
+				    font-weight: 600;
+				    line-height: 26px;
+				    margin-bottom: 10px;
+				    margin-top: 30px;
+				}
+			}
+
+			.drinkForm{
+				border-left: solid 1px #ccc;
+				@media only screen and (max-width: 768px) {
+					border-left: none;
+				}
+
+				label{
+					font-size: 16px;
+					font-weight: 400;
+				}
+
+				.buttonAdd{
+					font-size: 12px;
+					line-height: 20px;
+				}
 			}
 		}
 
-		
+		.cateringDeal{
+
+			h4{
+				font-weight: 500;
+    			font-size: 20px;
+    			text-decoration: underline;
+			}
+
+			.dealContent{
+				padding: 20px 10px;
+				p{
+				    padding-right: 15px;
+				    line-height: 25px;
+				    font-size: 16px;
+				}
+
+				.evenCol{
+					border-right: solid 1px #ccc;
+
+					@media only screen and (max-width: 577px) {
+						border: none;
+					}
+				}
+
+				.col-12{
+					margin-bottom: 0px;
+					padding-bottom: 15px;
+				}
+
+				.sub-sm{
+					margin-bottom: 10px;
+				}
+			}
+			
+			
+
+			.buttonAdd{
+				font-size: 12px;
+				line-height: 20px;
+				margin-bottom: 0px;
+				margin-top: 32px;
+			}
+		}
 	}
 }
