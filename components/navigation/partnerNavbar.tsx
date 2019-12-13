@@ -135,35 +135,35 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   className={this.props.activeScreen === 'general' ? 'active' : ''}
                   id="general"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerGeneral']}</li>
+                  ><span className="icon general"></span>{this.state.dictionary['navigationPartnerGeneral'].toUpperCase()}</li>
                 <li 
                   className={this.props.activeScreen === 'catering' ? 'active' : ''}
                   id="catering"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerCatering']}</li>
+                  ><span className="icon catering"></span>{this.state.dictionary['navigationPartnerCatering'].toUpperCase()}</li>
                 <li 
                   className={this.props.activeScreen === 'decoration' ? 'active' : ''}
                   id="decoration"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerDecoration']}</li>
+                  ><span className="icon decoration"></span>{this.state.dictionary['navigationPartnerDecoration'].toUpperCase()}</li>
                 <li 
                   className={this.props.activeScreen === 'offer' ? 'active' : ''}
                   id="offer"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerOffer']}</li>
+                  ><span className="icon offer"></span>{this.state.dictionary['navigationPartnerOffer'].toUpperCase()}</li>
                 <li 
                   className={this.props.activeScreen === 'calendar' ? 'active' : ''}
                   id="calendar"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerCalendar']}</li>
+                  ><span className="icon calendar"></span>{this.state.dictionary['navigationPartnerCalendar'].toUpperCase()}</li>
                 <li 
                   className={this.props.activeScreen === 'preview' ? 'active' : ''}
                   id="preview"
                   onClick={this.props.changeScreen}
-                  >{this.state.dictionary['navigationPartnerPreview']}</li>
+                  ><span className="icon preview"></span>{this.state.dictionary['navigationPartnerPreview'].toUpperCase()}</li>
                 <li 
                   onClick={this.logout}
-                >{this.state.dictionary['navigationPartnerLogout']}</li>
+                ><span className="icon logout"></span>{this.state.dictionary['navigationPartnerLogout'].toUpperCase()}</li>
               </ul>
             </div>
           )

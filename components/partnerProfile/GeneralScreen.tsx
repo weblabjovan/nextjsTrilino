@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { changeSinglePartnerField, updateGeneralPartner } from '../../actions/partner-actions';
 import { getLanguage } from '../../lib/language';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
-import { prepareGeneralPartnerObject, validateTerms, setUpMainGeneralState } from '../../lib/helpers/specificPartnerFunctions';
+import { prepareGeneralPartnerObject, validateTerms, setUpMainGeneralState, getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import genOptions from '../../lib/constants/generalOptions';
 import PlainInput from '../form/input';
 import PlainText from '../form/textField';
@@ -118,20 +118,29 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
   		const room = { name: '', size: null, capKids: null, capAdults: null, terms:{ monday:[ {from: '', to: '', price: null }, ], tuesday:[ {from: '', to: '', price: null }, ], wednesday:[ {from: '', to: '', price: null }, ], thursday:[ {from: '', to: '', price: null }, ], friday:[ {from: '', to: '', price: null }, ], saturday:[ {from: '', to: '', price: null }, ], sunday:[ {from: '', to: '', price: null }, ] }
 	    }
 	    const roomsCopy = JSON.parse(JSON.stringify(this.props.partnerRooms));
+      const generalCopy = JSON.parse(JSON.stringify(this.props.partnerGeneral));
+
+
 	    const dif = parseInt(num) - this.props.partnerRooms.length;
 	    for (var i = 0; i < dif; ++i) {
 	    	roomsCopy.push(room);
 	    }
+      generalCopy['roomNumber'] = { value: roomsCopy.length, label: roomsCopy.length };
   		this.props.changeSinglePartnerField('partnerRooms', roomsCopy);
+      this.props.changeSinglePartnerField('partnerGeneral', generalCopy);
   	}else if(this.props.partnerRooms.length === parseInt(num)){
 
   	}else{
   		const roomsCopy = JSON.parse(JSON.stringify(this.props.partnerRooms));
+      const generalCopy = JSON.parse(JSON.stringify(this.props.partnerGeneral));
   		const dif = this.props.partnerRooms.length - parseInt(num);
   		for (var i = 0; i < dif; ++i) {
 	    	roomsCopy.pop();
 	    }
-  		this.props.changeSinglePartnerField('partnerRooms', roomsCopy);
+      generalCopy['roomNumber'] = { value: roomsCopy.length, label: roomsCopy.length };
+
+      this.props.changeSinglePartnerField('partnerRooms', roomsCopy);
+      this.props.changeSinglePartnerField('partnerGeneral', generalCopy);
   	}
   }
 
@@ -188,16 +197,6 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
             	/>
             </Col>
             <Col xs='12' sm="6">
-            	<label>{this.state.dictionary['partnerProfileGeneralItemAddress']}</label>
-            	<PlainInput
-            		placeholder={this.state.dictionary['partnerProfileGeneralItemAddressPlaceholder']} 
-            		onChange={(event) => this.uniInputHandler(event.target.value, 'address')} 
-                value={this.props.partnerGeneral['address']}
-                className="logInput"
-                type="text"
-            	/>
-            </Col>
-            <Col xs='12' sm="6">
               <label>{this.state.dictionary['partnerProfileGeneralItemType']}</label>
               <Select 
                 options={genOptions[`spaceType_${this.props.lang}`]} 
@@ -207,6 +206,38 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemTypePlaceholder']}/>
             </Col>
+            <Col xs='12' sm="6">
+            	<label>{this.state.dictionary['partnerProfileGeneralItemAddress']}</label>
+            	<PlainInput
+            		placeholder={this.state.dictionary['partnerProfileGeneralItemAddressPlaceholder']} 
+            		onChange={(event) => this.uniInputHandler(event.target.value, 'address')} 
+                value={this.props.partnerGeneral['address']}
+                className="logInput"
+                type="text"
+            	/>
+            </Col>
+
+            <Col xs='12' sm="6">
+              <label>{this.state.dictionary['partnerProfileGeneralItemCity']}</label>
+              <PlainInput 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemSizePlaceholder']} 
+                onChange={(event) => this.uniInputHandler(event.target.value, 'size')} 
+                value={getGeneralOptionLabelByValue(genOptions['cities'], this.props.partnerObject['city'])} 
+                disabled={ true }
+                type="text"
+                className="logInput" />
+            </Col>
+            <Col xs='12' sm="6">
+              <label>{this.state.dictionary['partnerProfileGeneralItemQuarter']}</label>
+              <Select 
+                options={genOptions['quarter'][`${this.props.partnerObject['city']}`]} 
+                value={ this.props.partnerGeneral['quarter'] } 
+                onChange={(val) => this.uniInputHandler(val, 'quarter')} 
+                instanceId="ageFromInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemQuarterPlaceholder']}/>
+            </Col>
+            
             <Col xs='6' sm='3'>
             	<label>{this.state.dictionary['partnerProfileGeneralItemSize']}</label>
             	<PlainInput 

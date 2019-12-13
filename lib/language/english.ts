@@ -139,6 +139,9 @@ const english: LanguageInterface = {
 	partnerProfileGeneralItemDescriptionPlaceholder: '288 characters allowed',
 	partnerProfileGeneralItemAddress: 'Venue address:',
 	partnerProfileGeneralItemAddressPlaceholder: 'address',
+	partnerProfileGeneralItemCity: 'City:',
+	partnerProfileGeneralItemQuarter: 'City part:',
+	partnerProfileGeneralItemQuarterPlaceholder: 'city part',
 	partnerProfileGeneralItemType: 'Venue type:',
 	partnerProfileGeneralItemTypePlaceholder: 'type',
 	partnerProfileGeneralItemSize: 'Size of the venue:',
@@ -261,6 +264,7 @@ const english: LanguageInterface = {
 	partnerProfilePreviewSelfremarkCakeNo: 'This venue does not allow celebration organizers to bring their own cake. You have to use their cake.',
 	partnerProfilePreviewSelfremarkAnimatorYes: 'This venue does allow celebration organizers to organize their own animator.',
 	partnerProfilePreviewSelfremarkAnimatorNo: 'This venue does not allow celebration organizers to organize their own animator. You have to use their animator.',
+	partnerProfilePreviewSelfremarkEmpty: 'Food, drink, cake and animation restrictions are not yet saved.',
 	partnerProfilePreviewOfferFreeSub: 'Free content:',
 	partnerProfilePreviewOfferFreeEmpty: 'Free content is not yet inseted.',
 	partnerProfilePreviewOfferPayedSub: 'Payed content:',
@@ -276,6 +280,13 @@ const english: LanguageInterface = {
 	partnerProfilePreviewCateringCardPillarAlcoEmpty: 'Alcoholic drinks are not yet saved.',
 	partnerProfilePreviewCateringCardPillarHot: 'Hot drinks',
 	partnerProfilePreviewCateringCardPillarHotEmpty: 'Hot drinks are not yet saved.',
+	partnerProfilePreviewRoomsSpace: 'Celebration room - ',
+	partnerProfilePreviewRoomsSize: 'Size',
+	partnerProfilePreviewRoomsCapKids: 'Capacity kids',
+	partnerProfilePreviewRoomsCapAdults: 'Capacity adults',
+	partnerProfilePreviewDecorationSub: 'Decoration:',
+	partnerProfilePreviewDecorationEmpty: 'Decoration is not yet saved.',
+	partnerProfilePreviewDecorationFree: 'free',
 
 
 
@@ -297,7 +308,7 @@ const english: LanguageInterface = {
 	partnerProfileOfferAddonButton: 'Add',
 	partnerProfileOfferAddonAlertName: 'Content name is required. Please, fill out content name.',
 	partnerProfileOfferAddonAlertPrice: 'Content price is required. Please, fill out content price.',
-	partnerProfileOfferSaveButton: 'Save entertaiment content information',
+	partnerProfileOfferSaveButton: 'Save entertaiment content',
 
 
 	partnerProfileCateringTitle: 'Catering information',
@@ -332,6 +343,16 @@ const english: LanguageInterface = {
 	partnerProfileCateringCardFormButton: 'add on drink monu',
 	partnerProfileCateringDealsAlert: 'When saving catering deals, all deals should have type, price (only numbers), minimum(only numbers) and at least one food/drink.',
 	partnerProfileCateringSaveButton: 'Save deals and drink menu',
+
+
+
+	partnerProfileDecorationTitle: 'Decoration information',
+	partnerProfileDecorationDescription: 'Bellow you can add/edit venue decoration that you offer to your guests. If you provide some of the items in the decoration list, please check the corresponding grey checkbox and insert price if you ask for that decoration to be payed extra. For more information on how to fill out this section visit ',
+	partnerProfileDecorationSubMain: 'Venue decoration:',
+	partnerProfileDecorationSubSmal: 'Decoration list',
+	partnerProfileDecorationPricePlaceholder: 'price',
+	partnerProfileDecorationSaveButton: 'Save decorations',
+
 
 
 	loginTitle: 'This is Login Page',

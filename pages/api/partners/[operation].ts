@@ -5,7 +5,7 @@ import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid } from '../../../server/helpers/validations';
+import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
@@ -247,6 +247,31 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				}
 			}else{
 				return res.status(401).json({ endpoint: 'partners', operation: 'update catering', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+
+
+		if (type == 'decoration') {
+			const token = req.headers.authorization;
+			if (!isEmpty(token)) {
+				if (!isDecorationDataValid(data['decoration'])) {
+					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
+				}
+				try{
+					await connectToDb();
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']);
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { decoration: data['decoration'] } }, { new: true }).select('-password -_id');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'update decoration', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+					}else{
+						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(401).json({ endpoint: 'partners', operation: 'update decoration', success: false, code: 3, error: 'auth error', message: err });
+				}
+			}else{
+				return res.status(401).json({ endpoint: 'partners', operation: 'update decoration', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
 			}
 		}
 	}

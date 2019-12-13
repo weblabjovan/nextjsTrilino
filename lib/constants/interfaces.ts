@@ -45,6 +45,7 @@ export interface IpartnerGeneral {
 	description: string;
 	address: string;
 	spaceType: string | object;
+	quarter: string | object;
 	ageFrom: string | object;
 	ageTo: string | object;
 	mondayFrom: string | object;
@@ -101,4 +102,19 @@ interface IdealsItem {
 export interface IpartnerCatering {
 	drinkCard: Array<IdrinkCardItem>;
 	deals: Array<IdealsItem>;
+}
+
+interface IdecoItem {
+	check: boolean;
+	name_sr: string;
+	name_en: string;
+	value: number | string;
+	price: number | string;
+}
+
+export interface IpartnerDecoration {
+	'1': IdecoItem;
+	'2': IdecoItem;
+	'3': IdecoItem;
+	'4': IdecoItem;
 }

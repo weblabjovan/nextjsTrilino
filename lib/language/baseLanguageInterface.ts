@@ -137,6 +137,9 @@ export default interface LanguageInterface {
 	partnerProfileGeneralItemDescriptionPlaceholder: string;
 	partnerProfileGeneralItemAddress: string;
 	partnerProfileGeneralItemAddressPlaceholder: string;
+	partnerProfileGeneralItemCity: string;
+	partnerProfileGeneralItemQuarter: string;
+	partnerProfileGeneralItemQuarterPlaceholder: string;
 	partnerProfileGeneralItemType: string;
 	partnerProfileGeneralItemTypePlaceholder: string;
 	partnerProfileGeneralItemSize: string;
@@ -259,6 +262,7 @@ export default interface LanguageInterface {
 	partnerProfilePreviewSelfremarkCakeNo: string;
 	partnerProfilePreviewSelfremarkAnimatorYes: string;
 	partnerProfilePreviewSelfremarkAnimatorNo: string;
+	partnerProfilePreviewSelfremarkEmpty: string;
 	partnerProfilePreviewOfferFreeSub: string;
 	partnerProfilePreviewOfferFreeEmpty: string;
 	partnerProfilePreviewOfferPayedSub: string;
@@ -274,6 +278,13 @@ export default interface LanguageInterface {
 	partnerProfilePreviewCateringCardPillarAlcoEmpty: string;
 	partnerProfilePreviewCateringCardPillarHot: string;
 	partnerProfilePreviewCateringCardPillarHotEmpty: string;
+	partnerProfilePreviewRoomsSpace: string;
+	partnerProfilePreviewRoomsSize: string;
+	partnerProfilePreviewRoomsCapKids: string;
+	partnerProfilePreviewRoomsCapAdults: string;
+	partnerProfilePreviewDecorationSub: string;
+	partnerProfilePreviewDecorationEmpty: string;
+	partnerProfilePreviewDecorationFree: string;
 
 
 	partnerProfileOfferTitle: string;
@@ -328,6 +339,14 @@ export default interface LanguageInterface {
 	partnerProfileCateringCardFormButton: string;
 	partnerProfileCateringDealsAlert: string;
 	partnerProfileCateringSaveButton: string;
+
+
+	partnerProfileDecorationTitle: string;
+	partnerProfileDecorationDescription: string;
+	partnerProfileDecorationSubMain: string;
+	partnerProfileDecorationSubSmal: string;
+	partnerProfileDecorationPricePlaceholder: string;
+	partnerProfileDecorationSaveButton: string;
 
 
 

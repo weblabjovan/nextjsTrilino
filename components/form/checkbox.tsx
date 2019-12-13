@@ -3,6 +3,7 @@ import React from 'react';
 type MyProps = {
 	checked?: boolean;
 	disabled?: boolean;
+  field?: string;
 	onChange?(event: any): void;
   // using `interface` is also ok
 };
@@ -28,7 +29,8 @@ export default class PlainCheckbox extends React.Component <MyProps, MyState> {
             className="React__checkbox--input"
             checked={this.props.checked}
             disabled={this.props.disabled}
-            onChange={this.props.onChange}
+            data-field={ this.props.field }
+            onChange={(event) => this.props.onChange(event.target)}
           />
           <span className="React__checkbox--span" />
         </label>

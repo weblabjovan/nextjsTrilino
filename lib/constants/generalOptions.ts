@@ -18,6 +18,8 @@ interface IGenOptions {
   drinkType_en: Array<object>;
   dealType_sr: Array<object>;
   dealType_en: Array<object>;
+  decorType: object;
+  quarter: object;
   partnerGeneralStructure: object;
 }
 
@@ -255,6 +257,33 @@ const generalOptions: IGenOptions = {
       {value: '1', label: 'For kids'},
       {value: '2', label: 'For adults'},
     ],
+    decorType: {
+      '1': {name_sr: 'baloni', name_en: 'balloons'},
+      '2': {name_sr: 'konfete', name_en: 'confetti'},
+      '3': {name_sr: 'prskalice', name_en: 'spargers'},
+      '4': {name_sr: 'trake', name_en: 'bands'},
+    },
+    quarter: {
+      '1':[
+        {value: '1', label: 'Čukarica'},
+        {value: '2', label: 'Novi Beograd'},
+        {value: '3', label: 'Palilula'},
+        {value: '4', label: 'Rakovica'},
+        {value: '5', label: 'Savski venac'},
+        {value: '6', label: 'Stari grad'},
+        {value: '7', label: 'Voždovac'},
+        {value: '8', label: 'Vračar'},
+        {value: '9', label: 'Zemun'},
+        {value: '10', label: 'Zvezdara'},
+        {value: '11', label: 'Barajevo'},
+        {value: '12', label: 'Grocka'},
+        {value: '13', label: 'Lazarevac'},
+        {value: '14', label: 'Mladenovac'},
+        {value: '15', label: 'Obrenovac'},
+        {value: '16', label: 'Sopot'},
+        {value: '17', label: 'Surčin'},
+      ],
+    },
     partnerGeneralStructure: {
     size: null,
     playSize: null,

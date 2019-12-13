@@ -141,6 +141,9 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralItemDescriptionPlaceholder: 'opis do 288 karaktera',
 	partnerProfileGeneralItemAddress: 'Adresa prostora:',
 	partnerProfileGeneralItemAddressPlaceholder: 'adresa',
+	partnerProfileGeneralItemCity: 'Grad:',
+	partnerProfileGeneralItemQuarter: 'Deo grada:',
+	partnerProfileGeneralItemQuarterPlaceholder: 'deo grada',
 	partnerProfileGeneralItemType: 'Tip prostora:',
 	partnerProfileGeneralItemTypePlaceholder: 'tip',
 	partnerProfileGeneralItemSize: 'Površina prostora:',
@@ -263,10 +266,11 @@ const serbian: LanguageInterface = {
 	partnerProfilePreviewSelfremarkCakeNo: 'Ovaj lokal ne dozvoljava organizatorima proslave da donose svoju tortu na proslavu. Morate koristiti njihovu tortu.',
 	partnerProfilePreviewSelfremarkAnimatorYes: 'Ovaj lokal dozvoljava organizatorima proslave da organizuju svog animatora.',
 	partnerProfilePreviewSelfremarkAnimatorNo: 'Ovaj lokal ne dozvoljava organizatorima proslave da organizuju svog animatora. Morate koristiti njihovog animatora.',
+	partnerProfilePreviewSelfremarkEmpty: 'Restrikcije u vezi hrane, pića, torte i animatora još nisu sačuvane.',
 	partnerProfilePreviewOfferFreeSub: 'Besplatni sadržaji:',
-	partnerProfilePreviewOfferFreeEmpty: 'Besplatni sadržaji još uvek nisu upisani.',
+	partnerProfilePreviewOfferFreeEmpty: 'Besplatni sadržaji još uvek nisu sačuvani.',
 	partnerProfilePreviewOfferPayedSub: 'Sadržaji uz doplatu:',
-	partnerProfilePreviewOfferPayedEmpty: 'Sadržaji uz doplatu još uvek nisu upisani.',
+	partnerProfilePreviewOfferPayedEmpty: 'Sadržaji uz doplatu još uvek nisu sačuvani.',
 	partnerProfilePreviewCateringDealsSub: 'Ketring paketi:',
 	partnerProfilePreviewCateringDealsPer: 'po osobi',
 	partnerProfilePreviewCateringDealsEmpty: 'Katering paketi još uvek nisu sačuvani.',
@@ -278,6 +282,13 @@ const serbian: LanguageInterface = {
 	partnerProfilePreviewCateringCardPillarAlcoEmpty: 'Nijedno alkoholno piće nije sačuvano.',
 	partnerProfilePreviewCateringCardPillarHot: 'Topli napitci',
 	partnerProfilePreviewCateringCardPillarHotEmpty: 'Nijedan topli napitak nije sačuvan.',
+	partnerProfilePreviewRoomsSpace: 'Prostor za slavlje - ',
+	partnerProfilePreviewRoomsSize: 'Površina',
+	partnerProfilePreviewRoomsCapKids: 'Kapacitet dece',
+	partnerProfilePreviewRoomsCapAdults: 'Kapacitet odraslih',
+	partnerProfilePreviewDecorationSub: 'Dekoracija:',
+	partnerProfilePreviewDecorationEmpty: 'Dekoracija još uvek nije sačuvana.',
+	partnerProfilePreviewDecorationFree: 'besplatno',
 
 
 
@@ -298,7 +309,7 @@ const serbian: LanguageInterface = {
 	partnerProfileOfferAddonButton: 'Dodati',
 	partnerProfileOfferAddonAlertName: 'Naziv sadržaja je obavezan. Molimo vas upišite naziv sadržaja uz doplatu.',
 	partnerProfileOfferAddonAlertPrice: 'Cena sadržaja je obavezan. Molimo vas upišite cenu sadržaja uz doplatu.',
-	partnerProfileOfferSaveButton: 'Sačuvajte podatke o zabavnom sadržaju',
+	partnerProfileOfferSaveButton: 'Sačuvajte zabavni sadržaj',
 
 
 
@@ -336,7 +347,12 @@ const serbian: LanguageInterface = {
 	partnerProfileCateringSaveButton: 'Sačuvajte pakete i kartu pića',
 
 
-
+	partnerProfileDecorationTitle: 'Informacije u vezi sa dekoracijom',
+	partnerProfileDecorationDescription: 'U nastavku dodajte/izmenite informacije u vezi sa dekoracijom prostora koju nudite vašim gostima. Ukoliko neke stavke iz liste dekoracija imate u vašoj ponudi kliknite na sivi kvadratić pored i upišite cenu ukoliko dodatno naplaćujete za korišćenje te dekoracije. Za više informacija o načinu popunjavanja ovog dela pogledajte na ',
+	partnerProfileDecorationSubMain: 'Dekoracija prostora:',
+	partnerProfileDecorationSubSmal: 'Lista dekoracija',
+	partnerProfileDecorationPricePlaceholder: 'cena',
+	partnerProfileDecorationSaveButton: 'Sačuvajte dekoracije',
 
 	loginTitle: 'Ovo je stranica prijava',
 
