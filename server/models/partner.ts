@@ -19,6 +19,7 @@ const partnerSchema = new Schema({
 	contentOffer:[{ type: Number }],
 	contentAddon:[{ type: Object }],
 	catering: { type: Object},
+	decoration: { type: Object},
 });
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);

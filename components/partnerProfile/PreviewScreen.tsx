@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
-import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue } from '../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
@@ -439,10 +439,58 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               (!isFieldInObject(this.props.partnerObject, 'selfAnimator', 'general') && !isFieldInObject(this.props.partnerObject, 'selfCake', 'general') && !isFieldInObject(this.props.partnerObject, 'selfDrink', 'general') && !isFieldInObject(this.props.partnerObject, 'selfFood', 'general'))
               ?
               (<Col xs="12">
-                <h5 className="fadedPrev">Restrikcije u vezi hrane, pića, torte i animatora još nisu upisane.</h5>
+                <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewSelfremarkEmpty']}</h5>
               </Col>)
               : 
               null
+            }
+          </Row>
+
+          <Row className="roomsPr">
+            {
+              isFieldInObject(this.props.partnerObject, 'rooms', 'general')
+              ?
+              this.props.partnerObject['general']['rooms'].length
+              ?
+              <Col xs="12" className="roomList">
+                
+                {
+                  this.props.partnerObject['general']['rooms'].map((room, index) => {
+                    return(
+                      <Col xs="12" key={`roomKey_${index}`}>
+                        <Row className="item">
+                          {
+                            this.props.partnerObject['general']['rooms'].length > 1
+                            ?
+                            <Col xs="12">
+                              <p>{`${this.state.dictionary['partnerProfilePreviewRoomsSpace']} ${room['name']}`}</p>
+                            </Col>
+                            :
+                            null
+                          }
+                          <Col xs="12" sm="4">
+                            <label>{this.state.dictionary['partnerProfilePreviewRoomsSize']}</label>
+                            <label>{`${room['size']}m2`}</label>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            <label>{this.state.dictionary['partnerProfilePreviewRoomsCapKids']}</label>
+                            <label>{room['capKids']}</label>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            <label>{this.state.dictionary['partnerProfilePreviewRoomsCapAdults']}</label>
+                            <label>{room['capAdults']}</label>
+                          </Col>
+                        </Row>
+                      </Col>
+                    )
+                  })
+                }
+              </Col>
+              :
+              null
+              :
+              null
+
             }
           </Row>
 
@@ -494,6 +542,35 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               </Row>
             </Col>
           </Row> 
+
+          <Row className="subHeadPr">
+            <Col xs="12">
+              <h3>{this.state.dictionary['partnerProfilePreviewDecorationSub']}</h3>
+            </Col>
+          </Row>
+
+          <Row className="decorationPr">
+            {
+              isFieldInObject(this.props.partnerObject, 'decoration')
+            ?
+            Object.keys(this.props.partnerObject['decoration']).map( (item, index) => {
+              const decor = this.props.partnerObject['decoration'][item];
+              return(
+                <Col xs="12" sm="6" lg="4" key={`decorKey_${index}`}>
+                  <div className="item"><span className="icon"></span><span>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? (decor['price'] + 'rsd') : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</span></div>
+                </Col>
+              )
+            })
+            :
+            (<Col xs="12">
+              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewDecorationEmpty']}</h5>
+            </Col>)
+            }
+            <Col xs="12">
+            </Col>
+          </Row>
+
+
 
           <Row className="subHeadPr">
             <Col xs="12">

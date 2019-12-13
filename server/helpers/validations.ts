@@ -111,3 +111,13 @@ export const isCateringDataValid = (data: object): boolean => {
 
 	return true;
 }
+
+export const isDecorationDataValid = (data: object): boolean => {
+	for(let key in data){
+		if (!data[key].hasOwnProperty('price') || !data[key].hasOwnProperty('value')) {
+			return false;
+		}
+	}
+
+	return true;
+}

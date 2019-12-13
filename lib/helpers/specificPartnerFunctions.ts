@@ -235,6 +235,7 @@ const assembleForSelect = (key: string, value: number | string, language: string
 	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake', 'smoking', 'selfAnimator', 'movie', 'gaming' ];
 	const forCancelation = ['cancelation'];
 	const forType = ['spaceType'];
+	const forQuater = ['quarter'];
 
 	if (forItemDuration.indexOf(key) !== -1) {
 		const res = genOptions[`itemDuration_${language}`].filter((item) => { return item['value'] === value; });
@@ -259,6 +260,12 @@ const assembleForSelect = (key: string, value: number | string, language: string
 	if (forCancelation.indexOf(key) !== -1) {
 		const res = genOptions[`cancel_${language}`].filter((dual) => { return dual['value'] === value; });
 		return res[0];
+	}
+	if (forQuater.indexOf(key) !== -1) {
+		for(let key in genOptions['quarter']){
+			const res = genOptions['quarter'][key].filter((dual) => { return dual['value'] === value; });
+			return res[0];
+		}
 	}
 
 	return { value: value, label: value };
@@ -426,4 +433,56 @@ export const isolateByArrayFieldValue = (mainArr: Array<object>, field: string, 
 	}
 
 	return arr;
+}
+
+export const prepareDecorationDataForSave = (data: object): object => {
+	const res = {};
+	const decoration = JSON.parse(JSON.stringify(data));
+
+	for(let key in decoration) {
+		if (decoration[key]['check']) {
+			res[key] = { price: decoration[key]['price'], value: parseInt(key)};
+		}
+	}
+
+	return res;
+}
+
+export const buildPartnerDecorationObject = (partner: object): object => {
+	const newPartner = JSON.parse(JSON.stringify(partner));
+	let existing = null;
+	if (newPartner['decoration']) {
+		if (Object.keys(newPartner['decoration']).length) {
+			existing = newPartner['decoration'];
+		}
+	}
+
+	return buildDecoration(existing);
+}
+
+const buildDecoration = (existing: object = null): object => {
+	const res = {}
+	for(let key in genOptions['decorType']){
+		const decor = { check: false, name_sr: genOptions['decorType'][key]['name_sr'], name_en: genOptions['decorType'][key]['name_en'], value: parseInt(key), price: '' };
+		if (existing) {
+			if (existing[key]) {
+				decor['check'] = true;
+				decor['price'] = existing[key]['price'];
+			}
+		}
+		res[key] = decor;
+	}
+
+	return res;
+}
+
+export const getLayoutNumber = (size: string, length: number): string => {
+	let res = '12';
+	if (length === 3) {
+		size === 'sm' ? res = '4' : size === 'lg' ? res = '4' : null;
+	}else{
+		size === 'sm' ? res = '6' : size === 'lg' ? res = '6' : null;
+	}
+
+	return res;
 }

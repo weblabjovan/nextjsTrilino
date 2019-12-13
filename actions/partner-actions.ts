@@ -214,6 +214,30 @@ export function updateCateringPartner(param: string, data: object, link: object,
   };
 }
 
+export const updateDecorationgPartnerActionTypes = {
+  START: 'PARTNER_DECORATION_UPDATE_START',
+  ERROR: 'PARTNER_DECORATION_UPDATE_ERROR',
+  SUCCESS: 'PARTNER_DECORATION_UPDATE_SUCCESS',
+};
+
+export function updateDecorationPartner(param: string, data: object, link: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_UPDATE);
+  const sendBody = { param, data, type: 'decoration' };
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      sendBody,
+      updateDecorationgPartnerActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
 export const getPartnerProfileActionTypes = {
   START: 'PARTNER_PROFILE_GET_START',
   ERROR: 'PARTNER_PROFILE_GET_ERROR',

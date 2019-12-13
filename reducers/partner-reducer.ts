@@ -1,8 +1,8 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes
 } from '../actions/partner-actions';
-import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState } from '../lib/helpers/specificPartnerFunctions';
+import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration } from '../lib/constants/interfaces';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject } from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -44,6 +44,10 @@ interface initialState {
   updateActionCateringError: object | boolean;
   updateActionCateringSuccess: null | number;
 
+  updateActionDecorationStart: boolean;
+  updateActionDecorationError: object | boolean;
+  updateActionDecorationSuccess: null | number;
+
   partnerGeneral: IpartnerGeneral;
 
   partnerRooms: Array<IpartnerRoomItem>;
@@ -54,7 +58,7 @@ interface initialState {
 
   partnerCatering: object;
 
-
+  partnerDecoration: IpartnerDecoration;
   
 }
 
@@ -97,12 +101,17 @@ const initialState: initialState  = {
   updateActionCateringError: false,
   updateActionCateringSuccess: null,
 
+  updateActionDecorationStart: false,
+  updateActionDecorationError: false,
+  updateActionDecorationSuccess: null,
+
   partnerGeneral: {
     size: null,
     playSize: null,
     description: '',
     address: '',
     spaceType: '',
+    quarter: '',
     ageFrom: '',
     ageTo: '',
     mondayFrom: '',
@@ -187,6 +196,13 @@ const initialState: initialState  = {
     ],
   },
 
+  partnerDecoration: {
+    '1': {check: false, name_sr: 'baloni', name_en: 'balloons', value: 1, price: '' },
+    '2': {check: false, name_sr: 'konfete', name_en: 'confetti', value: 2, price: '' },
+    '3': {check: false, name_sr: 'prskalice', name_en: 'spargers', value: 3, price: '' },
+    '4': {check: false, name_sr: 'trake', name_en: 'bands', value: 4, price: '' },
+  },
+
 };
 
 const actionsMap = {
@@ -268,6 +284,7 @@ const actionsMap = {
       partnerOffer: setArrayWithLabelAndValue(`contentOffer_${lang}`, action.payload['partner']),
       partnerAddon: action.payload['partner']['contentAddon'] ? action.payload['partner']['contentAddon'] : [],
       partnerCatering: setUpMainCateringState(action.payload['partner'], lang),
+      partnerDecoration: buildPartnerDecorationObject(action.payload['partner']),
       partner: action.payload['partner'],
       partnerGetStart: false,
     };
@@ -401,6 +418,28 @@ const actionsMap = {
       updateActionCateringSuccess: action.payload.code,
       partner: action.payload.partner,
       updateActionCateringStart: false,
+    };
+  },
+
+  [updateDecorationgPartnerActionTypes.START]: (state) => {
+    return {
+      ...state,
+      updateActionDecorationStart: true,
+    };
+  },
+  [updateDecorationgPartnerActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      updateActionDecorationStart: false,
+      updateActionDecorationError: action.payload.response.body,
+    };
+  },
+  [updateDecorationgPartnerActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      updateActionDecorationSuccess: action.payload.code,
+      partner: action.payload.partner,
+      updateActionDecorationStart: false,
     };
   },
 };
