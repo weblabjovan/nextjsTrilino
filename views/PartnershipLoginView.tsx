@@ -352,7 +352,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                           onChange={this.handlePhoneChange} 
                           value={this.state.contactPhone} 
                           className={`${this.state.errorMessages['fields']['contactPhone'] ? "borderWarrning" : ''} logInput`} 
-                          type="tel" />
+                          type="number" />
 
     							<div className="middle marginSmall">
     								<a href="/">{this.state.dictionary['uniTerms']}</a>

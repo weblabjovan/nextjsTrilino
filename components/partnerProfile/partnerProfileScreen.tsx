@@ -6,6 +6,7 @@ import PreviewScreen from './PreviewScreen';
 import OfferScreen from './OfferScreen';
 import FoodScreen from './FoodScreen';
 import DecorationScreen from './DecorationScreen';
+import CalendarScreen from './CalendarScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
@@ -89,11 +90,12 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
             this.props.screen === 'calendar'
             ?
             (
-              <Row>
-                <Col xs='12' className="middle">
-                  <h1 className="middle">{this.state.dictionary['navigationPartnerCalendar']}</h1>
-                </Col>
-              </Row>
+              <CalendarScreen
+                lang={this.props.lang}
+                closeLoader={this.props.closeLoader}
+                openLoader={this.props.openLoader}
+                token={ this.props.token }
+              />
             )
             :
             this.props.screen === 'preview'

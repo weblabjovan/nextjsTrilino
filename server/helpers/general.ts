@@ -63,3 +63,76 @@ export const setUpLinkReq = (header: object): object => {
 
   return link;
 }
+
+export const extractRoomTerms = (rooms: Array<object>, roomReg: string, day: number): Array<object> => {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  let res = [];
+  
+  for (var i = 0; i < rooms.length; ++i) {
+    if (rooms[i]['regId'] === roomReg) {
+      res = rooms[i]['terms'][days[day]].filter((term) => {
+        return typeof term['from'] === 'string' && typeof term['from'] === 'string';
+      });
+    }
+  }
+
+  return res;
+}
+
+export const getFreeTerms = (reservations: Array<object>, roomTerms: Array<object>): Array<object> => {
+  const res = [];
+
+  if (!reservations.length) {
+    return roomTerms;
+  }
+
+  if (!roomTerms.length) {
+    return res;
+  }
+  
+
+  for (var i = 0; i < roomTerms.length; ++i) {
+    if (!isInReservations(roomTerms[i]['from'], roomTerms[i]['to'], reservations)) {
+      res.push(roomTerms[i])
+    }
+  }
+
+  return res;
+}
+
+const isInReservations = (from: string, to: string, reservations: Array<object>): boolean => {
+  for (var i = 0; i < reservations.length; ++i) {
+    if (reservations[i]['from'] === from && reservations[i]['to'] === to && reservations[i]['active']) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export const addMinutesToString = (time: string, minutes: number): string => {
+  const d = new Date(`2020-12-17T${time}:00`);
+  const newDate = new Date(d.getTime() + minutes*60000);
+  return `${newDate.getHours}:${newDate.getMinutes}`;
+}
+
+export const setDateTime = (date: string, time: string): Date => {
+  const splitTime = time.split(':');
+  const d = new Date(date);
+  const z = d.getTime() + (2*60*60*1000);
+  const newDate = new Date(z);
+  newDate.setUTCHours(parseInt(splitTime[0]));
+  newDate.setMinutes(parseInt(splitTime[1]));
+  newDate.setSeconds(0);
+  newDate.setMilliseconds(0);
+
+  return newDate;
+}
+
+export const setReservationDateForBase = (dateString: string): Date => {
+  const d = new Date(dateString);
+  const z = d.getTime() + (2*60*60*1000);
+  const newDate = new Date(z);
+
+  return newDate;
+}

@@ -33,6 +33,7 @@ interface IpartnerWeekTerms{
 
 export interface IpartnerRoomItem {
 	name: string;
+	regId?: number | string;
 	size: number | null; 
 	capKids: number | null;
 	capAdults: number | null;
@@ -72,15 +73,16 @@ export interface IpartnerGeneral {
 	gaming: string | object;
 	food: string | object;
 	drink: string | object;
-	cake: string | object;
 	selfFood: string | object;
 	selfDrink: string | object;
-	selfCake: string | object;
 	duration: string | object;
 	cancelation: string | object;
 	smoking: string | object;
 	selfAnimator: string | object;
 	roomNumber: string | object;
+	depositPercent: string | object;
+	despositNumber: string | object;
+	doubleDiscount: string | object;
 }
 
 interface IdrinkCardItem {
@@ -117,4 +119,33 @@ export interface IpartnerDecoration {
 	'2': IdecoItem;
 	'3': IdecoItem;
 	'4': IdecoItem;
+}
+
+export interface IpartnerReservation {
+	partner: string;
+	type: string;
+	room?: number | object;
+	date: Date;
+	options: Array<object>;
+	term: string | object;
+	terms: Array<object>;
+	from: string | object;
+	to: string;
+	double: boolean;
+	user?: string;
+	userName?: string;
+	guest?: string;
+	food: string | object;
+	animation: object;
+	decoration: object;
+	comment: string;
+	edit: boolean;
+	id: string;
+	showPrice: boolean;
+	termPrice: number;
+	animationPrice: number;
+	decorationPrice: number;
+	foodPrice: number;
+	price: number;
+	deposit: number;
 }

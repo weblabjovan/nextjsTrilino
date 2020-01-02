@@ -136,7 +136,7 @@ const serbian: LanguageInterface = {
 
 	
 	partnerProfileGeneralTitle: 'Osnovne informacije o prostoru',
-	partnerProfileGeneralDescription: 'U nastavku je formular koji za cilj ima prikupljanje osnovnih informacije o vašem prostoru. Ove informacije su jako bitne za vaše potencijalne klijente. Za više informacija o načinu popunjavanja ovog dela pogledajte na ',
+	partnerProfileGeneralDescription: 'U nastavku je formular koji za cilj ima prikupljanje osnovnih informacije o vašem prostoru. Ove informacije su jako bitne za vaše potencijalne klijente. Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileGeneralItemDescription: 'Opis prostora:',
 	partnerProfileGeneralItemDescriptionPlaceholder: 'opis do 288 karaktera',
 	partnerProfileGeneralItemAddress: 'Adresa prostora:',
@@ -233,6 +233,12 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralAlert_error_no_5: 'Ne postojanje dužine trajanja termina.',
 	partnerProfileGeneralRemark: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
 	partnerProfileGeneralSaveButton: 'Sačuvajte osnovne podatke',
+	partnerProfileGeneralDeposit: 'Procenat za depozit:',
+	partnerProfileGeneralDepositPlaceholder: 'depozit',
+	partnerProfileGeneralDepositReference: 'Osnovica za obračun depozita:',
+	partnerProfileGeneralDepositReferencePlaceholder: 'osnovica',
+	partnerProfileGeneralDouble: 'Popust za dupli termin:',
+	partnerProfileGeneralDoublePlaceholder: 'popust',
 
 
 	partnerProfilePreviewTitle: 'Pregled profila',
@@ -293,13 +299,13 @@ const serbian: LanguageInterface = {
 
 
 	partnerProfileOfferTitle: 'Informacije o zabavnom sadržaju',
-	partnerProfileOfferDescription: 'U nastavku dodajte/izmenite zabavne sadržaje koje nudite vašim gostima. Zabavni sadržaji su podeljeni u dve grupe: besplatni i uz doplatu. Zabavni sadržaji predstavljaju sve što gosti mogu koristiti da bi se igrali, rekreirali, zabavili, animirali i uživali u proslavi. Besplatni sadržaj je ono što vašim gostima nudite bez nadoknade, dok su sadržaji uz doplatu oni za koje je potrebno dodatno platiti.  Za više informacija o načinu popunjavanja ovog dela pogledajte na ',
+	partnerProfileOfferDescription: 'U nastavku dodajte/izmenite zabavne sadržaje koje nudite vašim gostima. Zabavni sadržaji su podeljeni u dve grupe: besplatni i dodatni. Zabavni sadržaji predstavljaju sve što gosti mogu koristiti da bi se igrali, rekreirali, zabavili, animirali i uživali u proslavi. Besplatni sadržaj je ono što vašim gostima nudite bez nadoknade, dok su dodatni sadržaji oni za koje je potrebno dodatno platiti ili uz koje ide vremenska restrikcija pri rezervaciji i korišćenju.  Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileOfferSubFree: 'Besplatni sadržaji:',
 	partnerProfileOfferNoItemsFree: 'Trenutno nemate sačuvane besplatne zabavne sadržaje',
 	partnerProfileOfferButtonTagAddFree: '+',
 	partnerProfileOfferButtonTagRemoveFree: '-',
-	partnerProfileOfferSubPay: 'Sadržaji uz doplatu:',
-	partnerProfileOfferNoItemsPay: 'Trenutno nemate sačuvane zabavne sadržaje uz doplatu',
+	partnerProfileOfferSubPay: 'Dodatni sadržaji:',
+	partnerProfileOfferNoItemsPay: 'Trenutno nemate sačuvane dodatne zabavne sadržaje.',
 	partnerProfileOfferAddonName: 'Naziv sadržaja:',
 	partnerProfileOfferAddonNamePlaceholder: 'naziv',
 	partnerProfileOfferAddonPrice: 'Cena:',
@@ -307,14 +313,14 @@ const serbian: LanguageInterface = {
 	partnerProfileOfferAddonComment: 'Komentar u vezi sa sadržajem:',
 	partnerProfileOfferAddonCommentPlaceholder: 'komentar',
 	partnerProfileOfferAddonButton: 'Dodati',
-	partnerProfileOfferAddonAlertName: 'Naziv sadržaja je obavezan. Molimo vas upišite naziv sadržaja uz doplatu.',
-	partnerProfileOfferAddonAlertPrice: 'Cena sadržaja je obavezan. Molimo vas upišite cenu sadržaja uz doplatu.',
+	partnerProfileOfferAddonAlertName: 'Naziv sadržaja je obavezan. Molimo vas upišite naziv dodatnog sadržaja.',
+	partnerProfileOfferAddonAlertPrice: 'Cena sadržaja je obavezan. Molimo vas upišite cenu dodatnog sadržaja.',
 	partnerProfileOfferSaveButton: 'Sačuvajte zabavni sadržaj',
 
 
 
 	partnerProfileCateringTitle: 'Informacije u vezi sa hranom i pićem',
-	partnerProfileCateringDescription: 'U nastavku dodajte/izmenite informacije u vezi sa hranom i pićem koje nudite vašim gostima. U delu za ketering pakete unesite informacije koje će gostima pomoći da odluče kakva hrana i piće treba da bude poslužena tokom proslave. U delu karta pića, unesite informacije o pićima koje nudite uz doplatu. Za više informacija o načinu popunjavanja ovog dela pogledajte na ',
+	partnerProfileCateringDescription: 'U nastavku dodajte/izmenite informacije u vezi sa hranom i pićem koje nudite vašim gostima. U delu za ketering pakete unesite informacije koje će gostima pomoći da odluče kakva hrana i piće treba da bude poslužena tokom proslave. U delu karta pića, unesite informacije o pićima koje nudite uz doplatu. Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileCateringDealsSub: 'Ketering paketi:',
 	partnerProfileCateringDealsAddDealButton: 'dodajte paket',
 	partnerProfileCateringDealsDealCont: 'Sadržaj paketa',
@@ -346,13 +352,62 @@ const serbian: LanguageInterface = {
 	partnerProfileCateringDealsAlert: 'Pri čuvanju informacija u vezi sa katering paketima, svi paketi moraju imati popunjen tip, cenu (samo brojevi), minimum (samo brojevi) i barem jedno jelo/piće.',
 	partnerProfileCateringSaveButton: 'Sačuvajte pakete i kartu pića',
 
-
 	partnerProfileDecorationTitle: 'Informacije u vezi sa dekoracijom',
-	partnerProfileDecorationDescription: 'U nastavku dodajte/izmenite informacije u vezi sa dekoracijom prostora koju nudite vašim gostima. Ukoliko neke stavke iz liste dekoracija imate u vašoj ponudi kliknite na sivi kvadratić pored i upišite cenu ukoliko dodatno naplaćujete za korišćenje te dekoracije. Za više informacija o načinu popunjavanja ovog dela pogledajte na ',
+	partnerProfileDecorationDescription: 'U nastavku dodajte/izmenite informacije u vezi sa dekoracijom prostora koju nudite vašim gostima. Ukoliko neke stavke iz liste dekoracija imate u vašoj ponudi kliknite na sivi kvadratić pored i upišite cenu ukoliko dodatno naplaćujete za korišćenje te dekoracije. Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileDecorationSubMain: 'Dekoracija prostora:',
 	partnerProfileDecorationSubSmal: 'Lista dekoracija',
 	partnerProfileDecorationPricePlaceholder: 'cena',
 	partnerProfileDecorationSaveButton: 'Sačuvajte dekoracije',
+
+
+	partnerProfileCalendarTitle: 'Kalendar rezervacija',
+	partnerProfileCalendarDescription: 'U nastavku se nalazi kalendarski pregled rezervacija vaših termina. Klikom na dugme kreiraj rezervaciju možete započeti proces rezervacije dostupnih termina u vašem objektu. Klikom na već kreirane rezervacije možete dobiti detaljniji pregled zahteva vašeg klijenta. Rezervacije koje ste vi kreirali kroz ovaj kalendar možete i da obrišete. Za više informacija o načinu korišćenja kalendara posetite ',
+	partnerProfileCalendarButton: 'Kreiraj rezervaciju',
+
+
+	partnerProfileReservationTitle: 'Formular za rezervacije',
+	partnerProfileReservationRoom: 'Sala:',
+	partnerProfileReservationRoomPlaceHolder: 'sala',
+	partnerProfileReservationDate: 'Datum:',
+	partnerProfileReservationDatePlaceHolder: 'Izaberite datum',
+	partnerProfileReservationTerm: 'Termin:',
+	partnerProfileReservationTermPlaceHolder: 'termin',
+	partnerProfileReservationUser: 'Korisnik:',
+	partnerProfileReservationUserPlaceHolder: 'korisnik',
+	partnerProfileReservationName: 'Ime slavljenika:',
+	partnerProfileReservationNamePlaceHolder: 'slavljenik',
+	partnerProfileReservationDouble: 'Dupli termin:',
+	partnerProfileReservationComment: 'Komentar:',
+	partnerProfileReservationCommentPlaceHolder: 'komentar',
+	partnerProfileReservationShowPrice: 'Obračunajte cenu:',
+	partnerProfileReservationPrice: 'Cena rezervacije:',
+	partnerProfileReservationDeposit: 'Cena depozita:',
+	partnerProfileReservationAlertRoom: 'Sala je obavezno polje, morate odabrati salu ukoliko želite da kreirate rezervaciju.',
+	partnerProfileReservationAlertDate: 'Datun je obavezno polje, morate odabrati datum ukoliko želite da kreirate rezervaciju.',
+	partnerProfileReservationAlertTerm: 'Termin je obavezno polje, morate odabrati termin ukoliko želite da kreirate rezervaciju.',
+	partnerProfileReservationAlertGuest: 'Slavljenik je obavezno polje, morate upisati ime slavljenika ukoliko želite da kreirate rezervaciju.',
+	partnerProfileReservationAlertDouble: 'Termin nakon osnovnog termina koji ste odabrali nije slobodan, iz tog razloga dupli termin nije moguć.',
+	partnerProfileReservationAlertBaseDuplicate: 'Na žalost, u toku vašeg popunjavanja ove rezervacije neko je rezervisao vaš termin. Molimo vas odaberite drugi termn.',
+	partnerProfileReservationAlertFoodNumber: 'Upisali ste nedovoljan broj osoba za jedan od ketering paketa koji ste odabrali. Molimo vas upišite broj osoba koji je jednak ili veći od naznačenog minimuma.',
+	partnerProfileReservationSave: 'Sačuvajte rezervaciju',
+	partnerProfileReservationDelete: 'Izbrišite rezervaciju',
+	partnerProfileReservationCateringSub: 'Ketring:',
+	partnerProfileReservationCateringPackage: 'Paket',
+	partnerProfileReservationCateringPerperson: 'po osobi',
+	partnerProfileReservationCateringPerson: 'osoba',
+	partnerProfileReservationCateringMin: 'Minimum',
+	partnerProfileReservationCateringNum: 'broj',
+	partnerProfileReservationCateringEmpty: 'Ketering paketi još uvek nisu sačuvani',
+	partnerProfileReservationAddonSub: 'Dodatni sadržaji:',
+	partnerProfileReservationAddonEmpty: 'Dodatni sadržaji još uvek nisu sačuvani',
+	partnerProfileReservationDecorationSub: 'Dekoracija:',
+	partnerProfileReservationDecorationEmpty: 'Dekoracije još uvek nisu sačuvane',
+	partnerProfileReservationModalTitle: 'Izbrišite rezervaciju',
+	partnerProfileReservationModalText: 'Ukoliko izbrišete ovu rezervaciju, ona više neće biti dostupna i termin koji je zauzimala će biti slobodan za rezervisanje. Da li ste sigurni da želite da izbrišete ovu rezervaciju?',
+	partnerProfileReservationModalButtonText: 'Da, izbriši rezervaciju',
+
+
+
 
 	loginTitle: 'Ovo je stranica prijava',
 

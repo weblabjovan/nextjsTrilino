@@ -52,7 +52,7 @@ class TermItem extends React.Component <MyProps, MyState>{
 		                options={genOptions[`times`]} 
 		                value={ key['from'] } 
 		                onChange={(val) => this.props.changeTermValue(this.props.room, this.props.day, 'from', val, index)} 
-		                instanceId="roomsInput" 
+		                instanceId={`roomsInput_${this.props.day}_${index}` }
 		                className="logInput" 
 		                styles={{ container: (provided, state) => ({ ...provided, border: false ? "1px solid red" : "#ccc" })}}
 		                placeholder={this.state.dictionary['partnerProfileGeneralDaysFrom']}/>
@@ -63,7 +63,7 @@ class TermItem extends React.Component <MyProps, MyState>{
 		                options={genOptions[`times`]} 
 		                value={ key['to'] } 
 		                onChange={(val) => this.props.changeTermValue(this.props.room, this.props.day, 'to', val, index)} 
-		                instanceId="roomsInput" 
+		                instanceId={`roomsInput1_${this.props.day}_${index}` } 
 		                className="logInput" 
 		                styles={{ container: (provided, state) => ({ ...provided, border: false ? "1px solid red" : "#ccc" })}}
 		                placeholder={this.state.dictionary['partnerProfileGeneralDaysTo']}/>

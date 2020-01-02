@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { changeSinglePartnerField, updateGeneralPartner } from '../../actions/partner-actions';
 import { getLanguage } from '../../lib/language';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
-import { prepareGeneralPartnerObject, validateTerms, setUpMainGeneralState, getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
+import { prepareGeneralPartnerObject, validateTerms, setUpMainGeneralState, getGeneralOptionLabelByValue, getGeneralOptionByValue, generateString } from '../../lib/helpers/specificPartnerFunctions';
 import genOptions from '../../lib/constants/generalOptions';
 import PlainInput from '../form/input';
 import PlainText from '../form/textField';
@@ -115,7 +115,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
   changePartnerRoomsInRedux(num){
   	if (this.props.partnerRooms.length < parseInt(num)) {
-  		const room = { name: '', size: null, capKids: null, capAdults: null, terms:{ monday:[ {from: '', to: '', price: null }, ], tuesday:[ {from: '', to: '', price: null }, ], wednesday:[ {from: '', to: '', price: null }, ], thursday:[ {from: '', to: '', price: null }, ], friday:[ {from: '', to: '', price: null }, ], saturday:[ {from: '', to: '', price: null }, ], sunday:[ {from: '', to: '', price: null }, ] }
+  		const room = { name: '', size: null, capKids: null, capAdults: null, regId: generateString(12), terms:{ monday:[ {from: '', to: '', price: null }, ], tuesday:[ {from: '', to: '', price: null }, ], wednesday:[ {from: '', to: '', price: null }, ], thursday:[ {from: '', to: '', price: null }, ], friday:[ {from: '', to: '', price: null }, ], saturday:[ {from: '', to: '', price: null }, ], sunday:[ {from: '', to: '', price: null }, ] }
 	    }
 	    const roomsCopy = JSON.parse(JSON.stringify(this.props.partnerRooms));
       const generalCopy = JSON.parse(JSON.stringify(this.props.partnerGeneral));
@@ -202,7 +202,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 options={genOptions[`spaceType_${this.props.lang}`]} 
                 value={ this.props.partnerGeneral['spaceType'] } 
                 onChange={(val) => this.uniInputHandler(val, 'spaceType')} 
-                instanceId="ageFromInput" 
+                instanceId="spaceTypeInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemTypePlaceholder']}/>
             </Col>
@@ -233,7 +233,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 options={genOptions['quarter'][`${this.props.partnerObject['city']}`]} 
                 value={ this.props.partnerGeneral['quarter'] } 
                 onChange={(val) => this.uniInputHandler(val, 'quarter')} 
-                instanceId="ageFromInput" 
+                instanceId="quarterInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemQuarterPlaceholder']}/>
             </Col>
@@ -487,7 +487,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 options={genOptions[`dual_${this.props.lang}`]} 
                 value={ this.props.partnerGeneral['gaming'] } 
                 onChange={(val) => this.uniInputHandler(val, 'gaming')} 
-                instanceId="animatorInput" 
+                instanceId="gamingInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemGamingPlaceholder']}/>
             </Col>
@@ -514,16 +514,6 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
             </Col>
 
             <Col xs='6' sm="3">
-             	<label>{this.state.dictionary['partnerProfileGeneralItemCake']}</label>
-            	<Select 
-                options={genOptions[`dual_${this.props.lang}`]} 
-                value={ this.props.partnerGeneral['cake'] } 
-                onChange={(val) => this.uniInputHandler(val, 'cake')} 
-                instanceId="cakeInput" 
-                className="logInput" 
-                placeholder={this.state.dictionary['partnerProfileGeneralItemCakePlaceholder']}/>
-            </Col>
-            <Col xs='6' sm="3">
              	<label>{this.state.dictionary['partnerProfileGeneralItemSelffood']}</label>
             	<Select 
                 options={genOptions[`dual_${this.props.lang}`]} 
@@ -542,16 +532,6 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 instanceId="selfDrinkInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemSelfdrinkPlaceholder']}/>
-            </Col>
-            <Col xs='6' sm="3">
-             	<label>{this.state.dictionary['partnerProfileGeneralItemSelfcake']}</label>
-            	<Select 
-                options={genOptions[`dual_${this.props.lang}`]} 
-                value={ this.props.partnerGeneral['selfCake'] } 
-                onChange={(val) => this.uniInputHandler(val, 'selfCake')} 
-                instanceId="selfCakeInput" 
-                className="logInput" 
-                placeholder={this.state.dictionary['partnerProfileGeneralItemSelfcakePlaceholder']}/>
             </Col>
 
             <Col xs='6' sm="3">
@@ -613,6 +593,38 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 instanceId="roomsInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemRoomsPlaceholder']}/>
+            </Col>
+
+            <Col xs='6' sm='4'>
+              <label>{this.state.dictionary['partnerProfileGeneralDeposit']}</label>
+              <Select 
+                options={genOptions[`percentage`]} 
+                value={ this.props.partnerGeneral['depositPercent'] } 
+                onChange={(val) => this.uniInputHandler(val, 'depositPercent')} 
+                instanceId="roomsInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralDepositPlaceholder']}/>
+            </Col>
+
+            <Col xs='6' sm='4'>
+              <label>{this.state.dictionary['partnerProfileGeneralDepositReference']}</label>
+              <Select 
+                options={genOptions[`depositType_${this.props.lang}`]} 
+                value={getGeneralOptionByValue(genOptions[`depositType_${this.props.lang}`], this.props.partnerGeneral['despositNumber']['value'])}
+                onChange={(val) => this.uniInputHandler(val, 'despositNumber')} 
+                instanceId="roomsInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralDepositReferencePlaceholder']}/>
+            </Col>
+            <Col xs='6' sm='4'>
+              <label>{this.state.dictionary['partnerProfileGeneralDouble']}</label>
+              <Select 
+                options={genOptions[`percentage`]} 
+                value={ this.props.partnerGeneral['doubleDiscount'] } 
+                onChange={(val) => this.uniInputHandler(val, 'doubleDiscount')} 
+                instanceId="roomsInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralDoublePlaceholder']}/>
             </Col>
             </Row>
             <RoomList 

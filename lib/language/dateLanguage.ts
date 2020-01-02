@@ -1,12 +1,12 @@
 export const datePickerLang = {
 	en:{
         months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        daysShort:["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ],
+        daysShort:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
         today: 'Today',
     },
     sr:{
         months: ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun', 'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'],
-        daysShort:['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'],
+        daysShort:['Ned', 'Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub' ],
         today: 'Danas',
     },
 }

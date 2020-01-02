@@ -38,7 +38,7 @@
 		}
 
 		.pageHeader{
-			margin-bottom: 30px;
+			margin-bottom: 10px;
 
 			@media only screen and (max-width: 577px) {
 				margin-bottom: 15px;
@@ -48,6 +48,7 @@
 				text-align: center;
 				font-size: 40px;
 				margin-bottom: 20px;
+				color: $darkGreyCol;
 
 				@media only screen and (max-width: 577px) {
 					font-size: 26px;
@@ -57,6 +58,8 @@
 			p{
 				font-size: 16px;
 				font-weight: 300;
+				color: $darkGreyCol;
+				font-style: italic;
 
 				@media only screen and (max-width: 577px) {
 					font-size: 15px;
@@ -586,11 +589,11 @@
 
 					&:before{
 						content: 'close';
-				        font-family: 'Material Icons';
-				        font-size: 14px;
-				        font-weight: 400;
-				        vertical-align: middle;
-				        color: #000;
+		        font-family: 'Material Icons';
+		        font-size: 14px;
+		        font-weight: 400;
+		        vertical-align: middle;
+		        color: #000;
 					}
 				}
 
@@ -719,68 +722,106 @@
 
 	.partnerProflePage.food{
 		.drinkCard{
-			margin-top: 30px;
-			border-top: solid 1px #ccc;
-    		padding-top: 30px;
+    	padding-top: 30px;
 
-			.drinkList{
-				.item{
-					position: relative;
-					padding-right: 30px;
-					padding-left: 10px;
+    	.mainCard{
+    		background: #5a5a5a;
+		    padding-top: 15px;
+		    padding-bottom: 15px;
+		    color: #fff;
+		    border-radius: 10px;
 
-					span{
-						position: absolute;
-						top: 0px;
-						right: 10px;
-						cursor: pointer;
+    		.drinkList{
+					.item{
+						position: relative;
+						padding-right: 30px;
+						padding-left: 10px;
 
-						&:before{
-							content: 'close';
-					        font-family: 'Material Icons';
-					        font-size: 20px;
-					        font-weight: 800;
-					        vertical-align: middle;
-					        color: #000;
+						span{
+							position: absolute;
+							top: 0px;
+							right: 10px;
+							cursor: pointer;
+
+							&:before{
+								content: 'close';
+				        font-family: 'Material Icons';
+				        font-size: 20px;
+				        font-weight: 800;
+				        vertical-align: middle;
+				        color: $cancelCol;
+							}
 						}
+
+						label{
+							font-size: 16px;
+						    font-weight: 400;
+						    line-height: 24px;
+						    margin-bottom: 8px;
+						}
+					}
+
+					h6{
+						font-size: 18px;
+					    font-weight: 600;
+					    line-height: 26px;
+					    margin-bottom: 10px;
+					    margin-top: 30px;
+					}
+				}
+    	}
+
+			
+
+			.drinkForm{
+
+				.mainForm{
+					margin-left: 15px;
+			    padding-top: 20px;
+			    border-radius: 10px;
+			    border: solid 1px #a7a7a7;
+			    -webkit-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+					-moz-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+					box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+
+					@media only screen and (max-width: 577px) {
+						margin-left: 0px;
+						margin: auto;
+						-webkit-box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
+						-moz-box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
+						box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
 					}
 
 					label{
 						font-size: 16px;
-					    font-weight: 400;
-					    line-height: 24px;
-					    margin-bottom: 8px;
+						font-weight: 400;
+					}
+
+					.buttonAdd{
+						font-size: 12px;
+						line-height: 20px;
 					}
 				}
 
-				h6{
-					font-size: 18px;
-				    font-weight: 600;
-				    line-height: 26px;
-				    margin-bottom: 10px;
-				    margin-top: 30px;
-				}
-			}
-
-			.drinkForm{
-				border-left: solid 1px #ccc;
-				@media only screen and (max-width: 768px) {
-					border-left: none;
-				}
-
-				label{
-					font-size: 16px;
-					font-weight: 400;
-				}
-
-				.buttonAdd{
-					font-size: 12px;
-					line-height: 20px;
-				}
+				
 			}
 		}
 
 		.cateringDeal{
+	    border: solid 1px #a7a7a7;
+	    -webkit-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			-moz-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+	    border-radius: 10px;
+	    padding: 30px 20px;
+	    margin-bottom: 40px;
+
+	    @media only screen and (max-width: 577px) {
+				margin-bottom: 30px;
+				-webkit-box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
+				-moz-box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
+				box-shadow: 0px 5px 6px 1px rgba(69,69,69,0.7);
+			}
 
 			h4{
 				font-weight: 500;
@@ -813,8 +854,6 @@
 					margin-bottom: 10px;
 				}
 			}
-			
-			
 
 			.buttonAdd{
 				font-size: 12px;
@@ -837,9 +876,194 @@
 			p{
 				text-transform: uppercase;
 				font-size: 16px;
-				line-height: 40px;
+				line-height: 24px;
 			}
 		}
 	}
-	
+
+	.partnerProflePage.calendar{
+		.calendarTop{
+			
+
+			.middle{
+				text-align: left;
+
+				@media only screen and (max-width: 577px) {
+					text-align: center;
+				}
+			}
+
+			.buttonAdd{
+				margin: 0px;
+			}
+		}
+		.myCalendarView{
+			margin-top: 30px;
+			margin-bottom: 30px;
+			height: 650px;
+
+			@media only screen and (max-width: 577px) {
+				height: 485px;
+			}
+
+			.rbc-toolbar{
+
+				.rbc-toolbar-label{
+					@media only screen and (max-width: 1007px) {
+						width: 100%;
+						padding: 5px 10px;
+					}
+				}
+			} 
+		}
+
+		.darkCover{
+			background-color: rgba(20,20,20,0.7);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			z-index: 998;
+
+			.reservationScreen{
+				width: 94%;
+				height: 94%;
+				position: fixed;
+				top: 3%;
+				left: 3%;
+				background-color: rgba(255,255,255,0.95);
+				z-index: 999;
+				border-radius: 5px;
+				padding: 20px 45px;
+				overflow-y: auto;
+
+				@media only screen and (max-width: 577px) {
+					padding: 10px;
+					padding-top: 45px;
+				}
+
+				span.absol{
+					position: absolute;
+					top: 10px;
+					right: 10px;
+				}
+
+				.icon{
+					font-family: 'Material Icons';
+	        font-size: 40px;
+	        line-height: 46px;
+	        color: #252525;
+	        cursor: pointer;
+				}
+
+				.closeIt:before{
+					content: 'close';
+				}
+
+				h3{
+					font-size: 30px;
+					font-weight: 600;
+					text-align: center;
+					margin-top: 15px;
+					margin-bottom: 30px;
+
+					@media only screen and (max-width: 577px) {
+						font-size: 22px;
+						margin-top: 5px;
+						margin-bottom: 20px;
+					}
+				}
+
+				.col-12{
+					margin-bottom: 10px;
+				}
+
+				.itemLabel{
+					margin-bottom: 5px;
+				}
+
+				.borderOnSm{
+					border-right: solid 1px #ccc;
+					@media only screen and (max-width: 577px) {
+						border: none;
+					}
+				}
+
+				h5{
+					font-size: 20px;
+			    margin-bottom: 15px;
+			    color: $darkGreyCol;
+				}
+
+				h4{
+					font-size: 22px;
+			    margin-top: 15px;
+			    margin-bottom: 10px;
+			    font-weight: 300;
+			    font-style: italic;
+			    color: $greyCol;
+				}
+
+				.pickSection{
+					margin-bottom: 25px;
+
+					@media only screen and (max-width: 577px) {
+						margin-bottom: 20px;
+					}
+
+					.nestedRow{
+					
+						@media only screen and (max-width: 577px) {
+							margin-bottom: 15px;
+						}
+
+						.adonComment{
+							color: $darkGreyCol;
+							font-size: 15px;
+							font-style: italic;
+							font-weight: 300;
+						}
+
+						.classicPar{
+							font-size: 16px;
+							line-height: 40px;
+							@media only screen and (max-width: 1024px) {
+								font-size: 15px;
+								line-height: 24px;
+							}
+							@media only screen and (max-width: 577px) {
+								font-size: 16px;
+							}
+						}
+					}
+
+					.fadedPrev{
+						font-weight: 400;
+						text-align: center;
+						width: 100%;
+					}
+				}
+
+				.mobileShow, .mobileHide{
+					ul{
+				    list-style-type: none;
+				    padding: 0px;
+				    padding-top: 20px;
+				    margin-bottom: 15px;
+
+				    li{
+				    	font-weight: 300;
+					    font-size: 18px;
+					    margin-bottom: 10px;
+				    }
+					}
+
+					.btn{
+						margin-top: 30px;
+					}
+				}
+			}
+		}
+	}	
 }

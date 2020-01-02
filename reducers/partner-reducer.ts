@@ -1,8 +1,8 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes
 } from '../actions/partner-actions';
-import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject } from '../lib/helpers/specificPartnerFunctions';
+import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration, IpartnerReservation } from '../lib/constants/interfaces';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject, generateString, createReservationTermsArray, formatReservations} from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -48,6 +48,18 @@ interface initialState {
   updateActionDecorationError: object | boolean;
   updateActionDecorationSuccess: null | number;
 
+  getPartnerRoomTermsStart: boolean;
+  getPartnerRoomTermsError: object | boolean;
+  getPartnerRoomTermsSuccess: null | number;
+
+  savePartnerReservationStart: boolean;
+  savePartnerReservationError: object | boolean;
+  savePartnerReservationSuccess: null | object;
+
+  getPartnerReservationsStart: boolean;
+  getPartnerReservationsError: boolean;
+  getPartnerReservationsSuccess: null | number;
+
   partnerGeneral: IpartnerGeneral;
 
   partnerRooms: Array<IpartnerRoomItem>;
@@ -59,6 +71,10 @@ interface initialState {
   partnerCatering: object;
 
   partnerDecoration: IpartnerDecoration;
+
+  partnerReservation: IpartnerReservation;
+
+  partnerReservationsList: Array<object>;
   
 }
 
@@ -105,6 +121,18 @@ const initialState: initialState  = {
   updateActionDecorationError: false,
   updateActionDecorationSuccess: null,
 
+  getPartnerRoomTermsStart: false,
+  getPartnerRoomTermsError: false,
+  getPartnerRoomTermsSuccess: null,
+
+  savePartnerReservationStart: false,
+  savePartnerReservationError: false,
+  savePartnerReservationSuccess: null,
+
+  getPartnerReservationsStart: false,
+  getPartnerReservationsError: false,
+  getPartnerReservationsSuccess: null,
+
   partnerGeneral: {
     size: null,
     playSize: null,
@@ -138,20 +166,22 @@ const initialState: initialState  = {
     gaming: '',
     food: '',
     drink: '',
-    cake: '',
     selfFood: '',
     selfDrink: '',
-    selfCake: '',
     smoking: '',
     selfAnimator: '',
     duration: '',
     cancelation: '',
     roomNumber: '',
+    depositPercent: '',
+    despositNumber: '',
+    doubleDiscount: '',
   },
 
   partnerRooms: [
     {
-      name: '', 
+      name: '',
+      regId: generateString(12), 
       size: null,
       capKids: null,
       capAdults: null,
@@ -202,6 +232,37 @@ const initialState: initialState  = {
     '3': {check: false, name_sr: 'prskalice', name_en: 'spargers', value: 3, price: '' },
     '4': {check: false, name_sr: 'trake', name_en: 'bands', value: 4, price: '' },
   },
+
+  partnerReservation: {
+    partner: '',
+    type: 'partner',
+    room: 0,
+    date: new Date(),
+    term: '',
+    options: [],
+    terms: [],
+    from: '',
+    to: '',
+    double: false,
+    user: '',
+    userName: '',
+    guest: '',
+    food: {},
+    animation: {},
+    decoration: {},
+    comment: '',
+    edit: true,
+    id: '',
+    showPrice: false,
+    termPrice: 0,
+    animationPrice: 0,
+    decorationPrice: 0,
+    foodPrice: 0,
+    price: 0,
+    deposit: 0,
+  },
+
+  partnerReservationsList: [],
 
 };
 
@@ -442,6 +503,72 @@ const actionsMap = {
       updateActionDecorationStart: false,
     };
   },
+
+  [getReservationTermsActionTypes.START]: (state) => {
+    return {
+      ...state,
+      getPartnerRoomTermsStart: true,
+    };
+  },
+  [getReservationTermsActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getPartnerRoomTermsStart: false,
+      getPartnerRoomTermsError: action.payload.response.body,
+    };
+  },
+  [getReservationTermsActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getPartnerRoomTermsSuccess: action.payload.code,
+      partnerReservation: {...state['partnerReservation'], 'terms': action.payload.freeTerms, 'options': createReservationTermsArray(action.payload.freeTerms)},
+      getPartnerRoomTermsStart: false,
+    };
+  },
+
+  [saveReservationActionTypes.START]: (state) => {
+    return {
+      ...state,
+      savePartnerReservationStart: true,
+    };
+  },
+  [saveReservationActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      savePartnerReservationStart: false,
+      savePartnerReservationError: action.payload.response.body,
+    };
+  },
+  [saveReservationActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      savePartnerReservationSuccess: action.payload,
+      savePartnerReservationStart: false,
+    };
+  },
+
+  [getReservationsActionTypes.START]: (state) => {
+    return {
+      ...state,
+      getPartnerReservationsStart: true,
+    };
+  },
+  [getReservationsActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getPartnerReservationsStart: false,
+      getPartnerReservationsError: action.payload.response.body,
+    };
+  },
+  [getReservationsActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getPartnerReservationsSuccess: action.payload.code,
+      partnerReservationsList: formatReservations(action.payload.reservations),
+      getPartnerReservationsStart: false,
+    };
+  },
+
 };
 
 export default function reducer(state: object = initialState, action: any = {}) {

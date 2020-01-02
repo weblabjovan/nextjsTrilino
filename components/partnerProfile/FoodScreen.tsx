@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
 import { changeSinglePartnerField, updateCateringPartner } from '../../actions/partner-actions';
-import {  getGeneralOptionLabelByValue, fillPickedOffers, isInArrayOfObjects, setCateringForBack } from '../../lib/helpers/specificPartnerFunctions';
+import {  getGeneralOptionLabelByValue, fillPickedOffers, isInArrayOfObjects, setCateringForBack, generateString } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import { isNumeric } from '../../lib/helpers/validations';
 import PlainInput from '../form/input';
@@ -185,7 +185,7 @@ class FoodScreen extends React.Component <MyProps, MyState>{
 
   addDeal(): void {
     const partnerCatering = JSON.parse(JSON.stringify(this.props.partnerCatering));
-    const deal = { type: '', price: '', min: null, items: [], currentItem: ''};
+    const deal = { type: '', price: '', min: null, items: [], currentItem: '', regId: generateString(12)};
     partnerCatering['deals'].push(deal);
     this.props.changeSinglePartnerField('partnerCatering', partnerCatering);
   }
@@ -335,7 +335,7 @@ class FoodScreen extends React.Component <MyProps, MyState>{
               </Alert>
           	</Col>
 
-          	<Col xs="12" lg="5">
+          	<Col xs="12" lg="5" className="mainCard">
           		<div className="drinkList">
                 <div className="middle">
                   <p className="sub-sm">{this.state.dictionary['partnerProfileCateringCardDisplayInfo']}</p>
@@ -418,7 +418,7 @@ class FoodScreen extends React.Component <MyProps, MyState>{
 
           	</Col>
             <Col xs="12" lg="7" className="drinkForm">
-              <Row>
+              <Row className="mainForm">
                 <Col xs="12">
                   <div className="middle">
                     <p className="sub-sm">{this.state.dictionary['partnerProfileCateringCardFormInfo']}</p>
