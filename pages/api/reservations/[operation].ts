@@ -141,10 +141,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const dictionary = getLanguage(language);
 
 		if (type === 'partner') {
+			return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: [] });
 			const { partner, room, dates } = req.body;
 			try{
 				const query = await Reservation.find({partner: partner, room: room, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}});
-				return res.status(200).json({ endpoint: 'reservations', operation: 'availableTerms', success: true, code: 1, reservations: query });
+				return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
 			}catch(err){
 				return res.status(500).send({ endpoint: 'reservations', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 			}
