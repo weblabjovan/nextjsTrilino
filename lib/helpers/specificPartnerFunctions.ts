@@ -622,13 +622,16 @@ export const formatReservations = (reservations: Array<object>): Array<object> =
 }
 
 export const getCurrentWeekStartAndEnd = (): object => {
-	const curr = new Date(); // get current date
-	const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-	const last = first + 6; // last day is the first day + 6
+	const curr = new Date();
+	curr.setHours(0,0,0,0);
+	const day = 86400 * 1000;
+	const week = 604800 * 1000;
+	const weekDay = curr.getDay() === 0 ? 7 : curr.getDay();
+	const startTimestamp = curr.getTime() - ((weekDay-1) * day);
+	const endTimestamp = startTimestamp + week - 1000;
 
-	const start = new Date(curr.setDate(first)).toUTCString();
-	const end = new Date(curr.setDate(last)).toUTCString();
-
+	const start = new Date(startTimestamp).toUTCString();
+	const end = new Date(endTimestamp).toUTCString();
 	return {start: setDateToDayStart(start), end: setDateToDayStart(end)};
 }
 
