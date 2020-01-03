@@ -142,8 +142,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		if (type === 'partner') {
 			const { partner, room, dates } = req.body;
+			return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: [], data:{ gte: setReservationDateForBase(dates['start']), lt: setReservationDateForBase(dates['end']), partner } });
 			try{
-				const resQuery = await Reservation.findOne({'partner': partner }, { new: true }).select('_id from to partner room');
+				const resQuery = await Reservation.find({'partner': partner }, { new: true }).select('_id from to partner room');
 				return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: resQuery, data:{ gte: setReservationDateForBase(dates['start']), lt: setReservationDateForBase(dates['end'])} });
 			}catch(err){
 				return res.status(500).send({ endpoint: 'reservations', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
