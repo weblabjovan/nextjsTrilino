@@ -335,23 +335,6 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
             }
 
             {
-              isFieldInObject(this.props.partnerObject, 'cake', 'general')
-              ?
-              this.props.partnerObject['general']['cake'] === '1'
-              ?
-              (<Col xs="4" sm="2" lg="1" className="smallColPadd">
-                <div className="iconHolder">
-                  <span className="icon cake" />
-                  <p>{this.state.dictionary['partnerProfilePreviewIconCake']}</p>
-                </div>
-              </Col>)
-              :
-              null
-              :
-              null
-            }
-
-            {
               isFieldInObject(this.props.partnerObject, 'smoking', 'general')
               ?
               this.props.partnerObject['general']['smoking'] === '1'
@@ -398,22 +381,6 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               :
               (<Col xs="12" sm="6">
                 <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkDrinkNo']}</h5>
-              </Col>)
-              :
-              null
-            }
-
-            {
-              isFieldInObject(this.props.partnerObject, 'selfCake', 'general')
-              ?
-              this.props.partnerObject['general']['selfCake'] === '1'
-              ?
-              (<Col xs="12" sm="6">
-                <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkCakeYes']}</h5>
-              </Col>)
-              :
-              (<Col xs="12" sm="6">
-                <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkCakeNo']}</h5>
               </Col>)
               :
               null

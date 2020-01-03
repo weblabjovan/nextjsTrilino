@@ -20,6 +20,6 @@ const partnerSchema = new Schema({
 	contentAddon:[{ type: Object }],
 	catering: { type: Object},
 	decoration: { type: Object},
-});
+}, {timestamps: true});
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);

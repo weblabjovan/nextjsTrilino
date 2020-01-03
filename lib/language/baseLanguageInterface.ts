@@ -229,6 +229,12 @@ export default interface LanguageInterface {
 	partnerProfileGeneralAlert_error_no_5: string;
 	partnerProfileGeneralRemark: string;
 	partnerProfileGeneralSaveButton: string;
+	partnerProfileGeneralDeposit: string;
+	partnerProfileGeneralDepositPlaceholder: string;
+	partnerProfileGeneralDepositReference: string;
+	partnerProfileGeneralDepositReferencePlaceholder: string;
+	partnerProfileGeneralDouble: string;
+	partnerProfileGeneralDoublePlaceholder: string;
 
 
 	partnerProfilePreviewTitle: string;
@@ -347,6 +353,51 @@ export default interface LanguageInterface {
 	partnerProfileDecorationSubSmal: string;
 	partnerProfileDecorationPricePlaceholder: string;
 	partnerProfileDecorationSaveButton: string;
+
+	partnerProfileReservationTitle: string;
+	partnerProfileReservationRoom: string;
+	partnerProfileReservationRoomPlaceHolder: string;
+	partnerProfileReservationDate: string;
+	partnerProfileReservationDatePlaceHolder: string;
+	partnerProfileReservationTerm: string;
+	partnerProfileReservationTermPlaceHolder: string;
+	partnerProfileReservationUser: string;
+	partnerProfileReservationUserPlaceHolder: string;
+	partnerProfileReservationName: string;
+	partnerProfileReservationNamePlaceHolder: string;
+	partnerProfileReservationDouble: string;
+	partnerProfileReservationComment: string;
+	partnerProfileReservationCommentPlaceHolder: string;
+	partnerProfileReservationPrice: string;
+	partnerProfileReservationDeposit: string;
+	partnerProfileReservationShowPrice: string;
+	partnerProfileReservationAlertRoom: string;
+	partnerProfileReservationAlertDate: string;
+	partnerProfileReservationAlertTerm: string;
+	partnerProfileReservationAlertGuest: string;
+	partnerProfileReservationAlertDouble: string;
+	partnerProfileReservationAlertBaseDuplicate: string;
+	partnerProfileReservationAlertFoodNumber: string;
+	partnerProfileReservationSave: string;
+	partnerProfileReservationDelete: string;
+	partnerProfileReservationCateringSub: string;
+	partnerProfileReservationCateringPackage: string;
+	partnerProfileReservationCateringPerperson: string;
+	partnerProfileReservationCateringPerson: string;
+	partnerProfileReservationCateringMin: string;
+	partnerProfileReservationCateringNum: string;
+	partnerProfileReservationCateringEmpty: string;
+	partnerProfileReservationAddonSub: string;
+	partnerProfileReservationAddonEmpty: string;
+	partnerProfileReservationDecorationSub: string;
+	partnerProfileReservationDecorationEmpty: string;
+	partnerProfileReservationModalTitle: string;
+	partnerProfileReservationModalText: string;
+	partnerProfileReservationModalButtonText: string;
+
+	partnerProfileCalendarTitle: string;
+	partnerProfileCalendarDescription: string;
+	partnerProfileCalendarButton: string;
 
 
 

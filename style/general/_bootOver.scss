@@ -96,3 +96,27 @@
 		min-width: 20px;
 	}
 }
+
+.modal-footer{
+	border: none;
+
+	button{
+		margin: auto;
+	}
+}
+
+.modal-body{
+	font-size: 16px;
+}
+
+.modal-header{
+	.close{
+		outline: none;
+	}
+}
+
+.alert{
+	.close{
+		outline: none;
+	}
+}

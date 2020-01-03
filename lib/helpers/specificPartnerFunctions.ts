@@ -1,6 +1,16 @@
 import moment from 'moment';
 import genOptions from '../constants/generalOptions';
 
+export const generateString = (length: number):string => {
+	let str = '';
+	const characters = ['a', 'b', 'w', 'r', 'm', '2', '1', 'x', 'T', 'n', 'X', 'b', '9', 'G', '7', 'd', 'O', 'l', 'y', 'm', 'p', '4', 'C', '6', 'm', 'F', 'c', 'v', '8', 'm', 'k', 'W', 'Q', 'f', '5', '0', 'z', 'K', 'h', 'j'];
+	var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      str += characters[Math.floor(Math.random() * charactersLength)];
+   }
+	return str;
+}
+
 export const prepareGeneralPartnerObject = (general: object, rooms: Array<object>): object => {
 	const object = {};
 	const partnerRooms = [];
@@ -17,7 +27,6 @@ export const prepareGeneralPartnerObject = (general: object, rooms: Array<object
 			  		}else{
 			  			object[key] = general[key];
 			  		}
-			  		
 			  	}
 	  		}
 	  	}
@@ -28,6 +37,7 @@ export const prepareGeneralPartnerObject = (general: object, rooms: Array<object
 		if (rooms[i]['name'] && rooms[i]['size'] && rooms[i]['capKids'] && rooms[i]['capAdults']) {
 			const room = {
 				name: rooms[i]['name'],
+				regId: rooms[i]['regId'] ? rooms[i]['regId'] : (i + 1),
 				size: parseInt(rooms[i]['size']),
 				capKids: parseInt(rooms[i]['capKids']),
 				capAdults: parseInt(rooms[i]['capAdults']),
@@ -38,7 +48,7 @@ export const prepareGeneralPartnerObject = (general: object, rooms: Array<object
 	}
 
 	object['roomNumber'] = partnerRooms.length;
-	object['rooms'] = partnerRooms;
+	object['rooms'] = makeRegIdsUniqueForArray(partnerRooms);
 
 	return object;
 }
@@ -55,8 +65,8 @@ const dissembleRoomTerms = (room: object): object => {
 	}
 
 	return terms;
-	
 }
+
 
 const assembleRoomTerms = (room: object): object => {
 	const terms = JSON.parse(JSON.stringify(room['terms']));
@@ -97,6 +107,17 @@ export const validateTerms = (rooms: Array<object>, duration: string | object, e
 
 	return {day: 'all', result: {success: true, message: 'Terms validated.'}};
 
+}
+
+export const getRoomsSelector = (rooms: Array<object>): Array<object> => {
+	const newrooms = JSON.parse(JSON.stringify(rooms));
+	const res = [];
+
+	for (var i = 0; i < newrooms.length; ++i) {
+		res.push({value: newrooms[i]['regId'], label: newrooms[i]['name']});
+	}
+
+	return res;
 }
 
 const isLastTermAfterClose = (dayLast: string | object, dayTerms: Array<object>): object => {
@@ -171,6 +192,7 @@ export const setUpGeneralRoomsForFront = (partner: object): Array<object> => {
 				for (var i = 0; i < rooms.length; ++i) {
 					const room = {
 						name: rooms[i]['name'],
+						regId: rooms[i]['regId'] ? rooms[i]['regId'] : (i + 1),
 						size: parseInt(rooms[i]['size']),
 						capKids: parseInt(rooms[i]['capKids']),
 						capAdults: parseInt(rooms[i]['capAdults']),
@@ -299,6 +321,16 @@ export const getGeneralOptionLabelByValue = (options: Array<object>, value: stri
 	return '';
 }
 
+export const getGeneralOptionByValue = (options: Array<object>, value: string | number): object => {
+	for (var i = 0; i < options.length; ++i) {
+		if (options[i]['value'] === value) {
+			return options[i]; 
+		}
+	}
+
+	return {value:'', lable:''};
+}
+
 export const setArrayWithLabelAndValue = (genField: string, partner: Array<number>): Array<object> => {
 	const options = genOptions[genField];
 	const arr = [];
@@ -359,6 +391,7 @@ export const setCateringForBack = (catering: object): object => {
 	const newCat = JSON.parse(JSON.stringify(catering));
 	let deals = removeEmpty(newCat['deals'], isDealEmpty);
 	deals = typeTheDeals(deals);
+	deals = makeRegIdsUniqueForArray(deals);
 	const drinkCard = newCat['drinkCard'];
 
 	return { deals, drinkCard };
@@ -441,11 +474,11 @@ export const prepareDecorationDataForSave = (data: object): object => {
 
 	for(let key in decoration) {
 		if (decoration[key]['check']) {
-			res[key] = { price: decoration[key]['price'], value: parseInt(key)};
+			res[key] = { price: decoration[key]['price'], value: parseInt(key), regId: decoration[key]['regId']};
 		}
 	}
 
-	return res;
+	return makeRegIdsUniqueForObject(res);
 }
 
 export const buildPartnerDecorationObject = (partner: object): object => {
@@ -468,12 +501,23 @@ const buildDecoration = (existing: object = null): object => {
 			if (existing[key]) {
 				decor['check'] = true;
 				decor['price'] = existing[key]['price'];
+				decor['regId'] = existing[key]['regId'];
 			}
 		}
 		res[key] = decor;
 	}
 
 	return res;
+}
+
+export const isForDecorationSave = (length: number, partner: object): boolean => {
+	if (partner['decoration']) {
+		if (Object.keys(partner['decoration']).length === 0 && length === 0) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 export const getLayoutNumber = (size: string, length: number): string => {
@@ -485,4 +529,139 @@ export const getLayoutNumber = (size: string, length: number): string => {
 	}
 
 	return res;
+}
+
+export const isFree = (value: number | string): boolean => {
+	if (value === null || value === '' || value === 0 || value === undefined) {
+		return true;
+	}
+
+	return false;
+}
+
+export const makeRegIdsUniqueForArray = (arr: Array<object>): Array<object> => {
+	const checker = {};
+	for (var i = 0; i < arr.length; ++i) {
+		if (!checker[arr[i]['regId']]) {
+			checker[arr[i]['regId']] = true;
+		}else{
+			arr[i]['regId'] = arr[i]['regId'] + i.toString();
+			checker[arr[i]['regId']] = true;
+		}
+	}
+
+	return arr;
+}
+
+const makeRegIdsUniqueForObject = (arr: object): object => {
+	const checker = {};
+	for(let key in arr){
+		if (!checker[arr[key]['regId']]) {
+			checker[arr[key]['regId']] = true;
+		}else{
+			arr[key]['regId'] = arr[key]['regId'] + key;
+			checker[arr[key]['regId']] = true;
+		}
+	}
+
+	return arr;
+}
+
+export const createReservationTermsArray = (freeTerms: Array<object>): Array<object> => {
+	const res = [];
+
+	for (var i = 0; i < freeTerms.length; ++i) {
+		res.push({label:`${freeTerms[i]['from']} - ${freeTerms[i]['to']}`, value:i});
+	}
+
+	return res;
+}
+
+export const prepareReservationObjectForSave = (obj: object): object => {
+	const partnerReservation = JSON.parse(JSON.stringify(obj));
+	partnerReservation['date']  = setDateToDayStart(partnerReservation['date']);
+	partnerReservation['animation'] = returnOnlyTrueForObjects(partnerReservation['animation']);
+	partnerReservation['decoration'] = returnOnlyTrueForObjects(partnerReservation['decoration']);
+
+	return partnerReservation;
+}
+
+export const setDateToDayStart = (date: string): string => {
+	const newDate = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0).format();
+
+	return newDate;
+}
+
+const returnOnlyTrueForObjects = (obj: object, field: string | null = null): object => {
+	const res = {};
+	for(let key in obj){
+		if (field) {
+			if (obj[key][field] === true) {
+				res[key] = obj[key];
+			}
+		}else{
+			if (obj[key] === true) {
+				res[key] = obj[key];
+			}
+		}
+	}
+
+	return res;
+}
+
+export const formatReservations = (reservations: Array<object>): Array<object> => {
+	for (var i = 0; i < reservations.length; ++i) {
+		const d = new Date(reservations[i]['date']);
+		const dateString = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+		reservations[i]['start'] = new Date(`${dateString} ${reservations[i]['from']}`);
+		reservations[i]['end'] = new Date(`${dateString} ${reservations[i]['to']}`);
+		reservations[i]['title'] = reservations[i]['guest'];
+	}
+
+	return reservations;
+}
+
+export const getCurrentWeekStartAndEnd = (): object => {
+	const curr = new Date();
+	curr.setHours(0,0,0,0);
+	const day = 86400 * 1000;
+	const week = 604800 * 1000;
+	const weekDay = curr.getDay() === 0 ? 7 : curr.getDay();
+	const startTimestamp = curr.getTime() - ((weekDay-1) * day);
+	const endTimestamp = startTimestamp + week - 1000;
+
+	const start = new Date(startTimestamp).toUTCString();
+	const end = new Date(endTimestamp).toUTCString();
+	return {start: setDateToDayStart(start), end: setDateToDayStart(end)};
+}
+
+export const addDaysToDate = (date: string | null, days: number): Date => {
+	let newDate = new Date();
+	if (date) {
+		newDate = new Date(date);
+	}
+  newDate.setDate(newDate.getDate() + days);
+
+  return newDate;
+}
+
+export const getFieldValueByRegId = (arr: Array<object>, regId: string, field: string): string => {
+	for (var i = 0; i < arr.length; ++i) {
+		if (arr[i]['regId'] === regId) {
+			return arr[i][field];
+		}
+	}
+
+	return '';
+}
+
+export const getFieldValueByRegIdForObjects = (obj: object, regId: string, field: string): string => {
+
+	for(let key in obj){
+		if (obj[key]['regId'] === regId) {
+			return obj[key][field];
+		}
+	}
+
+	return '';
 }

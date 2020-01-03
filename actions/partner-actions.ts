@@ -261,3 +261,64 @@ export function getPartnerProfile(link: object, auth: string) {
     );
   };
 }
+
+export const getReservationTermsActionTypes = {
+  START: 'PARTNER_GET_RESERVATION_TERMS_START',
+  ERROR: 'PARTNER_GET_RESERVATION_TERMS_ERROR',
+  SUCCESS: 'PARTNER_GET_RESERVATION_TERMS_SUCCESS',
+};
+
+export function getPartnerReservationTerms(link: object, data: object) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_FREE_TERMS);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getReservationTermsActionTypes,
+    );
+  };
+}
+
+export const saveReservationActionTypes = {
+  START: 'PARTNER_SAVE_RESERVATION_START',
+  ERROR: 'PARTNER_SAVE_RESERVATION_ERROR',
+  SUCCESS: 'PARTNER_SAVE_RESERVATION_SUCCESS',
+};
+
+export function savePartnerReservation(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_SAVE);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      saveReservationActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const getReservationsActionTypes = {
+  START: 'PARTNER_GET_RESERVATIONS_START',
+  ERROR: 'PARTNER_GET_RESERVATIONS_ERROR',
+  SUCCESS: 'PARTNER_GET_RESERVATIONS_SUCCESS',
+};
+
+export function getPartnerReservations(link: object, data: object) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_GET);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getReservationsActionTypes,
+    );
+  };
+}

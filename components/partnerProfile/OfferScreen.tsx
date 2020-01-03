@@ -5,7 +5,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
 import { changeSinglePartnerField, updateOfferPartner } from '../../actions/partner-actions';
-import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, fillPickedOffers } from '../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, fillPickedOffers, generateString, makeRegIdsUniqueForArray } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import PlainInput from '../form/input';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -123,7 +123,7 @@ class OfferScreen extends React.Component <MyProps, MyState>{
   addAddonToRedux(){
   	if (!this.state.errorMessages['show']) {
   		const partnerAddon =  JSON.parse(JSON.stringify(this.props.partnerAddon));
-	  	const addon = { name: this.state.addonName, price: this.state.addonPrice, comment: this.state.addonComment };
+	  	const addon = { name: this.state.addonName, price: this.state.addonPrice, comment: this.state.addonComment, regId: generateString(12) };
 	  	partnerAddon.push(addon);
 
 	  	this.setState({addonName: '', addonPrice: '', addonComment: ''}, () => {
@@ -160,7 +160,7 @@ class OfferScreen extends React.Component <MyProps, MyState>{
   	this.props.openLoader();
 		const link = setUpLinkBasic(window.location.href);
 		const offer = getOnlyValues(this.props.partnerOffer);
-		const addon = JSON.parse(JSON.stringify(this.props.partnerAddon));
+		const addon = JSON.parse(JSON.stringify(makeRegIdsUniqueForArray(this.props.partnerAddon)));
   	const data = { language: this.props.lang, offer, addon };
   	this.props.updateOfferPartner('_id', data, link, this.props.token);
   }

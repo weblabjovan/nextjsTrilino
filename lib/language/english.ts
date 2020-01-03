@@ -231,6 +231,12 @@ const english: LanguageInterface = {
 	partnerProfileGeneralAlert_error_no_5: 'No term duration.',
 	partnerProfileGeneralRemark: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
 	partnerProfileGeneralSaveButton: 'Save general information',
+	partnerProfileGeneralDeposit: 'Deposit percentage:',
+	partnerProfileGeneralDepositPlaceholder: 'deposit',
+	partnerProfileGeneralDepositReference: 'Deposit base:',
+	partnerProfileGeneralDepositReferencePlaceholder: 'base',
+	partnerProfileGeneralDouble: 'Double term discount:',
+	partnerProfileGeneralDoublePlaceholder: 'discount',
 
 
 	partnerProfilePreviewTitle: 'Profile preview',
@@ -292,13 +298,13 @@ const english: LanguageInterface = {
 
 
 	partnerProfileOfferTitle: 'Entertainment content information',
-	partnerProfileOfferDescription: 'Bellow you can add/edit information about entertainment content that you offer. Those contents are split in two types: free and payed. Entertainment content should be all things that can help your guests play, have fun and enjoy their party. The free content is the one that is included in the price of one schedule term, while the payed ones are those that need to be payed extra.  For more information on how to fill out this section visit ',
+	partnerProfileOfferDescription: 'Bellow you can add/edit information about entertainment content that you offer. Those contents are split in two types: free and additional. Entertainment content represents all the things that can help your guests play, have fun and enjoy their party. The free content is the one that is included in the price of one schedule term, while the additional ones are those that need to be payed extra or booked some time in advance.  For more information on how to fill out this section visit ',
 	partnerProfileOfferSubFree: 'Free content:',
-	partnerProfileOfferNoItemsFree: 'Currently cou do not have saved free contents',
+	partnerProfileOfferNoItemsFree: 'Currently free content is not yet saved.',
 	partnerProfileOfferButtonTagAddFree: 'add',
 	partnerProfileOfferButtonTagRemoveFree: 'remove',
-	partnerProfileOfferSubPay: 'Payed content:',
-	partnerProfileOfferNoItemsPay: 'Currently cou do not have saved payed contents',
+	partnerProfileOfferSubPay: 'Additional content:',
+	partnerProfileOfferNoItemsPay: 'Currently additional content is not yet saved.',
 	partnerProfileOfferAddonName: 'Content name:',
 	partnerProfileOfferAddonNamePlaceholder: 'name',
 	partnerProfileOfferAddonPrice: 'Price:',
@@ -306,8 +312,8 @@ const english: LanguageInterface = {
 	partnerProfileOfferAddonComment: 'Content comment:',
 	partnerProfileOfferAddonCommentPlaceholder: 'comment',
 	partnerProfileOfferAddonButton: 'Add',
-	partnerProfileOfferAddonAlertName: 'Content name is required. Please, fill out content name.',
-	partnerProfileOfferAddonAlertPrice: 'Content price is required. Please, fill out content price.',
+	partnerProfileOfferAddonAlertName: 'Content name is required. Please, fill out additional content name.',
+	partnerProfileOfferAddonAlertPrice: 'Content price is required. Please, fill out additional content price.',
 	partnerProfileOfferSaveButton: 'Save entertaiment content',
 
 
@@ -352,6 +358,56 @@ const english: LanguageInterface = {
 	partnerProfileDecorationSubSmal: 'Decoration list',
 	partnerProfileDecorationPricePlaceholder: 'price',
 	partnerProfileDecorationSaveButton: 'Save decorations',
+
+
+	partnerProfileCalendarTitle: 'Reservation calendar',
+	partnerProfileCalendarDescription: 'Bellow you can see calendar view of your reservations. By clicking on create reservation you can start the proces of reserving a term at your venue. By clicking on the already created reservation in the calendar you can see detailed info of thet reservation. Reservations that you made through this calendar create reservation process can also be deleted. For more information on how to use the calendar visit  ',
+	partnerProfileCalendarButton: 'Create reservation',
+
+
+
+	partnerProfileReservationTitle: 'Reservation Form',
+	partnerProfileReservationRoom: 'Room:',
+	partnerProfileReservationRoomPlaceHolder: 'room',
+	partnerProfileReservationDate: 'Date:',
+	partnerProfileReservationDatePlaceHolder: 'Choose date',
+	partnerProfileReservationTerm: 'Term:',
+	partnerProfileReservationTermPlaceHolder: 'term',
+	partnerProfileReservationUser: 'User:',
+	partnerProfileReservationUserPlaceHolder: 'user',
+	partnerProfileReservationName: 'Guest name:',
+	partnerProfileReservationNamePlaceHolder: 'guest',
+	partnerProfileReservationDouble: 'Double term:',
+	partnerProfileReservationComment: 'Comment:',
+	partnerProfileReservationCommentPlaceHolder: 'comment',
+	partnerProfileReservationShowPrice: 'Calculate price:',
+	partnerProfileReservationPrice: 'Reservation price:',
+	partnerProfileReservationDeposit: 'Deposit price:',
+	partnerProfileReservationAlertRoom: 'Room is required field, you have to choose room when you are creating reservation.',
+	partnerProfileReservationAlertDate: 'Date is required field, you have to choose date when you are creating reservation.',
+	partnerProfileReservationAlertTerm: 'Term is required field, you have to choose term when you are creating reservation.',
+	partnerProfileReservationAlertGuest: 'Guest name is required field, you have to insert guest name when you are creating reservation.',
+	partnerProfileReservationAlertDouble: 'Term after the main term that you have chosen is not available, so double term is not allowed in this situation. Please change the term.',
+	partnerProfileReservationAlertBaseDuplicate: 'Unfortunatly during your fill out od this reservation form someone else already reserved the same term that you have chosen. Please choose different term.',
+	partnerProfileReservationAlertFoodNumber: 'You have inserted unsufficient number of people for some of the catering deals. Please, insert number that is eaqual or larger that displayed minimum.',
+	partnerProfileReservationSave: 'Save reservation',
+	partnerProfileReservationDelete: 'Delete reservation',
+	partnerProfileReservationCateringSub: 'Catering:',
+	partnerProfileReservationCateringPackage: 'Deal',
+	partnerProfileReservationCateringPerperson: 'per person',
+	partnerProfileReservationCateringPerson: 'people',
+	partnerProfileReservationCateringMin: 'Minimum',
+	partnerProfileReservationCateringNum: 'number',
+	partnerProfileReservationCateringEmpty: 'Catering deals have not yet been saved',
+	partnerProfileReservationAddonSub: 'Addidional content:',
+	partnerProfileReservationAddonEmpty: 'Addidional content have not yet been saved',
+	partnerProfileReservationDecorationSub: 'Decoration:',
+	partnerProfileReservationDecorationEmpty: 'Decoration have not yet been saved',
+	partnerProfileReservationModalTitle: 'Delete reservation',
+	partnerProfileReservationModalText: 'If you delete this reservation it will not be available and the term which was attached to it will be free. Are you sure you want to delete this reservation?',
+	partnerProfileReservationModalButtonText: 'Yes, delete this reservation',
+
+
 
 
 

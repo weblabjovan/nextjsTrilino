@@ -5,7 +5,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
 import { changeSinglePartnerField, updateDecorationPartner } from '../../actions/partner-actions';
-import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, prepareDecorationDataForSave } from '../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, prepareDecorationDataForSave, generateString, isForDecorationSave } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import PlainInput from '../form/input';
 import CheckBox from '../form/checkbox';
@@ -72,6 +72,7 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
     const field = item.getAttribute('data-field');
     const partnerDecoration = JSON.parse(JSON.stringify(this.props.partnerDecoration));
     partnerDecoration[field]['check'] = !partnerDecoration[field]['check'];
+    partnerDecoration[field]['regId'] = partnerDecoration[field]['check'] === true ? generateString(12) : partnerDecoration[field]['regId'];
     partnerDecoration[field]['price'] =  partnerDecoration[field]['check'] === false ? '' : partnerDecoration[field]['price'];
     this.props.changeSinglePartnerField('partnerDecoration', partnerDecoration);
   }
@@ -85,7 +86,7 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
 
   saveDecoration(){
 		const decoration = prepareDecorationDataForSave(this.props.partnerDecoration);
-    if (Object.keys(decoration).length) {
+    if (isForDecorationSave(Object.keys(decoration).length, this.props.partnerObject)) {
       this.props.openLoader();
       const link = setUpLinkBasic(window.location.href);
       const data = { language: this.props.lang, decoration };

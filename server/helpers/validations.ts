@@ -1,4 +1,5 @@
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../../lib/helpers/validations';
+import { addMinutesToString } from './general';
 
 type partnerReg = {
 	name: string;
@@ -22,7 +23,7 @@ export const isPartnerRegDataValid = (data: partnerReg): boolean => {
 
 export const isGeneralDataValid = (data: object): boolean => {
 	for(let key in data){
-		if (key === 'roomNumber' || key === 'size' || key === 'playSize') {
+		if (key === 'roomNumber' || key === 'size' || key === 'playSize' || key === 'depositPercent' || key === 'doubleDiscount') {
 			if (typeof data[key] !== 'number') {
 				return false;
 			}
@@ -64,14 +65,11 @@ const isRoomDataValid = (room: object): boolean => {
 	for(let key in room){
 		if (numbers.indexOf(key) !== -1) {
 			if (typeof room[key] !== 'number') {
-				console.log(key);
-				console.log(typeof room[key]);
 				return false;
 			}
 		}
 		if (key === 'name') {
 			if (typeof room[key] !== 'string') {
-				console.log('ovde 2')
 				return false;
 			}
 		}
@@ -102,7 +100,6 @@ export const isCateringDataValid = (data: object): boolean => {
 		}else{
 			for (var i = 0; i < data['deals'].length; ++i) {
 				if (typeof data['deals'][i]['price'] !== 'number' || typeof data['deals'][i]['min'] !== 'number' || !isNumeric(data['deals'][i]['type'])) {
-					console.log('data 3');
 					return false;
 				}
 			}
@@ -120,4 +117,36 @@ export const isDecorationDataValid = (data: object): boolean => {
 	}
 
 	return true;
+}
+
+export const isReservationSaveDataValid = (data: object): boolean => {
+  if (!data['partner'] || !data['date'] || !data['room'] || !data['type'] || !data['from'] || !data['to']) {
+    return false;
+  }
+
+  return true;
+}
+
+export const isReservationStillAvailable = (data: object, reservations: Array<object>): boolean => {
+
+  if (!reservations.length) {
+    return true;
+  }
+
+  for (var i = 0; i < reservations.length; ++i) {
+  	if (data['double']) {
+  		const doubleFrom = addMinutesToString(data['to'], 30);
+		if (reservations[i]['from'] === data['from'] || reservations[i]['from'] === doubleFrom) {
+	      return false;
+	    }
+  		
+  	}else{
+  		if (reservations[i]['from'] === data['from']) {
+	      return false;
+	    }
+  	}
+    
+  }
+
+  return true;
 }

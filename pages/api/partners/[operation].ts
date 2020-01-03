@@ -68,7 +68,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findById(partnerId, '-password -_id -passSafetyCode -passProvided -verified');
+					const partner = await Partner.findById(partnerId, '-password -passSafetyCode -passProvided -verified');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -112,7 +112,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			try{
 				await connectToDb();
 				const id = encodeId(data.id);
-				const partner = await Partner.findOneAndUpdate({ '_id': id }, {"$set" : data.options }, { new: true }).select('-password -_id');
+				const partner = await Partner.findOneAndUpdate({ '_id': id }, {"$set" : data.options }, { new: true }).select('-password');
 				
 				if (partner) {
 					return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, partner: partner });
@@ -133,7 +133,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const salt = await bcrypt.genSalt(10);
 					const passHash = await bcrypt.hash(data.password, salt);
 					const id = encodeId(data.id);
-					const partner = await Partner.findOneAndUpdate({ '_id': id, 'passSafetyCode': data.code }, {"$set" : { passSafetyCode : '', password: passHash, passProvided: true } }, { new: true }).select('-password -_id');
+					const partner = await Partner.findOneAndUpdate({ '_id': id, 'passSafetyCode': data.code }, {"$set" : { passSafetyCode : '', password: passHash, passProvided: true } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1, partner: partner });
 					}else{
@@ -156,7 +156,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 					if (partner) {
 						const passSafetyCode = generateString(8);
-						const update = await Partner.findOneAndUpdate({ '_id': partner._id }, {"$set" : { passSafetyCode } }, { new: true }).select('-password -_id');
+						const update = await Partner.findOneAndUpdate({ '_id': partner._id }, {"$set" : { passSafetyCode } }, { new: true }).select('-password');
 						const sender = {name:'Trilino', email:'no.reply@trilino.com'};
 	  				const to = [{name: partner.contactPerson, email: partner.contactEmail }];
 	  				const bcc = null;
@@ -182,13 +182,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			const token = req.headers.authorization;
 			if (!isEmpty(token)) {
 				if (!isGeneralDataValid(data['general'])) {
-					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
+					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 5, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
 				}
 				try{
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'] } }, { new: true }).select('-password -_id');
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'] } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update general', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -212,7 +212,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { contentOffer: data['offer'], contentAddon: data['addon'] } }, { new: true }).select('-password -_id');
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { contentOffer: data['offer'], contentAddon: data['addon'] } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update offer', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -236,7 +236,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { catering: data['catering'] } }, { new: true }).select('-password -_id');
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { catering: data['catering'] } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update catering', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -261,7 +261,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { decoration: data['decoration'] } }, { new: true }).select('-password -_id');
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { decoration: data['decoration'] } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update decoration', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{

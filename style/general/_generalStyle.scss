@@ -6,6 +6,8 @@ $regFont: 'Roboto', sans-serif;
 $actionCol: #5c9ee2;
 $cancelCol: #e85d5d;
 $purple: #8c3ebf;
+$greyCol: #afafaf;
+$darkGreyCol: #5f5f5f;
 
 .totalWrapper{
 	background-color: #f9f9f9;
@@ -13,6 +15,16 @@ $purple: #8c3ebf;
 	img{
 		max-width: 100%;
 	}
+}
+
+.textHighlightPurple{
+  color: $purple;
+  font-weight: 800;
+}
+
+.textHighlightGrey{
+  color: $darkGreyCol;
+  font-weight: 800;
 }
 
 .smallColPadd{
@@ -55,6 +67,12 @@ $purple: #8c3ebf;
 
 .mobileHide{
   @media only screen and (max-width: 577px){
+    display: none;
+  }
+}
+
+.mobileShow{
+  @media only screen and (min-width: 576px){
     display: none;
   }
 }
@@ -192,44 +210,52 @@ button:disabled{
 
 }
 
-
-
-.React__checkbox--input {
-  display: none;
-}
-
-.React__checkbox--input {
-  + span {
-    color: red;
-    display: flex;
-    width: 30px;
-    height: 30px;
-    background: #5f5f5f;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin: 5px;
-    border: 0px solid #fff;
-    box-sizing: border-box;
-    transition: all 150ms;
+.React__checkbox{
+  .checkbox-simple-label{
+    margin-bottom: 0px;
+    vertical-align: top;
+    line-height: 25px;
+    margin-right: 10px;
   }
-  &:checked {
+  
+  .React__checkbox--input {
+    display: none;
+  }
+
+  .React__checkbox--input {
     + span {
-      border-width: 30px / 2;
-      &::before {
-        content: 'check';
-        font-family: 'Material Icons';
-        font-size: 30px;
-        color: #fff;
+      display: flex;
+      width: 20px;
+      height: 20px;
+      background: #5f5f5f;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin: 2px;
+      border: 0px solid #fff;
+      box-sizing: border-box;
+      transition: all 150ms;
+    }
+    &:checked {
+      + span {
+        border-width: 20px / 2;
+        &::before {
+          content: 'check';
+          font-family: 'Material Icons';
+          font-size: 20px;
+          color: #fff;
+        }
+      }
+    }
+    &:disabled {
+      + span {
+        background: rgba(0, 0, 0, .35);
       }
     }
   }
-  &:disabled {
-    + span {
-      background: rgba(0, 0, 0, .35);
-    }
-  }
 }
+
+
 
 .closeIcon{
   position: absolute;

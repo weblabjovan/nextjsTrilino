@@ -50,7 +50,7 @@ class HomeView extends React.Component <MyProps, MyState>{
       language: this.props.lang.toUpperCase(),
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
-       date: new Date(),
+      date: new Date(),
 
     };
 
@@ -70,7 +70,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
   dateChange = date => {
     this.setState({ date });
-  };
+  }
 
    _onReady(event) {
     // access to player in all event handlers via event.target

@@ -57,12 +57,14 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
       language: this.props.lang,
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
-      activeScreen: 'preview',
+      activeScreen: 'calendar',
       loader: true,
     };
 
   changeScreen(event){
-    this.setState({ activeScreen: event.target.id});
+    this.setState({ activeScreen: event.target.id}, () => {
+      window.scrollTo(0,0);
+    });
   }
 
   changeLanguage(lang){
