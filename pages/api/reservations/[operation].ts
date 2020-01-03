@@ -143,9 +143,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		if (type === 'partner') {
 			const { partner, room, dates } = req.body;
 			try{
-				const resQuery = await Reservation.find({'active': true }, { new: true }).select('_id from to partner room');
-				if (resQuery) {
-					return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: resQuery, data:{ gte: setReservationDateForBase(dates['start']), lt: setReservationDateForBase(dates['end'])} });
+				await connectToDb();
+				const query = await Reservation.find({partner, room, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}});
+				if (query) {
+					return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
 				}else{
 					return res.status(404).json({ endpoint: 'reservations', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
 				}
