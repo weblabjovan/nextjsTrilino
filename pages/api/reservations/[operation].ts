@@ -112,12 +112,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'getFreeTerms') {
 		const { date, partner, room, language } = req.body;
 		const dictionary = getLanguage(language);
+		const dateString = date.substring(0,19);
 
 		try{
 			await connectToDb();
-				const reservations = await Reservation.find({ 'date': date, 'partner': partner, 'room': room, active: true }, { new: true }).select('from to _id active');
+				const reservations = await Reservation.find({ 'date': dateString, 'partner': partner, 'room': room, active: true }, { new: true }).select('from to _id active');
 				const partnerObj = await Partner.findOne({'_id': partner});
-				const d = new Date(date);
+				const d = new Date(dateString);
 				const roomTerms = partnerObj['general'] ? extractRoomTerms(partnerObj['general']['rooms'], room, d.getDay()) : null;
 				const freeTerms = getFreeTerms(reservations, roomTerms);
 
