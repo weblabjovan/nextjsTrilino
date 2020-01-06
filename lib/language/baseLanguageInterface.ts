@@ -29,6 +29,9 @@ export default interface LanguageInterface {
 	uniSafetyCode: string;
 	uniSend: string;
 	uniPartnerProfileHelp: string;
+	uniPartnerProgressTitle: string;
+	uniPartnerProgressDescription: string;
+	uniPartnerProgressLink: string;
 
 	homeTitle: string;
 	homeImg_1: string;

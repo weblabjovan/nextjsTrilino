@@ -424,17 +424,30 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
               </Col>
               <Col xs="12" sm="6" className="borderOnSm">
                 <Row>
-                  <Col xs="12" sm="6" lg="4">
-                    <label className="itemLabel">{this.state.dictionary['partnerProfileReservationRoom']}</label>
-                    <Select 
-                      options={getRoomsSelector(this.props.partnerRooms)} 
-                      value={ this.props.partnerReservation['room'] } 
-                      onChange={(val) => this.handleRoomChange(val)} 
-                      isDisabled={ !this.props.partnerReservation['edit'] }
-                      instanceId="resRoomInput" 
-                      className="logInput" 
-                      placeholder={this.state.dictionary['partnerProfileReservationRoomPlaceHolder']}/>
-                  </Col>
+                  {
+                    isFieldInObject(this.props.partnerObject, 'rooms', 'general')
+                    ?
+                    this.props.partnerObject['general']['rooms'].length > 1
+                    ?
+                    (
+                      <Col xs="12" sm="6" lg="4">
+                        <label className="itemLabel">{this.state.dictionary['partnerProfileReservationRoom']}</label>
+                        <Select 
+                          options={getRoomsSelector(this.props.partnerRooms)} 
+                          value={ this.props.partnerReservation['room'] } 
+                          onChange={(val) => this.handleRoomChange(val)} 
+                          isDisabled={ !this.props.partnerReservation['edit'] }
+                          instanceId="resRoomInput" 
+                          className="logInput" 
+                          placeholder={this.state.dictionary['partnerProfileReservationRoomPlaceHolder']}/>
+                      </Col>
+                    )
+                    :
+                    null
+                    :
+                    null
+                  }
+                  
                   <Col xs="12" sm="6" lg="4">
                     <label className="itemLabel">{this.state.dictionary['partnerProfileReservationDate']}</label>
                     <DayPickerInput 

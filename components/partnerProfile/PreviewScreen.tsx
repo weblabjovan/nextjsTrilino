@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
+import { changeSinglePartnerField } from '../../actions/partner-actions';
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +15,11 @@ interface MyProps {
   lang: string;
 	partnerObject: null | object;
   partnerGeneral: object;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   closeLoader(): void;
+  changeSinglePartnerField(field: string, value: any): any;
 };
 interface MyState {
 	dictionary: object;
@@ -27,7 +32,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [];
+    const bindingFunctions = ['closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -40,6 +45,10 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
 	state: MyState = {
     dictionary: getLanguage(this.props.lang),
   };
+
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
+  }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
     if (prevProps.lang !== this.props.lang) {
@@ -68,6 +77,14 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['partnerProfilePreviewDescription']}</p>
               </div>
             </Col>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+
           </Row>
 
           <Row>
@@ -106,7 +123,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
             <Col xs="12" sm="8">
               <div className="generalFirst">
                 {
-                  isFieldInObject(this.props.partnerObject, 'name')
+                  isFieldInObject(this.props.partnerObject, 'name') && isFieldInObject(this.props.partnerObject, 'spaceType', 'general')
                   ?
                   <h3>{this.props.partnerObject['general']['spaceType'] ? getGeneralOptionLabelByValue(generalOptions['spaceType_' + this.props.lang], this.props.partnerObject['general']['spaceType']) + ' ' + this.props.partnerObject['name'] : `${this.props.partnerObject['name']}`}</h3>
                   :
@@ -470,6 +487,8 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 {
                   isFieldInObject(this.props.partnerObject, 'contentOffer')
                   ?
+                  this.props.partnerObject['contentOffer'].length
+                  ?
                   this.props.partnerObject['contentOffer'].map( (offer, index) => {
                     return(
                       <Col xs="12" sm="6" key={`offerKey_${index}`}>
@@ -477,6 +496,10 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                       </Col>
                      )
                   })
+                  :
+                  (<Col xs="12">
+                    <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferFreeEmpty']}</h5>
+                  </Col>)
                   :
                   (<Col xs="12">
                     <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferFreeEmpty']}</h5>
@@ -493,6 +516,8 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 {
                   isFieldInObject(this.props.partnerObject, 'contentAddon')
                   ?
+                  this.props.partnerObject['contentOffer'].length
+                  ?
                   this.props.partnerObject['contentAddon'].map( (addon, index) => {
                     return(
                       <Col xs="12" key={`addonKey_${index}`}>
@@ -501,6 +526,10 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                       </Col>
                      )
                   })
+                  :
+                  (<Col xs="12">
+                    <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferPayedEmpty']}</h5>
+                  </Col>)
                   :
                   (<Col xs="12">
                     <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferPayedEmpty']}</h5>
@@ -691,12 +720,16 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
 	partnerObject: state.PartnerReducer.partner,
   partnerGeneral: state.PartnerReducer.partnerGeneral,
+
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
 });
 
 
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
-
+    changeSinglePartnerField,
   },
   dispatch);
 };
