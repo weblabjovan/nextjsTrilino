@@ -2,7 +2,7 @@ import {
   registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes
 } from '../actions/partner-actions';
 import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration, IpartnerReservation } from '../lib/constants/interfaces';
-import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject, generateString, createReservationTermsArray, formatReservations} from '../lib/helpers/specificPartnerFunctions';
+import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject, generateString, createReservationTermsArray, formatReservations, calculateActivationProcess} from '../lib/helpers/specificPartnerFunctions';
 
 
 interface initialState {
@@ -59,6 +59,10 @@ interface initialState {
   getPartnerReservationsStart: boolean;
   getPartnerReservationsError: boolean;
   getPartnerReservationsSuccess: null | number;
+
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
 
   partnerGeneral: IpartnerGeneral;
 
@@ -132,6 +136,10 @@ const initialState: initialState  = {
   getPartnerReservationsStart: false,
   getPartnerReservationsError: false,
   getPartnerReservationsSuccess: null,
+
+  forActivation: false,
+  activationAlert: true,
+  activationProcessPercent: 20,
 
   partnerGeneral: {
     size: null,
@@ -347,6 +355,9 @@ const actionsMap = {
       partnerCatering: setUpMainCateringState(action.payload['partner'], lang),
       partnerDecoration: buildPartnerDecorationObject(action.payload['partner']),
       partner: action.payload['partner'],
+      forActivation: action.payload.partner['forActivation'],
+      activationAlert: action.payload.partner['forActivation'] ? false : true,
+      activationProcessPercent: calculateActivationProcess(action.payload.partner),
       partnerGetStart: false,
     };
   },
@@ -434,6 +445,9 @@ const actionsMap = {
       ...state,
       updateActionGeneralSuccess: action.payload.code,
       partner: action.payload.partner,
+      forActivation: action.payload.partner['forActivation'],
+      activationAlert: action.payload.partner['forActivation'] ? false : true,
+      activationProcessPercent: calculateActivationProcess(action.payload.partner),
       updateActionGeneralStart: false,
     };
   },
@@ -456,6 +470,9 @@ const actionsMap = {
       ...state,
       updateActionOfferSuccess: action.payload.code,
       partner: action.payload.partner,
+      forActivation: action.payload.partner['forActivation'],
+      activationAlert: action.payload.partner['forActivation'] ? false : true,
+      activationProcessPercent: calculateActivationProcess(action.payload.partner),
       updateActionOfferStart: false,
     };
   },
@@ -478,6 +495,9 @@ const actionsMap = {
       ...state,
       updateActionCateringSuccess: action.payload.code,
       partner: action.payload.partner,
+      forActivation: action.payload.partner['forActivation'],
+      activationAlert: action.payload.partner['forActivation'] ? false : true,
+      activationProcessPercent: calculateActivationProcess(action.payload.partner),
       updateActionCateringStart: false,
     };
   },
@@ -508,6 +528,7 @@ const actionsMap = {
     return {
       ...state,
       getPartnerRoomTermsStart: true,
+      partnerReservation: {...state['partnerReservation'], 'terms': [], 'options': []},
     };
   },
   [getReservationTermsActionTypes.ERROR]: (state, action) => {

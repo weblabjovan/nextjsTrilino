@@ -20,6 +20,9 @@ interface MyProps {
   lang: string;
   partnerRooms: Array<object>;
   partnerGeneral: object;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   changeSinglePartnerField(field: string, value: any): any;
   updateGeneralPartner(param: string, data: object, link: object, auth: string): object;
   closeLoader(): void;
@@ -47,7 +50,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'uniInputHandler', 'changePartnerRoomsInRedux', 'saveGeneral', 'changePartnerGeneralInRedux', 'closeAlert', 'validateSave'];
+    const bindingFunctions = ['handleInputChange', 'uniInputHandler', 'changePartnerRoomsInRedux', 'saveGeneral', 'changePartnerGeneralInRedux', 'closeAlert', 'validateSave', 'closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -150,6 +153,10 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
     this.setState({errorMessages: errorCopy});
   }
 
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
+  }
+
   validateSave(){
   	const ends = { monday: this.props.partnerGeneral['mondayTo'], tuesday: this.props.partnerGeneral['tuesdayTo'], wednesday: this.props.partnerGeneral['wednesdayTo'], thursday: this.props.partnerGeneral['thursdayTo'], friday: this.props.partnerGeneral['fridayTo'], saturday: this.props.partnerGeneral['saturdayTo'], sunday: this.props.partnerGeneral['sundayTo'] };
   	const validation = validateTerms(this.props.partnerRooms, this.props.partnerGeneral['duration'], ends);
@@ -170,7 +177,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
   	this.props.openLoader();
 		const link = setUpLinkBasic(window.location.href);
   	const general = prepareGeneralPartnerObject(this.props.partnerGeneral, this.props.partnerRooms);
-  	const data = { language: this.props.lang, general };
+  	const data = { language: this.props.lang, general, partner: this.props.partnerObject };
   	this.props.updateGeneralPartner('_id', data, link, this.props.token);
   }
 
@@ -187,7 +194,15 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
     					</div>
     					
     				</Col>
-    				 <Col xs='12'>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+
+    				<Col xs='12'>
             	<label>{this.state.dictionary['partnerProfileGeneralItemDescription']}</label>
             	<PlainText
             		placeholder={this.state.dictionary['partnerProfileGeneralItemDescriptionPlaceholder']} 
@@ -610,7 +625,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
               <label>{this.state.dictionary['partnerProfileGeneralDepositReference']}</label>
               <Select 
                 options={genOptions[`depositType_${this.props.lang}`]} 
-                value={getGeneralOptionByValue(genOptions[`depositType_${this.props.lang}`], this.props.partnerGeneral['despositNumber']['value'])}
+                value={this.props.partnerGeneral['despositNumber'] ? getGeneralOptionByValue(genOptions[`depositType_${this.props.lang}`], this.props.partnerGeneral['despositNumber']['value']) : ''}
                 onChange={(val) => this.uniInputHandler(val, 'despositNumber')} 
                 instanceId="roomsInput" 
                 className="logInput" 
@@ -664,6 +679,11 @@ const mapStateToProps = (state) => ({
 	partnerGetError: state.PartnerReducer.partnerGetError,
 	partnerGeneral: state.PartnerReducer.partnerGeneral,
 	partnerObject: state.PartnerReducer.partner,
+
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
+
 	updateActionGeneralStart: state.PartnerReducer.updateActionGeneralStart,
 	updateActionGeneralError: state.PartnerReducer.updateActionGeneralError,
 	updateActionGeneralSuccess: state.PartnerReducer.updateActionGeneralSuccess,

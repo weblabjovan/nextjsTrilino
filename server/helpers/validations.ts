@@ -150,3 +150,146 @@ export const isReservationStillAvailable = (data: object, reservations: Array<ob
 
   return true;
 }
+
+
+export const isPartnerForActivation = (partnerObj: object): boolean => {
+	if (!isGeneralFilled(partnerObj)) {
+		return false;
+	}
+
+	if (!isRoomsFilled(partnerObj)) {
+		return false;
+	}
+
+	if (!isFreeContentActive(partnerObj)) {
+		return false;
+	}
+
+	if (partnerObj['general']) {
+		if (partnerObj['general']['drink']) {
+			if (!isDrinkCardActive(partnerObj)) {
+				return false;
+			}
+		}else{
+			if (!partnerObj['general']['selfDrink']) {
+				return false;
+			}
+		}
+
+		if (partnerObj['general']['food']) {
+			if (!isCateringDealPresent(partnerObj)) {
+				return false;
+			}
+		}else{
+			if (!partnerObj['general']['selfFood']) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+const isGeneralFilled = (partner: object): boolean => {
+	const requiredGeneral = ['size', 'playSize', 'description', 'address', 'ageFrom', 'ageTo', 'mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo', 'parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'selfFood', 'selfDrink', 'duration', 'cancelation', 'roomNumber', 'selfAnimator', 'smoking', 'spaceType', 'movie', 'gaming', 'quarter', 'depositPercent', 'despositNumber', 'doubleDiscount'];
+
+	if (!partner['general']) {
+		return false;
+	}
+
+	const obj = partner['general'];
+
+	for (var i = 0; i < requiredGeneral.length; ++i) {
+		if (!obj[requiredGeneral[i]] || isEmpty(obj[requiredGeneral[i]])) {
+			return false
+		}
+	}
+
+	return true;
+}
+
+const isRoomsFilled = (partner: object): boolean => {
+	if (partner['general']) {
+		if (partner['general']['rooms']) {
+			if (Array.isArray(partner['general']['rooms'])) {
+				if (partner['general']['rooms'].length) {
+					let num = 0;
+					for (var i = 0; i < partner['general']['rooms'].length; ++i) {
+						num = num + getNumberOfFilledTerms(partner['general']['rooms'][i]['terms']);
+					}
+
+					if (num > 3) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+const getNumberOfFilledTerms = (terms: object): number => {
+	let num = 0;
+
+	for(let day in terms){
+		if (terms[day][0]['from']) {
+			for (var i = 0; i < terms[day].length; ++i) {
+				if (terms[day][i]['from']) {
+					num = num + 1;
+				}
+			}
+		}
+	}
+
+	return num;
+}
+
+const isDrinkCardActive = (partner: object): boolean => {
+	if (partner['catering']) {
+		if (partner['catering']['drinkCard']) {
+			if (Array.isArray(partner['catering']['drinkCard'])) {
+				if (partner['catering']['drinkCard'].length) {
+					if (partner['catering']['drinkCard'].length > 5) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+const isCateringDealPresent = (partner: object): boolean => {
+	if (partner['catering']) {
+		if (partner['catering']['deals']) {
+			if (Array.isArray(partner['catering']['deals'])) {
+				if (partner['catering']['deals'].length) {
+					for (var i = 0; i < partner['catering']['deals'].length; ++i) {
+							if (!partner['catering']['deals'][i]['type'] || !partner['catering']['deals'][i]['min'] || !partner['catering']['deals'][i]['price'] || !partner['catering']['deals'][i]['regId'] || partner['catering']['deals'][i]['items'].length < 5) {
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+const isFreeContentActive = (partner: object): boolean => {
+	if (partner['contentOffer']) {
+		if (Array.isArray(partner['contentOffer'])) {
+			if (partner['contentOffer'].length) {
+				if (partner['contentOffer'].length > 3) {
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}

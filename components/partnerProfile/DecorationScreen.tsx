@@ -18,6 +18,9 @@ interface MyProps {
   token?: string | undefined;
 	partnerObject: null | object;
   partnerDecoration: object;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   updateActionDecorationStart: boolean;
   updateActionDecorationError: object | boolean;
   updateActionDecorationSuccess: null | number;
@@ -39,7 +42,7 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'saveDecoration', 'handleInputChange', 'closeAlert', 'checkTheBox', 'changeThePrice'];
+    const bindingFunctions = [ 'saveDecoration', 'handleInputChange', 'closeAlert', 'checkTheBox', 'changeThePrice', 'closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -66,6 +69,10 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
     const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
     errorCopy['show'] = false;
     this.setState({errorMessages: errorCopy});
+  }
+
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
   }
 
   checkTheBox(item: any){
@@ -129,6 +136,14 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['partnerProfileDecorationDescription']} <a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+            
           </Row>
 
           <Row>
@@ -206,6 +221,11 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
 	partnerObject: state.PartnerReducer.partner,
   partnerDecoration: state.PartnerReducer.partnerDecoration,
+  
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
+
   updateActionDecorationStart: state.PartnerReducer.updateActionDecorationStart,
   updateActionDecorationError: state.PartnerReducer.updateActionDecorationError,
   updateActionDecorationSuccess: state.PartnerReducer.updateActionDecorationSuccess,

@@ -19,6 +19,9 @@ interface MyProps {
   partnerGeneral: object;
   partnerOffer: Array<object>;
   partnerAddon: Array<object>;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   updateOfferPartner(param: string, data: object, link: object, auth: string): object;
   changeSinglePartnerField(field: string, value: any): any;
   closeLoader(): void;
@@ -44,7 +47,7 @@ class OfferScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'addOfferItem', 'removeOfferItem', 'saveOffer', 'handleInputChange', 'addAddonToRedux', 'addonValidation', 'closeAlert', 'handleAddOn', 'removeOfferAddon'];
+    const bindingFunctions = [ 'addOfferItem', 'removeOfferItem', 'saveOffer', 'handleInputChange', 'addAddonToRedux', 'addonValidation', 'closeAlert', 'handleAddOn', 'removeOfferAddon', 'closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -156,12 +159,16 @@ class OfferScreen extends React.Component <MyProps, MyState>{
     this.setState({errorMessages: errorCopy});
   }
 
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
+  }
+
   saveOffer(){
   	this.props.openLoader();
 		const link = setUpLinkBasic(window.location.href);
 		const offer = getOnlyValues(this.props.partnerOffer);
 		const addon = JSON.parse(JSON.stringify(makeRegIdsUniqueForArray(this.props.partnerAddon)));
-  	const data = { language: this.props.lang, offer, addon };
+  	const data = { language: this.props.lang, offer, addon, partner: this.props.partnerObject };
   	this.props.updateOfferPartner('_id', data, link, this.props.token);
   }
 
@@ -213,6 +220,14 @@ class OfferScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['partnerProfileOfferDescription']}<a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+            
           </Row>
 
           <Row>
@@ -364,6 +379,11 @@ const mapStateToProps = (state) => ({
 	partnerObject: state.PartnerReducer.partner,
 	partnerOffer: state.PartnerReducer.partnerOffer,
 	partnerAddon: state.PartnerReducer.partnerAddon,
+
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
+  
 	updateActionOfferStart: state.PartnerReducer.updateActionOfferStart,
   updateActionOfferError: state.PartnerReducer.updateActionOfferError,
   updateActionOfferSuccess: state.PartnerReducer.updateActionOfferSuccess,

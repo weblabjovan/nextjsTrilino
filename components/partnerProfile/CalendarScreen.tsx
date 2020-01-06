@@ -27,6 +27,9 @@ interface MyProps {
   getPartnerReservationsError: boolean;
   getPartnerReservationsSuccess: null | number;
   partnerReservationsList: Array<object>;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   changeSinglePartnerField(field: string, value: any): any;
   getPartnerReservationTerms(link: object, data: object): any;
   getPartnerReservations(link: object, data: object): any;
@@ -40,6 +43,7 @@ interface MyState {
   activeRoom?: number | object;
 	errorMessages: object;
   dates: object;
+  ready: boolean;
 };
 
 class CalendarScreen extends React.Component <MyProps, MyState>{
@@ -49,7 +53,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'handleInputChange', 'setReservationShow', 'handleRoomChange', 'handleCalendarDateRangeChange', 'openExistingReservation'];
+    const bindingFunctions = [ 'handleInputChange', 'setReservationShow', 'handleRoomChange', 'handleCalendarDateRangeChange', 'openExistingReservation', 'closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -66,6 +70,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
     activeRoom: 1,
 		errorMessages: { show: false, fields:{ addonName: false, addonPrice: false, addonComment: false }},
     dates: getCurrentWeekStartAndEnd(),
+    ready: true,
   };
 
   handleInputChange(field, value){
@@ -78,14 +83,17 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
   setReservationShow(output: boolean){
     const partnerReservation = JSON.parse(JSON.stringify(this.props.partnerReservation));
     if (output) {
-      partnerReservation['room'] = this.state.activeRoom;
-      partnerReservation['date'] = new Date();
-      partnerReservation['partner'] = this.props.partnerObject['_id'];
-      partnerReservation['edit'] = true;
+      if (this.state.ready) {
+        partnerReservation['room'] = this.state.activeRoom;
+        partnerReservation['date'] = new Date();
+        partnerReservation['partner'] = this.props.partnerObject['_id'];
+        partnerReservation['edit'] = true;
+        
+        const link = setUpLinkBasic(window.location.href);
+        const date = new Date();
+        this.props.getPartnerReservationTerms(link, {partner: this.props.partnerObject['_id'], date: setDateToDayStart(date.toString()), room: this.state.activeRoom['value'], language: this.props.lang});
+      }
       
-      const link = setUpLinkBasic(window.location.href);
-      const date = new Date();
-      this.props.getPartnerReservationTerms(link, {partner: this.props.partnerObject['_id'], date: setDateToDayStart(date.toString()), room: this.state.activeRoom['value'], language: this.props.lang});
     }else{
       partnerReservation['partner'] = '';
       partnerReservation['type'] = 'partner';
@@ -127,23 +135,29 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
 
 
   handleCalendarDateRangeChange(event: any){
-    if (event['start']) {
-      this.setState({ dates: {start: event['start'], end: event['end']}}, () => {
-        const link = setUpLinkBasic(window.location.href);
-        this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
-      });
-    }else{
-      let dates = {};
-      if (event.length > 1) {
-        dates = {start: event[0], end: event[event.length - 1]};
+    if (this.state.ready) {
+      if (event['start']) {
+        this.setState({ dates: {start: event['start'], end: event['end']}}, () => {
+          const link = setUpLinkBasic(window.location.href);
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+        });
       }else{
-        dates = {start: event[0], end: addDaysToDate(event[0], 1)};
+        let dates = {};
+        if (event.length > 1) {
+          dates = {start: event[0], end: event[event.length - 1]};
+        }else{
+          dates = {start: event[0], end: addDaysToDate(event[0], 1)};
+        }
+        this.setState({ dates }, () => {
+          const link = setUpLinkBasic(window.location.href);
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+        });
       }
-      this.setState({ dates }, () => {
-        const link = setUpLinkBasic(window.location.href);
-        this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
-      });
     }
+  }
+
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
   }
 
   openExistingReservation(reservation: object){
@@ -188,9 +202,17 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
     }
 
     if (this.props.partnerObject && !prevProps.partnerObject) {
-      const link = setUpLinkBasic(window.location.href);
-      this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
-      this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]})
+      const ready = isFieldInObject(this.props.partnerObject, 'rooms', 'general') ? this.props.partnerObject['general']['rooms'].length ? true : false : false;
+      if (ready) {
+        const link = setUpLinkBasic(window.location.href);
+        this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+        this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]})
+      }else{
+        this.setState({ ready }, () => {
+          this.props.closeLoader();
+        });
+        
+      }
     }
 
     if (this.props.getPartnerReservationsStart) {
@@ -205,12 +227,19 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
   componentDidMount(){
     if (this.props.partnerObject) {
       if (!this.props.getPartnerReservationsSuccess) {
-        this.props.openLoader();
-        const link = setUpLinkBasic(window.location.href);
-        this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+
+        const ready = isFieldInObject(this.props.partnerObject, 'rooms', 'general') ? this.props.partnerObject['general']['rooms'].length ? true : false : false;
+        if (ready) {
+          this.props.openLoader();
+          const link = setUpLinkBasic(window.location.href);
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+          this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]});
+        }else{
+          this.setState({ ready });
+        }
       }
 
-      this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]});
+      
     }
   }
 	
@@ -237,25 +266,46 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['partnerProfileCalendarDescription']} <a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+            
           </Row>
 
           <Row className="calendarTop">
             <Col xs="12" sm="6" lg="4">
               <div className="middle">
-                <button className="buttonAdd" onClick={ () => this.setReservationShow(true) }>{this.state.dictionary['partnerProfileCalendarButton']}</button>
+                <button className="buttonAdd" disabled={!this.state.ready} onClick={ () => this.setReservationShow(true) }>{this.state.dictionary['partnerProfileCalendarButton']}</button>
               </div>
             </Col>
             <Col xs="12" sm="1" lg="4">
             </Col>
-            <Col xs="12" sm="5" lg="4">
-              <Select 
-                options={getRoomsSelector(this.props.partnerRooms)} 
-                value={ this.state.activeRoom } 
-                onChange={(val) => this.handleRoomChange(val)} 
-                instanceId="quarterInput" 
-                className="logInput" 
-                placeholder={this.state.dictionary['partnerProfileGeneralRoom']}/>
-            </Col>
+            {
+              isFieldInObject(this.props.partnerObject, 'rooms', 'general')
+              ?
+              this.props.partnerObject['general']['rooms'].length > 1
+              ?
+              (
+                <Col xs="12" sm="5" lg="4">
+                  <Select 
+                    options={getRoomsSelector(this.props.partnerRooms)} 
+                    value={ this.state.activeRoom } 
+                    onChange={(val) => this.handleRoomChange(val)} 
+                    instanceId="quarterInput" 
+                    className="logInput" 
+                    placeholder={this.state.dictionary['partnerProfileGeneralRoom']}/>
+                </Col>
+              )
+              :
+              null
+              :
+              null
+            }
+            
           </Row>
 
           <Row>
@@ -305,6 +355,10 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
 	partnerObject: state.PartnerReducer.partner,
   partnerRooms: state.PartnerReducer.partnerRooms,
+
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
 
   getPartnerReservationsStart: state.PartnerReducer.getPartnerReservationsStart,
   getPartnerReservationsError: state.PartnerReducer.getPartnerReservationsError,

@@ -21,6 +21,9 @@ interface MyProps {
 	partnerObject: null | object;
   partnerGeneral: object;
   partnerCatering: Array<object>;
+  forActivation: boolean;
+  activationAlert: boolean;
+  activationProcessPercent: number;
   updateCateringPartner(param: string, data: object, link: object, auth: string): object;
   changeSinglePartnerField(field: string, value: any): any;
   closeLoader(): void;
@@ -53,7 +56,7 @@ class FoodScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'saveCatering', 'handleInputChange', 'addDrinkToTheList', 'addDrinkValidation', 'closeAlert', 'handleAddDrink', 'removeDrinkFromList', 'subIsInDom', 'changeDealField', 'addDeal', 'removeDeal', 'addDealItem', 'removeDealItem', 'isValideForSave', 'closeDealsAlert'];
+    const bindingFunctions = [ 'saveCatering', 'handleInputChange', 'addDrinkToTheList', 'addDrinkValidation', 'closeAlert', 'handleAddDrink', 'removeDrinkFromList', 'subIsInDom', 'changeDealField', 'addDeal', 'removeDeal', 'addDealItem', 'removeDealItem', 'isValideForSave', 'closeDealsAlert', 'closeActivationAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -163,6 +166,10 @@ class FoodScreen extends React.Component <MyProps, MyState>{
     this.setState({errorMessages: errorCopy});
   }
 
+  closeActivationAlert(){
+    this.props.changeSinglePartnerField('activationAlert', false);
+  }
+
   closeDealsAlert(){
     this.setState({errorDeals: false});
   }
@@ -231,7 +238,7 @@ class FoodScreen extends React.Component <MyProps, MyState>{
       this.props.openLoader();
       const link = setUpLinkBasic(window.location.href);
       const catering = setCateringForBack(this.props.partnerCatering);
-      const data = { language: this.props.lang, catering };
+      const data = { language: this.props.lang, catering, partner: this.props.partnerObject };
       this.props.updateCateringPartner('_id', data, link, this.props.token);
     }else{
       this.setState({ errorDeals: true });
@@ -282,6 +289,14 @@ class FoodScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['partnerProfileCateringDescription']}<a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
+
+            <Col xs='12'>
+              <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
+                <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+              </Alert>
+            </Col>
+
           </Row>
 
           <Row>
@@ -520,6 +535,11 @@ class FoodScreen extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
 	partnerObject: state.PartnerReducer.partner,
 	partnerCatering: state.PartnerReducer.partnerCatering,
+
+  forActivation: state.PartnerReducer.forActivation,
+  activationAlert: state.PartnerReducer.activationAlert,
+  activationProcessPercent: state.PartnerReducer.activationProcessPercent,
+
 	updateActionCateringStart: state.PartnerReducer.updateActionCateringStart,
   updateActionCateringError: state.PartnerReducer.updateActionCateringError,
   updateActionCateringSuccess: state.PartnerReducer.updateActionCateringSuccess,

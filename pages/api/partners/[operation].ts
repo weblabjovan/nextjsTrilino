@@ -5,7 +5,7 @@ import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid } from '../../../server/helpers/validations';
+import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
@@ -34,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	    		
 	    		const par = await newPartner.save();
 
-	    		const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	    		const sender = {name:'Trilino', email:'admin@trilino.com'};
   				const to = [{name:contactPerson, email:contactEmail }];
   				const bcc = null;
   				const templateId = 2;
@@ -188,7 +188,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'] } }, { new: true }).select('-password');
+					const partnerFrontObj = data['partner'];
+					partnerFrontObj['general'] = data['general'];
+
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update general', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -212,7 +215,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { contentOffer: data['offer'], contentAddon: data['addon'] } }, { new: true }).select('-password');
+					const partnerFrontObj = data['partner'];
+					partnerFrontObj['contentOffer'] = data['offer'];
+					partnerFrontObj['contentAddon'] = data['addon'];
+
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { contentOffer: data['offer'], contentAddon: data['addon'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update offer', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{
@@ -236,7 +243,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					await connectToDb();
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
-					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { catering: data['catering'] } }, { new: true }).select('-password');
+					const partnerFrontObj = data['partner'];
+					partnerFrontObj['catering'] = data['catering'];
+
+					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { catering: data['catering'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'update catering', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 					}else{

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
-import { getPartnerProfile } from '../actions/partner-actions';
+import { getPartnerProfile, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isMobile } from '../lib/helpers/generalFunctions';
@@ -19,6 +19,7 @@ interface MyProps {
   userLanguage: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
+  changeSinglePartnerField(field: string, value: any): any;
   getPartnerProfile(link: object, auth: string): object;
   userAgent: string;
   path: string;
@@ -63,6 +64,10 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
 
   changeScreen(event){
     this.setState({ activeScreen: event.target.id}, () => {
+      if (!this.props.partnerObject['forActivation']) {
+        this.props.changeSinglePartnerField('activationAlert', true);
+      }
+      
       window.scrollTo(0,0);
     });
   }
@@ -141,6 +146,7 @@ const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
     getPartnerProfile,
+    changeSinglePartnerField,
   },
   dispatch);
 };
