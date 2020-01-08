@@ -2,13 +2,17 @@
 	"env": {
 		"MONGO_URI":"@mongo-uri",
 		"EMAIL_API_KEY":"@email-api-key",
-		"JWT_SECRET":"@jwt-secret"
+		"JWT_SECRET":"@jwt-secret",
+		"ADMIN_PASS":"@admin-pass",
+		"ADMIN_USER":"@admin-user"
 	},
 	"build": {
 	    "env": {
 	      	"MONGO_URI":"@mongo-uri",
 			"EMAIL_API_KEY":"@email-api-key",
-			"JWT_SECRET":"@jwt-secret"
+			"JWT_SECRET":"@jwt-secret",
+			"ADMIN_PASS":"@admin-pass",
+			"ADMIN_USER":"@admin-user"
 	    }
 	}
 }
