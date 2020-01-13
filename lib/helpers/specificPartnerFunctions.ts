@@ -810,3 +810,26 @@ const isFreeContentActive = (partner: object): boolean => {
 
 	return false;
 }
+
+export const createDisplayPhotoListObject = (partner: object): object => {
+	const res = { main: null, sel_1: null, sel_2: null, sel_3: null, sel_4: null, sel_5: null, sel_6: null }
+	if (partner['photos']) {
+		if(Array.isArray(partner['photos'])){
+			let main = 0;
+			let sel = 0;
+			for (var i = 0; i < partner['photos'].length; ++i) {
+				if (partner['photos'][i]['main'] && main === 0) {
+					res['main'] = partner['photos'][i]['name'];
+					main = 1;
+				}
+
+				if (partner['photos'][i]['selection'] && sel < 6) {
+					res[`sel_${sel + 1}`] = partner['photos'][i]['name'];
+					sel = sel + 1;
+				}
+			}
+		}
+	}
+
+	return res;
+}

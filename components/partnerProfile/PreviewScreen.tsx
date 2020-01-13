@@ -5,8 +5,9 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import generalOptions from '../../lib/constants/generalOptions';
 import { changeSinglePartnerField } from '../../actions/partner-actions';
-import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber } from '../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, createDisplayPhotoListObject } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
+import Keys from '../../server/keys';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
@@ -67,6 +68,8 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
 
 	
   render() {
+    const photoList = createDisplayPhotoListObject(this.props.partnerObject);
+
     return(
     	<div className="partnerProflePage preview">
         <Container fluid>
@@ -89,30 +92,30 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
 
           <Row>
             <Col xs="12" sm="6">
-              <div className="mainPhoto" style={{'background': 'url(../../static/home_1.jpg) center no-repeat', 'backgroundSize':'cover'}}></div>
+              <div className="mainPhoto" style={ photoList['main'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
             </Col>
             <Col xs="12" sm="6" className="mobileHide">
               <Row>
                 <Col xs="12" sm="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_1'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_1']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
                 <Col xs="12" sm="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_2'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_2']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
                 <Col xs="12" sm="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_3'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_3']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
               </Row>
 
               <Row>
                 <Col xs="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_4'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_4']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
                 <Col xs="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_5'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_5']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
                 <Col xs="4" className="smallColPadd">
-                  <div className="supportPhoto"></div>
+                  <div className="supportPhoto" style={ photoList['sel_6'] ? {'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['sel_6']+') center / cover no-repeat'} : {'background': '#ccc'}}></div>
                 </Col>
               </Row>
 

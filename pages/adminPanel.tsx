@@ -31,7 +31,7 @@ const Login : NextPage<Props> = ({ userAgent, token, link }) => {
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <AdminPanelView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } token={token} />
+      <AdminPanelView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } token={token} link={ link } />
     </div>
   )
 }

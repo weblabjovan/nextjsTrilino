@@ -117,11 +117,7 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
-  	// console.log(this.props.adminLoginSuccess);
-  	// console.log(this.props.adminLoginSuccess);
-  	// console.log(this.props.adminLoginSuccess);
   	if (this.props.adminLoginSuccess && !this.props.adminLoginStart && prevProps.adminLoginStart) {
-  		console.log('ovamo')
   		setCookie(this.props.adminLoginSuccess['token'],'trilino-admin-token', 7);
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/adminPanel?language=${this.props.lang}`;
   	}
@@ -150,8 +146,8 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
   					<Row>
               <Col xs='12'>
                 <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
-                  <p hidden={ !this.state.errorMessages['fields']['user']} >{ this.state.dictionary['partnerRegAlertTax'] }</p>
-                  <p hidden={ !this.state.errorMessages['fields']['pass']} >{ this.state.dictionary['partnerLogAlertPass'] }</p>
+                  <p hidden={ !this.state.errorMessages['fields']['user']} >Admin polje je obavezno, molimo vas upišite ime admina.</p>
+                  <p hidden={ !this.state.errorMessages['fields']['pass']} >Pass polje je obavezno, molimo vas upišite admin lozinku.</p>
                 </Alert>
               	<div className="box">
               		<h2>Admin prijava / Admin login</h2>
