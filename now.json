@@ -2,13 +2,23 @@
 	"env": {
 		"MONGO_URI":"@mongo-uri",
 		"EMAIL_API_KEY":"@email-api-key",
-		"JWT_SECRET":"@jwt-secret"
+		"JWT_SECRET":"@jwt-secret",
+		"ADMIN_PASS":"@admin-pass",
+		"ADMIN_USER":"@admin-user",
+		"AWS_PARTNER_PHOTO_ACCESS_KEY":"@aws-partner-photo-access-key",
+		"AWS_PARTNER_PHOTO_SECRET_ACCESS_KEY":"@aws-partner-photo-secret-access-key",
+		"AWS_PARTNER_PHOTO_LINK":"@aws-partner-photo-link"
 	},
 	"build": {
 	    "env": {
 	      	"MONGO_URI":"@mongo-uri",
 			"EMAIL_API_KEY":"@email-api-key",
-			"JWT_SECRET":"@jwt-secret"
+			"JWT_SECRET":"@jwt-secret",
+			"ADMIN_PASS":"@admin-pass",
+			"ADMIN_USER":"@admin-user",
+			"AWS_PARTNER_PHOTO_ACCESS_KEY":"@aws-partner-photo-access-key",
+			"AWS_PARTNER_PHOTO_SECRET_ACCESS_KEY":"@aws-partner-photo-secret-access-key",
+			"AWS_PARTNER_PHOTO_LINK":"@aws-partner-photo-link"
 	    }
 	}
 }

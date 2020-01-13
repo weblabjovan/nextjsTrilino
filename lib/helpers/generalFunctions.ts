@@ -55,6 +55,52 @@ export const parseUrl = (url:string):object => {
   return result;
 }
 
+export const sendFile =  ( 
+    dispatch: any, 
+    endpoint: string,
+    file: any,
+    actionTypes: any
+  ): any => 
+{
+
+  dispatch({ type: actionTypes.START });
+  const req = request.put(endpoint);
+
+  req.set("Content-Type", file['type'] )
+  .send(file)
+  .end((error, res) => {
+    if (error) {
+      dispatch({
+        type: actionTypes.ERROR,
+        payload: error,
+        requestData : file
+      });
+
+    } else if (res) {
+      console.log(res)
+      if (res.error) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: 'Unexpected error!',
+          requestData : file
+        });
+      } else if (res.status !== 200) {
+        dispatch({
+          type: actionTypes.ERROR,
+          payload: { status: res.status, text: res.text, body: res.body },
+          requestData : file
+        });
+      } else {
+        dispatch({
+          type: actionTypes.SUCCESS,
+          payload: { status: res.status, text: res.text, body: res.body },
+          requestData : file
+        });
+      }
+    }
+  });
+}
+
 export const apiEndpoint = (
   dispatch: any,
   endpoint: string,
@@ -140,4 +186,28 @@ export const setUpLinkBasic = (url: string | object): object => {
   const link = linkClass.getParsedUrl();
 
   return link;
+}
+
+export const getArrayObjectByFieldValue = (arr: Array<object>, field: string, value: string): null | object => {
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i][field]) {
+      if (arr[i][field] === value) {
+        return arr[i];
+      }
+    }
+  }
+
+  return null;
+}
+
+export const getArrayIndexByFieldValue = (arr: Array<object>, field: string, value: string): number => {
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i][field]) {
+      if (arr[i][field] === value) {
+        return i;
+      }
+    }
+  }
+
+  return -1;
 }

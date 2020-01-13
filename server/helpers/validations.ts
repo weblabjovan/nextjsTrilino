@@ -293,3 +293,15 @@ const isFreeContentActive = (partner: object): boolean => {
 
 	return false;
 }
+
+export const isPartnerPhotoSaveDataValid = (data: object): boolean => {
+	if (!data['partnerId'] || !data['photos']) {
+		return false;
+	}else{
+		if (!Array.isArray(data['photos']) || typeof data['partnerId'] !== 'string') {
+			return false;
+		}
+	}
+
+	return true;
+}

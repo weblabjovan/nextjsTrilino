@@ -20,6 +20,7 @@ const partnerSchema = new Schema({
 	contentAddon:[{ type: Object }],
 	catering: { type: Object},
 	decoration: { type: Object},
+	photos: [{ type: Object }],
 	forActivation: {type: Boolean, required: true, default: false},
 	active: {type: Boolean, required: true, default: false},
 }, {timestamps: true});

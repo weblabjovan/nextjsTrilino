@@ -38,7 +38,7 @@ export const encodeId = (id: string): string => {
 
 export const setToken = (type: string, id: string): object => {
   let token = {};
-  if (type === 'partner') {
+  if (type === 'partner' || type === 'admin') {
     token = jwt.sign({
       iss: 'Trilino',
       sub: id,

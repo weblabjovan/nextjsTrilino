@@ -279,3 +279,62 @@ button:disabled{
   font-size: 18px;
   line-height: 18px;
 }
+
+.darkCover{
+  background-color: rgba(20,20,20,0.7);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 998;
+}
+
+.galleryModal{
+  max-width: 860px;
+
+  .photo{
+    width: 100%;
+    height: 500px;
+  }
+
+  .actionHolder{
+    width: 50%;
+    margin: auto;
+    line-height: 10px;
+    text-align: center;
+
+    span{
+      font-family: 'Material Icons';
+      font-size: 50px;
+      font-weight: 800;
+      display: contents;
+      cursor: pointer;
+      color: $darkGreyCol;
+    }
+
+    .goBack{
+      margin-right: 25px;
+      &:before{
+        content: 'arrow_left';
+      }
+    }
+
+    .goNext{
+      margin-left: 25px;
+      &:before{
+        content: 'arrow_right';
+      }
+    }
+  }
+
+  .numbers{
+    display: block;
+    position: absolute;
+    right: 30px;
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    font-family: $headFont;
+  }
+}
