@@ -79,7 +79,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal'];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -228,10 +228,17 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     }
   }
 
+  closePhotoAlert(){
+    this.setState({ mainPhotoError: false, selectionPhotoError: false });
+  }
+
   handlePhotoSave(){
-    this.props.openLoader();
-    const link = setUpLinkBasic(window.location.href);
-    this.props.preSignPhoto(link, {partner: this.state.activePartner['_id'], num: getPhotoNumbers(this.state.activePartner)['largest']}, this.props.token);
+    if (this.state.photo) {
+      this.props.openLoader();
+      const link = setUpLinkBasic(window.location.href);
+      this.props.preSignPhoto(link, {partner: this.state.activePartner['_id'], num: getPhotoNumbers(this.state.activePartner)['largest']}, this.props.token);
+    }
+    
   }
 
   openConfirmationModal(photo: string){
@@ -331,6 +338,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           mainPhotoError={ this.state.mainPhotoError }
           selectionPhotoError={ this.state.selectionPhotoError }
           openConfirmationModal={ this.openConfirmationModal }
+          closeAlert={ this.closePhotoAlert }
         />
     		<Row>
           <Col xs='12' className="middle">
