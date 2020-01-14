@@ -22,12 +22,12 @@ interface MyProps {
   openConfirmationModal(photo: string): void;
   mainPhotoError: boolean;
   selectionPhotoError: boolean;
+  closeAlert():void;
 };
 
 interface MyState {
   dictionary: object;
   lang: string;
-  alert: boolean;
 };
 
 export default class AdminPartnerPhoto extends React.Component <MyProps, MyState>{
@@ -35,18 +35,7 @@ export default class AdminPartnerPhoto extends React.Component <MyProps, MyState
 	state: MyState = {
     dictionary: getLanguage('sr'),
     lang: 'sr',
-    alert: false,
   };
-
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){
-    if ((this.props.mainPhotoError || this.props.selectionPhotoError) && !this.state.alert) {
-      this.setState({ alert: true })
-    }
-  }
-
-  closeAlert(){
-    this.setState({alert: false})
-  }
 
 	
   render() {
@@ -70,9 +59,9 @@ export default class AdminPartnerPhoto extends React.Component <MyProps, MyState
 
               <Row>
                 <Col xs='12'>
-                  <Alert color="danger" isOpen={ this.state.alert } toggle={() => this.closeAlert()}>
-                    <p hidden={ !this.props.mainPhotoError }>Problem sa glavnom slikom</p>
-                    <p hidden={ !this.props.selectionPhotoError }>Problem sa sporednim slikama</p>
+                  <Alert color="danger" isOpen={ this.props.mainPhotoError || this.props.selectionPhotoError ? true : false } toggle={() => this.props.closeAlert()}>
+                    <p hidden={ !this.props.mainPhotoError }>Partner može imati samo 1 glavnu sliku. Glavna slika je već označena, ukoliko želite da označite novu glavnu sliku morate prvo poništiti postojeću.</p>
+                    <p hidden={ !this.props.selectionPhotoError }>Partner može imati 6 sporednih slika. Sve sporedne slike su već označene, ukoliko želite da označite neku novu sliku morate prvo poništit jednu od postojećih sporednih slika.</p>
                   </Alert>
                 </Col>
               </Row>
