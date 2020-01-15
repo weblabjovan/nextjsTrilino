@@ -9,6 +9,8 @@ import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecor
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
+import SibApiV3Sdk from 'sib-api-v3-sdk';
+import Keys from '../../../server/keys';
 
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
@@ -44,7 +46,39 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
   				const params = { title: "Registracija partnera", text: `Testni tekst za slanje emaila, jednokratni sigurnosni kod:  ${passSafetyCode}`, link: link, button: 'Verifikujte se ovde'};
   				const email = { sender, to, bcc, templateId, params };
-					await sendEmail(email);
+
+  				///////EMAIL PART
+
+  				const defaultClient = SibApiV3Sdk.ApiClient.instance;
+
+				// Configure API key authorization: api-key
+				const apiKey = defaultClient.authentications['api-key'];
+				apiKey.apiKey = Keys.EMAIL_API_KEY;
+				// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+				//apikey.apiKeyPrefix = 'Token';
+
+				// Configure API key authorization: partner-key
+				// var partnerKey = defaultClient.authentications['partner-key'];
+				// partnerKey.apiKey = 'YOUR API KEY';
+				// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+				//partnerKey.apiKeyPrefix = 'Token';
+
+				const apiInstance = new SibApiV3Sdk.SMTPApi();
+
+				const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
+				sendSmtpEmail.sender = sender;
+				sendSmtpEmail.to = to;
+				sendSmtpEmail.templateId = templateId;
+				sendSmtpEmail.params = params;
+
+				apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+				  console.log('API called successfully. Returned data: ' + data);
+				}, function(error) {
+				  console.error(error);
+				});
+
+				//////
+					// await sendEmail(email);
 		    	return res.status(200).json({ endpoint: 'partners', operation: 'save', success: true, code: 1 });
 				}
   		}catch(err){
