@@ -1,7 +1,10 @@
 {
   "name": "create-next-example-app",
+  "engines": {
+      "node": "10.x"
+    },
   "scripts": {
-    "postinstall": ["npm rebuild node-sass", "npm rebuild bcrypt"],
+    "postinstall": "npm rebuild node-sass",
     "cypress:open": "cypress open",
     "dev": "next",
     "build": "next build",
