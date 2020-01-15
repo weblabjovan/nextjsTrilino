@@ -71,12 +71,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				sendSmtpEmail.to = to;
 				sendSmtpEmail.templateId = templateId;
 				sendSmtpEmail.params = params;
-				console.log('email je aktivan na kraju');
-				apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-				  console.log('API called successfully. Returned data: ' + data);
-				}, function(error) {
-				  console.error(error);
-				});
+				
+				const eme = apiInstance.sendTransacEmail(sendSmtpEmail);
+				console.log(eme);
 
 				//////
 					// await sendEmail(email);
