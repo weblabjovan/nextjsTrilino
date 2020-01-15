@@ -26,6 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   			if (replica) {
 		    	return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode2'] });
 				}else{
+				console.log('email je aktivan');
 	    		const country = 'Serbia';
 	    		const created = new Date();
 	    		const passProvided = false;
