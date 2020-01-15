@@ -36,9 +36,6 @@ jobs:
             - run:
                 name: Install Now CLI
                 command: sudo npm install --global --unsafe-perm now@16.7.3-canary.0
-            - run:
-                name: Node Sass rebuild
-                command: npm rebuild node-sass
             - deploy:
                 name: Deploy & Alias
                 command: |
