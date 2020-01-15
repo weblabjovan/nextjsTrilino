@@ -72,7 +72,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				sendSmtpEmail.templateId = templateId;
 				sendSmtpEmail.params = params;
 				
-				const eme = apiInstance.sendTransacEmail(sendSmtpEmail);
+				const eme = await apiInstance.sendTransacEmail(sendSmtpEmail);
 				console.log(eme);
 
 				//////
