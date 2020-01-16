@@ -50,33 +50,26 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
   				///////EMAIL PART
 
-  				const defaultClient = SibApiV3Sdk.ApiClient.instance;
+  		// 		const defaultClient = SibApiV3Sdk.ApiClient.instance;
 
-				// Configure API key authorization: api-key
-				const apiKey = defaultClient.authentications['api-key'];
-				apiKey.apiKey = Keys.EMAIL_API_KEY;
-				// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-				//apikey.apiKeyPrefix = 'Token';
+				// // Configure API key authorization: api-key
+				// const apiKey = defaultClient.authentications['api-key'];
+				// apiKey.apiKey = Keys.EMAIL_API_KEY;
 
-				// Configure API key authorization: partner-key
-				// var partnerKey = defaultClient.authentications['partner-key'];
-				// partnerKey.apiKey = 'YOUR API KEY';
-				// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-				//partnerKey.apiKeyPrefix = 'Token';
+				// const apiInstance = new SibApiV3Sdk.SMTPApi();
 
-				const apiInstance = new SibApiV3Sdk.SMTPApi();
-
-				const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
-				sendSmtpEmail.sender = sender;
-				sendSmtpEmail.to = to;
-				sendSmtpEmail.templateId = templateId;
-				sendSmtpEmail.params = params;
+				// const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
+				// sendSmtpEmail.sender = sender;
+				// sendSmtpEmail.to = to;
+				// sendSmtpEmail.templateId = templateId;
+				// sendSmtpEmail.params = params;
 				
-				const eme = await apiInstance.sendTransacEmail(sendSmtpEmail);
-				console.log(eme);
+				// const eme = await apiInstance.sendTransacEmail(sendSmtpEmail);
+				// console.log(eme);
 
-				//////
-					// await sendEmail(email);
+				const emailSe =	await sendEmail(email);
+				console.log(emailSe);
+				
 		    	return res.status(200).json({ endpoint: 'partners', operation: 'save', success: true, code: 1 });
 				}
   		}catch(err){

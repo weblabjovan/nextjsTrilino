@@ -32,10 +32,11 @@ export const sendEmail = async (email: emailSMTP ): Promise<any> => {
 	sendSmtpEmail.templateId = email.templateId;
 	sendSmtpEmail.params = email.params;
 
-	apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
-	  console.log('API called successfully. Returned data: ' + data);
-	}, function(error) {
-	  console.error(error);
-	});
+	return apiInstance.sendTransacEmail(sendSmtpEmail)
+	// .then(function(data) {
+	//   console.log('API called successfully. Returned data: ' + data);
+	// }, function(error) {
+	//   console.error(error);
+	// });
 }
 
