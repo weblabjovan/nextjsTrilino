@@ -33,6 +33,15 @@ export default interface LanguageInterface {
 	uniPartnerProgressDescription: string;
 	uniPartnerProgressLink: string;
 
+	emailPartnerRegisterTitle: string;
+	emailPartnerRegisterText: string;
+	emailPartnerRegisterCode: string;
+	emailPartnerRegisterButton: string;
+	emailPartnerForgotPassTitle: string;
+	emailPartnerForgotPassText: string;
+	emailPartnerForgotPassCode: string;
+	emailPartnerForgotPassButton: string;
+
 	homeTitle: string;
 	homeImg_1: string;
 	homeImg_2: string;

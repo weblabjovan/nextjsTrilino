@@ -24,6 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   			if (replica) {
 		    	return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode2'] });
 				}else{
+
 	    		const country = 'Serbia';
 	    		const created = new Date();
 	    		const passProvided = false;
@@ -34,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	    		
 	    		const par = await newPartner.save();
 
-	    		const sender = {name:'Trilino', email:'admin@trilino.com'};
+	    		const sender = {name:'Trilino', email:'no.reply@trilino.com'};
   				const to = [{name:contactPerson, email:contactEmail }];
   				const bcc = null;
   				const templateId = 2;
@@ -42,9 +43,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   				const page = decodeId(generateString, par._id);
   				const link = `${req.headers.origin}/emailVerification?language=${language}&page=${page}&type=partner`;
 
-  				const params = { title: "Registracija partnera", text: `Testni tekst za slanje emaila, jednokratni sigurnosni kod:  ${passSafetyCode}`, link: link, button: 'Verifikujte se ovde'};
+  				const params = { title: `${name} ${dictionary['emailPartnerRegisterTitle']}`, text: `${dictionary['emailPartnerRegisterText']}`, code: `${dictionary['emailPartnerRegisterCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerRegisterButton']}`};
   				const email = { sender, to, bcc, templateId, params };
-					await sendEmail(email);
+
+				const emailSe =	await sendEmail(email);
+				console.log(emailSe);
+
 		    	return res.status(200).json({ endpoint: 'partners', operation: 'save', success: true, code: 1 });
 				}
   		}catch(err){
@@ -165,9 +169,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	  				const page = decodeId(generateString, partner._id);
 	  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=partner`;
 
-	  				const params = { title: "Promena lozinke", text: `Testni tekst za promenu lozinke, jednokratni sigurnosni kod:  ${passSafetyCode}`, link: link, button: 'Promenite lozinku ovde'};
+	  				const params = { title: `${partner['name']} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
 	  				const email = { sender, to, bcc, templateId, params };
-  					await sendEmail(email);
+
+	  				const emailSe =	await sendEmail(email);
+					console.log(emailSe);
   					return res.status(200).json({ endpoint: 'partners', operation: 'update', success: true, code: 1 });
 					}else{
 						return res.status(404).json({ endpoint: 'partners', operation: 'update', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerUpdateReqPassCode3'] });
