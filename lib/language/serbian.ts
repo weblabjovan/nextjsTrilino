@@ -35,6 +35,15 @@ const serbian: LanguageInterface = {
 	uniPartnerProgressDescription: 'Ukoliko želite da saznate šta je sve potrebno da popunite pre nego što vaš profil postane aktivan pročitajte ',
 	uniPartnerProgressLink: 'pomoć za aktivaciju',
 
+	emailPartnerRegisterTitle: ', dobrodošli u Trilino',
+	emailPartnerRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa hiljadama ljudi koji su zainteresovani za vaš prostor i vaše usluge. Sve što treba da uradite je da kreirate vaš profil koji će adekvatno predstaviti ono što možete da ponudite posetiocima našeg sajta. Ali pre toga je potrebno je da verifikujete vašu registraciju i kreirate vašu lozinku. Kliknite na dugme u nastavku i ispratite sledeća uputstva. Srećno.',
+	emailPartnerRegisterCode: 'Jednokratni sigurnosni kod:',
+	emailPartnerRegisterButton: 'Verifikujte se ovde',
+	emailPartnerForgotPassTitle: ', zaboravli ste lozinku?',
+	emailPartnerForgotPassText: 'Obavestili ste nas da ste zaboravili vašu lozinku i da niste u stanju da pristupite vašem profilu. Ne brinite, klikom na dugme u nastavku jednostavno i sigurno ćete promeniti lozinku i biti u mogućnosti da ponovo pristupite vašem profilu. Srećno.',
+	emailPartnerForgotPassCode: 'Jednokratni sigurnosni kod:',
+	emailPartnerForgotPassButton: 'Promenite lozinku ovde',
+
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
 	homeImg_1: 'Trilino-dečije-slavlje-homepage',
 	homeImg_2: 'Trilino-roditelji-lako-organizuju-rođendan',

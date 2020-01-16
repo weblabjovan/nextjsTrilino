@@ -35,6 +35,15 @@ const english: LanguageInterface = {
 	uniPartnerProgressDescription: 'If you want to find out what needs to be filled out before your profile is active, please visit ',
 	uniPartnerProgressLink: 'activation help',
 
+	emailPartnerRegisterTitle: ', welcome to Trilino',
+	emailPartnerRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. From now on you will be connected to thousands of people that are interested in your space and/or your services. All you have to do is to create your profile that will fairly present your business to visitors of our web site. Before that you should verify your registration and create your password. Click on the button bellow and follow the instractions. Good luck.',
+	emailPartnerRegisterCode: 'Safety code:',
+	emailPartnerRegisterButton: 'Verify here',
+	emailPartnerForgotPassTitle: ', forgot your password?',
+	emailPartnerForgotPassText: 'You have informed us that you have forgot your password and you can not access your profile. Do not worry, by clicking on the button bellow you will be able to set up a new password and safely access your profile. Good luck.',
+	emailPartnerForgotPassCode: 'Safety code:',
+	emailPartnerForgotPassButton: 'Change password here',
+
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
 	homeImg_2: 'Trilino-parents-easy-organize-party',
