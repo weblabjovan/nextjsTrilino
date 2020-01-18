@@ -56,7 +56,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
     if (this.props.error) {
-      this.props.router.push(`/?language=${this.props.lang}`);
+      // this.props.router.push(`/?language=${this.props.lang}`);
     }
 		this.props.setUserLanguage(this.props.lang);
 	}

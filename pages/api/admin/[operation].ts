@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		try{
 			if (user === Keys.ADMIN_USER && pass === Keys.ADMIN_PASS) {
-				const token = setToken('partner', decodeId(generateString, pass));
+				const token = setToken('admin', decodeId(generateString, pass));
 				return res.status(200).json({ endpoint: 'admin', operation: 'login', success: true, code: 1, token });
 			}else{
 				return res.status(404).json({ endpoint: 'admin', operation: 'login', success: false, code: 2, error: 'auth error' });
@@ -36,6 +36,23 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			return res.status(404).json({ endpoint: 'admin', operation: 'login', success: false, code: 3, error: err });
 		}
 	}
+
+
+	if (req.query.operation === 'devLogin') {
+		const { pass } = req.body;
+
+		try{
+			if (pass === Keys.ADMIN_BASIC_DEV_STRING) {
+				const token = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+				return res.status(200).json({ endpoint: 'admin', operation: 'devAuth', success: true, code: 1, token });
+			}else{
+				return res.status(404).json({ endpoint: 'admin', operation: 'devAuth', success: false, code: 2, error: 'dev auth error' });
+			}
+		}catch(err){
+			return res.status(404).json({ endpoint: 'admin', operation: 'devAuth', success: false, code: 3, error: err });
+		}
+	}
+
 
 	if (req.query.operation === 'partners') {
 		const token = req.headers.authorization;
@@ -169,6 +186,27 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		}else{
 			return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoDelete', success: false, code: 4, error: 'selection error', message:'no auth token' });
 		}
+	}
+
+	if (req.query.operation === 'devAuth') {
+		const token = req.headers.authorization;
+		
+		if (!isEmpty(token)) {
+			try{
+				const decoded = verifyToken(token);
+				const admin = encodeId(decoded['sub']); 
+				if ( admin === Keys.ADMIN_BASIC_DEV_KEY) {
+					return res.status(200).json({ endpoint: 'admin', operation: 'devAuth', success: true, code: 1, message: 'ok' });
+				}else{
+					return res.status(404).json({ endpoint: 'admin', operation: 'devAuth', success: false, code: 2, error: 'devAuth error', message: 'not valid dev' });
+				}
+			}catch(err){
+				return res.status(500).json({ endpoint: 'admin', operation: 'devAuth', success: false, code: 3, error: 'selection error', message:'verification problem' });
+			}
+		}else{
+			return res.status(500).json({ endpoint: 'admin', operation: 'devAuth', success: false, code: 4, error: 'selection error', message:'no auth token' });
+		}
+		
 	}
 
 	if (req.query.operation === 'auth') {

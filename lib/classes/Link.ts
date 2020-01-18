@@ -80,14 +80,19 @@ class LinkClass {
 
 	private  getQuery (url:string):object {
 	  const query = {};
-	  const initial = url.split('?');
-	  const second = initial[1].split('&');
-	  second.forEach((val) => {
-	      const ar = val.split('=');
-	      query[ar[0]] = ar[1];
-	  });
+	  let initial = "";
+	  const init = url.split('?');
+	  if (init[1]) {
+	  	const second = init[1].split('&');
+		  second.forEach((val) => {
+		      const ar = val.split('=');
+		      query[ar[0]] = ar[1];
+		  });
+		initial = init[1];
+	  }
+	  
 
-	  return {initial: initial[1], query};
+	  return {initial, query};
 	}
 
 	getParsedUrl(): objectLink{
