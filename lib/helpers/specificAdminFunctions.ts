@@ -118,8 +118,8 @@ export const setPhotosForDelete = (photos: Array<object>, photo: string): Array<
 
 export const isDevEnvLogged = async (context: any, ): Promise<boolean> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
-	console.log(link);
-	if (link['host'] === 'dev.trilino') {
+	// console.log(link);
+	if (link['host'] === 'dev.trilino.com') {
 		const allCookies = nextCookie(context);
     	const devAuth = allCookies['trilino-dev-auth'];
 	    if (devAuth) {
