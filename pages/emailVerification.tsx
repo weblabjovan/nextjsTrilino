@@ -87,6 +87,8 @@ EmailVerification.getInitialProps = async (ctx: any) => {
     
   }
 
+  console.log(verifyObject);
+
   return { userAgent, verifyObject, resolution }
 }
 

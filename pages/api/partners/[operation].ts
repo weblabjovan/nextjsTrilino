@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		if (isPartnerRegDataValid(req.body)) {
   		try{
-  			await connectToDb();
+  			await connectToDb(req.headers.host);
   			const replica = await Partner.findOne({ taxNum });
   			if (replica) {
 		    	return res.status(401).send({ endpoint: 'partners', operation: 'save', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode2'] });
@@ -69,9 +69,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			const token = req.headers.authorization;
 			if (!isEmpty(token)) {
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
+
 					const partner = await Partner.findById(partnerId, '-password -passSafetyCode -passProvided -verified');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
@@ -95,7 +96,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		}
 
 		try{
-			await connectToDb();
+			await connectToDb(req.headers.host);
 			const partner = await Partner.findById(partnerId, '-password');
 			if (partner) {
 				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
@@ -114,7 +115,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		if (type === 'verification') {
 			try{
-				await connectToDb();
+				await connectToDb(req.headers.host);
 				const id = encodeId(data.id);
 				const partner = await Partner.findOneAndUpdate({ '_id': id }, {"$set" : data.options }, { new: true }).select('-password');
 				
@@ -133,7 +134,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				return res.status(500).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'password data validation error', message: dictionary['apiPartnerUpdatePassCode2'] });
 			}else{
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const salt = await bcrypt.genSalt(10);
 					const passHash = await bcrypt.hash(data.password, salt);
 					const id = encodeId(data.id);
@@ -155,7 +156,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				return res.status(400).json({ endpoint: 'partners', operation: 'update', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerUpdatePassCode2'] });
 			}else{
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const partner = await Partner.findOne({ taxNum: data['taxNum'], contactEmail: data['email'] });
 
 					if (partner) {
@@ -191,7 +192,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 5, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
 				}
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
 					const partnerFrontObj = data['partner'];
@@ -218,7 +219,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
 				}
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
 					const partnerFrontObj = data['partner'];
@@ -246,7 +247,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
 				}
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
 					const partnerFrontObj = data['partner'];
@@ -274,7 +275,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).json({ endpoint: 'partners', operation: 'validation', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerSaveCode5'] });
 				}
 				try{
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const decoded = verifyToken(token);
 					const partnerId = encodeId(decoded['sub']);
 					const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { decoration: data['decoration'] } }, { new: true }).select('-password');
@@ -302,7 +303,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			res.status(400).send({ endpoint: 'partners', operation: 'login', success: false, code: 4, error: 'validation error', message: dictionary['apiPartnerLoginCode4']  });
 		}else{
 			try{
-				await connectToDb();
+				await connectToDb(req.headers.host);
 				const partner = await Partner.findOne({taxNum});
 				if (partner) {
 					if (partner.passProvided) {
@@ -334,7 +335,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		if (!isEmpty(token)) {
 				
 			try{
-				await connectToDb();
+				await connectToDb(req.headers.host);
 				const decoded = verifyToken(token);
 				const partnerId = encodeId(decoded['sub']); 
 				const partner = await Partner.findById(partnerId, '-password');

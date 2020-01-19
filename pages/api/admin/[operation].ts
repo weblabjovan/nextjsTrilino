@@ -64,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const { field, term } = req.body;
 				
 				if ( admin === Keys.ADMIN_PASS) {
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const partners = field !== '' && term !== '' ? await Partner.find({[field]: { '$regex': term, '$options': 'i'}}).select('-password') : await Partner.find({}).select('-password');
 					if (partners) {
 						return res.status(200).json({ endpoint: 'admin', operation: 'partners', success: true, code: 1, partners });
@@ -92,7 +92,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const { id, active } = req.body;
 				
 				if ( admin === Keys.ADMIN_PASS) {
-					await connectToDb();
+					await connectToDb(req.headers.host);
 					const partner = await Partner.findOneAndUpdate({ '_id': id }, {"$set" : { active } }, { new: true }).select('-password');
 					if (partner) {
 						return res.status(200).json({ endpoint: 'admin', operation: 'partnerActivate', success: true, code: 1, partner });
@@ -165,7 +165,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					console.log(del);
 
 					if (del) {
-						await connectToDb();
+						await connectToDb(req.headers.host);
 						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { photos } }, { new: true }).select('-password');
 
 						if (partner) {
@@ -242,7 +242,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						return res.status(404).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 6, error: 'auth error', message: 'request data not valida' });
 					}else{
 						const {partnerId, photos } = req.body;
-						await connectToDb();
+						await connectToDb(req.headers.host);
 						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { photos } }, { new: true }).select('-password');
 
 						if (partner) {

@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const token = req.headers.authorization;
 
 		try{
-			await connectToDb();
+			await connectToDb(req.headers.host);
 			if (type === 'partner' || type === 'user') {
 				if (!isEmpty(token)) {
 					const decoded = verifyToken(token);
@@ -115,7 +115,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const dateString = date.substring(0,19);
 
 		try{
-			await connectToDb();
+			await connectToDb(req.headers.host);
 				const reservations = await Reservation.find({ 'date': dateString, 'partner': partner, 'room': room, active: true }, { new: true }).select('from to _id active');
 				const partnerObj = await Partner.findOne({'_id': partner});
 				const d = new Date(dateString);
@@ -144,7 +144,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		if (type === 'partner') {
 			const { partner, room, dates } = req.body;
 			try{
-				await connectToDb();
+				await connectToDb(req.headers.host);
 				const query = await Reservation.find({partner, room, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}});
 				if (query) {
 					return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
@@ -164,7 +164,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const token = req.headers.authorization;
 
 		try{
-			await connectToDb();
+			await connectToDb(req.headers.host);
 			if (!isEmpty(token)) {
 				const decoded = verifyToken(token);
 				const identifierId = encodeId(decoded['sub']);

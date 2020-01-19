@@ -869,6 +869,6 @@ export const isPartnerLogged = async (context: any): Promise<boolean> => {
 
 export const getPartnerToken = (context: any): string => {
 	const allCookies = nextCookie(context);
-	const token = allCookies['trilino-admin-token'] ? allCookies['trilino-partner-token'] : '';
+	const token = allCookies['trilino-partner-token'] ? allCookies['trilino-partner-token'] : '';
 	return token;
 }

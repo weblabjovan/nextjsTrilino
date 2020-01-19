@@ -116,7 +116,7 @@ export const setPhotosForDelete = (photos: Array<object>, photo: string): Array<
 	return list;
 }
 
-export const isDevEnvLogged = async (context: any, ): Promise<boolean> => {
+export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 	// console.log(link);
 	if (link['host'] === 'dev.trilino.com') {

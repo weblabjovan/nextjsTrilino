@@ -10,6 +10,7 @@ type keyType = {
 	AWS_PARTNER_PHOTO_LINK: string;
 	ADMIN_BASIC_DEV_STRING: string;
 	ADMIN_BASIC_DEV_KEY: string;
+	MONGO_URI_PROD: string;
 }
 
 const keys: keyType = {
@@ -22,7 +23,8 @@ const keys: keyType = {
 	AWS_PARTNER_PHOTO_SECRET_ACCESS_KEY: process.env.AWS_PARTNER_PHOTO_SECRET_ACCESS_KEY,
 	AWS_PARTNER_PHOTO_LINK: process.env.AWS_PARTNER_PHOTO_LINK,
 	ADMIN_BASIC_DEV_STRING: process.env.ADMIN_BASIC_DEV_STRING,
-	ADMIN_BASIC_DEV_KEY: process.env.ADMIN_BASIC_DEV_KEY
+	ADMIN_BASIC_DEV_KEY: process.env.ADMIN_BASIC_DEV_KEY,
+	MONGO_URI_PROD: process.env.MONGO_URI_PROD
 }
 
 export default keys;
