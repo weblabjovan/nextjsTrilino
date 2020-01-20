@@ -148,6 +148,7 @@ const english: LanguageInterface = {
 	partnerProfileGeneralTitle: 'General informations about the venue',
 	partnerProfileGeneralDescription: 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.  For more information on how to fill out this section visit ',
 	partnerProfileGeneralItemDescription: 'Venue description:',
+	partnerProfileGeneralSubSpace: 'Venue',
 	partnerProfileGeneralItemDescriptionPlaceholder: '288 characters allowed',
 	partnerProfileGeneralItemAddress: 'Venue address:',
 	partnerProfileGeneralItemAddressPlaceholder: 'address',
@@ -327,6 +328,10 @@ const english: LanguageInterface = {
 	partnerProfileOfferAddonAlertName: 'Content name is required. Please, fill out additional content name.',
 	partnerProfileOfferAddonAlertPrice: 'Content price is required. Please, fill out additional content price.',
 	partnerProfileOfferSaveButton: 'Save entertaiment content',
+	partnerProfileOfferSubFreeContent: 'Chosen content',
+	partnerProfileOfferSubFreeList: 'Free content list',
+	partnerProfileOfferSubAddContent: 'Additional content list',
+	partnerProfileOfferSubAddForm: 'Form for adding additional content',
 
 
 	partnerProfileCateringTitle: 'Catering information',

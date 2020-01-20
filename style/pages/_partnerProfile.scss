@@ -13,6 +13,16 @@
 	.partnerProflePage{
 		padding: 40px 0px;
 
+		.partnerSection{
+			border-radius: 10px;
+	    border: solid 1px #a7a7a7;
+	    -webkit-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			-moz-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			padding: 15px 20px;
+    	margin-bottom: 40px;
+		}
+
 		.sub-sm{
 			font-size: 14px !important;
 			font-weight: 300 !important;
@@ -829,6 +839,9 @@
 
 			.dealContent{
 				padding: 20px 10px;
+				background: #f1f1f1;
+    		margin-bottom: 10px;
+    		
 				p{
 				    padding-right: 15px;
 				    line-height: 25px;

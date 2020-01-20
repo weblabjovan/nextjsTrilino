@@ -154,7 +154,7 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
             </Row>
           </Row>
 
-          <Row className="decorationList">
+          <Row className="decorationList partnerSection">
             <Col xs="12">
               <div className="middle">
                 <p className="sub-sm">{this.state.dictionary['partnerProfileDecorationSubSmal']}</p>

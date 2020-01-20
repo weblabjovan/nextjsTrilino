@@ -150,6 +150,7 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralTitle: 'Osnovne informacije o prostoru',
 	partnerProfileGeneralDescription: 'U nastavku je formular koji za cilj ima prikupljanje osnovnih informacije o vašem prostoru. Ove informacije su jako bitne za vaše potencijalne klijente. Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileGeneralItemDescription: 'Opis prostora:',
+	partnerProfileGeneralSubSpace: 'Prostor',
 	partnerProfileGeneralItemDescriptionPlaceholder: 'opis do 288 karaktera',
 	partnerProfileGeneralItemAddress: 'Adresa prostora:',
 	partnerProfileGeneralItemAddressPlaceholder: 'adresa',
@@ -328,6 +329,10 @@ const serbian: LanguageInterface = {
 	partnerProfileOfferAddonAlertName: 'Naziv sadržaja je obavezan. Molimo vas upišite naziv dodatnog sadržaja.',
 	partnerProfileOfferAddonAlertPrice: 'Cena sadržaja je obavezan. Molimo vas upišite cenu dodatnog sadržaja.',
 	partnerProfileOfferSaveButton: 'Sačuvajte zabavni sadržaj',
+	partnerProfileOfferSubFreeContent: 'Odabrani sadržaji',
+	partnerProfileOfferSubFreeList: 'Lista besplatnih sadržaja',
+	partnerProfileOfferSubAddContent: 'Lista dodatnih sadržaja',
+	partnerProfileOfferSubAddForm: 'Formular za unos dodatnih sadržaja',
 
 
 
