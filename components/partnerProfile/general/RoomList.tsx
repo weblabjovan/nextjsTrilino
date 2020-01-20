@@ -104,7 +104,7 @@ class RoomList extends React.Component <MyProps, MyState>{
 	
   render() {
     return(
-    	<div>
+    	<div className="partnerSection">
         {
         	this.props.partnerRooms.map((key, index) => {
         		return(

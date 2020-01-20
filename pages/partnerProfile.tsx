@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
-import fetch from 'isomorphic-unfetch';
-import nextCookie from 'next-cookies';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { isPartnerLogged, getPartnerToken } from '../lib/helpers/specificPartnerFunctions';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
@@ -45,29 +45,23 @@ const PartnerProfile : NextPage<Props> = ({userAgent, link, token}) => {
 PartnerProfile.getInitialProps = async (ctx: any) => {
 	const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-	const allCookies = nextCookie(ctx);
-	const token = allCookies['trilino-partner-token'];
-	const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
-	try{
-		const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/auth/?language=${link['queryObject']['language']}`;
-	  	const response = await fetch(apiUrl, {
-		  credentials: 'include',
-		  headers: {
-		    Authorization: `${token}`
-		  }
-		});
+  const devLog = await isDevEnvLogged(ctx);
 
-		if (response.status !== 200) {
-			ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
-			ctx.res.end();
-		}
-	}catch(err){
-		ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
-		ctx.res.end();
-	}
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
 
-	
+  const partnerLog = await isPartnerLogged(ctx);
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+
+  if (!partnerLog) {
+    ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
+    ctx.res.end();
+  }
+
+	const token = getPartnerToken(ctx);
 
   return { userAgent, link, token }
 }

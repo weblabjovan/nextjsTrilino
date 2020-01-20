@@ -40,7 +40,7 @@ class ConfirmView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		if (this.props.error) {
-			this.props.router.push(`/confirm?language=${this.props.lang}&page=error`);
+			// this.props.router.push(`/confirm?language=${this.props.lang}&page=error`);
 		}
 		this.props.setUserLanguage(this.props.lang);
 	}

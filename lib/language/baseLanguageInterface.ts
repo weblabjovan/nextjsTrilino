@@ -147,6 +147,7 @@ export default interface LanguageInterface {
 	partnerProfileGeneralDescription: string;
 	partnerProfileGeneralItemDescription: string;
 	partnerProfileGeneralItemDescriptionPlaceholder: string;
+	partnerProfileGeneralSubSpace: string;
 	partnerProfileGeneralItemAddress: string;
 	partnerProfileGeneralItemAddressPlaceholder: string;
 	partnerProfileGeneralItemCity: string;
@@ -323,6 +324,10 @@ export default interface LanguageInterface {
 	partnerProfileOfferAddonAlertName: string;
 	partnerProfileOfferAddonAlertPrice: string;
 	partnerProfileOfferSaveButton: string;
+	partnerProfileOfferSubFreeContent: string;
+	partnerProfileOfferSubFreeList: string;
+	partnerProfileOfferSubAddContent: string;
+	partnerProfileOfferSubAddForm: string;
 
 
 	partnerProfileCateringTitle: string;

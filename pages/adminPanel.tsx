@@ -2,10 +2,9 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import fetch from 'isomorphic-unfetch';
-import nextCookie from 'next-cookies';
+import { isDevEnvLogged, isAdminLogged, getAdminToken } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
-import AdminPanelView from '../views/AdminPanelView'
+import AdminPanelView from '../views/AdminPanelView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -39,29 +38,25 @@ const Login : NextPage<Props> = ({ userAgent, token, link }) => {
 Login.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const allCookies = nextCookie(ctx);
-  const token = allCookies['trilino-admin-token'];
+
+  const devLog = await isDevEnvLogged(ctx);
+
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
+
+  const adminLog = await isAdminLogged(ctx);
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
-  try{
-    const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/auth/`;
-      const response = await fetch(apiUrl, {
-      credentials: 'include',
-      headers: {
-        Authorization: `${token}`
-      }
-    });
-
-
-    if (response.status !== 200) {
-      ctx.res.writeHead(302, {Location: `/adminLogin?language=${link['queryObject']['language']}`});
-      ctx.res.end();
-    }
-  }catch(err){
+  if (!adminLog) {
     ctx.res.writeHead(302, {Location: `/adminLogin?language=${link['queryObject']['language']}`});
     ctx.res.end();
   }
-  return { userAgent, link, token}
+
+  const token = getAdminToken(ctx);
+
+  return { userAgent, link, token }
 }
 
 export default withRedux(Login)

@@ -305,3 +305,13 @@ export const isPartnerPhotoSaveDataValid = (data: object): boolean => {
 
 	return true;
 }
+
+export const dataHasValidProperty = (data: object, property: Array<string>): boolean => {
+	for (var i = 0; i < property.length; ++i) {
+		if (!data.hasOwnProperty(property[i])) {
+			return false;
+		}
+	}
+
+	return true;
+}

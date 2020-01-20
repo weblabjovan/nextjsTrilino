@@ -6,6 +6,7 @@ import Head from '../components/head';
 import EmailVerificationView from '../views/EmailVerificationView';
 import pages from '../lib/constants/pages';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -46,11 +47,19 @@ const EmailVerification : NextPage<Props> = ({ userAgent, verifyObject, resoluti
   )
 }
 
-EmailVerification.getInitialProps = async ({ req }) => {
+EmailVerification.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic(req.url);
   let verifyObject = { };
   let resolution = 0;
+
+  const devLog = await isDevEnvLogged(ctx);
+
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
 
   if (link['queryObject']['type'] === 'partner') {
     try{
@@ -77,6 +86,8 @@ EmailVerification.getInitialProps = async ({ req }) => {
     }
     
   }
+
+  console.log(verifyObject);
 
   return { userAgent, verifyObject, resolution }
 }

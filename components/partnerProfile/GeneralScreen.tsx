@@ -201,6 +201,13 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
               </Alert>
             </Col>
+          </Row>
+
+          <Row className="partnerSection">
+
+            <Col xs='12'>
+              <h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubSpace']}</h4>
+            </Col>
 
     				<Col xs='12'>
             	<label>{this.state.dictionary['partnerProfileGeneralItemDescription']}</label>
@@ -291,6 +298,9 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemAgetoPlaceholder']}/>
             </Col>
+          </Row>
+
+          <Row className="partnerSection">
             <Col xs='12'>
             	<h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubTimes']}</h4>
             </Col>
@@ -416,9 +426,9 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
             </Col>
             
             	
-            </Row>
+          </Row>
 
-            <Row>
+          <Row className="partnerSection">
 
             <Col xs='12'>
             	<h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubCharacteristics']}</h4>
@@ -569,9 +579,9 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemSmokingPlaceholder']}/>
             </Col>
-            </Row>
+          </Row>
 
-            <Row>
+          <Row className="partnerSection">
 
             <Col xs='12'>
             	<h4 className="middle">{this.state.dictionary['partnerProfileGeneralSubRooms']}</h4>
@@ -641,14 +651,14 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralDoublePlaceholder']}/>
             </Col>
-            </Row>
-            <RoomList 
-            	lang={this.props.lang}
-            />
+          </Row>
+          <RoomList 
+          	lang={this.props.lang}
+          />
 
-            <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
-              <p>{ this.state.dictionary[`partnerProfileGeneralAlert_${this.state.errorMessages['response']['day']}`] } { this.state.dictionary[`partnerProfileGeneralAlert_${this.state.errorMessages['response']['message']}`] }</p>
-            </Alert>
+          <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
+            <p>{ this.state.dictionary[`partnerProfileGeneralAlert_${this.state.errorMessages['response']['day']}`] } { this.state.dictionary[`partnerProfileGeneralAlert_${this.state.errorMessages['response']['message']}`] }</p>
+          </Alert>
 
             
 

@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import ConfirmView from '../views/ConfirmView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -47,8 +48,17 @@ const Confirm : NextPage<Props> = ({ userAgent }) => {
   )
 }
 
-Confirm.getInitialProps = async ({ req }) => {
+Confirm.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+
+  const devLog = await isDevEnvLogged(ctx);
+
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
+
   return { userAgent}
 }
 

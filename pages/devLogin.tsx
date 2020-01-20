@@ -1,6 +1,7 @@
-import { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { withRedux } from '../lib/redux'
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { withRedux } from '../lib/redux';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
 import LoginView from '../views/LoginView'
 import pages from '../lib/constants/pages';
@@ -12,7 +13,7 @@ interface Props {
 }
 
 
-const Login : NextPage<Props> = ({ userAgent }) => {
+const DevLogin : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = 'sr'
@@ -26,14 +27,23 @@ const Login : NextPage<Props> = ({ userAgent }) => {
   return (
     <div>
       <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
-      <h1>Ništa od stranice</h1>
+      <LoginView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
     </div>
   )
 }
 
-Login.getInitialProps = async ({ req }) => {
+DevLogin.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+
+  const devLog = await isDevEnvLogged(ctx);
+
+  if (devLog) {
+    ctx.res.writeHead(302, {Location: `/?language=sr`});
+    ctx.res.end();
+  }
+
   return { userAgent}
 }
 
-export default withRedux(Login)
+export default withRedux(DevLogin)

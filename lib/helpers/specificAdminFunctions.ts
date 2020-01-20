@@ -1,4 +1,7 @@
 import { calculateActivationProcess } from './specificPartnerFunctions';
+import { setUpLinkBasic } from './generalFunctions';
+import fetch from 'isomorphic-unfetch';
+import nextCookie from 'next-cookies';
 
 
 export const decoratePartners = (partners: Array<object>): Array<object> => {
@@ -111,4 +114,71 @@ export const setPhotosForDelete = (photos: Array<object>, photo: string): Array<
 	}
 
 	return list;
+}
+
+export const isDevEnvLogged = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	// console.log(link);
+	if (link['host'] === 'dev.trilino.com') {
+		const allCookies = nextCookie(context);
+    	const devAuth = allCookies['trilino-dev-auth'];
+	    if (devAuth) {
+	      try{
+	        const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/`;
+	        const response = await fetch(apiUrl, {
+	          credentials: 'include',
+	          headers: {
+	            Authorization: `${devAuth}`
+	          }
+	        });
+
+	        if (response['status'] === 200) {
+	          return true;
+	        }else{
+	        	return false;
+	        }
+
+	      }catch(err){
+	        return false;
+	      }
+	    }else{
+	    	return false;
+	    }
+	}else{
+		return true;
+	}
+}
+
+export const isAdminLogged = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const allCookies = nextCookie(context);
+  const token = allCookies['trilino-admin-token'];
+
+  if (token) {
+  	try{
+	    const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/auth/`;
+	      const response = await fetch(apiUrl, {
+	      credentials: 'include',
+	      headers: {
+	        Authorization: `${token}`
+	      }
+	    });
+
+	    if (response.status === 200) {
+	    	return true;
+	    }else{
+	    	return false;
+	    }
+	  }catch(err){
+	    return false;
+	  }
+  }else{
+  	return false;
+  }
+}
+
+export const getAdminToken = (context: any): string => {
+	const allCookies = nextCookie(context);
+	const token = allCookies['trilino-admin-token'] ? allCookies['trilino-admin-token'] : '';
+	return token;
 }

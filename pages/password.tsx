@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
@@ -42,12 +43,20 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
   )
 }
 
-Password.getInitialProps = async ({ req }) => {
+Password.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic(req.url);
 	const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
 	let verifyObject = { };
 	let error = true;
+
+  const devLog = await isDevEnvLogged(ctx);
+
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
 
 	if (link['queryObject']['type'] === 'partner') {
     try{

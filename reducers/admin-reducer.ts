@@ -1,5 +1,5 @@
 import {
-  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes
+  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes
 } from '../actions/admin-actions';
 
 import { decoratePartners, changePartnerListItem } from '../lib/helpers/specificAdminFunctions';
@@ -33,8 +33,13 @@ interface initialState {
   adminDeletePartnerPhotoError: object | boolean;
   adminDeletePartnerPhotoSuccess: null | number;
 
+  adminBasicDevLoginStart: boolean;
+  adminBasicDevLoginError: object | boolean;
+  adminBasicDevLoginSuccess: null | number;
+
   partners: Array<object>;
   partnerPhoto: null | object;
+  devAuth: string;
 }
 
 const initialState: initialState  = {
@@ -66,8 +71,13 @@ const initialState: initialState  = {
   adminDeletePartnerPhotoError: false,
   adminDeletePartnerPhotoSuccess: null,
 
+  adminBasicDevLoginStart: false,
+  adminBasicDevLoginError: false,
+  adminBasicDevLoginSuccess: null,
+
   partners: [],
   partnerPhoto: null,
+  devAuth: '',
 
 };
 
@@ -197,7 +207,7 @@ const actionsMap = {
       ...state,
       adminSavePartnerPhotoStart: false,
       partnerPhoto: null,
-      adminSavePartnerPhotoError: action.payload.body,
+      adminSavePartnerPhotoError: action.payload.response.body,
     };
   },
   [adminSavePartnerPhotoActionTypes.SUCCESS]: (state, action) => {
@@ -221,7 +231,7 @@ const actionsMap = {
     return {
       ...state,
       adminDeletePartnerPhotoStart: false,
-      adminDeletePartnerPhotoError: action.payload.body,
+      adminDeletePartnerPhotoError: action.payload.response.body,
     };
   },
   [adminDeletePartnerPhotoActionTypes.SUCCESS]: (state, action) => {
@@ -230,6 +240,30 @@ const actionsMap = {
       adminDeletePartnerPhotoSuccess: action.payload.code,
       partners: changePartnerListItem(action.payload.partner, [...state['partners']]),
       adminDeletePartnerPhotoStart: false,
+    };
+  },
+
+  [adminBasicDevLoginActionTypes.START]: (state) => {
+    return {
+      ...state,
+      adminBasicDevLoginStart: true,
+      adminBasicDevLoginError: false,
+      adminBasicDevLoginSuccess: null,
+    };
+  },
+  [adminBasicDevLoginActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      adminBasicDevLoginStart: false,
+      adminBasicDevLoginError: action.payload.response.body,
+    };
+  },
+  [adminBasicDevLoginActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      adminBasicDevLoginSuccess: action.payload.code,
+      devAuth: action.payload['token'],
+      adminBasicDevLoginStart: false,
     };
   },
   

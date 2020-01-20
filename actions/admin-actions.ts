@@ -162,3 +162,23 @@ export function adminDeletePartnerPhoto(link: object, data: object, auth: string
     );
   };
 }
+
+
+export const adminBasicDevLoginActionTypes = {
+  START: 'ADMIN_BASIC_DEV_LOGIN_START',
+  ERROR: 'ADMIN_BASIC_DEV_LOGIN_ERROR',
+  SUCCESS: 'ADMIN_BASIC_DEV_LOGIN_SUCCESS',
+};
+
+export function adminBasicDevLogin(link: object, data: object) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_DEV_LOGIN);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      adminBasicDevLoginActionTypes,
+    );
+  };
+}

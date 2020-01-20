@@ -234,9 +234,16 @@ class OfferScreen extends React.Component <MyProps, MyState>{
           	<Col xs="12">
           		<h4>{this.state.dictionary['partnerProfileOfferSubFree']}</h4>
           	</Col>
+          </Row>
+
+          <Row className="partnerSection">
           	<Col xs="12" sm="12" lg="4">
           		<Row >
-		          	
+		          	<Col xs="12">
+                  <div className="middle">
+                    <p className="sub-sm">{this.state.dictionary['partnerProfileOfferSubFreeContent']}</p>
+                  </div>
+                </Col>
 		          	<Col xs="12">
 		          		<div className="chipList">
 					        	{
@@ -260,6 +267,11 @@ class OfferScreen extends React.Component <MyProps, MyState>{
 
           	<Col xs="12" sm="12" lg="8" className="offerBorder">
           		<Row>
+                <Col xs="12">
+                  <div className="middle">
+                    <p className="sub-sm">{this.state.dictionary['partnerProfileOfferSubFreeList']}</p>
+                  </div>
+                </Col>
 			          {
 			          	generalOptions[`contentOffer_${this.props.lang}`].map( (obj, index) => {
 			          		return(
@@ -285,12 +297,18 @@ class OfferScreen extends React.Component <MyProps, MyState>{
 
           
 
-         
-
-          <Row >
+          <Row>
           	<Col xs="12">
           		<h4>{this.state.dictionary['partnerProfileOfferSubPay']}</h4>
           	</Col>
+          </Row>
+
+          <Row className="partnerSection">
+            <Col xs="12">
+              <div className="middle">
+                <p className="sub-sm">{this.state.dictionary['partnerProfileOfferSubAddContent']}</p>
+              </div>
+            </Col>
           	<Col xs="12">
           		<Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
                 <p hidden={ !this.state.errorMessages['fields']['addonName']} >{this.state.dictionary['partnerProfileOfferAddonAlertName']}</p>
@@ -314,42 +332,50 @@ class OfferScreen extends React.Component <MyProps, MyState>{
           			}
 		        	</div>
           	</Col>
-          </Row>
 
-          <Row className="addOnForm">
-          	<Col xs="12" sm="8">
-          		<label>{this.state.dictionary['partnerProfileOfferAddonName']}</label>
-          		<PlainInput 
-                placeholder={this.state.dictionary['partnerProfileOfferAddonNamePlaceholder']}
-                value={ this.state.addonName }
-                onChange={ (event) => this.handleInputChange('addonName', event.target.value) }
-                type="text"
-                className={`${this.state.errorMessages['fields']['addonName'] ? "borderWarrning" : ''} logInput`} />
-          	</Col>
-          	<Col xs="12" sm="4">
-          		<label>{this.state.dictionary['partnerProfileOfferAddonPrice']}</label>
-          		<PlainInput 
-                placeholder={this.state.dictionary['partnerProfileOfferAddonPricePlaceholder']}
-                value={ this.state.addonPrice }
-                onChange={ (event) => this.handleInputChange('addonPrice', event.target.value) }
-                type="number"
-                className={`${this.state.errorMessages['fields']['addonPrice'] ? "borderWarrning" : ''} logInput`} />
-          	</Col>
-          	<Col xs="12">
-          		<label>{this.state.dictionary['partnerProfileOfferAddonComment']}</label>
-          		<PlainInput 
-                placeholder={this.state.dictionary['partnerProfileOfferAddonCommentPlaceholder']} 
-                value={ this.state.addonComment }
-                onChange={ (event) => this.handleInputChange('addonComment', event.target.value) }
-                type="text"
-                max={ 255 }
-                className="logInput" />
-          	</Col>
-          	<Col xs="12">
-          		<div className="middle">
-								<button className="buttonAdd" onClick={ this.handleAddOn }>{this.state.dictionary['partnerProfileOfferAddonButton']}</button>
-							</div>
-          	</Col>
+            <Col xs="12">
+              <Row>
+                <Col xs="12">
+                  <div className="middle">
+                    <p className="sub-sm">{this.state.dictionary['partnerProfileOfferSubAddForm']}</p>
+                  </div>
+                </Col>
+
+                <Col xs="12" sm="8">
+                  <label>{this.state.dictionary['partnerProfileOfferAddonName']}</label>
+                  <PlainInput 
+                    placeholder={this.state.dictionary['partnerProfileOfferAddonNamePlaceholder']}
+                    value={ this.state.addonName }
+                    onChange={ (event) => this.handleInputChange('addonName', event.target.value) }
+                    type="text"
+                    className={`${this.state.errorMessages['fields']['addonName'] ? "borderWarrning" : ''} logInput`} />
+                </Col>
+                <Col xs="12" sm="4">
+                  <label>{this.state.dictionary['partnerProfileOfferAddonPrice']}</label>
+                  <PlainInput 
+                    placeholder={this.state.dictionary['partnerProfileOfferAddonPricePlaceholder']}
+                    value={ this.state.addonPrice }
+                    onChange={ (event) => this.handleInputChange('addonPrice', event.target.value) }
+                    type="number"
+                    className={`${this.state.errorMessages['fields']['addonPrice'] ? "borderWarrning" : ''} logInput`} />
+                </Col>
+                <Col xs="12">
+                  <label>{this.state.dictionary['partnerProfileOfferAddonComment']}</label>
+                  <PlainInput 
+                    placeholder={this.state.dictionary['partnerProfileOfferAddonCommentPlaceholder']} 
+                    value={ this.state.addonComment }
+                    onChange={ (event) => this.handleInputChange('addonComment', event.target.value) }
+                    type="text"
+                    max={ 255 }
+                    className="logInput" />
+                </Col>
+                <Col xs="12">
+                  <div className="middle">
+                    <button className="buttonAdd" onClick={ this.handleAddOn }>{this.state.dictionary['partnerProfileOfferAddonButton']}</button>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
           </Row>
 
           <Row>

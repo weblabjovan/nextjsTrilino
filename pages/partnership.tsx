@@ -1,6 +1,7 @@
-import { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { withRedux } from '../lib/redux'
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { withRedux } from '../lib/redux';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
 import PartnershipView from '../views/PartnershipView'
 import pages from '../lib/constants/pages';
@@ -31,8 +32,17 @@ const Partnership : NextPage<Props> = ({ userAgent }) => {
   )
 }
 
-Partnership.getInitialProps = async ({ req }) => {
+Partnership.getInitialProps = async (ctx: any) => {
+  const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+
+ const devLog = await isDevEnvLogged(ctx);
+
+  if (!devLog) {
+    ctx.res.writeHead(302, {Location: `/devLogin`});
+    ctx.res.end();
+  }
+
   return { userAgent}
 }
 
