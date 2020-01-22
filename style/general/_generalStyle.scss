@@ -211,6 +211,9 @@ button:disabled{
 }
 
 .React__checkbox{
+  label{
+    margin-bottom: 0px;
+  }
   .checkbox-simple-label{
     margin-bottom: 0px;
     vertical-align: top;
@@ -232,6 +235,7 @@ button:disabled{
       justify-content: center;
       color: white;
       margin: 2px;
+      margin-bottom: 0px;
       border: 0px solid #fff;
       box-sizing: border-box;
       transition: all 150ms;

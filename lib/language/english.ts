@@ -426,6 +426,25 @@ const english: LanguageInterface = {
 
 
 
+	searchFilterBasicCity: 'City:',
+	searchFilterBasicDistrict: 'District:',
+	searchFilterBasicDate: 'Celebration date:',
+	searchFilterBasicKidsNum: 'Kids number:',
+	searchFilterBasicAdultsNum: 'Adults number:',
+	searchFilterBasicMoreDetail: 'DETAILED SEARCH',
+	searchFilterBasicMoreBasic: 'BASIC SEARCH',
+	searchFilterAdditionalEntertainmentSub: 'Entertainment',
+	searchFilterAdditionalVenueName: 'Venue name:',
+	searchFilterAdditionalAgeFrom: 'Age from:',
+	searchFilterAdditionalAgeTo: 'Age to:',
+	searchFilterAdditionalAgePlaceholder: 'age',
+	searchFilterAdditionalPriceFrom: 'Price from:',
+	searchFilterAdditionalPriceTo: 'Price to:',
+	searchResultsTitle: 'Search results',
+	searchResultsSortPlaceholder: 'sort',
+	searchResultsItemsNum: 'results',
+	searchResultsLoadButton: 'Load more results',
+
 
 
 	loginTitle: 'This is Login Page',

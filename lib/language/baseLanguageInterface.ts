@@ -371,6 +371,12 @@ export default interface LanguageInterface {
 	partnerProfileDecorationPricePlaceholder: string;
 	partnerProfileDecorationSaveButton: string;
 
+
+	partnerProfileCalendarTitle: string;
+	partnerProfileCalendarDescription: string;
+	partnerProfileCalendarButton: string;
+
+
 	partnerProfileReservationTitle: string;
 	partnerProfileReservationRoom: string;
 	partnerProfileReservationRoomPlaceHolder: string;
@@ -412,9 +418,25 @@ export default interface LanguageInterface {
 	partnerProfileReservationModalText: string;
 	partnerProfileReservationModalButtonText: string;
 
-	partnerProfileCalendarTitle: string;
-	partnerProfileCalendarDescription: string;
-	partnerProfileCalendarButton: string;
+
+	searchFilterBasicCity: string;
+	searchFilterBasicDistrict: string;
+	searchFilterBasicDate: string;
+	searchFilterBasicKidsNum: string;
+	searchFilterBasicAdultsNum: string;
+	searchFilterBasicMoreDetail: string;
+	searchFilterBasicMoreBasic: string;
+	searchFilterAdditionalEntertainmentSub: string;
+	searchFilterAdditionalVenueName: string;
+	searchFilterAdditionalAgeFrom: string;
+	searchFilterAdditionalAgeTo: string;
+	searchFilterAdditionalAgePlaceholder: string;
+	searchFilterAdditionalPriceFrom: string;
+	searchFilterAdditionalPriceTo: string;
+	searchResultsTitle: string;
+	searchResultsSortPlaceholder: string;
+	searchResultsItemsNum: string;
+	searchResultsLoadButton: string;
 
 
 

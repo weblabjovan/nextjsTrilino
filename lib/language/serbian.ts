@@ -100,7 +100,7 @@ const serbian: LanguageInterface = {
 	partnerRegTitle: 'Partnerska registracija',
 	partnerLogExplanation: 'Ovu stranicu za prijavljivanje koriste registrovani Trilino partneri.',
 	partnerRegExplanation: 'Ovu stranicu za registraciju koriste vlasnici prostora koji žele da postanu Trilino partneri.',
-	partnerRegName: 'Naziv lokala',
+	partnerRegName: 'Naziv prostora',
 	partnerRegTax: 'PIB',
 	partnerRegContactPerson: 'Kontakt osoba',
 	partnerRegContactEmail: 'Kontakt email',
@@ -422,6 +422,27 @@ const serbian: LanguageInterface = {
 	partnerProfileReservationModalTitle: 'Izbrišite rezervaciju',
 	partnerProfileReservationModalText: 'Ukoliko izbrišete ovu rezervaciju, ona više neće biti dostupna i termin koji je zauzimala će biti slobodan za rezervisanje. Da li ste sigurni da želite da izbrišete ovu rezervaciju?',
 	partnerProfileReservationModalButtonText: 'Da, izbriši rezervaciju',
+
+
+	searchFilterBasicCity: 'Grad:',
+	searchFilterBasicDistrict: 'Deo grada:',
+	searchFilterBasicDate: 'Datum proslave:',
+	searchFilterBasicKidsNum: 'Broj dece:',
+	searchFilterBasicAdultsNum: 'Broj odraslih:',
+	searchFilterBasicMoreDetail: 'DETALJNA PRETRAGA',
+	searchFilterBasicMoreBasic: 'OSNOVNA PRETRAGA',
+	searchFilterAdditionalEntertainmentSub: 'Zabavni sadržaj',
+	searchFilterAdditionalVenueName: 'Naziv prostora:',
+	searchFilterAdditionalAgeFrom: 'Za uzrast od:',
+	searchFilterAdditionalAgeTo: 'Za uzrast do:',
+	searchFilterAdditionalAgePlaceholder: 'uzrast',
+	searchFilterAdditionalPriceFrom: 'Cena termina od:',
+	searchFilterAdditionalPriceTo: 'Cena termina do:',
+	searchResultsTitle: 'Rezultati pretrage',
+	searchResultsSortPlaceholder: 'sortirajte',
+	searchResultsItemsNum: 'rezultata',
+	searchResultsLoadButton: 'Učitajte još rezultata',
+
 
 
 

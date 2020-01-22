@@ -6,6 +6,7 @@ type MyProps = {
   field?: string;
 	onChange?(event: any): void;
   label?: string;
+  orientation?: string; 
   // using `interface` is also ok
 };
 type MyState = {
@@ -22,12 +23,13 @@ export default class PlainCheckbox extends React.Component <MyProps, MyState> {
   // };
 
   render() {
+    const backOrientation = this.props.orientation === 'back' ? true : false;
     return (
       <div>
         
         <div className="React__checkbox">
           {
-            this.props.label
+            this.props.label && !backOrientation
             ?
             <label className="checkbox-simple-label">{this.props.label}</label>
             :
@@ -45,6 +47,14 @@ export default class PlainCheckbox extends React.Component <MyProps, MyState> {
             />
             <span className="React__checkbox--span" />
           </label>
+
+          {
+            this.props.label && backOrientation
+            ?
+            <label className="checkbox-simple-label">{this.props.label}</label>
+            :
+            null
+          }
         </div>
         
       </div>
