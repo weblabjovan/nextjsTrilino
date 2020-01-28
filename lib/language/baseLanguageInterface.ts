@@ -436,6 +436,8 @@ export default interface LanguageInterface {
 	searchResultsTitle: string;
 	searchResultsSortPlaceholder: string;
 	searchResultsItemsNum: string;
+	searchResultsItemKids: string;
+	searchResultsItemAdults: string;
 	searchResultsLoadButton: string;
 
 

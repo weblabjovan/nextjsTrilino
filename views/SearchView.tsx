@@ -496,8 +496,8 @@ class SearchView extends React.Component <MyProps, MyState>{
 			            			<div className="info">
 			            				<h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
 	            						<p><span className="icon room"></span>{item['general']['address']}</p>
-	            						<p><span className="icon group"></span>120 dece i 400 odraslih</p>
-	            						<p><span className="icon house"></span>1200 m2</p>
+	            						<p><span className="icon group"></span>{`${item['general']['capacity']['sumKids']} ${this.state.dictionary['searchResultsItemKids']} ${item['general']['capacity']['sumAdults']} ${this.state.dictionary['searchResultsItemAdults']}`}</p>
+	            						<p><span className="icon house"></span>{`${item['general']['size']}m2`}</p>
 	            						<h6> <span className="icon star"></span>4.5</h6>
 			            			</div>
 			            		</div>

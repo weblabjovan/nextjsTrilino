@@ -184,6 +184,12 @@ export const createSearchQuery = (fields: object): object => {
       }
     }
 
+    if (key === 'district') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result[key] = fields[key];
+      }
+    }
+
     if (key === 'agesFrom') {
       if (fields[key] !== null && fields[key] !== 'null') {
         if (Object.keys(fields).indexOf('agesTo') !== -1) {
@@ -234,12 +240,6 @@ export const createSearchQuery = (fields: object): object => {
         const c = arr.map( x => { return parseInt(x)});
 
         result['contentOffer'] = { $all: c };
-      }
-    }
-
-    if (key === 'district') {
-      if (fields[key] !== null && fields[key] !== 'null') {
-        result[key] = fields[key];
       }
     }
 
@@ -323,4 +323,21 @@ const oneOfTheRoomsIsAvailable = (rooms: Array<object>, day: string, reservation
   }
 
   return false;
+}
+
+export const calculatePartnerCapacity = (rooms: Array<object>): object => {
+  let maxAdults = 0;
+  let maxKids = 0;
+  let sumAdults = 0;
+  let sumKids = 0;
+
+  for (var i = 0; i < rooms.length; ++i) {
+    sumKids = sumKids + rooms[i]['capKids'];
+    sumAdults = sumAdults + rooms[i]['capAdults'];
+    maxAdults = maxAdults < rooms[i]['capAdults'] ? rooms[i]['capAdults'] : maxAdults;
+    maxKids = maxKids < rooms[i]['capKids'] ? rooms[i]['capKids'] : maxKids;
+
+  }
+
+  return { maxAdults, maxKids, sumAdults, sumKids };
 }

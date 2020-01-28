@@ -443,6 +443,8 @@ const english: LanguageInterface = {
 	searchResultsTitle: 'Search results',
 	searchResultsSortPlaceholder: 'sort',
 	searchResultsItemsNum: 'results',
+	searchResultsItemKids: 'kids and',
+	searchResultsItemAdults: 'adults',
 	searchResultsLoadButton: 'Load more results',
 
 

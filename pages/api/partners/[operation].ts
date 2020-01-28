@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -90,10 +90,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			};
 
 			try{
-				console.log(query);
-				console.log(req['query']);
 				await connectToDb(req.headers.host);
-				const partnersOne = await Partner.aggregate([{ $match: query }, {$lookup: lookup}]).select('-password');;
+				const partnersOne = await Partner.aggregate([{ $match: query }, {$lookup: lookup}]);
 				const partners = getFreeTermPartners(partnersOne, dateString);
 				return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1, partners,  message: 'Ok' });
 			}catch(err){
@@ -249,6 +247,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						if (data['general']['ageTo']) {
 							data['general']['ageTo'] = parseInt(data['general']['ageTo']);
 						}
+						if (data['general']['rooms']) {
+							data['general']['capacity'] = calculatePartnerCapacity(data['general']['rooms']);
+						}
+						
 
 						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { district, general: data['general'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
 						if (partner) {

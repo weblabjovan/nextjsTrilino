@@ -441,6 +441,8 @@ const serbian: LanguageInterface = {
 	searchResultsTitle: 'Rezultati pretrage',
 	searchResultsSortPlaceholder: 'sortirajte',
 	searchResultsItemsNum: 'rezultata',
+	searchResultsItemKids: 'dece i',
+	searchResultsItemAdults: 'odraslih',
 	searchResultsLoadButton: 'Učitajte još rezultata',
 
 
