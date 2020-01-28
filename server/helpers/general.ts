@@ -136,3 +136,191 @@ export const setReservationDateForBase = (dateString: string): Date => {
 
   return newDate;
 }
+
+export const setDateForServer = (date: string): Date => {
+  const strings = date.split('-')
+  const d = new Date();
+  d.setFullYear(parseInt(strings[2]));
+  d.setMonth(parseInt(strings[1])-1);
+  d.setDate(parseInt(strings[0]));
+  d.setUTCHours(0);
+  d.setMinutes(0);
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+
+  return d;
+}
+
+const dayForSearch = (date: string): string => {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const d = setDateForServer(date);
+
+  return days[d.getDay()];
+}
+
+export const createSearchQuery = (fields: object): object => {
+  const result = { 'active': true, 'forActivation': true };
+  for(let key in fields){
+    if (key === 'date') {
+      const day = dayForSearch(fields['date']);
+      result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'from': {$exists: true }}}}} }];
+    }
+
+    if (key === 'kidsNum') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result['$and'].push({ 'general.rooms': { $elemMatch: {'capKids': { $gte: parseInt(fields[key]) }}}});
+      }
+    }
+
+    if (key === 'adultsNum') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result['$and'].push({ 'general.rooms': { $elemMatch: {'capAdults': { $gte: parseInt(fields[key]) }}}});
+      }
+    }
+
+    if (key === 'city') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result[key] = fields[key];
+      }
+    }
+
+    if (key === 'agesFrom') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        if (Object.keys(fields).indexOf('agesTo') !== -1) {
+          result['general.ageTo'] = { $lte: parseInt(fields['agesTo']), $gte: parseInt(fields[key])}
+        }else{
+          result['general.ageTo'] = { $gt: parseInt(fields[key])}
+        }
+        
+      }
+    }
+
+    if (key === 'agesTo') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        if (Object.keys(fields).indexOf('agesFrom') !== -1) {
+          result['general.ageTo'] = { $lte: parseInt(fields[key]), $gte: parseInt(fields['agesFrom'])}
+        }else{
+          result['general.ageFrom'] = { $lt: parseInt(fields[key])}
+        }
+        
+      }
+    }
+
+    if (key === 'priceFrom') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        const day = dayForSearch(fields['date']);
+        if (Object.keys(fields).indexOf('priceTo') !== -1) {
+          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields['priceTo']), $gte: parseInt(fields[key])}}}}} });
+        }else{
+          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $gte: parseInt(fields[key])}}}}} });
+        }
+      }
+    }
+
+    if (key === 'priceTo') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        const day = dayForSearch(fields['date']);
+        if (Object.keys(fields).indexOf('priceFrom') !== -1) {
+
+        }else{
+          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields[key])}}}}} });
+        }
+      }
+    }
+
+    if (key === 'offer') {
+       if (fields[key] !== null && fields[key] !== 'null' && fields[key] !== '') {
+        const arr = fields[key].split('%');
+        const c = arr.map( x => { return parseInt(x)});
+
+        result['contentOffer'] = { $all: c };
+      }
+    }
+
+    if (key === 'district') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result[key] = fields[key];
+      }
+    }
+
+    if (key === 'name') {
+      if (fields[key] !== null && fields[key] !== 'null') {
+        result[key] = { $regex: fields[key], $options: 'i' };
+      }
+    }
+
+    if (key === 'parking') {
+      if (fields[key]) {
+        result['general.parking'] =  '1'
+      }
+    }
+
+    if (key === 'yard') {
+      if (fields[key]) {
+        result['general.yard'] =  '1'
+      }
+    }
+
+    if (key === 'balcon') {
+      if (fields[key]) {
+        result['general.balcon'] =  '1'
+      }
+    }
+
+    if (key === 'pool') {
+      if (fields[key]) {
+        result['general.pool'] =  '1'
+      }
+    }
+
+    if (key === 'animator') {
+      if (fields[key]) {
+        result['general.animator'] =  '1'
+      }
+    }
+
+    if (key === 'movie') {
+      if (fields[key]) {
+        result['general.movie'] =  '1'
+      }
+    }
+
+    if (key === 'gaming') {
+      if (fields[key]) {
+        result['general.gaming'] =  '1'
+      }
+    }
+
+  };
+
+  return result;
+}
+
+export const getFreeTermPartners = (partners: Array<object>, date: string): Array<object> => {
+  const day = dayForSearch(date);
+  const result = [];
+
+  for (var i = 0; i < partners.length; ++i) {
+    if (!partners[i]['reservations'].length) {
+      result.push(partners[i]);
+    }else{
+      if (oneOfTheRoomsIsAvailable(partners[i]['general']['rooms'], day, partners[i]['reservations'].length)) {
+        result.push(partners[i]);
+      }
+    }
+  }
+
+  return result;
+}
+
+const oneOfTheRoomsIsAvailable = (rooms: Array<object>, day: string, reservationCount: number): boolean => {
+  for (var i = 0; i < rooms.length; ++i) {
+    if (rooms[i]['terms'][day][0]['from']) {
+      if (rooms[i]['terms'][day].length > reservationCount) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}

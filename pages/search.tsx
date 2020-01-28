@@ -5,7 +5,7 @@ import Head from '../components/head';
 import SearchView from '../views/SearchView';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
+import { isPartnerLogged, getPartners } from '../lib/helpers/specificPartnerFunctions';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -13,10 +13,12 @@ import '../style/style.scss';
 interface Props {
   userAgent?: string;
   link?: null | object;
+  query?: object;
+  partners?: Array<object>;
 }
 
 
-const Search : NextPage<Props> = ({ userAgent }) => {
+const Search : NextPage<Props> = ({ userAgent, query, partners }) => {
 
   const router = useRouter();
   let lang = 'sr';
@@ -36,7 +38,11 @@ const Search : NextPage<Props> = ({ userAgent }) => {
         router={ router } 
         path={router.pathname} 
         fullPath={ router.asPath } 
-        lang={ lang } />
+        lang={ lang }
+        partners={ partners }
+        date={ query['date'] ? query['date'] : null }
+        district={ query['district'] ? query['district'] : null }
+        city={ query['city'] ? query['city'] : null } />
     </div>
   )
 }
@@ -44,6 +50,7 @@ const Search : NextPage<Props> = ({ userAgent }) => {
 Search.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  let partners = [];
 
   const devLog = await isDevEnvLogged(ctx);
 
@@ -52,7 +59,13 @@ Search.getInitialProps = async (ctx: any) => {
     ctx.res.end();
   }
 
-  return { userAgent }
+  const response = await getPartners(ctx);
+  if (response['status'] === 200) {
+    const re = await response.json();
+    partners = re['partners']
+  }
+
+  return { userAgent, query: ctx['query'], partners }
 }
 
 export default withRedux(Search)

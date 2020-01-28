@@ -8,7 +8,8 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'react-day-picker/lib/style.css';
@@ -34,6 +35,8 @@ interface MyState {
 	dictionary: object;
 	isMobile: boolean;
   date: Date;
+  city: null | object;
+  district: null | object;
 };
 
 class HomeView extends React.Component <MyProps, MyState>{
@@ -51,13 +54,12 @@ class HomeView extends React.Component <MyProps, MyState>{
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
       date: new Date(),
+      city: null,
+      district: null,
 
     };
 
 	componentDidMount(){
-    if (this.props.error) {
-      // this.props.router.push(`/?language=${this.props.lang}`);
-    }
 		this.props.setUserLanguage(this.props.lang);
 	}
 
@@ -66,6 +68,20 @@ class HomeView extends React.Component <MyProps, MyState>{
       return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     }
     return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  }
+
+  handleInputChange(field, value){
+     this.setState(prevState => ({
+      ...prevState,
+      [field]: value // No error here, but can't ensure that key is in StateKeys
+    }));
+  }
+
+  handleSearch(){
+    const link = setUpLinkBasic(window.location.href);
+    const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+    const url = `${link['protocol']}${link['host']}/search?language=${this.props.lang}&city=${this.state.city ? this.state.city['value'] : null }&district=${this.state.district ? this.state.district['value'] : null }&date=${date}`;
+    window.location.href =  url;
   }
 
   dateChange = date => {
@@ -78,11 +94,6 @@ class HomeView extends React.Component <MyProps, MyState>{
   }
 	
   render() {
-    const options = [
-      { value: '1', label: 'Beograd' },
-      { value: '2', label: 'Novi sad' },
-      { value: '3', label: 'Niš' }
-    ];
 
     const opts = {
       height: this.state.isMobile ? '320' : '690',
@@ -113,8 +124,20 @@ class HomeView extends React.Component <MyProps, MyState>{
                       <div className="box">
                         <h2>{ this.state.dictionary['homeTitle'] }</h2>
                         <form>
-                          <Select options={options} instanceId="homeCity" className="homeInput" placeholder={ this.state.dictionary['uniCity'] }/>
-                          <Select options={options} instanceId="homeDistrict" className="homeInput" placeholder={ this.state.dictionary['uniDistrict'] } />
+                          <Select 
+                            options={genOptions['cities']} 
+                            instanceId="homeCity" 
+                            value={ this.state.city }
+                            onChange={ (val) => this.handleInputChange('city', val)}
+                            className="homeInput" 
+                            placeholder={ this.state.dictionary['uniCity'] }/>
+                          <Select 
+                            options={genOptions['quarter'][this.state.city ? this.state.city['value'].toString() : 0]} 
+                            instanceId="homeDistrict" 
+                            value={ this.state.district }
+                            onChange={ (val) => this.handleInputChange('district', val)}
+                            className="homeInput" 
+                            placeholder={ this.state.dictionary['uniDistrict'] } />
                           <DayPickerInput 
                             value={ this.state.date }
                             formatDate={ this.formatDate }
@@ -131,7 +154,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                             }}
                            />
                         </form>
-                        <Button color="success">{ this.state.dictionary['uniSearch'] }</Button>
+                        <Button color="success" onClick={() => this.handleSearch() }>{ this.state.dictionary['uniSearch'] }</Button>
                       </div>
                   </div>
                   <div className="homeHeading bottomPos hidden-xs">
@@ -181,7 +204,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <h4>{ this.state.dictionary['homeWhatBenTitle'] }</h4>
                     <p>{ this.state.dictionary['homeWhatBenMini'] }</p>
                   </div>
-                  <img src="/static/home_2.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                  <img src="/static/thumbnail.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                 </Col>
 
                 <Col xs="12" sm="6" className="hidden-xs">

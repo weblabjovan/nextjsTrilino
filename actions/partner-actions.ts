@@ -1,4 +1,4 @@
-import { isMobile, apiEndpoint, setApiBasLink } from '../lib/helpers/generalFunctions';
+import { isMobile, apiEndpoint, setApiBasLink, setGetQuery } from '../lib/helpers/generalFunctions';
 import apiRoot  from '../lib/constants/api';
 
 
@@ -76,6 +76,32 @@ export function getPartner(id: string, encoded: boolean, link: object) {
       endpoint,
       id,
       getPartnerActionTypes,
+      null,
+      false,
+      'GET'
+    );
+  };
+}
+
+
+export const getPartnersMultipleActionTypes = {
+  START: 'PARTNERS_MULTIPLE_GET_START',
+  ERROR: 'PARTNER_MULTIPLE_GET_ERROR',
+  SUCCESS: 'PARTNER_MULTIPLE_GET_SUCCESS',
+};
+
+export function getPartnersMultiple(data: object, link: object) {
+  const point = setApiBasLink(link, apiRoot.PARTNERS_GET);
+  const query = setGetQuery('search', data);
+  const endpoint = `${point}?${query}`;
+  console.log(endpoint);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      null,
+      getPartnersMultipleActionTypes,
       null,
       false,
       'GET'

@@ -269,7 +269,7 @@ const assembleForSelect = (key: string, value: number | string, language: string
 		return res[0];
 	}
 	if (forAges.indexOf(key) !== -1) {
-		const res = genOptions['ages'].filter((age) => { return age['value'] === value; });
+		const res = genOptions['ages'].filter((age) => { return age['value'] === value.toString(); });
 		return res[0];
 	}
 	if (forTimes.indexOf(key) !== -1) {
@@ -614,6 +614,16 @@ const returnOnlyTrueForObjects = (obj: object, field: string | null = null): obj
 	return res;
 }
 
+export const dateForSearch = (date: string): Date => {
+	const strings = date.split('-')
+	const d = new Date();
+	d.setFullYear(parseInt(strings[2]));
+	d.setMonth(parseInt(strings[1])-1);
+	d.setDate(parseInt(strings[0]));
+
+	return d;
+}
+
 export const formatReservations = (reservations: Array<object>): Array<object> => {
 	for (var i = 0; i < reservations.length; ++i) {
 		const d = new Date(reservations[i]['date']);
@@ -712,9 +722,13 @@ export const calculateActivationProcess = (partnerObj: object): number => {
 }
 
 const isGeneralFilled = (partner: object): boolean => {
-	const requiredGeneral = ['size', 'playSize', 'description', 'address', 'ageFrom', 'ageTo', 'mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo', 'parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'selfFood', 'selfDrink', 'duration', 'cancelation', 'roomNumber', 'selfAnimator', 'smoking', 'spaceType', 'movie', 'gaming', 'quarter', 'depositPercent', 'despositNumber', 'doubleDiscount'];
+	const requiredGeneral = ['size', 'playSize', 'description', 'address', 'ageFrom', 'ageTo', 'mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo', 'parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'selfFood', 'selfDrink', 'duration', 'cancelation', 'roomNumber', 'selfAnimator', 'smoking', 'spaceType', 'movie', 'gaming', 'depositPercent', 'despositNumber', 'doubleDiscount'];
 
 	if (!partner['general']) {
+		return false;
+	}
+
+	if (partner['district'] === '0') {
 		return false;
 	}
 
@@ -867,8 +881,54 @@ export const isPartnerLogged = async (context: any): Promise<boolean> => {
   }
 }
 
+
+export const getPartners = async (context: any): Promise<any> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/get/?language=${link['queryObject']['language']}&city=${link['queryObject']['city']}&district=${link['queryObject']['district']}&date=${link['queryObject']['date']}&multiple=true`;
+	const response = await fetch(apiUrl);
+
+    return response;
+}
+
+
+
 export const getPartnerToken = (context: any): string => {
 	const allCookies = nextCookie(context);
 	const token = allCookies['trilino-partner-token'] ? allCookies['trilino-partner-token'] : '';
 	return token;
+}
+
+export const setSearchData = (data: object): object => {
+	const fields = ['city', 'district', 'date', 'kidsNum', 'adultsNum', 'parking', 'yard', 'balcon', 'pool', 'animator', 'gaming', 'offer', 'agesFrom', 'agesTo', 'priceFrom', 'priceTo', 'name'];
+	const result = {};
+
+	for(let key in data){
+		if (fields.indexOf(key) !== -1) {
+			if (data[key]) {
+				if (key === 'date') {
+					result[key] = `${data[key].getDate()}-${data[key].getMonth() + 1}-${data[key].getFullYear()}`;
+				}else{
+					if (typeof data[key] === 'object') {
+						if (data[key]['value']) {
+							result[key] = data[key]['value'];
+						}else{
+							if (key === 'offer') {
+								const arr = [];
+								for(let index in data[key]){
+									if (data[key][index]) {
+										arr.push(parseInt(index));
+									}
+								}
+								result[key] = arr;
+							}
+						}
+					}else{
+						result[key] = data[key];
+					}
+				}
+			}
+		}
+	}
+
+	return result;
 }

@@ -6,9 +6,10 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
+import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
+import { isMobile, setCookie, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue } from '../lib/helpers/generalFunctions';
+import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
 import CheckBox from '../components/form/checkbox';
@@ -16,15 +17,28 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import Select from 'react-select';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
+import Keys from '../server/keys';
+import 'react-day-picker/lib/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
+
   setUserLanguage(language: string): string;
+  getPartnersMultiple(data: object, link: object): void;
+  changeSinglePartnerField(field: string, value: any): any;
+  getPartnersMultipleStart: boolean;
+  getPartnersMultipleError: object | boolean;
+  getPartnersMultipleSuccess: null | number;
+  searchResults: Array<object>;
+  partners: Array<object>;
   userLanguage: string;
   userAgent: string;
   path: string;
+  date: null | string;
+  city: null | string;
+  district: null | string;
   fullPath: string;
   lang: string;
 };
@@ -78,9 +92,9 @@ class SearchView extends React.Component <MyProps, MyState>{
     dictionary: getLanguage(this.props.lang),
     isMobile: isMobile(this.props.userAgent),
     loader: false,
-    city: null,
-    district: null,
-    date: new Date(),
+    city: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 ? getArrayObjectByFieldValue(genOptions['cities'], 'value', this.props.city) : null,
+    district: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 && getArrayIndexByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) !== -1 ? getArrayObjectByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) : null,
+    date: this.props.date ? dateForSearch(this.props.date)  : new Date(),
     kidsNum: 1,
     adultsNum: 1,
     additional: false,
@@ -144,21 +158,32 @@ class SearchView extends React.Component <MyProps, MyState>{
 
   handleSearch(){
   	this.setState({ loader: true }, () => {
-  		this.toggleAdditional();
-  		console.log(this.state);
+  		if (this.state.additional) {
+  			this.toggleAdditional();
+  		}
+  		
+  		const data = setSearchData({...this.state});
+  		const link = setUpLinkBasic(window.location.href);
+  		this.props.getPartnersMultiple(data, link);
   	})
   	
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-
+  	if (!this.props.getPartnersMultipleStart && prevProps.getPartnersMultipleStart && !this.props.getPartnersMultipleError && this.props.getPartnersMultipleSuccess) {
+    	this.setState({loader: false });
+    }
   }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+
+		this.props.changeSinglePartnerField('searchResults', this.props.partners);
+
 	}
 	
   render() {
+
     return(
     	<div className="totalWrapper">
         <Loader  show={ this.state.loader } />
@@ -454,26 +479,29 @@ class SearchView extends React.Component <MyProps, MyState>{
 
               <Col xs='12' sm="3">
                 <div className="middle">
-              		<h5>{ this.state.dictionary['searchResultsItemsNum'] }</h5>
+              		<h5>{ `${this.props.searchResults.length} ${this.state.dictionary['searchResultsItemsNum']}` }</h5>
               	</div>
               </Col>
             </Row>
 
-            <Row className="searchResultsContent">
+            <Row className="searchResultsContent justify-content-sm-center">
             	{
-            		genOptions['contentOfferForSearch'].map((item, index) => {
+            		this.props.searchResults.map((item, index) => {
+            			const photoList = createDisplayPhotoListObject(item);
             			return(
             				<Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
+            					<a href={`/location/${item['_id']}`}>
 			            		<div className="searchItem">
-			            			<div className="photo" style={{'background': 'url(../static/partnershipHead.jpg) center / cover no-repeat'}}></div>
+			            			<div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
 			            			<div className="info">
-			            				<h5>Test igraonica</h5>
-	            						<p><span className="icon room"></span>Bulevar kralja Aleksandra 345</p>
+			            				<h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
+	            						<p><span className="icon room"></span>{item['general']['address']}</p>
 	            						<p><span className="icon group"></span>120 dece i 400 odraslih</p>
 	            						<p><span className="icon house"></span>1200 m2</p>
 	            						<h6> <span className="icon star"></span>4.5</h6>
 			            			</div>
 			            		</div>
+			            		</a>
 			            	</Col>
             			)
             		})
@@ -511,12 +539,19 @@ class SearchView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+
+  searchResults: state.PartnerReducer.searchResults,
+  getPartnersMultipleStart: state.PartnerReducer.getPartnersMultipleStart,
+  getPartnersMultipleError: state.PartnerReducer.getPartnersMultipleError,
+  getPartnersMultipleSuccess: state.PartnerReducer.getPartnersMultipleSuccess,
 });
 
 
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
+    changeSinglePartnerField,
+    getPartnersMultiple,
   },
   dispatch);
 };
