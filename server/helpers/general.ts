@@ -163,18 +163,32 @@ export const createSearchQuery = (fields: object): object => {
   for(let key in fields){
     if (key === 'date') {
       const day = dayForSearch(fields['date']);
-      result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'from': {$exists: true }}}}} }];
+      if (result['$and']) {
+        result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'from': {$exists: true }}}}} });
+      }else{
+        result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'from': {$exists: true }}}}} }];
+      }
     }
 
     if (key === 'kidsNum') {
       if (fields[key] !== null && fields[key] !== 'null') {
-        result['$and'].push({ 'general.rooms': { $elemMatch: {'capKids': { $gte: parseInt(fields[key]) }}}});
+        if (result['$and']) {
+          result['$and'].push({ 'general.rooms': { $elemMatch: {'capKids': { $gte: parseInt(fields[key]) }}}});
+        }else{
+          result['$and'] = [{ 'general.rooms': { $elemMatch: {'capKids': { $gte: parseInt(fields[key]) }}}}];
+        }
+        
       }
     }
 
     if (key === 'adultsNum') {
       if (fields[key] !== null && fields[key] !== 'null') {
-        result['$and'].push({ 'general.rooms': { $elemMatch: {'capAdults': { $gte: parseInt(fields[key]) }}}});
+        if (result['$and']) {
+          result['$and'].push({ 'general.rooms': { $elemMatch: {'capAdults': { $gte: parseInt(fields[key]) }}}});
+        }else{
+          result['$and'] = [{ 'general.rooms': { $elemMatch: {'capAdults': { $gte: parseInt(fields[key]) }}}}];
+        }
+        
       }
     }
 
@@ -216,9 +230,18 @@ export const createSearchQuery = (fields: object): object => {
       if (fields[key] !== null && fields[key] !== 'null') {
         const day = dayForSearch(fields['date']);
         if (Object.keys(fields).indexOf('priceTo') !== -1) {
-          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields['priceTo']), $gte: parseInt(fields[key])}}}}} });
+          if (result['$and']) {
+            result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields['priceTo']), $gte: parseInt(fields[key])}}}}} });
+          }else{
+            result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields['priceTo']), $gte: parseInt(fields[key])}}}}} }];
+          }
         }else{
-          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $gte: parseInt(fields[key])}}}}} });
+          if (result['$and']) {
+            result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $gte: parseInt(fields[key])}}}}} });
+          }else{
+            result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $gte: parseInt(fields[key])}}}}} }];
+          }
+          
         }
       }
     }
@@ -229,7 +252,12 @@ export const createSearchQuery = (fields: object): object => {
         if (Object.keys(fields).indexOf('priceFrom') !== -1) {
 
         }else{
-          result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields[key])}}}}} });
+          if (result['$and']) {
+            result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields[key])}}}}} });
+          }else{
+            result['$and'] = [{ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields[key])}}}}} }];
+          }
+          
         }
       }
     }
