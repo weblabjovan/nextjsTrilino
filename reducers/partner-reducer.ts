@@ -1,5 +1,5 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes, getPartnersMultipleActionTypes
 } from '../actions/partner-actions';
 import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration, IpartnerReservation } from '../lib/constants/interfaces';
 import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject, generateString, createReservationTermsArray, formatReservations, calculateActivationProcess} from '../lib/helpers/specificPartnerFunctions';
@@ -60,6 +60,10 @@ interface initialState {
   getPartnerReservationsError: boolean;
   getPartnerReservationsSuccess: null | number;
 
+  getPartnersMultipleStart: boolean;
+  getPartnersMultipleError: object | boolean;
+  getPartnersMultipleSuccess: null | number;
+
   forActivation: boolean;
   activationAlert: boolean;
   activationProcessPercent: number;
@@ -79,6 +83,8 @@ interface initialState {
   partnerReservation: IpartnerReservation;
 
   partnerReservationsList: Array<object>;
+
+  searchResults: Array<object>;
   
 }
 
@@ -136,6 +142,10 @@ const initialState: initialState  = {
   getPartnerReservationsStart: false,
   getPartnerReservationsError: false,
   getPartnerReservationsSuccess: null,
+
+  getPartnersMultipleStart: false,
+  getPartnersMultipleError: false,
+  getPartnersMultipleSuccess: null,
 
   forActivation: false,
   activationAlert: true,
@@ -271,6 +281,8 @@ const initialState: initialState  = {
   },
 
   partnerReservationsList: [],
+
+  searchResults: [],
 
 };
 
@@ -587,6 +599,28 @@ const actionsMap = {
       getPartnerReservationsSuccess: action.payload.code,
       partnerReservationsList: formatReservations(action.payload.reservations),
       getPartnerReservationsStart: false,
+    };
+  },
+
+  [getPartnersMultipleActionTypes.START]: (state) => {
+    return {
+      ...state,
+      getPartnersMultipleStart: true,
+    };
+  },
+  [getPartnersMultipleActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getPartnersMultipleStart: false,
+      getPartnersMultipleError: action.payload.response.body,
+    };
+  },
+  [getPartnersMultipleActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getPartnersMultipleSuccess: action.payload.code,
+      searchResults: action.payload.partners,
+      getPartnersMultipleStart: false,
     };
   },
 

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -26,12 +26,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				}else{
 
 	    		const country = 'Serbia';
+	    		const district = '0';
 	    		const created = new Date();
 	    		const passProvided = false;
 	    		const verified = false;
 	    		const passSafetyCode = generateString(8);
 
-	    		const newPartner = new Partner({ name, taxNum, city, contactPerson, contactEmail, contactPhone, verified, country, created, passProvided, userlanguage, passSafetyCode });
+	    		const newPartner = new Partner({ name, taxNum, city, district, contactPerson, contactEmail, contactPhone, verified, country, created, passProvided, userlanguage, passSafetyCode });
 	    		
 	    		const par = await newPartner.save();
 
@@ -63,48 +64,84 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const { type } = req.body;
 		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
 		const dictionary = getLanguage(userlanguage);
+		const multiple = req['query']['multiple'] ? true : false;
 
-		if (type === 'profile') {
-			const token = req.headers.authorization;
-			if (!isEmpty(token)) {
-				try{
-					await connectToDb(req.headers.host);
-					const decoded = verifyToken(token);
-					const partnerId = encodeId(decoded['sub']);
+		if (multiple) {
+			const query = createSearchQuery(req['query']);
+			const dateString = req['query']['date'] as string;
+			const queryDate = setDateForServer(dateString).toISOString().substring(0,19);
+			const lookup = { 
+				from: 'reservations', 
+				let: { partnerId: '$_id'},
+				pipeline: [
+					{ $addFields: { "partnerId": { "$toObjectId": "$partner" }}},
+          { $match:
+             { $expr:
+                { $and:
+                   [
+                     { $eq: [ "$partnerId",  "$$partnerId" ] }
+                   ]
+                }
+             }
+          },
+          { $match: { "date": queryDate }}
+        ],
+        as: "reservations"
+			};
 
-					const partner = await Partner.findById(partnerId, '-password -passSafetyCode -passProvided -verified');
-					if (partner) {
-						return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
-					}else{
-						return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			try{
+				await connectToDb(req.headers.host);
+				const partnersOne = await Partner.aggregate([{ $match: query }, {$lookup: lookup}]);
+				const partners = getFreeTermPartners(partnersOne, dateString);
+				return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1, partners,  message: 'Ok' });
+			}catch(err){
+				return res.status(500).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 2,  message: req['query'] });
+			}
+			
+
+		}else{
+			if (type === 'profile') {
+				const token = req.headers.authorization;
+				if (!isEmpty(token)) {
+					try{
+						await connectToDb(req.headers.host);
+						const decoded = verifyToken(token);
+						const partnerId = encodeId(decoded['sub']);
+
+						const partner = await Partner.findById(partnerId, '-password -passSafetyCode -passProvided -verified');
+						if (partner) {
+							return res.status(200).json({ endpoint: 'partners', operation: 'get profile', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
+						}else{
+							return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+						}
+					}catch(err){
+						return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 3, error: 'auth error', message: err });
 					}
-				}catch(err){
-					return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 3, error: 'auth error', message: err });
+				}else{
+					return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
 				}
-			}else{
-				return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+			
+			let partnerId = req['query']['partner'].toString();
+
+			if (req['query']['encoded']) {
+				partnerId = encodeId(partnerId);
+			}
+
+			try{
+				await connectToDb(req.headers.host);
+				const partner = await Partner.findById(partnerId, '-password');
+				if (partner) {
+					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
+				}else{
+					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerGetCode2'] });
+				}
+			}catch(err){
+				return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 			}
 		}
-		
 
 		
-		let partnerId = req['query']['partner'].toString();
-
-		if (req['query']['encoded']) {
-			partnerId = encodeId(partnerId);
-		}
-
-		try{
-			await connectToDb(req.headers.host);
-			const partner = await Partner.findById(partnerId, '-password');
-			if (partner) {
-				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
-			}else{
-				return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerGetCode2'] });
-			}
-		}catch(err){
-			return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
-		}
 	}
 
 	if (req.query.operation === 'update'){
@@ -203,8 +240,19 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerId = encodeId(decoded['sub']);
 						const partnerFrontObj = data['partner'];
 						partnerFrontObj['general'] = data['general'];
+						const district = data['partner']['district'];
+						if (data['general']['ageFrom']) {
+							data['general']['ageFrom'] = parseInt(data['general']['ageFrom']);
+						}
+						if (data['general']['ageTo']) {
+							data['general']['ageTo'] = parseInt(data['general']['ageTo']);
+						}
+						if (data['general']['rooms']) {
+							data['general']['capacity'] = calculatePartnerCapacity(data['general']['rooms']);
+						}
+						
 
-						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { general: data['general'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
+						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { district, general: data['general'], forActivation: isPartnerForActivation(partnerFrontObj) } }, { new: true }).select('-password');
 						if (partner) {
 							return res.status(200).json({ endpoint: 'partners', operation: 'update general', success: true, code: 1,  message: dictionary['apiPartnerAuthCode1'], partner });
 						}else{

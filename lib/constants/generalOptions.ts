@@ -1,8 +1,11 @@
 interface IGenOptions {
+  searchSortOptions_sr: Array<object>;
+  searchSortOptions_en: Array<object>;
 	itemDuration_sr: Array<object>;
 	itemDuration_en: Array<object>;
 	cities: Array<object>;
 	ages: Array<object>;
+  prices: Array<object>;
 	times: Array<object>;
 	dual_en: Array<object>;
 	dual_sr: Array<object>;
@@ -11,6 +14,7 @@ interface IGenOptions {
 	firstDeca: Array<object>;
   spaceType_sr: Array<object>;
   spaceType_en: Array<object>;
+  contentOfferForSearch: Array<number>;
   contentOffer_sr: Array<object>;
   contentOffer_en: Array<object>;
   drinkScale: Array<object>;
@@ -27,6 +31,18 @@ interface IGenOptions {
 }
 
 const generalOptions: IGenOptions = {
+  searchSortOptions_sr: [
+    { value: '1', label: 'Sortiraj po popularnosti' },
+    { value: '2', label: 'Sortiraj po ceni uzlazno' },
+    { value: '3', label: 'Sortiraj po ceni silazno' },
+    { value: '4', label: 'Sortiraj po ocenama' },
+  ],
+  searchSortOptions_en: [
+    { value: '1', label: 'Sort by popularity' },
+    { value: '2', label: 'Sort by price low' },
+    { value: '3', label: 'Sort by price high' },
+    { value: '4', label: 'Sort by ranking' },
+  ],
 	itemDuration_sr: [
       { value: '2', label: '2 sata' },
       { value: '2.5', label: '2,5 sata' },
@@ -55,6 +71,24 @@ const generalOptions: IGenOptions = {
       { value: '3', label: 'Cafe' },
       { value: '4', label: 'Sport facility' },
       { value: '5', label: 'Other' }
+    ],
+    prices:[
+      { value: '4000', label: '4000' },
+      { value: '5000', label: '5000' },
+      { value: '6000', label: '6000' },
+      { value: '7000', label: '7000' },
+      { value: '8000', label: '8000' },
+      { value: '9000', label: '9000' },
+      { value: '10000', label: '10000' },
+      { value: '11000', label: '11000' },
+      { value: '12000', label: '12000' },
+      { value: '13000', label: '13000' },
+      { value: '14000', label: '14000' },
+      { value: '15000', label: '15000' },
+      { value: '16000', label: '16000' },
+      { value: '17000', label: '17000' },
+      { value: '18000', label: '18000' },
+      { value: '19000', label: '19000' },
     ],
     ages: [
       { value: '1', label: '1' },
@@ -137,6 +171,9 @@ const generalOptions: IGenOptions = {
       { value: '4', label: '4' },
       { value: '5', label: '5' },
     ],
+    contentOfferForSearch:[
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 18, 22, 23, 26, 30, 31, 33, 34, 37
+    ],
     contentOffer_sr: [
       {value: '1', label: 'Lavirint'},
       {value: '2', label: 'Mini teren za fudbal'},
@@ -165,9 +202,9 @@ const generalOptions: IGenOptions = {
       {value: '25', label: 'Lutke za decu'},
       {value: '26', label: 'Vozila na pedale'},
       {value: '27', label: 'Vozila na guranje'},
-      {value: '28', label: 'Kreativne radionice za decu'},
+      {value: '28', label: 'Radionice za decu'},
       {value: '29', label: 'X box konzola'},
-      {value: '30', label: 'Sportska takmičenja za decu'},
+      {value: '30', label: 'Takmičenja za decu'},
       {value: '31', label: 'Stoni fudbal'},
       {value: '32', label: 'Vazdušni hokej'},
       {value: '33', label: 'Fliperi'},
@@ -189,14 +226,14 @@ const generalOptions: IGenOptions = {
     ],
     contentOffer_en: [
       {value: '1', label: 'Lavirint'},
-      {value: '2', label: 'Mini teren za fudbal'},
-      {value: '3', label: 'Mini teren za košarku'},
+      {value: '2', label: 'Mini footbal court'},
+      {value: '3', label: 'Mini basketball court'},
       {value: '4', label: 'Face painting'},
       {value: '5', label: 'Limbo dance'},
       {value: '6', label: 'Trampolina'},
-      {value: '7', label: 'Drvene kućice'},
-      {value: '8', label: 'Kvizovi znanja'},
-      {value: '9', label: 'Dečija diskoteka'},
+      {value: '7', label: 'Wooden houses'},
+      {value: '8', label: 'Quiz'},
+      {value: '9', label: 'Kid disco'},
       {value: '10', label: 'Karaoke'},
       {value: '11', label: 'Laser tag'},
       {value: '12', label: 'Penjalice'},
@@ -255,10 +292,12 @@ const generalOptions: IGenOptions = {
     dealType_sr: [
       {value: '1', label: 'Za decu'},
       {value: '2', label: 'Za odrasle'},
+      {value: '3', label: 'Za decu i odrasle'},
     ],
     dealType_en: [
       {value: '1', label: 'For kids'},
       {value: '2', label: 'For adults'},
+      {value: '2', label: 'For kind and adults'},
     ],
     percentage: [
       {value: 10, label: '10%'},

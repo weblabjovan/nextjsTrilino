@@ -50,7 +50,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'uniInputHandler', 'changePartnerRoomsInRedux', 'saveGeneral', 'changePartnerGeneralInRedux', 'closeAlert', 'validateSave', 'closeActivationAlert'];
+    const bindingFunctions = ['handleInputChange', 'uniInputHandler', 'changePartnerRoomsInRedux', 'saveGeneral', 'changePartnerGeneralInRedux', 'closeAlert', 'validateSave', 'closeActivationAlert', 'changeDistrict'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -114,6 +114,12 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
   	const generalCopy = JSON.parse(JSON.stringify(this.props.partnerGeneral));
   	generalCopy[field] = value;
   	this.props.changeSinglePartnerField('partnerGeneral', generalCopy);
+  }
+
+  changeDistrict(value){
+    const partnerCopy = JSON.parse(JSON.stringify(this.props.partnerObject));
+    partnerCopy['district'] = value['value'];
+    this.props.changeSinglePartnerField('partner', partnerCopy);
   }
 
   changePartnerRoomsInRedux(num){
@@ -253,8 +259,8 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
               <label>{this.state.dictionary['partnerProfileGeneralItemQuarter']}</label>
               <Select 
                 options={genOptions['quarter'][`${this.props.partnerObject['city']}`]} 
-                value={ this.props.partnerGeneral['quarter'] } 
-                onChange={(val) => this.uniInputHandler(val, 'quarter')} 
+                value={ getGeneralOptionByValue(genOptions['quarter'][`${this.props.partnerObject['city']}`], this.props.partnerObject['district'])} 
+                onChange={(val) => this.changeDistrict(val)} 
                 instanceId="quarterInput" 
                 className="logInput" 
                 placeholder={this.state.dictionary['partnerProfileGeneralItemQuarterPlaceholder']}/>

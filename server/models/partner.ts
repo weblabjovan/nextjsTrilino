@@ -5,6 +5,7 @@ const partnerSchema = new Schema({
 	name: {type: String, required: true},
 	taxNum: {type: Number, required: true},
 	city: {type: String, required: true},
+	district: {type: String, required: true},
 	country: String,
 	contactPerson: {type: String, required: true},
 	contactEmail: {type: String, required: true},

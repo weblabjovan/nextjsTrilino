@@ -27,7 +27,7 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		        <Col xs='12' sm="6" >
 		          	<ul>
 		          		<li><a href={`/login?language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
-		          		<li><a href="/">{this.props.search}</a></li>
+		          		<li><a href={`/search?language=${this.props.language.toLowerCase()}`}>{this.props.search}</a></li>
 		          		<li><a href="/">{this.props.faq}</a></li>
 		          		<li><a href={`/partnership?language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</a></li>
 		          		<li><a href="/">{this.props.contact}</a></li>

@@ -211,3 +211,18 @@ export const getArrayIndexByFieldValue = (arr: Array<object>, field: string, val
 
   return -1;
 }
+
+export const setGetQuery = (type: string, data: object): string => {
+  if (type === 'search') {
+    return setSearchQuery(data);
+  }
+
+  return '';
+}
+
+const setSearchQuery = (data: object): string => {
+  data['multiple'] = true;
+  data['offer'] = data['offer'] ? data['offer'].toString().replace(/,/g, '%') : null;
+  return JSON.stringify(data).replace(/"/g, '').replace(/:/g, '=').replace(/,/g, '&').replace(/{|}/g, '');
+}
+
