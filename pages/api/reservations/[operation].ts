@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import Reservation from '../../../server/models/reservation';
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -158,6 +158,23 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				try{
 					await connectToDb(req.headers.host);
 					const query = await Reservation.find({partner, room, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}});
+					if (query) {
+						return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
+					}else{
+						return res.status(404).json({ endpoint: 'reservations', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
+					}
+					
+				}catch(err){
+					return res.status(500).send({ endpoint: 'reservations', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
+				}
+			}
+
+			if (type === 'user') {
+				const {partner, date} = req.body;
+				const queryDate = setDateForServer(date).toISOString().substring(0,19);
+				try{
+					await connectToDb(req.headers.host);
+					const query = await Reservation.find({partner, date: queryDate});
 					if (query) {
 						return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
 					}else{

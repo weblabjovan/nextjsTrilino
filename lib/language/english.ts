@@ -53,7 +53,7 @@ const english: LanguageInterface = {
 	homeHeader_3: 'Testimonials',
 	homeHeader_4: 'You have a space for kids?',
 	homeHeader_5: 'How it works?',
-	homeWhatDescribe: 'Trilino is a reliable internet service which enables you to organize a childrens celebration in an easy and fast way with the help of your desktop or mobile device.',
+	homeWhatDescribe: 'Trilino is free internet service which enables you to organize a childrens celebration in an easy and fast way with the help of your desktop or mobile device.',
 	homeWhatBenTitle: 'Short title in english language',
 	homeWhatBen: 'Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work. Longer explanation of the benefits that needs a lot of work.',
 	homeWhatBenMini: 'Short explanation of the benefits that needs a little work.',

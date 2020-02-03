@@ -1,17 +1,29 @@
 import {
-  changeSingleFieldActionType, deleteReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
 	deleteReservationStart: boolean;
   deleteReservationError: object | boolean;
   deleteReservationSuccess: null | object;
+
+  getReservationsStart: boolean;
+  getReservationsError: object | boolean;
+  getReservationsSuccess: null | number;
+
+  reservations: Array<object>;
 }
 
 const initialState: initialState  = {
   deleteReservationStart: false,
   deleteReservationError: false,
   deleteReservationSuccess: null,
+
+  getReservationsStart: false,
+  getReservationsError: false,
+  getReservationsSuccess: null,
+
+  reservations: [],
 
 };
 
@@ -43,6 +55,29 @@ const actionsMap = {
       ...state,
       deleteReservationSuccess: action.payload.code,
       deleteReservationStart: false,
+    };
+  },
+
+  [getReservationsOnDateActionType.START]: (state) => {
+    return {
+      ...state,
+      getReservationsStart: true,
+      getReservationsSuccess: null,
+    };
+  },
+  [getReservationsOnDateActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getReservationsStart: false,
+      getReservationsError: action.payload.response.body,
+    };
+  },
+  [getReservationsOnDateActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getReservationsStart: false,
+      getReservationsSuccess: action.payload.code,
+      reservations: action.payload.reservations,
     };
   },
   

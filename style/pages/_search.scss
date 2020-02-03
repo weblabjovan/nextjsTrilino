@@ -1,6 +1,6 @@
 .searchWrapper{
 	.filter{
-		background: #ccc;
+		background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
 		padding-top: 20px;
 
 		.basic{
@@ -13,9 +13,17 @@
 			    }
 			}
 
+			.col-12{
+				@media only screen and (max-width: 577px){
+					text-align: center;
+		    }
+			}
+
 			label{
 				font-weight: 700;
 				font-size: 16px;
+				color: #fff;
+
 				@media only screen and (max-width: 768px){
 					font-size: 11px;
 			    }
@@ -30,19 +38,34 @@
 			}
 
 			button{
-				position: absolute;
-				bottom: 4px;
 
 				@media only screen and (max-width: 577px){
 					font-size: 16px;
-					padding: 5px 12px;
-					bottom: 2px;
-			    }
+					margin: auto;
+			   }
 
 			    @media only screen and (max-width: 370px){
 					font-size: 14px;
-					padding: 5px 12px;
-			    }
+			  }
+			}
+
+			.btn-success{
+				margin-top: 30px;
+			    border-radius: 30px;
+			    padding: 10px 30px;
+			    background: #f8f9fa;
+			    color: #216cf7;
+			    font-weight: 700;
+			    -webkit-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+				-moz-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+				box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+				 transition: all 1s;
+
+				&:hover{
+					-webkit-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+					-moz-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+					box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+				}
 			}
 
 			.middle{
@@ -50,7 +73,7 @@
 					font-family: $headFont;
 					font-weight: 300;
 					font-size: 14px;
-					color: $darkGreyCol;
+					color: #fff;
 					text-decoration: underline;
 					margin-top: 15px;
 					cursor: pointer;
@@ -84,16 +107,19 @@
 				margin-bottom: 20px;
 				font-size: 20px;
 				font-weight: 300;
+				color: #fff;
 			}
 
 			hr{
 				margin: 0px;
 				margin-bottom: 5px;
+				background: #fff;
 			}
 
 			label{
 				margin-bottom: 3px;
 				font-size: 15px;
+				color: #fff;
 
 				@media only screen and (max-width: 768px){
 					font-size: 14px;
@@ -167,9 +193,16 @@
 
 		.searchItem{
 			margin-bottom: 20px;
+			border-radius: 15px;
+			-webkit-box-shadow: 3px 3px 6px 2px rgba(89,89,89,1);
+			-moz-box-shadow: 3px 3px 6px 2px rgba(89,89,89,1);
+			box-shadow: 3px 3px 6px 2px rgba(89,89,89,1);
+
 			.photo{
 				width: 100%;
 				height: 200px;
+		    border-top-left-radius: 15px;
+    		border-top-right-radius: 15px;
 
 				@media only screen and (max-width: 320px){
 					height: 150px;
@@ -181,11 +214,18 @@
 				padding-right: 40px;
 				background: #fff;
 				position: relative;
+				border-bottom-left-radius: 15px;
+    		border-bottom-right-radius: 15px;
+			    border-bottom: solid 1px #ccc;
+			    border-right: solid 1px #ccc;
+			    border-left: solid 1px #ccc;
+
+
 
 				h5{
 					font-size: 20px;
 					font-weight: 700;
-					color: #000 !important;
+					color: $purple !important;
 					line-height: 32px;
 					@media only screen and (max-width: 380px){
 						font-size: 18px;

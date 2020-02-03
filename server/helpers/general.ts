@@ -330,9 +330,11 @@ export const getFreeTermPartners = (partners: Array<object>, date: string): Arra
 
   for (var i = 0; i < partners.length; ++i) {
     if (!partners[i]['reservations'].length) {
+      partners[i]['link'] = decodeId(generateString, partners[i]['_id']);
       result.push(partners[i]);
     }else{
       if (oneOfTheRoomsIsAvailable(partners[i]['general']['rooms'], day, partners[i]['reservations'].length)) {
+        partners[i]['link'] = decodeId(generateString, partners[i]['_id']);
         result.push(partners[i]);
       }
     }
@@ -368,4 +370,49 @@ export const calculatePartnerCapacity = (rooms: Array<object>): object => {
   }
 
   return { maxAdults, maxKids, sumAdults, sumKids };
+}
+
+export const preparePartnerForLocation = (partner: object, date: string): object => {
+  const day = dayForSearch(date);
+  let freeTerms = [];
+
+  if (!partner['reservations'].length) {
+    freeTerms = JSON.parse(JSON.stringify(partner['general']['rooms']));
+    for (var i = 0; i < freeTerms.length; ++i) {
+      freeTerms[i]['terms'] = freeTerms[i]['terms'][day];
+    }
+  }else{
+    freeTerms = JSON.parse(JSON.stringify(partner['general']['rooms']));
+    for (var i = 0; i < freeTerms.length; ++i) {
+      freeTerms[i]['terms'] = matchReservationsWithTerms(partner['reservations'], freeTerms[i]['terms'][day], freeTerms[i]['regId']);
+    }
+  }
+
+  partner['terms'] = freeTerms;
+
+  return partner;
+}
+
+const matchReservationsWithTerms = (reservations: Array<object>, terms:Array<object>, room: string): Array<object> => {
+  const reser = JSON.parse(JSON.stringify(reservations));
+  const result = [];
+  for (var i = 0; i < terms.length; ++i) {
+    if (terms[i]['from']) {
+      if (!isInReservationArray(reser, room, terms[i]['from'], terms[i]['to'])) {
+        result.push(terms[i]);
+      }
+    }
+  }
+
+  return result;
+}
+
+const isInReservationArray = (reservations: Array<object>, room: string, from: string, to: string): boolean => {
+  for (var i = 0; i < reservations.length; ++i) {
+    if (reservations[i]['room'] === room && reservations[i]['to'] === to && reservations[i]['from'] === from) {
+      return true;
+    }
+  }
+
+  return false;
 }

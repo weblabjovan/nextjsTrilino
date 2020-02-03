@@ -2,8 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Partner from '../../../server/models/partner';
+import Reservation from '../../../server/models/reservation';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -128,9 +129,42 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				partnerId = encodeId(partnerId);
 			}
 
+			
+
 			try{
-				await connectToDb(req.headers.host);
-				const partner = await Partner.findById(partnerId, '-password');
+				let partner = null;
+				if (req['query']['date']) {
+					const dateString = req['query']['date'] as string;
+					const queryDate = setDateForServer(dateString).toISOString().substring(0,19);
+					const lookup = { 
+						from: 'reservations', 
+						let: { partnerId: '$_id'},
+						pipeline: [
+							{ $addFields: { "partnerId": { "$toObjectId": "$partner" }}},
+		          { $match:
+		             { $expr:
+		                { $and:
+		                   [
+		                     { $eq: [ "$partnerId",  "$$partnerId" ] }
+		                   ]
+		                }
+		             }
+		          },
+		          { $match: { "date": queryDate }},
+		          { $match: { "active": true }},
+		        ],
+		        as: "reservations"
+					};
+
+					await connectToDb(req.headers.host);
+					const ObjectId = mongoose.Types.ObjectId;
+					const Agregate = await Partner.aggregate([{ $match: { '_id': ObjectId(partnerId) } }, {$lookup: lookup}]);
+					partner = preparePartnerForLocation(Agregate[0], dateString);
+				}else{
+					await connectToDb(req.headers.host);
+					partner = await Partner.findById(partnerId, '-password');
+				}
+				
 				if (partner) {
 					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
 				}else{

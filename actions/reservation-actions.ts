@@ -46,3 +46,22 @@ export function deleteReservation(link: object, data: object, auth: string) {
     );
   };
 }
+
+export const getReservationsOnDateActionType = {
+  START: 'GET_RESERVATIONS_ONDATE_START',
+  ERROR: 'GET_RESERVATIONS_ONDATE_ERROR',
+  SUCCESS: 'GET_RESERVATIONS_ONDATE_SUCCESS',
+};
+
+export function getReservationsOnDate(link: object, data: object) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_GET);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getReservationsOnDateActionType,
+    );
+  };
+}

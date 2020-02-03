@@ -184,6 +184,8 @@ class SearchView extends React.Component <MyProps, MyState>{
 	
   render() {
 
+    const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+
     return(
     	<div className="totalWrapper">
         <Loader  show={ this.state.loader } />
@@ -261,7 +263,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                     value={this.state.adultsNum} 
                     className="logInput" />
                 </Col>
-                <Col xs='4' sm="2">
+                <Col xs='12' sm="2">
                 	<Button color="success" onClick={ this.handleSearch }>{ this.state.dictionary['uniSearch'] }</Button>
                 </Col>
                 <Col xs="12">
@@ -490,7 +492,7 @@ class SearchView extends React.Component <MyProps, MyState>{
             			const photoList = createDisplayPhotoListObject(item);
             			return(
             				<Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
-            					<a href={`/location/${item['_id']}`}>
+            					<a href={`/location?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`}>
 			            		<div className="searchItem">
 			            			<div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
 			            			<div className="info">

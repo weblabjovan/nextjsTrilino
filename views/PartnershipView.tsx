@@ -103,7 +103,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="partnerWhatItem">
                         <div className="face">
-                          <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <span className="icon sale"></span>
                         </div>
                         <h4>{ this.state.dictionary['partnershipSubTitle_1'] }</h4>
                         <p>{ this.state.dictionary['partnershipSubDescription_1'] }</p>
@@ -118,7 +118,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="partnerWhatItem">
                         <div className="face">
-                          <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <span className="icon internet"></span>
                         </div>
                         <h4>{ this.state.dictionary['partnershipSubTitle_2'] }</h4>
                         <p>{ this.state.dictionary['partnershipSubDescription_2'] }</p>
@@ -132,7 +132,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="partnerWhatItem">
                         <div className="face">
-                          <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <span className="icon proces"></span>
                         </div>
                         <h4>{ this.state.dictionary['partnershipSubTitle_3'] }</h4>
                         <p>{ this.state.dictionary['partnershipSubDescription_3'] }</p>
@@ -195,7 +195,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                     <Col xs="12" className="partnerWhatItem">
                       
                       <div className="double">
-                        <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                        <div className="iconHolder">
+                          <span className="icon registration"></span>
+                        </div>
                         <h4>{this.state.dictionary['partnershipStepsTitle_1']}</h4>
                        </div>
                       <p>{this.state.dictionary['partnershipStepsDescription_1']}</p>
@@ -210,7 +212,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                   <Row>
                     <Col xs="12" className="partnerWhatItem">
                       <div className="double">
-                        <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                        <div className="iconHolder">
+                          <span className="icon photo"></span>
+                        </div>
                         <h4>{this.state.dictionary['partnershipStepsTitle_2']}</h4>
                        </div>
                       <p>{this.state.dictionary['partnershipStepsDescription_2']}</p>
@@ -224,7 +228,9 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                   <Row>
                     <Col xs="12" className="partnerWhatItem">
                       <div className="double">
-                        <img src="/static/connectIcon.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                        <div className="iconHolder">
+                          <span className="icon activation"></span>
+                        </div>
                         <h4>{this.state.dictionary['partnershipStepsTitle_3']}</h4>
                       </div>
                       <p>{this.state.dictionary['partnershipStepsDescription_3']}</p>
@@ -239,7 +245,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-         <div className="colorPurple">
+         <div className="colorBrand">
           <Container>
             <Row>
                 <Col xs="12">
