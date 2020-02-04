@@ -44,7 +44,6 @@
 		width: 60%;
 		margin: auto;
 		margin-bottom: 50px;
-		color: #000;
 
 		@media only screen and (max-width: 992px) {
 	    	width: 80%;
@@ -81,7 +80,8 @@
 	}
 
 	.colorLink{
-		color: #8c3ebf;
+		color: $lightBlue;
+		margin-left: 5px;
 		font-style: italic;
 	}
 }
@@ -93,6 +93,7 @@
 	h2{
 		font-size: 44px;
 	    margin-bottom: 40px;
+	    color: #fff;
 	    @media only screen and (max-width: 557px) {
 	    	font-size: 32px;
 	    	margin-bottom: 30px;
@@ -113,6 +114,25 @@
 
 		&:hover{
 			color:#000;
+		}
+	}
+
+	.btn-success{
+		margin-top: 30px;
+	    border-radius: 30px;
+	    padding: 10px 30px;
+	    background: #f8f9fa;
+	    color: #216cf7;
+	    font-weight: 700;
+	    -webkit-box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		-moz-box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		 transition: all 1s;
+
+		&:hover{
+			-webkit-box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
+			-moz-box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
+			box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
 		}
 	}
 }
@@ -184,6 +204,7 @@
 		    font-size: 44px;
 		    line-height: 60px;
 		    margin-top: 15%;
+		    color: #fff;
 
 		    @media only screen and (max-width: 1272px) {
 		    	font-size: 36px;
@@ -213,11 +234,61 @@
 		    margin-bottom: 20px;
 		    text-align: center;
 		    border-radius: 50%;
-		    border: solid 2px #ccc;
+		    border: solid 2px $purple;
+
+		    .icon{
+				display: block;
+				text-align: center;
+				width: 100%;
+				font-family: 'Material Icons';
+		        font-size: 60px;
+		        line-height: 85px;
+		        color: $purple;
+			}
+
+			.sale:before{
+				content: 'storefront';
+			}
+			.internet:before{
+				content: 'language';
+			}
+			.proces:before{
+				content: 'build';
+			}
 		}
 
 		.double{
 			width: 100%;
+
+			.iconHolder{
+				width: 60px;
+			    height: 60px;
+			    line-height: 55px;
+			    margin: auto;
+			    text-align: center;
+			    display: inline-block;
+			    vertical-align: middle;
+			}
+
+			.icon{
+				display: block;
+				text-align: center;
+				width: 100%;
+				font-family: 'Material Icons';
+		        font-size: 45px;
+		        line-height: 55px;
+		        color: $purple;
+			}
+
+			.registration:before{
+				content: 'account_box';
+			}
+			.photo:before{
+				content: 'collections';
+			}
+			.activation:before{
+				content: 'important_devices';
+			}
 
 			h4{
 				display: inline-block;

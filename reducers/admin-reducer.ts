@@ -88,6 +88,7 @@ const actionsMap = {
       ...state,
       adminLoginStart: true,
       adminLoginSuccess: null,
+      adminLoginError: false,
     };
   },
   [adminLoginActionTypes.ERROR]: (state, action) => {

@@ -881,6 +881,15 @@ export const isPartnerLogged = async (context: any): Promise<boolean> => {
   }
 }
 
+export const getSinglePartner = async (context: any, encoded: boolean): Promise<any> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const date = link['queryObject']['date'] ? link['queryObject']['date'] : 'null';
+	const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/get/?language=${link['queryObject']['language']}&partner=${link['queryObject']['partner']}&date=${date}&encoded=${encoded}`;
+	const response = await fetch(apiUrl);
+
+	return response;
+}
+
 
 export const getPartners = async (context: any): Promise<any> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});

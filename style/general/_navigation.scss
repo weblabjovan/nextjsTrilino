@@ -35,15 +35,16 @@
 	}
 
 	.leftWrap{
+		margin-bottom: 15px;
 
 		.logo{
 			@media only screen and (max-width: 577px) {
 			    margin: auto;
-				margin-bottom: 25px;
+				margin-bottom: 5px;
 			}
-			margin-top: 25px;
-			margin-bottom: 25px;
-			width: 250px;
+
+			margin-bottom: 5px;
+			width: 120px;
 		}
 
 		.socialWrapper{
@@ -167,7 +168,7 @@
 			cursor: initial;
 			font-size: 20px;
 			font-weight: 600;
-			background-color: #8c3ebf;
+			background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
 			text-transform: none;
 
 			span{

@@ -519,7 +519,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
                 {
                   isFieldInObject(this.props.partnerObject, 'contentAddon')
                   ?
-                  this.props.partnerObject['contentOffer'].length
+                  this.props.partnerObject['contentAddon'].length
                   ?
                   this.props.partnerObject['contentAddon'].map( (addon, index) => {
                     return(

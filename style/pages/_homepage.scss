@@ -1,11 +1,12 @@
 .homeHeading{
 	h3{
-		font-size: 36px;
-		margin: 25px 0px;
+		font-size: 46px;
+		margin: 45px 0px;
 
 		@media only screen and (max-width: 577px) {
-	    	margin: 20px 0px;
+	    	margin: 30px 0px;
     		font-size: 32px;
+    		text-align: center;
 		}   
 	}
 }
@@ -18,7 +19,8 @@
 
 .homescreen{
 	@media only screen and (max-width: 577px) {
-    	background-image: linear-gradient(to bottom, rgba(99, 99, 99, 0.52), rgba(36, 36, 36, 0.73)), url("/static/home_1_mob.jpg");
+    	// background-image: linear-gradient(to bottom, rgba(99, 99, 99, 0.52), rgba(36, 36, 36, 0.73)), url("/static/home_1_mob.jpg");
+    	background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
     	background-size: cover;
     	background-repeat: no-repeat;
     	background-position: center;
@@ -31,7 +33,7 @@
 	padding: 40px 20px;
 
 	@media only screen and (max-width: 577px){
-		padding: 15px 15px;
+		padding: 30px 15px;
 	}
 
 	p{
@@ -39,6 +41,8 @@
 	    text-align: center;
 	    font-weight: 300;
 	    line-height: 42px;
+	    width: 800px;
+	    margin: auto;
 
 	    @media only screen and (max-width: 992px){
 			font-size: 24px;
@@ -46,8 +50,9 @@
 		}
 
 		@media only screen and (max-width: 577px){
-			font-size: 18px;
-			line-height: 24px;
+			font-size: 22px;
+			line-height: 32px;
+			width: 100%;
 		}
 	}
 }
@@ -74,9 +79,11 @@
 	    margin-top: 15%;
 	    text-align: center;
 	    padding: 50px 30px;
-	    border: 1px #ccc solid;
-	    border-radius: 20px;
-	    background-color: #8c3ebf;
+	    border-radius: 30px;
+	    background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
+	    -webkit-box-shadow: 7px 7px 12px 0px rgba(98,102,110,1);
+		-moz-box-shadow: 7px 7px 12px 0px rgba(98,102,110,1);
+		box-shadow: 7px 7px 12px 0px rgba(98,102,110,1);
 
 	    @media only screen and (max-width: 1334px) {
 	    	padding: 30px 20px;
@@ -93,17 +100,35 @@
 	    	margin-top: 10%;
   			width: 90%;
   			padding: 0px;
-	    	border: none;
-	    	background-color: transparent;
+	    	background-image: none;
+	    	-webkit-box-shadow: none;
+			-moz-box-shadow: none;
+			box-shadow: none;
 		}
 
 	    .homeInput, .DayPickerInput{
 	    	margin-top: 10px;
+	    	text-align: left;
 	    }
 	}
 
 	.btn-success{
 		margin-top: 30px;
+	    border-radius: 30px;
+	    padding: 10px 30px;
+	    background: #f8f9fa;
+	    color: #216cf7;
+	    font-weight: 700;
+	    -webkit-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		-moz-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		 transition: all 1s;
+
+		&:hover{
+			-webkit-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+			-moz-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+			box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+		}
 	}
 }
 
@@ -145,7 +170,7 @@
 	overflow: hidden;
 
 	img{
-		max-width: 80%;
+		max-width: 75%;
 
 		@media only screen and (max-width: 992px) {
 	    	max-width: 110%;
@@ -176,6 +201,44 @@
 	    }
 	}
 }
+
+.homeWhatNewLine{
+	padding: 20px 0px;
+	margin: auto;
+	margin-bottom: 50px;
+	width: 100%;
+	border-radius: 20px;
+	-webkit-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
+	-moz-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
+	box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
+
+	@media only screen and (max-width: 577px) {
+    	margin-bottom: 35px;
+    	-webkit-box-shadow: 0px 7px 12px 0px rgba(61,61,61,1);
+		-moz-box-shadow: 0px 7px 12px 0px rgba(61,61,61,1);
+		box-shadow: 0px 7px 12px 0px rgba(61,61,61,1);
+	}
+
+	.photo{
+		width: 120px;
+		height: 120px;
+		margin: auto;
+		border-radius: 50%;
+	}
+
+	p{
+		line-height: 32px;
+		font-size: 20px;
+		font-weight: 300;
+		margin-top: 15px;
+		@media only screen and (max-width: 577px) {
+	    	font-size: 17px;
+	    	line-height: 30px;
+	    	text-align: center;
+		}
+	}
+}
+
 
 .homeWhatLine{
 	margin-top: 30px;
@@ -238,6 +301,11 @@
 
 	margin-bottom: 30px;
 	padding-bottom: 20px;
+	border-radius: 20px;
+	background-image: linear-gradient(to right top, #cccccc, #b5b5b5, #9f9f9f, #898989, #747474);
+	-webkit-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
+	-moz-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
+	box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
 
 	.photo{
 		width: 100%;
@@ -266,6 +334,7 @@
 		font-size: 18px;
 		margin-top: 20px;
 		padding: 0px 10px;
+		font-weight: 300;
 
 		@media only screen and (max-width: 577px) {
 	    	font-size: 14px;
@@ -291,18 +360,64 @@
 	}
 }
 
+.processWrapper{
+
+	padding: 50px 0px;
+
+	.item{
+		width: 600px;
+		padding: 10px;
+		color: #fff;
+		margin: auto;
+		border-bottom: solid 1px #ccc;
+		h4{
+			font-size: 40px;
+			font-weight: 600;
+			color: #fff;
+			text-align: center;
+		}
+
+		p{
+			font-size: 14px;
+			font-weight: 300;
+			text-align: center;
+		}
+	}
+
+	.iconHolder{
+		width: 100%;
+		text-align: center;
+		margin-top: 15px;
+		margin-bottom: 15px;
+
+		.icon{
+			display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+	        font-size: 50px;
+	        line-height: 45px;
+	        color: #fff;
+		}
+
+		.down:before{
+			content: 'expand_more';
+		}
+	}
+}
+
 .homeInfographicWrapper{
-	margin-top: 25px;
-	margin-bottom: 25px;
+	margin-top: 60px;
+	margin-bottom: 40px;
 	text-align: center;
 	@media only screen and (max-width: 600px) {
-    	margin-top: 15px;
-		margin-bottom: 15px;
+    	margin-top: 35px;
+		margin-bottom: 25px;
 	}
 }
 
 .homePartner{
-	background-image: linear-gradient(to bottom, rgba(99, 99, 99, 0.52), rgba(36, 36, 36, 0.73)), url("/static/home_4.png");
+	background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -311,6 +426,25 @@
 
 	@media only screen and (max-width: 992px) {
     	padding: 40px 0px;
+	}
+
+	.btn-success{
+		margin-top: 10px;
+	    border-radius: 30px;
+	    padding: 10px 30px;
+	    background: #f8f9fa;
+	    color: #216cf7;
+	    font-weight: 700;
+	    -webkit-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		-moz-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+		 transition: all 1s;
+
+		&:hover{
+			-webkit-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+			-moz-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+			box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+		}
 	}
 
 	h4{
@@ -330,6 +464,7 @@
 		color: #fff;
 		font-size: 30px;
 		margin-bottom: 40px;
+		font-weight: 300;
 
 		@media only screen and (max-width: 992px) {
 			width: 90%;

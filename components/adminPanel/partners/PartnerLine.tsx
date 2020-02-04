@@ -58,7 +58,7 @@ export default class PartnerLine extends React.Component <MyProps, MyState>{
         		<Col xs="12" sm="2" className="activation">
         			<p className="middle">Popunjenost profila</p>
         			<h4 className="middle">{`${this.props.percent}%`}</h4>
-        			<CustomInput type="switch" className="middle" id={`activateSwitch_${this.props.index}`} onClick={(event) => this.props.partnerActivation(event) } name={`${this.props.partnerId}`} label={this.props.active ? 'Deaktiviraj' : 'Aktiviraj'} />
+        			<CustomInput type="switch" className="middle" id={`activateSwitch_${this.props.index}`} onClick={(event) => this.props.partnerActivation(event) } checked={ this.props.active } name={`${this.props.partnerId}`} label={this.props.active ? 'Deaktiviraj' : 'Aktiviraj'} />
         		</Col>
         		<Col xs="12" sm="3" className="photo">
         			<p className="middle">{`Broj slika: ${this.props.photoNumber}`}</p>

@@ -27,6 +27,7 @@ interface MyProps {
   path: string;
   fullPath: string;
   lang: string;
+  link: null | object
 };
 interface MyState {
 	language: string;
@@ -35,6 +36,7 @@ interface MyState {
   logString: string;
   alertOpen: boolean;
   loader: boolean;
+  loginTry: number;
 };
 
 class LoginView extends React.Component <MyProps, MyState>{
@@ -46,6 +48,7 @@ class LoginView extends React.Component <MyProps, MyState>{
       logString: '',
       alertOpen: false,
       loader: false,
+      loginTry: 0,
     };
 
   handlelogPassChange(val){
@@ -66,6 +69,15 @@ class LoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (this.state.loginTry > 9) {
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+    }
+
+    if (this.props.adminBasicDevLoginError && !prevProps.adminBasicDevLoginError && !this.props.adminBasicDevLoginStart) {
+      const loginTry = this.state.loginTry + 1;
+      this.setState({ loginTry });
+    }
+
     if (!this.props.adminBasicDevLoginStart && prevProps.adminBasicDevLoginStart && this.props.adminBasicDevLoginSuccess) {
       setCookie(this.props.devAuth,'trilino-dev-auth', 5);
       const link = setUpLinkBasic(window.location.href);

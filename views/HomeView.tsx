@@ -9,6 +9,7 @@ import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -147,6 +148,10 @@ class HomeView extends React.Component <MyProps, MyState>{
                             hideOnDayClick={ true }
                             keepFocus={ false }
                             dayPickerProps={{
+                              disabledDays: {
+                                  before: new Date(),
+                                  after: addDaysToDate(null, 180),
+                              },
                               todayButton: datePickerLang[this.props.lang]['today'],
                               selectedDays: [ this.state.date ],
                               weekdaysShort: datePickerLang[this.props.lang]['daysShort'],
@@ -182,7 +187,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div className="colorGrey">
+        <div className="colorWhoo">
           <Container>
             <Row>
                 <Col xs="12">
@@ -199,15 +204,15 @@ class HomeView extends React.Component <MyProps, MyState>{
         <div className="">
           <Container>
             <Row>
-                <Col xs="12" sm="6" className="homeWhatImage">
+                <Col xs="12" sm="5" className="homeWhatImage">
                   <div className="homeWhatImageInsert hidden-xs-up">
                     <h4>{ this.state.dictionary['homeWhatBenTitle'] }</h4>
                     <p>{ this.state.dictionary['homeWhatBenMini'] }</p>
                   </div>
-                  <img src="/static/thumbnail.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                  <img src="/static/woman_phone_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                 </Col>
 
-                <Col xs="12" sm="6" className="hidden-xs">
+                <Col xs="12" sm="7" className="hidden-xs">
                   <div className="homeWhat">
                     <h4>{ this.state.dictionary['homeWhatBenTitle'] }</h4>
                     <p>{ this.state.dictionary['homeWhatBen'] }</p>
@@ -235,83 +240,53 @@ class HomeView extends React.Component <MyProps, MyState>{
         <div>
           <Container>
             <Row>
-                <Col xs="12" sm="6">
-                  <Container fluid>
-                    <Row>
-                      <Col xs="12" className="homeWhatLine">
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/clock.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy1'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
+              <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/watch.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy1'] }</p></Col>
+                  <hr></hr>
+                </Row>
+              </Col>
 
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/color-wheel.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy2'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
-                        
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/savings.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy3'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
+               <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/toys.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy2'] }</p></Col>
+                </Row>
+              </Col>
+            </Row>
 
-                 <Col xs="12" sm="6">
-                  <Container fluid >
-                    <Row>
-                      <Col xs="12" className="homeWhatLine">
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/button.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy4'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
+            <Row>
+              <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/gift.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy3'] }</p></Col>
+                </Row>
+              </Col>
 
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/brochure.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy5'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
+               <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/simple.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy4'] }</p></Col>
+                </Row>
+              </Col>
+            </Row>
 
-                        <div className="item">
-                          <div className="photo">
-                            <img src="/static/positive-comment.png" alt={ this.state.dictionary['homeImg_3'] } ></img>
-                          </div>
-                          <div className="text">
-                            <p>{ this.state.dictionary['homeWhy6'] }</p>
-                          </div>
-                          <div style={{'clear': 'both'}}></div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
-                
-              </Row>
+            <Row>
+              <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/paper.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy5'] }</p></Col>
+                </Row>
+              </Col>
+
+               <Col xs="12" sm="6">
+                <Row className="homeWhatNewLine">
+                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/smile.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy6'] }</p></Col>
+                </Row>
+              </Col>
+            </Row>
 
           </Container>
         </div>
@@ -329,15 +304,37 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div >
+         <div style={{'backgroundImage': 'radial-gradient(circle, #325390, #3c62a9, #4672c3, #5082dd, #5b92f8)' }}>
           <Container>
-            <Row>
+            <Row className="processWrapper">
                 <Col xs="12">
-                  <div className="homeInfographicWrapper hidden-xs">
-                    <img src={`/static/infographic-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
+                  <div className="item">
+                    <h4>Pretražite</h4>
+                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
                   </div>
-                  <div className="homeInfographicWrapper hidden-xs-up">
-                    <img src={`/static/infographicsMob-${this.props.lang}.png`} alt={ this.state.dictionary['homeImg_3'] } ></img>
+                  <div className="iconHolder">
+                    <span className="icon down"></span>
+                  </div>
+
+                  <div className="item">
+                    <h4>Rezervišite</h4>
+                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                  </div>
+                  <div className="iconHolder">
+                    <span className="icon down"></span>
+                  </div>
+
+                  <div className="item">
+                    <h4>Proslavite</h4>
+                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                  </div>
+                  <div className="iconHolder">
+                    <span className="icon down"></span>
+                  </div>
+
+                  <div className="item">
+                    <h4>Ocenite</h4>
+                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
                   </div>
                 </Col>
               </Row>

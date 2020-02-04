@@ -61,7 +61,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
               <Navbar color="faded" light>
               <NavbarBrand href={`/?language=${this.props.language.toLowerCase()}`} className="mr-auto">
                 <div className="logoWrapper">
-                  <img src="/static/logo.png" alt="trilino-logo"></img>
+                  <img src="/static/logo_top.png" alt="trilino-logo"></img>
                 </div>
               </NavbarBrand>
               <NavbarToggler onClick={this.toggleNavbar}  />
