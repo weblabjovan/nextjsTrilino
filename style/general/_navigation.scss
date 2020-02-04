@@ -35,15 +35,16 @@
 	}
 
 	.leftWrap{
+		margin-bottom: 15px;
 
 		.logo{
 			@media only screen and (max-width: 577px) {
 			    margin: auto;
-				margin-bottom: 25px;
+				margin-bottom: 5px;
 			}
-			margin-top: 25px;
-			margin-bottom: 25px;
-			width: 250px;
+
+			margin-bottom: 5px;
+			width: 120px;
 		}
 
 		.socialWrapper{

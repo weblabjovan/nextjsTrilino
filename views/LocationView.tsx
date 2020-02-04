@@ -58,7 +58,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['closeGallery', 'openPhotoGallery', 'changeGalleryPhoto', 'selectRoom', 'formatDate','dateChange'];
+    const bindingFunctions = ['closeGallery', 'openPhotoGallery', 'changeGalleryPhoto', 'selectRoom', 'formatDate','dateChange', 'makeReservation'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -126,14 +126,17 @@ class LocationView extends React.Component <MyProps, MyState>{
     });
   }
 
+  makeReservation(){
+  	const data = { date: this.state.date, partner: this.props.partner['_id'], room: this.state.term['id'], from: this.state.term['from'], to: this.state.term['to'] };
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
 
   	if (!this.props.getReservationsStart && prevProps.getReservationsStart && this.props.getReservationsSuccess) {
   		this.props.partner['reservations'] = this.props.reservations;
   		this.props.partner['terms'] = preparePartnerForLocation([...this.props.partner['general']['rooms']], [...this.props.reservations], this.state.date);
   		this.setState({ loader: false }, () => {
-  			
-  			console.log(this.props.partner);
+  			console.log();
   		})
   	}
 
@@ -162,14 +165,14 @@ class LocationView extends React.Component <MyProps, MyState>{
     		/>
     		<div className="location">
 	    		<GalleryModal 
-	          title="Galerija"
+	          title={this.props.partner['name']}
 	          isOpen={ this.state.galleryOpen }
 	          toggle={ this.closeGallery }
 	          photo={ this.state.galleryPhoto }
 	          index={ this.state.galleryPhotoIndex }
 	          max={ this.props.partner ? this.props.partner['photos'] ? this.props.partner['photos'].length : 0 : 0 }
-	          text="slika"
-	          from="od"
+	          text={this.state.dictionary['locationGalleryText']}
+	          from={this.state.dictionary['locationGalleryFrom']}
 	          changePhoto={ this.changeGalleryPhoto }
 	        />
 	        <Container>
@@ -415,15 +418,15 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          	<Col xs="12" sm="6" className="bigColPaddLeft">
 	          		<div className="generalSecond">
 	          			<Row className="item">
-		          			<Col xs="12"><span className="icon range" /> <h5>{`Primereno za uzrast od ${this.props.partner['general']['ageFrom']} do ${this.props.partner['general']['ageTo']} godina`}</h5></Col>
+		          			<Col xs="12"><span className="icon range" /> <h5>{`${this.state.dictionary['locationRangeFirst']} ${this.props.partner['general']['ageFrom']} ${this.state.dictionary['locationRangeSecond']} ${this.props.partner['general']['ageTo']} ${this.state.dictionary['locationRangeThird']}`}</h5></Col>
 		          		</Row>
 
 		          		<Row className="item">
-		          			<Col xs="12"><span className="icon size" /> <h5>{`Veličine prostora ${this.props.partner['general']['size']}m2 `}</h5></Col>
+		          			<Col xs="12"><span className="icon size" /> <h5>{`${this.state.dictionary['locationSizeFirst']} ${this.props.partner['general']['size']}m2 `}</h5></Col>
 		          		</Row> 
 
 		          		<Row className="item">
-		          			<Col xs="12"><span className="icon play" /> <h5>{`Veličina prostora za igru ${this.props.partner['general']['playSize']}m2`}</h5></Col>
+		          			<Col xs="12"><span className="icon play" /> <h5>{`${this.state.dictionary['locationPlaySizeFirst']} ${this.props.partner['general']['playSize']}m2`}</h5></Col>
 		          		</Row>
 
 		          		<Row className="item">
@@ -431,11 +434,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          				this.props.partner['general']['selfFood'] === '1'
 		          				?
 		          				<Col xs="12">
-		          					<span className="icon add" /> <h5>{`Dozvoljeno donošenje svoje hrane`}</h5>
+		          					<span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfFoodTrue']}`}</h5>
 		          				</Col>
 		          				:
 		          				<Col xs="12">
-		          					<span className="icon block" /> <h5>{`Donošenje svoje hrane nije dozvoljeno`}</h5>
+		          					<span className="icon block" /> <h5>{`${this.state.dictionary['locationSelfFoodFalse']}`}</h5>
 		          				</Col>
 		          			}
 		          		</Row>
@@ -445,11 +448,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          				this.props.partner['general']['selfDrink'] === '1'
 		          				?
 		          				<Col xs="12">
-		          					<span className="icon add" /> <h5>{`Dozvoljeno donošenje svog pića`}</h5>
+		          					<span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfDrinkTrue']}`}</h5>
 		          				</Col>
 		          				:
 		          				<Col xs="12">
-		          					<span className="icon block" /> <h5>{`Donošenje svog pića nije dozvoljeno`}</h5>
+		          					<span className="icon block" /> <h5>{`${this.state.dictionary['locationSelfDrinkFalse']}`}</h5>
 		          				</Col>
 		          			}
 		          		</Row>
@@ -459,11 +462,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          				this.props.partner['general']['selfAnimator'] === '1'
 		          				?
 		          				<Col xs="12">
-		          					<span className="icon add" /> <h5>{`Dozvoljeno ogranizovanje svog animatora`}</h5>
+		          					<span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfAnimatorTrue']}`}</h5>
 		          				</Col>
 		          				:
 		          				<Col xs="12">
-		          					<span className="icon block" /> <h5>{`Organizovanje svog animatora nije dozvoljeno`}</h5>
+		          					<span className="icon block" /> <h5>{`${this.state.dictionary['locationSelfAnimatorFalse']}`}</h5>
 		          				</Col>
 		          			}
 		          		</Row>     		
@@ -473,83 +476,173 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	          </Row>
 
+	          <Row className="offer">
+	          	<Col xs="12" sm="6" lg="4">
+	          		<div className="section">
+	          			<h3>{this.state.dictionary['locationOfferTitleFree']}</h3>
+	          			{
+	          				this.props.partner['contentOffer'].map( (offer, index) => {
+	                    return(
+	                    	<div className="item" key={`offerKey_${index}`}>
+				          				<span className="icon check"></span>
+				          				<p>{getGeneralOptionLabelByValue(generalOptions[`contentOffer_${this.props.lang}`], offer.toString())}</p>
+				          			</div>
+	                     )
+	                  })
+	          			}
+	          			
+	          		</div>
+	          		
+	          	</Col>
+
+	          	<Col xs="12" sm="6" lg="4">
+	          		<div className="section">
+	          			<h3>{this.state.dictionary['locationOfferTitleAddon']}</h3>
+	          			{
+	          				this.props.partner['contentAddon'].length
+	                  ?
+	                  this.props.partner['contentAddon'].map( (addon, index) => {
+	                    return(
+	                    	<div className="item" key={`addonKey_${index}`}>
+				          				<span className="icon check"></span>
+				          				<p>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${addon['price']} rsd`}</p>
+				          				<p className="payRemark">{addon['comment'] ? `*${addon['comment']}` : ''}</p>
+				          			</div>
+	                     )
+	                  })
+	                  :
+                    <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewOfferPayedEmpty']}</h5>
+	          			}
+	          		</div>
+	          	</Col>
+
+	          	<Col xs="12" sm="6" lg="4">
+
+	          		<div className="section">
+	          			<h3>{this.state.dictionary['locationOfferTitleDecor']}</h3>
+	          			{
+              			isFieldInObject(this.props.partner, 'decoration')
+				            ?
+				            Object.keys(this.props.partner['decoration']).length
+				            ?
+				            Object.keys(this.props.partner['decoration']).map( (item, index) => {
+				              const decor = this.props.partner['decoration'][item];
+				              return(
+				              	<div className="item" key={`decorKey_${index}`}>
+				          				<span className="icon check"></span>
+				          				<p>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? (decor['price'] + 'rsd') : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</p>
+				          			</div>
+				              )
+				            })
+				            :
+				            <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewDecorationEmpty']}</h5>
+				            :
+				            <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewDecorationEmpty']}</h5>
+				          }
+	          		</div>
+	          	</Col>
+
+	          </Row>
+
 	          <Row className="availabilityTable">
-	          	<div className="headline">
-	          		<h4>Raspoloživost</h4>
-	          		<DayPickerInput 
-                  value={ this.state.date }
-                  formatDate={ this.formatDate }
-                  placeholder="Izaberite datum"
-                  onDayChange= { this.dateChange }
-                  format="dd/mm/yyyy"
-                  hideOnDayClick={ true }
-                  keepFocus={ false }
-                  dayPickerProps={{
-                  	disabledDays: {
-                        before: new Date(),
-                        after: addDaysToDate(null, 180),
-                    },
-                    todayButton: datePickerLang[this.props.lang]['today'],
-                    selectedDays: [ this.state.date ],
-                    weekdaysShort: datePickerLang[this.props.lang]['daysShort'],
-                    months: datePickerLang[this.props.lang]['months']
-                  }}
-                 />
+	          	<Col xs="12">
+	          		<div className="headline">
+		          		<h4>{this.state.dictionary['locationAvailabilityTitle']}</h4>
+		          		<DayPickerInput 
+	                  value={ this.state.date }
+	                  formatDate={ this.formatDate }
+	                  placeholder="Izaberite datum"
+	                  onDayChange= { this.dateChange }
+	                  format="dd/mm/yyyy"
+	                  hideOnDayClick={ true }
+	                  keepFocus={ false }
+	                  dayPickerProps={{
+	                  	disabledDays: {
+	                        before: new Date(),
+	                        after: addDaysToDate(null, 180),
+	                    },
+	                    todayButton: datePickerLang[this.props.lang]['today'],
+	                    selectedDays: [ this.state.date ],
+	                    weekdaysShort: datePickerLang[this.props.lang]['daysShort'],
+	                    months: datePickerLang[this.props.lang]['months']
+	                  }}
+	                 />
 	          	</div>
-	          	<Table responsive>
-					      <thead>
-					        <tr>
-					          <th>Sala</th>
-					          <th>Veličina</th>
-					          <th>Kapacitet</th>
-					          <th>Termini</th>
-					          <th></th>
-					        </tr>
-					      </thead>
-					      <tbody>
-					      	{
-					      		this.props.partner['terms'].map( (term, index) => {
-					      			return(
-					      				(
-					      					<tr key={`term${index}`}>
-									          <th scope="row">{term['name']}</th>
-									          <td>{`${term['size']}m2`}</td>
-									          <td>{`${term['capKids']} dece i ${term['capAdults']} odraslih`}</td>
-									          <td className="activeButtons">
-									          	{
-									          		term['terms'].map( (item, itemIndex) => {
-									          			return(
-									          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${item['price']}rsd`}</span></Button>
-									          			)
-									          		})
-									          	}
+	          	</Col>
 
-									          </td>
-									          <td>
-									          	{
-									          		this.state.selectedRoom
-									          		?
-									          		(	
-									          			<div className="resInfoMsg">
-									          				<p>Izabrali ste termin:</p>
-										          			<p>{this.state.term['room']}</p>
-										          			<p>{`${this.state.term['from']} - ${this.state.term['to']}`}</p>
-										          			<p>{`${this.state.term['price']} rsd`}</p>
-									          			</div>
-									          			
-									          		)
-									          		:
-									          		<p>Izaberite termin</p>
-									          	}
-									          </td>
-									        </tr>
-					      				)
-					      			)
-					      		})
-					      	}
-					      </tbody>
-					    </Table>
+	          	<Col xs="12">
+	          		<Table responsive>
+						      <thead>
+						        <tr>
+						          <th>{this.state.dictionary['locationAvailabilityTableColumnOne']}</th>
+						          <th>{this.state.dictionary['locationAvailabilityTableColumnTwo']}</th>
+						          <th>{this.state.dictionary['locationAvailabilityTableColumnThree']}</th>
+						          <th>{this.state.dictionary['locationAvailabilityTableColumnFour']}</th>
+						          <th></th>
+						        </tr>
+						      </thead>
+						      <tbody>
+						      	{
+						      		this.props.partner['terms'].map( (term, index) => {
+						      			return(
+						      				(
+						      					<tr key={`term${index}`}>
+										          <th scope="row">{term['name']}</th>
+										          <td>{`${term['size']}m2`}</td>
+										          <td>{`${term['capKids']} dece i ${term['capAdults']} odraslih`}</td>
+										          <td className="activeButtons">
+										          	{
+										          		term['terms'].map( (item, itemIndex) => {
+										          			return(
+										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${item['price']}rsd`}</span></Button>
+										          			)
+										          		})
+										          	}
 
+										          </td>
+										          <td>
+										          	{
+										          		this.state.selectedRoom
+										          		?
+										          		(	
+										          			<div className="resInfoMsg">
+										          				<p>{this.state.dictionary['locationChooseTermAfter']}</p>
+											          			<p>{this.state.term['room']}</p>
+											          			<p>{`${this.state.term['from']} - ${this.state.term['to']}`}</p>
+											          			<p>{`${this.state.term['price']} rsd`}</p>
+											          			<Button color="success" onClick={ this.makeReservation } className="hidden-xs">{this.state.dictionary['locationButtonReserve']}</Button>
+										          			</div>
+										          			
+										          		)
+										          		:
+										          		(
+										          			<div className="resInfoMsg">
+										          				<p>{this.state.dictionary['locationChooseTermBefore']}</p>
+										          			</div>
+										          		)
+										          		
+										          	}
+										          </td>
+										        </tr>
+						      				)
+						      			)
+						      		})
+						      	}
+						      </tbody>
+						    </Table>
+	          	</Col>
+
+	          	<Col xs="12" className="hidden-xs-up">
+	          		<div className="middle xsReserveButton">
+	          		{
+	          			this.state.selectedRoom
+									?
+									<Button color="success" onClick={ this.makeReservation }>{this.state.dictionary['locationButtonReserve']}</Button>
+									:
+									null
+	          		}
+	          		</div>
+	          	</Col>
 	          </Row>
 	          
 	        </Container>    

@@ -35,6 +35,7 @@ interface MyState {
 	user: string;
 	pass: string;
 	errorMessages: object;
+  loginTry: number;
 };
 
 class AdminLoginView extends React.Component <MyProps, MyState>{
@@ -61,6 +62,7 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
     user: '',
     pass: '',
     errorMessages: { show: false, fields: {user: false, pass: false }},
+    loginTry: 0,
   };
 
   handleInputChange(field, value){
@@ -117,6 +119,15 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+
+    if (this.state.loginTry > 9) {
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+    }
+
+    if (this.props.adminLoginError && !prevProps.adminLoginError && !this.props.adminLoginStart) {
+      const loginTry = this.state.loginTry + 1;
+      this.setState({ loginTry });
+    }
   	if (this.props.adminLoginSuccess && !this.props.adminLoginStart && prevProps.adminLoginStart) {
   		setCookie(this.props.adminLoginSuccess['token'],'trilino-admin-token', 7);
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/adminPanel?language=${this.props.lang}`;

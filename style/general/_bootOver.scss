@@ -1,5 +1,9 @@
 .container{
-	max-width: 90%;
+	max-width: 1400px;
+	@media only screen and (max-width: 1600px) {
+		max-width: 90%;
+	}
+
 	@media only screen and (max-width: 577px) {
 		max-width: 100%;
 		margin: 0px;

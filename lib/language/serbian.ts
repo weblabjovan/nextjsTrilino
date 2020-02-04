@@ -447,6 +447,33 @@ const serbian: LanguageInterface = {
 
 
 
+	locationGalleryText: 'slika',
+	locationGalleryFrom: 'od',
+	locationRangeFirst: 'Primereno za uzrast od',
+	locationRangeSecond: 'do',
+	locationRangeThird: 'godina',
+	locationSizeFirst: 'Veličine prostora',
+	locationPlaySizeFirst: 'Veličina prostora za igru',
+	locationSelfFoodTrue: 'Dozvoljeno donošenje svoje hrane',
+	locationSelfFoodFalse: 'Donošenje svoje hrane nije dozvoljeno',
+	locationSelfDrinkTrue: 'Dozvoljeno donošenje svog pića',
+	locationSelfDrinkFalse: 'Donošenje svog pića nije dozvoljeno',
+	locationSelfAnimatorTrue: 'Dozvoljeno ogranizovanje svog animatora',
+	locationSelfAnimatorFalse: 'Organizovanje svog animatora nije dozvoljeno',
+	locationOfferTitleFree: 'Besplatni sadržaji',
+	locationOfferTitleAddon: 'Dodatni sadržaji',
+	locationOfferTitleDecor: 'Dekoracija',
+	locationAvailabilityTitle: 'Raspoloživost',
+	locationAvailabilityTableColumnOne: 'Sala',
+	locationAvailabilityTableColumnTwo: 'Veličina',
+	locationAvailabilityTableColumnThree: 'Kapacitet',
+	locationAvailabilityTableColumnFour: 'Termini',
+	locationChooseTermBefore: 'Izaberite termin',
+	locationChooseTermAfter: 'Izabrali ste termin:',
+	locationButtonReserve: 'Rezervišite',
+
+
+
 
 
 	loginTitle: 'Ovo je stranica prijava',

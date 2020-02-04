@@ -448,6 +448,32 @@ const english: LanguageInterface = {
 	searchResultsLoadButton: 'Load more results',
 
 
+	locationGalleryText: 'pictures',
+	locationGalleryFrom: 'from',
+	locationRangeFirst: 'For age from',
+	locationRangeSecond: 'to',
+	locationRangeThird: 'years',
+	locationSizeFirst: 'Space size',
+	locationPlaySizeFirst: 'Play space size',
+	locationSelfFoodTrue: 'Bringing of your own food allowed',
+	locationSelfFoodFalse: 'Bringing of your own food not allowed',
+	locationSelfDrinkTrue: 'Bringing of your own drink allowed',
+	locationSelfDrinkFalse: 'Bringing of your own drink not allowed',
+	locationSelfAnimatorTrue: 'Organization of your own animator allowed',
+	locationSelfAnimatorFalse: 'Organization of your own animator not allowed',
+	locationOfferTitleFree: 'Free content',
+	locationOfferTitleAddon: 'Additional content',
+	locationOfferTitleDecor: 'Decoration',
+	locationAvailabilityTitle: 'Availability',
+	locationAvailabilityTableColumnOne: 'Room',
+	locationAvailabilityTableColumnTwo: 'Size',
+	locationAvailabilityTableColumnThree: 'Capacity',
+	locationAvailabilityTableColumnFour: 'Terms',
+	locationChooseTermBefore: 'Choose your term',
+	locationChooseTermAfter: 'Chosen term:',
+	locationButtonReserve: 'Reserve',
+
+
 
 	loginTitle: 'This is Login Page',
 

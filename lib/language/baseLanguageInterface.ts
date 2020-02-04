@@ -441,6 +441,31 @@ export default interface LanguageInterface {
 	searchResultsLoadButton: string;
 
 
+	locationGalleryText: string;
+	locationGalleryFrom: string;
+	locationRangeFirst: string;
+	locationRangeSecond: string;
+	locationRangeThird: string;
+	locationSizeFirst: string;
+	locationPlaySizeFirst: string;
+	locationSelfFoodTrue: string;
+	locationSelfFoodFalse: string;
+	locationSelfDrinkTrue: string;
+	locationSelfDrinkFalse: string;
+	locationSelfAnimatorTrue: string;
+	locationSelfAnimatorFalse: string;
+	locationOfferTitleFree: string;
+	locationOfferTitleAddon: string;
+	locationOfferTitleDecor: string;
+	locationAvailabilityTitle: string;
+	locationAvailabilityTableColumnOne: string;
+	locationAvailabilityTableColumnTwo: string;
+	locationAvailabilityTableColumnThree: string;
+	locationAvailabilityTableColumnFour: string;
+	locationChooseTermBefore: string;
+	locationChooseTermAfter: string;
+	locationButtonReserve: string;
+
 
 	
 	loginTitle: string;

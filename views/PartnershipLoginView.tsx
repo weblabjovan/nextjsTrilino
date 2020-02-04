@@ -55,6 +55,7 @@ interface MyState {
   logPass: string;
   errorMessages: object;
   regBtnDisabled: boolean;
+  logTry: number;
 };
 
 class PartnershipLoginView extends React.Component <MyProps, MyState>{
@@ -87,6 +88,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       contactPhone: '',
       logTax: null,
       logPass: '',
+      logTry: 0,
       errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false }},
       regBtnDisabled: false,
     };
@@ -100,12 +102,17 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+      if (this.state.logTry > 9) {
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+      }
 
       if (this.props.partnerLoginError && !prevProps.partnerLoginError && !this.props.partnerLoginStart) {
+        const logTry = this.state.logTry + 1;
         const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
         errorCopy['show'] = true;
         errorCopy['fields']['baseError'] = true;
-        this.setState({regBtnDisabled: false, errorMessages: errorCopy, baseErrorMessage: this.props.partnerLoginError['message'] });
+
+        this.setState({regBtnDisabled: false, logTry, errorMessages: errorCopy, baseErrorMessage: this.props.partnerLoginError['message'] });
       }
 
       if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
