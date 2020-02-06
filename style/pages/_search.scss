@@ -79,6 +79,13 @@
 					cursor: pointer;
 				}
 			}
+
+			.DayPickerInput-Overlay{
+				@media only screen and (max-width: 577px){
+					left: initial;
+					right: 0px !important;
+			   }
+			}
 		}
 
 		.additional{
@@ -121,6 +128,9 @@
 				margin-top: 3px;
 				font-size: 15px;
 				color: #fff;
+				@media only screen and (max-width: 1025px){
+					font-size: 11px;
+			    }
 
 				@media only screen and (max-width: 768px){
 					font-size: 14px;
