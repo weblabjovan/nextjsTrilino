@@ -226,3 +226,18 @@ const setSearchQuery = (data: object): string => {
   return JSON.stringify(data).replace(/"/g, '').replace(/:/g, '=').replace(/,/g, '&').replace(/{|}/g, '');
 }
 
+export const setUrlString = (name: string): string => {
+  const newName = name.toLowerCase();
+  const split  = newName.split(' ');
+  let res = '';
+
+  if (split.length > 1) {
+    res = split.join('-');
+  }else{
+    res = split[0];
+  }
+
+  return res;
+
+}
+

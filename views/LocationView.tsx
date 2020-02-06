@@ -127,7 +127,17 @@ class LocationView extends React.Component <MyProps, MyState>{
   }
 
   makeReservation(){
-  	const data = { date: this.state.date, partner: this.props.partner['_id'], room: this.state.term['id'], from: this.state.term['from'], to: this.state.term['to'] };
+  	if (this.state.date && this.props.partner['link'] && this.state.term) {
+  		const link = setUpLinkBasic(window.location.href);
+	  	const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+	  	const partner = this.props.partner['link'];
+	  	const room = this.state.term['id'];
+	  	const from = this.state.term['from'];
+	  	const to = this.state.term['to'];
+
+	  	const url = `${link['protocol']}${link['host']}/reservation?language=${this.props.lang}&partner=${partner}&room=${room}&from=${from}&to=${to}&date=${date}`;
+	  	window.location.href =  url;
+  	}
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -144,6 +154,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+		console.log(this.props.partner);
 	}
 	
   render() {
@@ -592,16 +603,22 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          <td>{`${term['capKids']} dece i ${term['capAdults']} odraslih`}</td>
 										          <td className="activeButtons">
 										          	{
+										          		term['terms'].length
+										          		?
 										          		term['terms'].map( (item, itemIndex) => {
 										          			return(
 										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${item['price']}rsd`}</span></Button>
 										          			)
 										          		})
+										          		:
+										          		<p>Nema dostupnih termina</p>
 										          	}
 
 										          </td>
 										          <td>
 										          	{
+										          		term['terms'].length
+										          		?
 										          		this.state.selectedRoom
 										          		?
 										          		(	
@@ -618,6 +635,12 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          		(
 										          			<div className="resInfoMsg">
 										          				<p>{this.state.dictionary['locationChooseTermBefore']}</p>
+										          			</div>
+										          		)
+										          		:
+										          		(
+										          			<div className="resInfoMsg">
+										          				<p></p>
 										          			</div>
 										          		)
 										          		

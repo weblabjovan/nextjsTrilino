@@ -890,6 +890,16 @@ export const getSinglePartner = async (context: any, encoded: boolean): Promise<
 	return response;
 }
 
+export const getSinglePartnerForReservation = async (context: any, encoded: boolean): Promise<any> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const encodedParam = encoded ? 'encoded=true' : '';
+	const date = link['queryObject']['date'] ? link['queryObject']['date'] : 'null';
+	const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/get/?language=${link['queryObject']['language']}&partner=${link['queryObject']['partner']}&date=${date}&type=reservation&room=${link['queryObject']['room']}&from=${link['queryObject']['from']}&to=${link['queryObject']['to']}&${encodedParam}`;
+	const response = await fetch(apiUrl);
+
+	return response;
+}
+
 
 export const getPartners = async (context: any): Promise<any> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});

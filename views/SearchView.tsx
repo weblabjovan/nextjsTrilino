@@ -8,7 +8,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
@@ -91,7 +91,7 @@ class SearchView extends React.Component <MyProps, MyState>{
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
     isMobile: isMobile(this.props.userAgent),
-    loader: false,
+    loader: true,
     city: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 ? getArrayObjectByFieldValue(genOptions['cities'], 'value', this.props.city) : null,
     district: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 && getArrayIndexByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) !== -1 ? getArrayObjectByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) : null,
     date: this.props.date ? dateForSearch(this.props.date)  : new Date(),
@@ -177,9 +177,8 @@ class SearchView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-
 		this.props.changeSinglePartnerField('searchResults', this.props.partners);
-
+    this.setState({loader: false });
 	}
 	
   render() {
@@ -468,7 +467,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                   options={genOptions[`searchSortOptions_${this.props.lang}`]} 
                   value={ this.state.sort } 
                   onChange={(val) => this.handleInputChange('sort', val)} 
-                  instanceId="homeDistrict" 
+                  instanceId="sortOptions" 
                   className="logInput" 
                   placeholder={ this.state.dictionary['searchResultsSortPlaceholder'] }/>
               </Col>
@@ -485,39 +484,56 @@ class SearchView extends React.Component <MyProps, MyState>{
               	</div>
               </Col>
             </Row>
+            {
+              this.props.searchResults.length
+              ?
+              <div>
+                <Row className="searchResultsContent justify-content-sm-center">
+                  {
+                    this.props.searchResults.map((item, index) => {
+                      const photoList = createDisplayPhotoListObject(item);
+                      return(
+                        <Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
+                          <a href={`/locations/${setUrlString(item['name'])}/?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`}>
+                          <div className="searchItem">
+                            <div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
+                            <div className="info">
+                              <h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
+                              <p><span className="icon room"></span>{item['general']['address']}</p>
+                              <p><span className="icon group"></span>{`${item['general']['capacity']['sumKids']} ${this.state.dictionary['searchResultsItemKids']} ${item['general']['capacity']['sumAdults']} ${this.state.dictionary['searchResultsItemAdults']}`}</p>
+                              <p><span className="icon house"></span>{`${item['general']['size']}m2`}</p>
+                              <h6> <span className="icon star"></span>4.5</h6>
+                            </div>
+                          </div>
+                          </a>
+                        </Col>
+                      )
+                    })
+                  }
+                  
+                </Row>
 
-            <Row className="searchResultsContent justify-content-sm-center">
-            	{
-            		this.props.searchResults.map((item, index) => {
-            			const photoList = createDisplayPhotoListObject(item);
-            			return(
-            				<Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
-            					<a href={`/location?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`}>
-			            		<div className="searchItem">
-			            			<div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
-			            			<div className="info">
-			            				<h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
-	            						<p><span className="icon room"></span>{item['general']['address']}</p>
-	            						<p><span className="icon group"></span>{`${item['general']['capacity']['sumKids']} ${this.state.dictionary['searchResultsItemKids']} ${item['general']['capacity']['sumAdults']} ${this.state.dictionary['searchResultsItemAdults']}`}</p>
-	            						<p><span className="icon house"></span>{`${item['general']['size']}m2`}</p>
-	            						<h6> <span className="icon star"></span>4.5</h6>
-			            			</div>
-			            		</div>
-			            		</a>
-			            	</Col>
-            			)
-            		})
-            	}
-            	
-            </Row>
+                <Row className="searchViewEnd">
+                  <Col xs="12">
+                    <div className="middle">
+                      <Button color="success">{ this.state.dictionary['searchResultsLoadButton'] }</Button>
+                    </div>
+                  </Col>
+                </Row>
+                
+              </div>
+              :
+              <Row>
+                <Col xs="12">
+                  <div className="middle">
+                    <h3 className="noMatch">Trenutno nema rezultata koji odgovaraju vašim kriterijumima pretrage</h3>
+                  </div>
+                </Col>
+                
+              </Row>
+            }
 
-            <Row className="searchViewEnd">
-            	<Col xs="12">
-            		<div className="middle">
-	            		<Button color="success">{ this.state.dictionary['searchResultsLoadButton'] }</Button>
-	            	</div>
-            	</Col>
-            </Row>
+            
         	</Container>
             
           </div> 

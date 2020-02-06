@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Keys from '../keys';
 import LinkClass from '../../lib/classes/Link';
+import DateHandler from '../../lib/classes/DateHandler';
 
 export const generateString = (length: number):string => {
 	let str = '';
@@ -379,7 +380,7 @@ export const preparePartnerForLocation = (partner: object, date: string): object
   if (!partner['reservations'].length) {
     freeTerms = JSON.parse(JSON.stringify(partner['general']['rooms']));
     for (var i = 0; i < freeTerms.length; ++i) {
-      freeTerms[i]['terms'] = freeTerms[i]['terms'][day];
+      freeTerms[i]['terms'] = freeTerms[i]['terms'][day].filter(term => { if(term['from']){ return term }});
     }
   }else{
     freeTerms = JSON.parse(JSON.stringify(partner['general']['rooms']));
@@ -389,6 +390,7 @@ export const preparePartnerForLocation = (partner: object, date: string): object
   }
 
   partner['terms'] = freeTerms;
+  partner['link'] = decodeId(generateString, partner['_id']);
 
   return partner;
 }
@@ -411,6 +413,47 @@ const isInReservationArray = (reservations: Array<object>, room: string, from: s
   for (var i = 0; i < reservations.length; ++i) {
     if (reservations[i]['room'] === room && reservations[i]['to'] === to && reservations[i]['from'] === from) {
       return true;
+    }
+  }
+
+  return false;
+}
+
+export const preparePartnerForReservation = (partner: object, data: object): object => {
+  const day = dayForSearch(data['date']);
+  let partnerCopy = JSON.parse(JSON.stringify(partner));
+  partnerCopy['reservation'] = setUserReservation(partner['general']['rooms'], day, data['room'], data['from']);
+
+  return partnerCopy;
+}
+
+const setUserReservation = (rooms: Array<object>, day: string, room: string, from: string): object => {
+  const result = {};
+  const roomsCopy = JSON.parse(JSON.stringify(rooms));
+
+  for (var i = 0; i < roomsCopy.length; ++i) {
+    if (roomsCopy[i]['regId'] === room ) {
+      result['name'] = roomsCopy[i]['name'];
+      result['id'] = roomsCopy[i]['regId'];
+      result['size'] = roomsCopy[i]['size'];
+      result['capKids'] = roomsCopy[i]['capKids'];
+      result['capAdults'] = roomsCopy[i]['capAdults'];
+      result['term'] = roomsCopy[i]['terms'][day].filter((term) => { return term['from'] === from})[0];
+    }
+  }
+
+  return result;
+}
+
+export const isUrlTermValid = (rooms: Array<object>, data: object) => {
+  const dateHandler = new DateHandler(data['date']);
+
+  for (var i = 0; i < rooms.length; ++i) {
+    if (rooms[i]['regId'] === data['room']) {
+      const termArr = rooms[i]['terms'][dateHandler.getDayFromDate()].filter( term => { if(term['from'] === data['from'] && term['to'] === data['to']){ return term }});
+      if (termArr.length) {
+        return true;
+      }
     }
   }
 

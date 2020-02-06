@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { withRedux } from '../lib/redux';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { getSinglePartner } from '../lib/helpers/specificPartnerFunctions';
-import LocationView from '../views/LocationView';
-import Head from '../components/head';
-import pages from '../lib/constants/pages';
+import { withRedux } from '../../lib/redux';
+import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
+import { isDevEnvLogged } from '../../lib/helpers/specificAdminFunctions';
+import { getSinglePartner } from '../../lib/helpers/specificPartnerFunctions';
+import LocationView from '../../views/LocationView';
+import Head from '../../components/head';
+import pages from '../../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
+import '../../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -50,7 +50,8 @@ const Location : NextPage<Props> = ({ userAgent, partner }) => {
 
 Location.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
-
+  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  let result = { partner: null};
 	const devLog = await isDevEnvLogged(ctx);
 
   if (!devLog) {
@@ -59,9 +60,22 @@ Location.getInitialProps = async (ctx: any) => {
   }
 
   const partnerRes = await getSinglePartner(ctx, true);
-  const result = await partnerRes.json();
+  if (partnerRes['status'] === 200) {
+    result = await partnerRes.json();
+    if (!result['partner']) {
+      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.end();
+    }else{
+      if (!result['partner']['terms']) {
+        ctx.res.writeHead(302, {Location: `/?language=sr`});
+        ctx.res.end();
+      }
+    }
+  }else{
+    ctx.res.writeHead(302, {Location: `/?language=sr`});
+    ctx.res.end();
+  }
 
-  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 
   return { userAgent, partner: result['partner'] }
 }

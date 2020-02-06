@@ -63,6 +63,9 @@ Search.getInitialProps = async (ctx: any) => {
   if (response['status'] === 200) {
     const re = await response.json();
     partners = re['partners']
+  }else{
+    ctx.res.writeHead(302, {Location: `/?language=sr`});
+    ctx.res.end();
   }
 
   return { userAgent, query: ctx['query'], partners }
