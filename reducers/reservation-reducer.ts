@@ -1,3 +1,4 @@
+import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
   changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType
 } from '../actions/reservation-actions';
@@ -12,6 +13,9 @@ interface initialState {
   getReservationsSuccess: null | number;
 
   reservations: Array<object>;
+
+  reservationGeneral: IreservationGeneral;
+  reservationAdditional: object;
 }
 
 const initialState: initialState  = {
@@ -25,11 +29,22 @@ const initialState: initialState  = {
 
   reservations: [],
 
+  reservationGeneral:{
+    name: '',
+    room:'',
+    adultsNum: '',
+    kidsNum: '',
+  },
+
+  reservationAdditional: {
+
+  },
+
 };
 
 const actionsMap = {
 	[changeSingleFieldActionType.SUCCESS]: (state, action) => {
-    if (action.meta.source === 'partner') {
+    if (action.meta.source === 'reservation') {
       return {
         ...state,
         [action.meta.field]: action.payload,

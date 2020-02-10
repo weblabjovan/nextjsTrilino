@@ -24,6 +24,13 @@
 	}
 }
 
+.hidden-sm-up{
+
+	@media only screen and (min-width: 992px) {
+		display: none;
+	}
+}
+
 .hidden-xs-up{
 
 	@media only screen and (min-width: 577px) {

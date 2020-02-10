@@ -149,3 +149,10 @@ export interface IpartnerReservation {
 	price: number;
 	deposit: number;
 }
+
+export interface IreservationGeneral{
+	name: string;
+	room: string;
+	adultsNum: string | number;
+	kidsNum: string | number;
+}

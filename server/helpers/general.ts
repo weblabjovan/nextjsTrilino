@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Keys from '../keys';
+import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
 
@@ -423,6 +424,7 @@ export const preparePartnerForReservation = (partner: object, data: object): obj
   const day = dayForSearch(data['date']);
   let partnerCopy = JSON.parse(JSON.stringify(partner));
   partnerCopy['reservation'] = setUserReservation(partner['general']['rooms'], day, data['room'], data['from']);
+  partnerCopy['catering'] = setPartnerCatering(partner['catering']);
 
   return partnerCopy;
 }
@@ -443,6 +445,16 @@ const setUserReservation = (rooms: Array<object>, day: string, room: string, fro
   }
 
   return result;
+}
+
+const setPartnerCatering = (catering: object): object => {
+  const cateringCopy = JSON.parse(JSON.stringify(catering));
+
+  products['trilinoCatering'].map( (item) => {
+    cateringCopy['deals'].push(item);
+  })
+
+  return cateringCopy;
 }
 
 export const isUrlTermValid = (rooms: Array<object>, data: object) => {

@@ -10,7 +10,6 @@ import { prepareGeneralPartnerObject, validateTerms, setUpMainGeneralState, getG
 import genOptions from '../../lib/constants/generalOptions';
 import PlainInput from '../form/input';
 import PlainText from '../form/textField';
-import PlainCheckbox from '../form/checkbox';
 import RoomList from './general/RoomList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
