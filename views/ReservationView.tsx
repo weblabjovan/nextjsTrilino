@@ -55,7 +55,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -75,13 +75,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
       sections: {'1': {active: true, clickable: false }, '2': {active: false, clickable: false }, '3': {active: false, clickable: false }, '4': {active: false, clickable: false } },
       errors: {flag: false, fields: { }},
       info: { general: {name: '', room:'', adultsNum: 0, kidsNum: 0 }, catering: [], addon: []},
-      price: {total: 0, term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0 },
+      price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0 },
     };
   
-
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-    
-  }
 
   validateSection(section: number){
     if (section === 1) {
@@ -209,7 +205,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['addon'] = arr;
     priceCopy['addon'] = num;
     priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-    this.setState({ info: infoCopy, price: priceCopy });
+    this.setState({ info: infoCopy, price: priceCopy }, () => {
+      this.refreshInfoHeight();
+    });
 
     this.openNextSection(3);
   }
@@ -230,7 +228,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
       infoCopy['catering'] = arr;
       priceCopy['catering'] = num;
       priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-      this.setState({ info: infoCopy, price: priceCopy});
+      this.setState({ info: infoCopy, price: priceCopy},() => {
+        this.refreshInfoHeight();
+      });
     }
   }
 
@@ -349,7 +349,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
         cateringItem['num'] = num;
         cateringCopy[regId] = cateringItem;
         if (!cateringItem['name']) {
-          cateringItem['name'] = `Partner paket ${index + 1}`;
+          cateringItem['name'] = `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`;
         }
       }
     }
@@ -392,10 +392,21 @@ class ReservationView extends React.Component <MyProps, MyState>{
     this.setState({errors: errorsCopy});
   }
 
+  refreshInfoHeight(){
+    const elem = document.getElementById(`additional_2`);
+    const base = this.state.isMobile ? 260 : 340;
+    const line = this.state.isMobile ? 30 : 35;
+    const add = (this.state.info['catering'].length + this.state.info['addon'].length) * line;
+
+    elem.style.height = `${base + add}px`;
+  }
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    
+  }
+
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-		console.log(this.props.partner);
-    console.log(this.props.router);
 	}
 	
   render() {
@@ -416,7 +427,6 @@ class ReservationView extends React.Component <MyProps, MyState>{
     		/>
     		<div className="reservationWrapper">
           <Container>
-
               <Row>
                 <Col xs='12' lg="5" className="hidden-sm-up">
                   <InfoFix
@@ -446,7 +456,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     num={ 1 }
                     active={ this.state.sections['1']['active'] }
                     clickable={ this.state.sections['1']['clickable'] }
-                    name="Osnovni podaci"
+                    name={this.state.dictionary['reservationResStep1']}
                     clickFunction={ this.toggleSteps }
                     id="resStep_1"
                   />
@@ -454,9 +464,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     <Col xs="12" className="formSection" id="step_1">
                       <Row>
                         <Col xs="12" sm="6" lg="4">
-                          <label>Ime slavljenika/ce:</label>
+                          <label>{this.state.dictionary['reservationFormBasicNameTitle']}</label>
                           <PlainInput
-                            placeholder="ime" 
+                            placeholder={this.state.dictionary['reservationFormBasicNamePlaceholder']} 
                             onChange={(event) => this.uniInputHandler(event.target.value, 'name', 'reservationGeneral')} 
                             value={this.props.reservationGeneral['name']}
                             className={`${this.state.errors['fields']['generalName'] ? "borderWarrning" : ''} logInput`}
@@ -465,9 +475,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         </Col>
 
                         <Col xs="12" sm="6" lg="4">
-                          <label>Očekivani broj odraslih:</label>
+                          <label>{this.state.dictionary['reservationFormBasicAdultsNumTitle']}</label>
                           <PlainInput
-                            placeholder="broj" 
+                            placeholder={this.state.dictionary['reservationFormBasicAdultsNumPlaceholder']} 
                             onChange={(event) => this.uniInputHandler(event.target.value, 'adultsNum', 'reservationGeneral')} 
                             value={this.props.reservationGeneral['adultsNum']}
                             className={`${this.state.errors['fields']['generalAdults'] || this.state.errors['fields']['generalAdutsSize'] ? "borderWarrning" : ''} logInput`}
@@ -476,9 +486,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         </Col>
 
                         <Col xs="12" sm="6" lg="4">
-                          <label>Očekivani broj dece:</label>
+                          <label>{this.state.dictionary['reservationFormBasicKidsNumTitle']}</label>
                           <PlainInput
-                            placeholder="broj" 
+                            placeholder={this.state.dictionary['reservationFormBasicKidsNumPlaceholder']}
                             onChange={(event) => this.uniInputHandler(event.target.value, 'kidsNum', 'reservationGeneral')} 
                             value={this.props.reservationGeneral['kidsNum']}
                             className={`${this.state.errors['fields']['generalKids'] || this.state.errors['fields']['generalKidsSize'] ? "borderWarrning" : ''} logInput`}
@@ -488,7 +498,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
                         <Col xs="12">
                           <div className="middle">
-                            <button className="next" onClick={() => this.validateSection(1)} >Sačuvaj</button>
+                            <button className="next" onClick={() => this.validateSection(1)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
                       </Row>
@@ -499,7 +509,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     num={ 2 }
                     active={ this.state.sections['2']['active'] }
                     clickable={ this.state.sections['2']['clickable'] }
-                    name="Ketering"
+                    name={this.state.dictionary['reservationResStep2']}
                     clickFunction={ this.toggleSteps }
                     id="resStep_2"
                   />
@@ -510,14 +520,14 @@ class ReservationView extends React.Component <MyProps, MyState>{
                          return(
                            <Row className="cateringDeal" key={`cateringKey_${index}`}>
                             <Col xs="12" sm="5">
-                              <p className="strong">{deal['name'] ? deal['name'] : `Partner paket ${index + 1}`}</p>
-                              <p>{`Cena po osobi ${deal['price']}rsd`}</p>
-                              <p>{`Minimum ${deal['min']} osoba`}</p>
+                              <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
+                              <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${deal['price']}rsd`}</p>
+                              <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
                             </Col>
 
                             <Col xs="12" sm="7">
                               <Row>
-                                <Col xs="12"><p className="strong">Meni:</p></Col>
+                                <Col xs="12"><p className="strong">{this.state.dictionary['reservationFormCateringMenu']}</p></Col>
                                 {
                                   deal['items'].map( (item, itemIndex) => {
                                     return(
@@ -530,9 +540,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
                             <Col xs="12">
                               <div className="mobileWrapper">
-                                <label className="strong">Broj gostiju koji želi ovaj paket:</label>
+                                <label className="strong">{this.state.dictionary['reservationFormCateringNumLabel']}</label>
                                 <PlainInput
-                                  placeholder="broj" 
+                                  placeholder={ this.state.dictionary['reservationFormBasicKidsNumPlaceholder'] }
                                   onChange={(event) => this.changeCateringNumber(event.target.value, deal['regId'], index)} 
                                   value={this.props.reservationCatering[deal['regId']] ? this.props.reservationCatering[deal['regId']]['num'] : ''}
                                   className={`${this.state.errors['fields'][deal['regId']] || this.state.errors['fields']['cateringTime'] ? "borderWarrning" : ''} logInput`}
@@ -547,7 +557,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                         <Col xs="12">
                           <div className="middle">
-                            <button className="next" onClick={() => this.validateSection(2)} >Sačuvaj</button>
+                            <button className="next" onClick={() => this.validateSection(2)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
                       </Row>
@@ -559,7 +569,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     num={ 3 }
                     active={ this.state.sections['3']['active'] }
                     clickable={ this.state.sections['3']['clickable'] }
-                    name="Dodatni sadržaj"
+                    name={this.state.dictionary['reservationResStep3']}
                     clickFunction={ this.toggleSteps }
                     id="resStep_3"
                   />
@@ -567,7 +577,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection hide" id="step_3">
                       <Row className="addonSection">
-                        <Col xs="12"><h4>Zabava</h4></Col>
+                        <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonFun']}</h4></Col>
                         <Col xs="12">
                         {
                           this.props.partner['contentAddon'].map( (addon, index) => {
@@ -575,7 +585,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <Row className="item" key={`addonKey_${index}`}>
                                 <Col xs="10">
                                   <p className="name">{addon.name}</p>
-                                  <p>{`Cena ${addon.price}rsd`}</p>
+                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${addon.price}rsd`}</p>
                                 </Col>
                                 <Col xs="2">
                                  <CheckBox
@@ -596,7 +606,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       </Row>
 
                       <Row className="addonSection">
-                        <Col xs="12"><h4>Dekoracija</h4></Col>
+                        <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonDecoration']}</h4></Col>
                         <Col xs="12">
                         {
                           Object.keys(this.props.partner['decoration']).map( (key, index) => {
@@ -605,7 +615,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <Row className="item" key={`decorKey_${index}`}>
                                 <Col xs="10">
                                   <p className="name">{genOptions['decorType'][item['value'].toString()][`name_${this.props.lang}`]}</p>
-                                  <p>{`Cena ${item.price}rsd`}</p>
+                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${item.price}rsd`}</p>
                                 </Col>
                                 <Col xs="2">
                                  <CheckBox
@@ -625,7 +635,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                          <Col xs="12">
                           <div className="middle">
-                            <button className="next" onClick={() => this.validateSection(3)} >Sačuvaj</button>
+                            <button className="next" onClick={() => this.validateSection(3)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
                       </Row>
@@ -637,7 +647,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     num={ 4 }
                     active={ this.state.sections['4']['active'] }
                     clickable={ this.state.sections['4']['clickable'] }
-                    name="Plaćanje"
+                    name={this.state.dictionary['reservationResStep4']}
                     clickFunction={ this.toggleSteps }
                     id="resStep_4"
                   />
@@ -648,7 +658,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                          <Col xs="12">
                           <div className="middle">
-                            <button className="next" onClick={() => this.openNextSection(4)} >Sačuvaj</button>
+                            <button className="next" onClick={() => this.openNextSection(4)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
                       </Row>

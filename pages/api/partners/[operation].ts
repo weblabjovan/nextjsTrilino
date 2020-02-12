@@ -140,6 +140,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(401).json({ endpoint: 'partners', operation: 'get profile', success: false, code: 4, error: 'auth error', message: dictionary['apiPartnerAuthCode2'] });
 				}
 			}else if (req['query']['type'] === 'reservation') {
+				console.log('ovde 1111')
 				if (!isReservationPartnerDataValid(req['query'])) {
 					return res.status(404).send({ endpoint: 'partners', operation: 'get', success: false, code: 4, error: 'validation error', message: 'send data is not valid' });
 				}else{

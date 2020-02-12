@@ -48,7 +48,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
   }
 
   calculateAdditionalElementHeight(){
-    const base = this.props.mobile ? 260 : 300;
+    const base = this.props.mobile ? 260 : 340;
     const line = this.props.mobile ? 30 : 35;
     const add = (this.props.catering.length + this.props.addon.length) * line;
     const total = base + add;
@@ -60,7 +60,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
     return (
         <Row className="reservationFix">
           <Col xs="12" className="title">
-            <p className="little">Podaci o rezervaciji</p>
+            <p className="little">{this.state.dictionary['reservationInfoTitle']}</p>
           </Col>
           <Col xs="12">
             <Row className="basic">
@@ -78,7 +78,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
             <Row className="basic"> 
               <Col xs="12">
                 <div className="middle">
-                  <span className="linkDown" onClick={ () => this.toggleAdditional() }>Detaljnije</span>
+                  <span className="linkDown" onClick={ () => this.toggleAdditional() }>{`${this.state.additional ? this.state.dictionary['reservationInfoBasicLess'] : this.state.dictionary['reservationInfoBasicMore'] }`}</span>
                 </div>
               </Col>
              
@@ -88,31 +88,31 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
             <Row >
               <Col xs="12" className="general">
                 <Row>
-                  <Col xs="5">Slavljenik:</Col>
+                  <Col xs="5">{this.state.dictionary['reservationInfoAdditionalName']}</Col>
                   <Col xs="7">{this.props.general['name']}</Col>
                 </Row>
                 <Row>
-                  <Col xs="5">Sala:</Col>
+                  <Col xs="5">{this.state.dictionary['reservationInfoAdditionalRoom']}</Col>
                   <Col xs="7">{this.props.general['room']}</Col>
                 </Row>
                 <Row>
-                  <Col xs="5">Broj odraslih:</Col>
+                  <Col xs="5">{this.state.dictionary['reservationInfoAdditionalAdultsNum']}</Col>
                   <Col xs="7">{this.props.general['adultsNum']}</Col>
                 </Row>
                 <Row>
-                  <Col xs="5">Broj dece:</Col>
+                  <Col xs="5">{this.state.dictionary['reservationInfoAdditionalKidsNum']}</Col>
                   <Col xs="7">{this.props.general['kidsNum']}</Col>
                 </Row>
               </Col>
 
               <Col xs="12">
-                <h4>Ketering:</h4>
+                <h4>{this.state.dictionary['reservationInfoAdditionalCateringTitle']}</h4>
                 <Table>
                   <thead>
                     <tr>
-                      <th>Paket</th>
-                      <th>Količina</th>
-                      <th>Cena</th>
+                      <th>{this.state.dictionary['reservationInfoAdditionalCateringDeal']}</th>
+                      <th>{this.state.dictionary['reservationInfoAdditionalCateringQuantity']}</th>
+                      <th>{this.state.dictionary['reservationInfoAdditionalCateringPrice']}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -129,19 +129,19 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                         )
                       })
                       :
-                      <tr><td><p>Ketring nije odabran</p></td></tr>
+                      <tr><td><p>{this.state.dictionary['reservationInfoAdditionalCateringNone']}</p></td></tr>
                     }
                   </tbody>
                 </Table>
               </Col>
 
               <Col xs="12">
-                <h4>Dodatno:</h4>
+                <h4>{this.state.dictionary['reservationInfoAdditionalAddonTitle']}</h4>
                 <Table>
                   <thead>
                     <tr>
-                      <th>Sadržaj</th>
-                      <th>Cena</th>
+                      <th>{this.state.dictionary['reservationInfoAdditionalAddonContent']}</th>
+                      <th>{this.state.dictionary['reservationInfoAdditionalAddonPrice']}</th>
                     </tr>
                   </thead>
 
@@ -158,7 +158,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                         )
                       })
                       :
-                      <tr><td><p>Dodatno nije odabrano</p></td></tr>
+                      <tr><td><p>{this.state.dictionary['reservationInfoAdditionalAddonNone']}</p></td></tr>
                     }
                   </tbody>
                 </Table>

@@ -31,7 +31,7 @@ export default class DateHandler {
 		const begining = this.setDayOnBegining(this.now);
 		const timeDiff = (this.date.getTime() - begining.getTime()) / (1000 * 60 * 60);
 		
-		if (timeDiff < 0 || timeDiff > 200) {
+		if (timeDiff < 0 || timeDiff > (180 * 24)) {
 			return false;
 		}
 
