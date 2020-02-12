@@ -298,7 +298,7 @@ const assembleForSelect = (key: string, value: number | string, language: string
 	return { value: value, label: value };
 }
 
-export const isFieldInObject = (object: object, field: string, subObject: null | string = null): boolean => {
+export const isFieldInObject = (object: object, field: string, subObject?:string ): boolean => {
 	if (object) {
 		if (subObject) {
 			if (object[subObject]) {
@@ -498,7 +498,7 @@ export const buildPartnerDecorationObject = (partner: object): object => {
 	return buildDecoration(existing);
 }
 
-const buildDecoration = (existing: object = null): object => {
+const buildDecoration = (existing?: object): object => {
 	const res = {}
 	for(let key in genOptions['decorType']){
 		const decor = { check: false, name_sr: genOptions['decorType'][key]['name_sr'], name_en: genOptions['decorType'][key]['name_en'], value: parseInt(key), price: '' };

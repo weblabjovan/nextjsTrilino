@@ -38,6 +38,28 @@ export default class DateHandler {
 		return true;
 	}
 
+	public getDateDifferenceFromNow = (scale: null | string = null): number => {
+		let devider = (1000 * 60 * 60);
+		if (scale === 'minute') {
+			devider = (1000 * 60);
+		}
+		if (scale === 'day') {
+			devider = (1000 * 60 * 60 * 24);
+		}
+
+		const begining = this.setDayOnBegining(this.now);
+		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
+
+		return timeDiff;
+	}
+
+	public setDateTimeFromUrl = (time?: string): void => {
+		this.setDateForServer();
+		if (time) {
+			this.setDayOnSpecificTime(time);
+		}
+	}
+
 	public getDateForServer = (): Date => {
 		this.setDateForServer();
 		return this.date;
@@ -47,7 +69,7 @@ export default class DateHandler {
 		const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 		this.setDateForServer();
 
-  	return days[this.date.getDay()];
+  		return days[this.date.getDay()];
 	}
 
 	public formatDateString = (type: string): string => {
@@ -78,6 +100,15 @@ export default class DateHandler {
 	  d.setMilliseconds(0);
 
 	  return d;
+	}
+
+	private setDayOnSpecificTime = (time: string): void => {
+		const split = time.split(':');
+
+		this.date.setUTCHours(parseInt(split[0]))
+		this.date.setMinutes(parseInt(split[1]))
+		this.date.setSeconds(0);
+	  	this.date.setMilliseconds(0);
 	}
 
 	private getServerDateString = () => {

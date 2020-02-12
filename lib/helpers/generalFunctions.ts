@@ -212,6 +212,17 @@ export const getArrayIndexByFieldValue = (arr: Array<object>, field: string, val
   return -1;
 }
 
+export const getObjectFieldByFieldValue = (obj: object, field: string, value: string): null | object => {
+
+  for(let key in obj){
+    if (obj[key][field] === value) {
+      return obj[key];
+    }
+  }
+
+  return null;
+}
+
 export const setGetQuery = (type: string, data: object): string => {
   if (type === 'search') {
     return setSearchQuery(data);

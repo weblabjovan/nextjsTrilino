@@ -16,6 +16,7 @@ interface initialState {
 
   reservationGeneral: IreservationGeneral;
   reservationAdditional: object;
+  reservationCatering: object;
 }
 
 const initialState: initialState  = {
@@ -37,6 +38,10 @@ const initialState: initialState  = {
   },
 
   reservationAdditional: {
+
+  },
+
+  reservationCatering: {
 
   },
 

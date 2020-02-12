@@ -117,6 +117,8 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                   </thead>
                   <tbody>
                     {
+                      this.props.catering.length
+                      ?
                       this.props.catering.map((deal, index) => {
                         return(
                           <tr key={`cateringKey_${index}`}>
@@ -126,6 +128,8 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                           </tr>
                         )
                       })
+                      :
+                      <tr><td><p>Ketring nije odabran</p></td></tr>
                     }
                   </tbody>
                 </Table>
@@ -143,6 +147,8 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
 
                   <tbody>
                     {
+                      this.props.addon.length
+                      ?
                       this.props.addon.map( (addon, index) => {
                         return(
                           <tr key={`cateringKey_${index}`}>
@@ -151,6 +157,8 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                           </tr>
                         )
                       })
+                      :
+                      <tr><td><p>Dodatno nije odabrano</p></td></tr>
                     }
                   </tbody>
                 </Table>

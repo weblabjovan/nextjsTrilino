@@ -56,7 +56,7 @@ const products: IProdOptions = {
 				'sok od pomorandže',
 				'itd itd itd'
 			],
-			regId: '11111111111',
+			regId: '22222222222',
 		},
 	]
 }

@@ -424,7 +424,10 @@ export const preparePartnerForReservation = (partner: object, data: object): obj
   const day = dayForSearch(data['date']);
   let partnerCopy = JSON.parse(JSON.stringify(partner));
   partnerCopy['reservation'] = setUserReservation(partner['general']['rooms'], day, data['room'], data['from']);
-  partnerCopy['catering'] = setPartnerCatering(partner['catering']);
+  if (partner['general']['selfFood'] === '1') {
+    partnerCopy['catering'] = setPartnerCatering(partner['catering']);
+  }
+  
 
   return partnerCopy;
 }
