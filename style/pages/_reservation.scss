@@ -1,0 +1,384 @@
+.reservationWrapper{
+	padding-top: 40px;
+	position: relative;
+
+	@media only screen and (max-width: 768px) {
+		padding-top: 30px;
+	}
+
+	.smallColPadd{
+		padding-left: 7.5px;
+		padding-right: 7.5px;
+
+		@media only screen and (max-width: 577px) {
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+	}
+
+	.fix{
+		width: 100%;
+	}
+
+	.reservationFix{
+		margin-bottom: 30px;
+
+		@media only screen and (max-width: 577px) {
+			
+		}
+
+		.title{
+			padding: 5px 0px;
+			background: $purple;
+
+			.little{
+				font-size: 12px;
+				font-weight: 300;
+				color: #fff;
+				line-height: 15px;
+				text-align: center;
+			}
+		}
+
+		.basic{
+			position: relative;
+			background: #fff;
+
+			h3{
+				font-size: 19px;
+				line-height: 30px;
+				text-align: center;
+				margin: 0px;
+			}
+
+			p{
+				font-size: 14px;
+				line-height: 32px;
+			}
+
+			.price{
+				font-size: 15px;
+				line-height: 32px;
+				font-weight: 600;
+				color: $purple;
+				@media only screen and (max-width: 577px) {
+					font-size: 14px;
+				}
+			}
+
+			.linkDown{
+				cursor: pointer;
+				text-align: center;
+				text-decoration: underline;
+				text-transform: uppercase;
+				font-size: 12px;
+				margin-top: 10px;
+				margin-bottom: 10px;
+				color: $actionCol;
+			}
+		}
+
+		.additional{
+			overflow:hidden;
+			transition:all 800ms ease-in-out;
+			height: 300px;
+			width: 100%;
+			margin: 0px !important;
+			background: #fff;
+			
+
+			.general{
+				margin-top: 25px;
+				margin-bottom: 30px;
+
+				font-size: 16px;
+				@media only screen and (max-width: 577px) {
+					font-size: 14px;
+					margin-top: 15px;
+					margin-bottom: 20px;
+				}
+			}
+
+
+			h4{
+				font-size: 17px;
+				margin: 0px;
+				line-height: 26px;
+			}
+
+			.table{
+				thead{
+					th{
+						padding: 2px;
+						border-bottom: solid 1px #ccc;
+						font-size: 13px;
+						font-weight: 600;
+					}
+				}
+
+				td{
+					font-size: 16px;
+					font-weight: 400;
+					padding: 3px;
+
+					@media only screen and (max-width: 577px) {
+						font-size: 14px;
+						padding: 2px;
+					}
+				}
+			}
+
+			.faded{
+				font-size: 14px;
+				font-weight: 400;
+				color: #888;
+			}
+		}
+
+		.overflow{
+			overflow: initial;
+		}
+
+		.hide{
+			height: 0px;
+		}
+	}
+
+	.resStep{
+		margin-bottom: 40px;
+
+		.stepHeadline{
+			width: 70px;
+			height: 70px;
+			border-radius: 40px;
+			margin: auto;
+			background: #888;
+			padding: 1px;
+			@media only screen and (max-width: 577px) {
+				width: 50px;
+				height: 50px;
+				border-radius: 25px;
+			}
+
+			.allWhite{
+				width: 60px;
+				height: 60px;
+				border-radius: 32px;
+				margin: 0px;
+			    margin-left: 4px;
+			    margin-top: 4px;
+				background: #fff;
+				padding: 1px;
+				@media only screen and (max-width: 577px) {
+					width: 44px;
+					height: 44px;
+					margin-left: 2px;
+				    margin-top: 2px;
+					border-radius: 25px;
+				}
+
+				.numWrapper{
+					width: 50px;
+					height: 50px;
+					border-radius: 30px;
+					margin: 0px;
+				    margin-left: 4px;
+				    margin-top: 4px;
+					background: #888;
+					@media only screen and (max-width: 577px) {
+						width: 38px;
+						height: 38px;
+						margin-left: 2px;
+				    	margin-top: 2px;
+						border-radius: 20px;
+					}
+
+					h4{
+						color: #fff;
+						text-align: center;
+						font-size: 40px;
+						line-height: 49px;
+						margin: 0px;
+						@media only screen and (max-width: 577px) {
+							font-size: 30px;
+							line-height: 36px;
+						}
+					}
+				}
+			}
+		}
+
+		.stepHeadline.active{
+			background: $purple;
+
+			.numWrapper{
+				background: $purple;
+			}
+		}
+
+		.stepHeadline.click{
+			background: $actionCol;
+			cursor: pointer;
+
+			.numWrapper{
+				background: $actionCol;
+			}
+		}
+
+		h5{
+			font-size: 36px;
+			font-weight: 700;
+			color: #888;
+			margin: 0px;
+			text-align: center;
+
+			@media only screen and (max-width: 577px) {
+				font-size: 26px;
+			}
+		}
+	}
+
+	.step{
+		.formSection{
+			overflow:hidden;
+			transition:all 800ms ease-in-out;
+			height: 175px;
+			width: 100%;
+			margin: 0px !important;
+
+			@media only screen and (max-width: 577px) {
+				height: 300px;
+			}
+
+			h4{
+				font-size: 32px;
+				line-height: 40px;
+				font-weight: 600;
+
+				@media only screen and (max-width: 577px) {
+					font-size: 22px;
+					line-height: 30px;
+					text-align: center;
+				}
+			}
+
+			label{
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 20px;
+
+				@media only screen and (max-width: 577px) {
+					font-size: 14px;
+					line-height: 18px;
+				}
+			}
+
+			.next{
+				margin-top: 25px;
+				margin-bottom: 20px;
+				border: none;
+			    border-radius: 30px;
+			    padding: 7px 20px;
+			    text-transform: uppercase;
+			    background: #38d43d;
+			    outline: none;
+			    color: #ffffff;
+			    font-weight: 700;
+			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				 transition: all 1s;
+
+				&:hover{
+					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					-moz-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+				}
+
+				@media only screen and (max-width: 577px) {
+					margin-top: 15px;
+					margin-bottom: 10px;
+				}
+			}
+
+			.cateringDeal{
+				padding: 10px 0px;
+				border-bottom: solid 1px #ccc;
+				margin-bottom: 10px;
+
+				p{
+					font-size: 16px;
+					font-weight: 400;
+					line-height: 22px;
+
+					@media only screen and (max-width: 577px) {
+						font-size: 14px;
+						line-height: 20px;
+					}
+				}
+
+				.strong{
+					font-size: 18px;
+					font-weight: 600;
+					margin-bottom: 10px;
+	    			margin-top: 15px;
+				}
+
+				.second{
+					font-style: italic;
+				}
+
+				.mobileWrapper{
+					margin-top: 25px;
+					@media only screen and (max-width: 577px) {
+						margin-top: 15px;
+					}
+				}
+			}
+
+			.addonSection{
+
+				.item{
+					margin-bottom: 20px;
+					padding-bottom: 5px;
+					border-bottom: solid 1px #ccc;
+
+					p{
+						font-size: 16px;
+
+						@media only screen and (max-width: 577px) {
+							font-size: 14px;
+						}
+					}
+
+					.name{
+						font-size: 18px;
+						font-weight: 600;
+
+						@media only screen and (max-width: 577px) {
+							font-size: 16px;
+						}
+					}
+
+					.small{
+						font-size: 15px;
+						font-weight: 400;
+						font-style: italic;
+
+						@media only screen and (max-width: 577px) {
+							font-size: 14px;
+						}
+					}
+				}
+			}
+		}
+
+		.overflow{
+			overflow: initial;
+		}
+
+		.hide{
+			height: 0px;
+		}
+	}
+}

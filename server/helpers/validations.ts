@@ -1,4 +1,5 @@
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../../lib/helpers/validations';
+import DateHandler from '../../lib/classes/DateHandler';
 import { addMinutesToString } from './general';
 
 type partnerReg = {
@@ -315,6 +316,52 @@ export const dataHasValidProperty = (data: object, property: Array<string>): boo
 		if (!data.hasOwnProperty(property[i])) {
 			return false;
 		}
+	}
+
+	return true;
+}
+
+export const isReservationPartnerDataValid = (data: object): boolean => {
+	if (!data['partner'] || data['partner'] === 'undefined' || !data['language'] || data['language'] === 'undefined' || !data['date'] || data['date'] === 'undefined' || !data['room'] || data['room'] === 'undefined' || !data['from'] || data['from'] === 'undefined' || !data['to'] || data['to'] === 'undefined' || !data['type'] || data['type'] === 'undefined') {
+		return false;
+	}
+
+	const dateHandler = new DateHandler(data['date']);
+
+	if (!dateHandler.isUrlDateValidDateString()) {
+		return false;
+	}
+
+	return true;
+}
+
+export const isGetMultiplePartnersDataValid = (data: object): boolean => {
+	if (!data['date'] || data['date'] === 'undefined' || !data['city'] || data['city'] === 'undefined' || !data['district'] || data['district'] === 'undefined') {
+		return false;
+	}
+
+	if (parseInt(data['city']) === NaN || parseInt(data['district']) === NaN ) {
+		return false;
+	}
+
+	const dateHandler = new DateHandler(data['date']);
+
+	if (!dateHandler.isUrlDateValidDateString()) {
+		return false;
+	}
+
+	return true;
+}
+
+export const isGetSinglePartnerDataValid = (data: object): boolean => {
+	if (!data['partner'] || data['partner'] === 'undefined' || !data['language'] || data['language'] === 'undefined' || !data['date'] || data['date'] === 'undefined') {
+		return false;
+	}
+
+	const dateHandler = new DateHandler(data['date']);
+
+	if (!dateHandler.isUrlDateValidDateString()) {
+		return false;
 	}
 
 	return true;

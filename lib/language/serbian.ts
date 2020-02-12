@@ -474,6 +474,43 @@ const serbian: LanguageInterface = {
 
 
 
+	reservationInfoTitle: 'Podaci o rezervaciji',
+	reservationInfoBasicMore: 'Detaljnije',
+	reservationInfoBasicLess: 'Osnovno',
+	reservationInfoAdditionalName: 'Slavljenik/ca:',
+	reservationInfoAdditionalRoom: 'Sala:',
+	reservationInfoAdditionalAdultsNum: 'Broj odraslih:',
+	reservationInfoAdditionalKidsNum: 'Broj dece:',
+	reservationInfoAdditionalCateringTitle: 'Ketering:',
+	reservationInfoAdditionalCateringDeal: 'Paket',
+	reservationInfoAdditionalCateringQuantity: 'Količina',
+	reservationInfoAdditionalCateringPrice: 'Cena',
+	reservationInfoAdditionalCateringNone: 'Ketring nije odabran',
+	reservationInfoAdditionalAddonTitle: 'Dodatno:',
+	reservationInfoAdditionalAddonContent: 'Sadržaj',
+	reservationInfoAdditionalAddonPrice: 'Cena',
+	reservationInfoAdditionalAddonNone: 'Dodatno nije odabrano',
+	reservationResStep1: 'Osnovni podaci',
+	reservationResStep2: 'Ketering',
+	reservationResStep3: 'Dodatni sadržaj',
+	reservationResStep4: 'Plaćanje',
+
+	reservationFormBasicNameTitle: 'Ime slavljenika/ce:',
+	reservationFormBasicNamePlaceholder: 'ime',
+	reservationFormBasicAdultsNumTitle: 'Očekivani broj odraslih:',
+	reservationFormBasicAdultsNumPlaceholder: 'broj',
+	reservationFormBasicKidsNumTitle: 'Očekivani broj dece:',
+	reservationFormBasicKidsNumPlaceholder: 'broj',
+	reservationFormCateringPartnerDeal: 'Partner paket',
+	reservationFormCateringPerPrice: 'Cena po osobi',
+	reservationFormCateringMin: 'Minimum',
+	reservationFormCateringPerson: 'osoba',
+	reservationFormCateringMenu: 'Meni:',
+	reservationFormCateringNumLabel: 'Broj gostiju koji želi ovaj paket:',
+	reservationFormAddonFun: 'Zabava',
+	reservationFormAddonDecoration: 'Dekoracija',
+	reservationFormAddonPrice: 'Cena',
+
 
 
 	loginTitle: 'Ovo je stranica prijava',

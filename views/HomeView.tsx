@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button } from 'reactstrap';
 import YouTube from 'react-youtube';
+import Loader from '../components/loader';
 import Select from 'react-select';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { datePickerLang } from '../lib/language/dateLanguage';
@@ -38,6 +39,7 @@ interface MyState {
   date: Date;
   city: null | object;
   district: null | object;
+  loader: boolean;
 };
 
 class HomeView extends React.Component <MyProps, MyState>{
@@ -57,6 +59,7 @@ class HomeView extends React.Component <MyProps, MyState>{
       date: new Date(),
       city: null,
       district: null,
+      loader: false,
 
     };
 
@@ -79,10 +82,12 @@ class HomeView extends React.Component <MyProps, MyState>{
   }
 
   handleSearch(){
-    const link = setUpLinkBasic(window.location.href);
-    const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
-    const url = `${link['protocol']}${link['host']}/search?language=${this.props.lang}&city=${this.state.city ? this.state.city['value'] : null }&district=${this.state.district ? this.state.district['value'] : null }&date=${date}`;
-    window.location.href =  url;
+    this.setState({ loader: true }, () => {
+      const link = setUpLinkBasic(window.location.href);
+      const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+      const url = `${link['protocol']}${link['host']}/search?language=${this.props.lang}&city=${this.state.city ? this.state.city['value'] : null }&district=${this.state.district ? this.state.district['value'] : null }&date=${date}`;
+      window.location.href =  url;
+    })
   }
 
   dateChange = date => {
@@ -106,6 +111,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
     return(
     	<div className="totalWrapper">
+        <Loader  show={ this.state.loader } />
     		<NavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 

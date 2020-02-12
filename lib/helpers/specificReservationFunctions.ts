@@ -1,3 +1,4 @@
+import DateHandler from '../classes/DateHandler';
 
 const dayForSearch = (date: Date): string => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -47,4 +48,15 @@ const isInReservationArray = (reservations: Array<object>, room: string, from: s
   }
 
   return -1;
+}
+
+export const isDateDifferenceValid = (difference: number, date: string, time: string): boolean => {
+  const dateHandler = new DateHandler(date);
+  dateHandler.setDateTimeFromUrl(time);
+
+  if (dateHandler.getDateDifferenceFromNow('hour') > difference) {
+    return true;
+  }
+
+  return false;
 }

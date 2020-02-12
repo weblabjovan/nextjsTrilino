@@ -466,6 +466,43 @@ export default interface LanguageInterface {
 	locationChooseTermAfter: string;
 	locationButtonReserve: string;
 
+	reservationInfoTitle: string;
+	reservationInfoBasicMore: string;
+	reservationInfoBasicLess: string;
+	reservationInfoAdditionalName: string;
+	reservationInfoAdditionalRoom: string;
+	reservationInfoAdditionalAdultsNum: string;
+	reservationInfoAdditionalKidsNum: string;
+	reservationInfoAdditionalCateringTitle: string;
+	reservationInfoAdditionalCateringDeal: string;
+	reservationInfoAdditionalCateringQuantity: string;
+	reservationInfoAdditionalCateringPrice: string;
+	reservationInfoAdditionalCateringNone: string;
+	reservationInfoAdditionalAddonTitle: string;
+	reservationInfoAdditionalAddonContent: string;
+	reservationInfoAdditionalAddonPrice: string;
+	reservationInfoAdditionalAddonNone: string;
+	reservationResStep1: string;
+	reservationResStep2: string;
+	reservationResStep3: string;
+	reservationResStep4: string;
+
+	reservationFormBasicNameTitle: string;
+	reservationFormBasicNamePlaceholder: string;
+	reservationFormBasicAdultsNumTitle: string;
+	reservationFormBasicAdultsNumPlaceholder: string;
+	reservationFormBasicKidsNumTitle: string;
+	reservationFormBasicKidsNumPlaceholder: string;
+	reservationFormCateringPartnerDeal: string;
+	reservationFormCateringPerPrice: string;
+	reservationFormCateringMin: string;
+	reservationFormCateringPerson: string;
+	reservationFormCateringMenu: string;
+	reservationFormCateringNumLabel: string;
+	reservationFormAddonFun: string;
+	reservationFormAddonDecoration: string;
+	reservationFormAddonPrice: string;
+
 
 	
 	loginTitle: string;

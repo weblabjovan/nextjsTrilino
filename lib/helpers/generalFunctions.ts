@@ -212,6 +212,17 @@ export const getArrayIndexByFieldValue = (arr: Array<object>, field: string, val
   return -1;
 }
 
+export const getObjectFieldByFieldValue = (obj: object, field: string, value: string): null | object => {
+
+  for(let key in obj){
+    if (obj[key][field] === value) {
+      return obj[key];
+    }
+  }
+
+  return null;
+}
+
 export const setGetQuery = (type: string, data: object): string => {
   if (type === 'search') {
     return setSearchQuery(data);
@@ -224,5 +235,20 @@ const setSearchQuery = (data: object): string => {
   data['multiple'] = true;
   data['offer'] = data['offer'] ? data['offer'].toString().replace(/,/g, '%') : null;
   return JSON.stringify(data).replace(/"/g, '').replace(/:/g, '=').replace(/,/g, '&').replace(/{|}/g, '');
+}
+
+export const setUrlString = (name: string): string => {
+  const newName = name.toLowerCase();
+  const split  = newName.split(' ');
+  let res = '';
+
+  if (split.length > 1) {
+    res = split.join('-');
+  }else{
+    res = split[0];
+  }
+
+  return res;
+
 }
 

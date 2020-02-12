@@ -298,7 +298,7 @@ const assembleForSelect = (key: string, value: number | string, language: string
 	return { value: value, label: value };
 }
 
-export const isFieldInObject = (object: object, field: string, subObject: null | string = null): boolean => {
+export const isFieldInObject = (object: object, field: string, subObject?:string ): boolean => {
 	if (object) {
 		if (subObject) {
 			if (object[subObject]) {
@@ -498,7 +498,7 @@ export const buildPartnerDecorationObject = (partner: object): object => {
 	return buildDecoration(existing);
 }
 
-const buildDecoration = (existing: object = null): object => {
+const buildDecoration = (existing?: object): object => {
 	const res = {}
 	for(let key in genOptions['decorType']){
 		const decor = { check: false, name_sr: genOptions['decorType'][key]['name_sr'], name_en: genOptions['decorType'][key]['name_en'], value: parseInt(key), price: '' };
@@ -885,6 +885,16 @@ export const getSinglePartner = async (context: any, encoded: boolean): Promise<
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 	const date = link['queryObject']['date'] ? link['queryObject']['date'] : 'null';
 	const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/get/?language=${link['queryObject']['language']}&partner=${link['queryObject']['partner']}&date=${date}&encoded=${encoded}`;
+	const response = await fetch(apiUrl);
+
+	return response;
+}
+
+export const getSinglePartnerForReservation = async (context: any, encoded: boolean): Promise<any> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const encodedParam = encoded ? 'encoded=true' : '';
+	const date = link['queryObject']['date'] ? link['queryObject']['date'] : 'null';
+	const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/get/?language=${link['queryObject']['language']}&partner=${link['queryObject']['partner']}&date=${date}&type=reservation&room=${link['queryObject']['room']}&from=${link['queryObject']['from']}&to=${link['queryObject']['to']}&${encodedParam}`;
 	const response = await fetch(apiUrl);
 
 	return response;

@@ -13,11 +13,11 @@ export const changeSingleFieldActionType = {
   SUCCESS: 'CHANGE_RESERVATION_FIELD_SUCCESS',
 };
 
-export function changeSinglePartnerField(field: string, value: any) {
+export function changeSingleReservationField(field: string, value: any) {
 
   return function (dispatch: dispatch) {
     dispatch({
-      meta: {field: field, source: 'partner'},
+      meta: {field: field, source: 'reservation'},
       type: changeSingleFieldActionType.SUCCESS,
       payload: value,
     });

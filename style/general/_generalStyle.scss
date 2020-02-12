@@ -354,3 +354,13 @@ button:disabled{
     font-family: $headFont;
   }
 }
+
+.mobileWrapper{
+  width: 360px;
+  margin: auto;
+
+  @media only screen and (max-width: 577px) {
+    width: 100%;
+    margin: initial;
+  }
+}
