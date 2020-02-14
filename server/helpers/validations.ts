@@ -336,7 +336,7 @@ export const isReservationPartnerDataValid = (data: object): boolean => {
 }
 
 export const isGetMultiplePartnersDataValid = (data: object): boolean => {
-	if (!data['date'] || data['date'] === 'undefined' || !data['city'] || data['city'] === 'undefined' || !data['district'] || data['district'] === 'undefined') {
+	if (!data['date'] || data['date'] === 'undefined') {
 		return false;
 	}
 

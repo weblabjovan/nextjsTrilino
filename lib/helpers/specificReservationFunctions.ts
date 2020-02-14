@@ -12,7 +12,7 @@ export const preparePartnerForLocation = (rooms: Array<object>, reservations: Ar
   if (!reservations.length) {
     freeTerms = JSON.parse(JSON.stringify(rooms));
     for (var i = 0; i < freeTerms.length; ++i) {
-      freeTerms[i]['terms'] = freeTerms[i]['terms'][day];
+      freeTerms[i]['terms'] = freeTerms[i]['terms'][day].filter( term => { if (term.hasOwnProperty('from')) { return term; }});
     }
   }else{
     freeTerms = JSON.parse(JSON.stringify(rooms));

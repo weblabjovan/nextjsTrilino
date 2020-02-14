@@ -444,13 +444,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
                 </Col>
                 <Col xs='12' lg="7">
                   <Alert color="danger" isOpen={ this.state.errors["flag"] } toggle={this.closeAlert} >
-                    <p hidden={ !this.state.errors['fields']['generalName']} >Problem sa imenom</p>
-                    <p hidden={ !this.state.errors['fields']['generalAdults']} >Problem sa odraslima</p>
-                    <p hidden={ !this.state.errors['fields']['generalAdutsSize']} >Problem sa odraslima broj</p>
-                    <p hidden={ !this.state.errors['fields']['generalKids']} >Problem sa decom</p>
-                    <p hidden={ !this.state.errors['fields']['generalKidsSize']} >Problem sa decom broj</p>
-                    <p hidden={ !this.state.errors['fields']['catering']} >Problem sa brojem keteringa</p>
-                    <p hidden={ !this.state.errors['fields']['cateringTime']} >Ketering nije dostupan u ovako bliskom vremenskom periodu. Molimo vas obrišite brojeve zainteresovanih gostiju iz označenih polja.</p>
+                    <p hidden={ !this.state.errors['fields']['generalName']} >{this.state.dictionary['reservationAlertGeneralName']}</p>
+                    <p hidden={ !this.state.errors['fields']['generalAdults']} >{this.state.dictionary['reservationAlertGeneralAdults']}</p>
+                    <p hidden={ !this.state.errors['fields']['generalAdutsSize']} >{this.state.dictionary['reservationAlertGeneralAdutsSize']}</p>
+                    <p hidden={ !this.state.errors['fields']['generalKids']} >{this.state.dictionary['reservationAlertGeneralKids']}</p>
+                    <p hidden={ !this.state.errors['fields']['generalKidsSize']} >{this.state.dictionary['reservationAlertGeneralKidsSize']}</p>
+                    <p hidden={ !this.state.errors['fields']['catering']} >{this.state.dictionary['reservationAlertCatering']}</p>
+                    <p hidden={ !this.state.errors['fields']['cateringTime']} >{this.state.dictionary['reservationAlertCateringTime']}</p>
                   </Alert>
                   <ResStep
                     num={ 1 }
