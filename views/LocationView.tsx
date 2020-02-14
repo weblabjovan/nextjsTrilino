@@ -128,15 +128,18 @@ class LocationView extends React.Component <MyProps, MyState>{
 
   makeReservation(){
   	if (this.state.date && this.props.partner['link'] && this.state.term) {
-  		const link = setUpLinkBasic(window.location.href);
-	  	const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
-	  	const partner = this.props.partner['link'];
-	  	const room = this.state.term['id'];
-	  	const from = this.state.term['from'];
-	  	const to = this.state.term['to'];
+  		this.setState({loader: true}, () => {
+  			const link = setUpLinkBasic(window.location.href);
+		  	const date = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+		  	const partner = this.props.partner['link'];
+		  	const room = this.state.term['id'];
+		  	const from = this.state.term['from'];
+		  	const to = this.state.term['to'];
 
-	  	const url = `${link['protocol']}${link['host']}/reservation?language=${this.props.lang}&partner=${partner}&room=${room}&from=${from}&to=${to}&date=${date}`;
-	  	window.location.href =  url;
+		  	const url = `${link['protocol']}${link['host']}/reservation?language=${this.props.lang}&partner=${partner}&room=${room}&from=${from}&to=${to}&date=${date}`;
+		  	window.location.href =  url;
+  		})
+  		
   	}
   }
 

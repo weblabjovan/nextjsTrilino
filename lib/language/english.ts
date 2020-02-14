@@ -510,6 +510,13 @@ const english: LanguageInterface = {
 	reservationFormAddonFun: 'Fun',
 	reservationFormAddonDecoration: 'Decoration',
 	reservationFormAddonPrice: 'Price',
+	reservationAlertGeneralName: 'Name of the celebrant is required field, please insert celebrant name.',
+	reservationAlertGeneralAdults: 'Expected adult guests is required field, please insert number of expected adult guests.',
+	reservationAlertGeneralAdutsSize: 'Number of expected adult guests is larger than maximum capacity of this room. Please change number of expected adult guests.',
+	reservationAlertGeneralKids: 'Expected kid guests is required field, please insert number of expected kid guests.',
+	reservationAlertGeneralKidsSize: 'Number of expected kid guests is larger than maximum capacity of this room. Please change number of expected kid guests.',
+	reservationAlertCatering: 'Field - Number of guests wanting this deal - expects a number value, please insert number value in highlighted field.',
+	reservationAlertCateringTime: 'Catering is not available for events with such short notice. Please delete all values from highlighted fields.',
 
 
 

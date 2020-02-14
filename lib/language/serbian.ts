@@ -510,6 +510,13 @@ const serbian: LanguageInterface = {
 	reservationFormAddonFun: 'Zabava',
 	reservationFormAddonDecoration: 'Dekoracija',
 	reservationFormAddonPrice: 'Cena',
+	reservationAlertGeneralName: 'Ime slavljenika/ce je obavezno polje, molimo vas upišite ime slavljenika/ce.',
+	reservationAlertGeneralAdults: 'Očekivani broj odraslih gostiju je obavezno polje, molimo vas upišite očekivani broj odraslih gostiju.',
+	reservationAlertGeneralAdutsSize: 'Očekivani broj odraslih prevazilazi maksimalni kapacitet odraslih ove sale. Molimo vas promenite broj očekivani broj odraslih gostiju.',
+	reservationAlertGeneralKids: 'Očekivani broj dece je obavezno polje, molimo vas upišite očekivani broj dece.',
+	reservationAlertGeneralKidsSize: 'Očekivani broj dece prevazilazi maksimalni kapacitet dece ove sale. Molimo vas promenite broj očekivani broj dece.',
+	reservationAlertCatering: 'Broj gostiju koji želi paket mora biti broj. Molimo vas upišite broj u označeno polje.',
+	reservationAlertCateringTime: 'Ketering nije dostupan u ovako bliskom vremenskom periodu. Molimo vas obrišite brojeve zainteresovanih gostiju iz označenih polja.',
 
 
 

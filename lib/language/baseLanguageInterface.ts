@@ -502,6 +502,13 @@ export default interface LanguageInterface {
 	reservationFormAddonFun: string;
 	reservationFormAddonDecoration: string;
 	reservationFormAddonPrice: string;
+	reservationAlertGeneralName: string;
+	reservationAlertGeneralAdults: string;
+	reservationAlertGeneralAdutsSize: string;
+	reservationAlertGeneralKids: string;
+	reservationAlertGeneralKidsSize: string;
+	reservationAlertCatering: string;
+	reservationAlertCateringTime: string;
 
 
 	

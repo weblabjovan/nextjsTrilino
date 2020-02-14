@@ -77,7 +77,6 @@ export const sendFile =  (
       });
 
     } else if (res) {
-      console.log(res)
       if (res.error) {
         dispatch({
           type: actionTypes.ERROR,

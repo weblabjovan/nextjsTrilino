@@ -123,7 +123,7 @@ class LoginView extends React.Component <MyProps, MyState>{
                       className={`logInput`} 
                       onChange={() => this.handlelogPassChange(event.target['value'])} 
                       value={this.state.logString}
-                      type="text" />
+                      type="password" />
 
                     <div className="middle">
                       <Button color="success" onClick={() => this.handleLogin()} >POŠALJI</Button>
