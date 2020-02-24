@@ -195,7 +195,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
     				<Col xs='12'>
     					<div className="pageHeader">
     						<h2>{this.state.dictionary['partnerProfileGeneralTitle']}</h2>
-    						<p>{this.state.dictionary['partnerProfileGeneralDescription']}<a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
+    						<p>{this.state.dictionary['partnerProfileGeneralDescription']}<a href={`/partnerHelp?language=${this.props.lang}&section=general`} target="_blank">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
     					</div>
     					
     				</Col>
@@ -203,7 +203,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
             <Col xs='12'>
               <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
                 <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
-                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href={`/partnerHelp?language=${this.props.lang}&section=activation`} target="_blank"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
               </Alert>
             </Col>
           </Row>
@@ -221,6 +221,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
             		onChange={(event) => this.uniInputHandler(event.target.value, 'description')} 
                 value={this.props.partnerGeneral['description']}
                 className="logInput"
+                max={ 450 }
             	/>
             </Col>
             <Col xs='12' sm="6">
