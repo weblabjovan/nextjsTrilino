@@ -133,14 +133,14 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
             <Col xs="12">
               <div className="pageHeader">
                 <h2>{this.state.dictionary['partnerProfileDecorationTitle']}</h2>
-                <p>{this.state.dictionary['partnerProfileDecorationDescription']} <a href="#">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
+                <p>{this.state.dictionary['partnerProfileDecorationDescription']} <a href={`/partnerHelp?language=${this.props.lang}&section=decoration`} target="_blank">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
 
             <Col xs='12'>
               <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
                 <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
-                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href="#"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href={`/partnerHelp?language=${this.props.lang}&section=activation`} target="_blank"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
               </Alert>
             </Col>
             
@@ -166,9 +166,6 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
                 return(
                    <Col xs="12" sm="6" lg="4" key={`decoKey_${index}`} className="decorationItem">
                     <Row>
-                      <Col xs="6">
-                        <p>{item[`name_${this.props.lang}`]}</p>
-                      </Col>
                       <Col xs="2">
                         <CheckBox
                           disabled={ false }
@@ -177,6 +174,10 @@ class DecorationScreen extends React.Component <MyProps, MyState>{
                           onChange={ this.checkTheBox }
                         />
                       </Col>
+                      <Col xs="6">
+                        <p>{item[`name_${this.props.lang}`]}</p>
+                      </Col>
+                      
                       <Col xs="4">
                         <PlainInput 
                           placeholder={this.state.dictionary['partnerProfileDecorationPricePlaceholder']}

@@ -144,7 +144,7 @@ const generalOptions: IGenOptions = {
       { value: '22:00', label: '22:00' },
       { value: '22:30', label: '22:30' },
       { value: '23:00', label: '23:00' },
-      { value: '', label: '-' }
+      { value: '-1', label: '-' }
     ],
     dual_en: [
       { value: '1', label: 'Yes' },

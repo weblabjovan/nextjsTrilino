@@ -126,6 +126,16 @@ export const getRoomsSelector = (rooms: Array<object>): Array<object> => {
 }
 
 const isLastTermAfterClose = (dayLast: string | object, dayTerms: Array<object>): object => {
+	if (dayTerms.length) {
+		if (dayTerms[0]['from']) {
+			if (typeof dayLast === 'object') {
+				if (dayLast['value'] === '-1') {
+					return {success: false, message: 'error_no_4'};
+				}
+			}
+		}
+	}
+	
 	if (dayTerms.length > 1) {
 		if (typeof dayLast === 'object') {
 			if (dayTerms[dayTerms.length - 1]['to'] && dayLast['value']) {
@@ -162,8 +172,9 @@ const isDaysTermValid = (day: Array<object>, duration: string): object => {
 			}
 
 			if (i !== 0) {
+
 				const lastTo = moment(`2020-02-08 ${day[i - 1]['to']['value']}`, "YYYY-MM-DD HH:mm");
-				const lastDiff =  moment.duration(from.diff()).asHours();
+				const lastDiff =  moment.duration(from.diff(lastTo)).asHours();
 				if (lastDiff < 0.5) {
 					return {success: false, message: 'error_no_3'};
 				}

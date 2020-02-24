@@ -34,8 +34,12 @@ export const isGeneralDataValid = (data: object): boolean => {
 			}
 		}
 		else{
-			if (typeof data[key] !== 'string') {
-				return false;
+			if (key === 'capacity') {
+				// code...
+			}else{
+				if (typeof data[key] !== 'string') {
+					return false;
+				}
 			}
 		}
 	}

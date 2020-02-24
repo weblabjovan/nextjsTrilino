@@ -378,8 +378,8 @@ const serbian: LanguageInterface = {
 
 
 	partnerProfileCalendarTitle: 'Kalendar rezervacija',
-	partnerProfileCalendarDescription: 'U nastavku se nalazi kalendarski pregled rezervacija vaših termina. Klikom na dugme kreiraj rezervaciju možete započeti proces rezervacije dostupnih termina u vašem objektu. Klikom na već kreirane rezervacije možete dobiti detaljniji pregled zahteva vašeg klijenta. Rezervacije koje ste vi kreirali kroz ovaj kalendar možete i da obrišete. Za više informacija o načinu korišćenja kalendara posetite ',
-	partnerProfileCalendarButton: 'Kreiraj rezervaciju',
+	partnerProfileCalendarDescription: 'U nastavku se nalazi kalendarski pregled rezervacija vaših termina. Klikom na dugme kreirajte rezervaciju možete započeti proces rezervacije dostupnih termina u vašem objektu. Klikom na već kreirane rezervacije možete dobiti detaljniji pregled zahteva vašeg klijenta. Rezervacije koje ste vi kreirali kroz ovaj kalendar možete i da obrišete. Za više informacija o načinu korišćenja kalendara posetite ',
+	partnerProfileCalendarButton: 'Kreirajte rezervaciju',
 
 
 	partnerProfileReservationTitle: 'Formular za rezervacije',
