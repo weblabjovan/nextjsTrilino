@@ -31,9 +31,11 @@ export default class PartnerHelpView extends React.Component <MyProps, MyState>{
   };
 
   componentDidMount(){
-  	const term = !this.props.section || this.props.section === 'undefined' ? 'generalSec' : `${this.props.section}Sec`;
-  	const res = document.getElementById(term);
-  	res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+    setTimeout(() => {
+      const term = !this.props.section || this.props.section === 'undefined' ? 'generalSec' : `${this.props.section}Sec`;
+      const res = document.getElementById(term);
+      res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+    }, 1200);
   }
 	
   render() {
