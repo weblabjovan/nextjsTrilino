@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getSinglePartnerForReservation } from '../lib/helpers/specificPartnerFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import ReservationView from '../views/ReservationView';
 import pages from '../lib/constants/pages';
@@ -19,13 +19,7 @@ interface Props {
 const Reservation : NextPage<Props> = ({ userAgent, partner }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

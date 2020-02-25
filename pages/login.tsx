@@ -1,8 +1,9 @@
-import { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { withRedux } from '../lib/redux'
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { withRedux } from '../lib/redux';
+import { defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
-import LoginView from '../views/LoginView'
+import LoginView from '../views/LoginView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -15,13 +16,7 @@ interface Props {
 const Login : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

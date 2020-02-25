@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnershipView from '../views/PartnershipView'
 import pages from '../lib/constants/pages';
@@ -16,13 +17,7 @@ interface Props {
 const Partnership : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

@@ -3,6 +3,7 @@ import Keys from '../keys';
 import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
+import { languageList } from '../../lib/language/locale';
 
 export const generateString = (length: number):string => {
 	let str = '';
@@ -473,4 +474,16 @@ export const isUrlTermValid = (rooms: Array<object>, data: object) => {
   }
 
   return false;
+}
+
+export const defineUserLanguage = (languageString: string | string[]): string => {
+  if (languageString) {
+    if (languageList.indexOf(languageString.toString()) !== -1) {
+      return languageString.toString();
+    }else{
+      return 'sr';
+    }
+  }
+
+  return 'sr';
 }

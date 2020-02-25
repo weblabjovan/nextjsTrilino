@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import PartnershipLoginView from '../views/PartnershipLoginView';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
 import pages from '../lib/constants/pages';
@@ -19,14 +19,7 @@ interface Props {
 const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
 
   const router = useRouter();
-  let lang = 'sr';
-
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   let error = false;
   let page = router.query['page'] as string;

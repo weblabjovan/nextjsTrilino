@@ -41,7 +41,7 @@ export default class PartnerHelpsr extends React.Component <MyProps, MyState> {
     						<li>Polje <strong>OPIS PROSTORA</strong> je obavezno polje u kojem je potrebno opisno predstaviti vaš prostor u okviru 450 karaktera (slova, brojeva).</li>
     						<li>Polje <strong>TIP PROSTORA</strong> je obavezno polje u kojem je potrebno odabrati tip kojem vaš prostor najviše odgovara.</li>
     						<li>Polje <strong>ADRESA PROSTORA</strong> je obavezno polje u kojem je potrebno upisati adresu (ulicu i broj) vašeg prostora.</li>
-    						<li>Polje <strong>GRAD</strong> je zaključano polje i ono se ne moće menjati.</li>
+    						<li>Polje <strong>GRAD</strong> je zaključano polje i ono se ne može menjati.</li>
     						<li>Polje <strong>DEO GRADA</strong> je obavezmo polje u kojem je potrebno odabrati deo grada u kome se nalazi vaš prostor.</li>
     						<li>Polje <strong>POVRŠINA PROSTORA</strong> je obavezno polje u kojem je potrebno upisati, koristeći samo brojeve, kvadraturu celog prostora/lokala.</li>
     						<li>Polje <strong>POVRŠINA PROSTORA ZA IGRU</strong> je obavezno polje u kojem je potrebno upisati, koristeći samo brojeve, kvadraturu prostora koji je deci dostupan isključivo za igru.</li>
@@ -136,7 +136,6 @@ export default class PartnerHelpsr extends React.Component <MyProps, MyState> {
     					<img src={`/static/help/${this.props.lang}/help-content-2.jpg`}></img>
     					<ul>
     						<li>U opciji <strong>DODATNI SADRŽAJI</strong> definišu se oni zabavni sadržaji, usluge i aktivnosti koje su gostima vašeg prostora dostupne uz doplatu, napomenu, ili neko drugo ograničenje.</li>
-    						<li>Formular za unos pića na kartu se koristi kako bi se prvo i svako novo piće unelo na kartu pića i postalo vidljivo na levoj strani ekrana u odeljku sive boje.</li>
     						<li>Polje <strong>NAZIV SADRŽAJA</strong> je obavezno polje i u njega se upisuje naziv dodatnog sadržaja.</li>
     						<li>Polje <strong>CENA</strong> je obavezno polje i u njega se upisuje, isključivo u brojčanoj vrednosti, cena tog sadržaja za korišćenje u punom trajanju jednog termina. Ukoliko je sadržaj besplatan u ovo polje se upisuje broj 0.</li>
     						<li>Polje <strong>NAPOMENA</strong> je obavezno polje i predstavlja ograničenje koje je vezano uz korišćenje ovog sadrćaja. To može biti brojčano ograničenje, npr da je sadržaj dostupan samo za 5 dece u jednom trenutku. To može biti vremensko ograničenje, da se sadržaj može koristiti svega 30 minuta. To može biti ograničenje u okviru rezervisanja, da je npr. potrebno unapred rezervisati takav sadržaj i ukoliko se definisani vremenski period ne ispoštuje od strane korisnika vaš prostor nije u obavezi da prezentuje taj sadržaj.</li>

@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { defineLanguage } from '../lib/helpers/generalFunctions';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
@@ -16,17 +17,8 @@ interface Props {
 const Home : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
-  let lang = 'sr'
+  let lang = defineLanguage(router.query['language']);
   let error = false;
-
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }else{
-    error = true;
-  }
 
   return (
     <div>
