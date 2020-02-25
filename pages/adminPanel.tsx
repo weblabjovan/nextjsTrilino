@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isAdminLogged, getAdminToken } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
 import AdminPanelView from '../views/AdminPanelView';
@@ -19,13 +19,7 @@ interface Props {
 const Login : NextPage<Props> = ({ userAgent, token, link }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

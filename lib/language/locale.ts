@@ -43,3 +43,6 @@ export const getLocalMessages = (lang: string): object =>{
         };
     }
 }
+
+
+export const languageList = [ 'sr', 'en'];

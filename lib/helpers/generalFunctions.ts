@@ -1,6 +1,7 @@
 import request from 'superagent';
 import cookie from 'js-cookie';
 import LinkClass from '../classes/Link';
+import { languageList } from '../language/locale';
 
 
 export const setApiBasLink = (linkObj: object, route: string): string => {
@@ -249,5 +250,15 @@ export const setUrlString = (name: string): string => {
 
   return res;
 
+}
+
+export const defineLanguage = (language: string | string[] | null | undefined): string => {
+  if (language) {
+    if (languageList.indexOf(language.toString()) !== -1) {
+      return language.toString();
+    }
+  }
+
+  return 'sr';
 }
 

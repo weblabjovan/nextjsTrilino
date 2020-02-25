@@ -5,7 +5,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import EmailVerificationView from '../views/EmailVerificationView';
 import pages from '../lib/constants/pages';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -22,13 +22,7 @@ interface Props {
 const EmailVerification : NextPage<Props> = ({ userAgent, verifyObject, resolution }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

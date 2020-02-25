@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
+import { defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import ConfirmView from '../views/ConfirmView';
 import pages from '../lib/constants/pages';
@@ -16,13 +17,7 @@ interface Props {
 const Confirm : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   let error = false;
   let page = router.query['page'] as string;

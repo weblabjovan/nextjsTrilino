@@ -4,7 +4,7 @@ import fetch from 'isomorphic-unfetch';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import PasswordView from '../views/PasswordView'
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,13 +20,7 @@ interface Props {
 const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 
   const router = useRouter();
-  let lang = 'sr'
-  if (router.query['language'] !== undefined) {
-    let stringLang = router.query['language'] as string;
-    if (pages['language'].indexOf(stringLang) !== -1) {
-      lang = stringLang;
-    }
-  }
+  let lang = defineLanguage(router.query['language']);
 
   return (
     <div>

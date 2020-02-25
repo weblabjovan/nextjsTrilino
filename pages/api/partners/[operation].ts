@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import Partner from '../../../server/models/partner';
 import Reservation from '../../../server/models/reservation';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -23,8 +23,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'save') {
 		const { name, taxNum, city, contactPerson, contactEmail, contactPhone, language } = req.body;
-		const userlanguage = language;
-		const dictionary = getLanguage(language);
+		const userlanguage = defineUserLanguage(language);
+		const dictionary = getLanguage(userlanguage);
 
 		if (isPartnerRegDataValid(req.body)) {
   		try{
@@ -78,7 +78,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'get'){
 		const { type } = req.body;
-		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
+		const userlanguage = defineUserLanguage(req['query']['language']);
 		const dictionary = getLanguage(userlanguage);
 		const multiple = req['query']['multiple'] ? true : false;
 
@@ -241,7 +241,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			return res.status(500).send({ endpoint: 'partners', operation: 'update', success: false, code: 10, error: 'basic validation error'  });
 		}else{
 			const { param, data, type } = req.body;
-			const dictionary = getLanguage(data.language);
+			const userlanguage = defineUserLanguage(data.language);
+			const dictionary = getLanguage(userlanguage);
 
 			if (type === 'verification') {
 				if (!dataHasValidProperty(data, ['id', 'options'])) {
@@ -494,7 +495,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 
 	if (req.query.operation === 'auth') {
-		const userlanguage = req['query']['language'] ? req['query']['language'].toString() : 'sr';
+		const userlanguage = defineUserLanguage(req['query']['language']);
 		const dictionary = getLanguage(userlanguage);
 
 		const token = req.headers.authorization;
