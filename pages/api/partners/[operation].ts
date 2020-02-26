@@ -173,9 +173,27 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 					}
 				}
+			}else if(req['query']['type'] === 'verification') {
+				let partnerId = req['query']['partner'].toString();
+
+				if (req['query']['encoded']) {
+					partnerId = encodeId(partnerId);
+				}
+
+				try{
+					await connectToDb(req.headers.host);
+					const partner = await Partner.findById(partnerId, '-password');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
+					}else{
+						return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerGetCode2'] });
+					}
+				}catch(err){
+					return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
+				}
 			}else{
 				if (!isGetSinglePartnerDataValid(req['query'])) {
-					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'validation error', message: 'invalid data sent' });
+					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 4, error: 'validation error', message: 'invalid data sent' });
 				}else{
 					let partnerId = req['query']['partner'].toString();
 
@@ -204,7 +222,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				             }
 				          },
 				          { $match: { "date": queryDate }},
-				          { $match: { "active": true }},
+				          { $match: { "active": false }},
 				        ],
 				        as: "reservations"
 							};

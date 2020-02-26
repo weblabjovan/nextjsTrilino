@@ -60,7 +60,7 @@ PasswordChange.getInitialProps = async (ctx: any) => {
 
 	if (link['queryObject']['type'] === 'partner') {
 		try{
-			const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
+			const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
 		  verifyObject = await res.json();
 			if (verifyObject['success']) {
 				error = true;

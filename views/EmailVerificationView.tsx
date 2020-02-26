@@ -76,6 +76,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 	}
 	
   render() {
+    
     return(
 
     	<div className="totalWrapper">

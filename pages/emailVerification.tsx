@@ -60,7 +60,7 @@ EmailVerification.getInitialProps = async (ctx: any) => {
   if (link['queryObject']['type'] === 'partner') {
     try{
       const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
+      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         if (verifyObject['partner']['verified']) {
