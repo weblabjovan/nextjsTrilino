@@ -124,7 +124,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
-        this.props.router.push(`/confirm?language=${this.props.lang}&page=partner_registration`)
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm?language=${this.props.lang}}&page=partner_registration`;
       }
       if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {
         this.setState({ regBtnDisabled: false });
@@ -139,7 +139,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
     if (this.props.error) {
-      this.props.router.push(`/partnershipLogin?language=${this.props.lang}&page=error`);
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnershipLogin?language=${this.props.lang}&page=error`;
     }
 		this.props.setUserLanguage(this.props.lang);
 	}
