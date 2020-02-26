@@ -47,7 +47,7 @@ const Confirm : NextPage<Props> = ({ userAgent }) => {
 
 Confirm.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
-  const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const userAgent = navigator.userAgent;
 
   const devLog = await isDevEnvLogged(ctx);
 
