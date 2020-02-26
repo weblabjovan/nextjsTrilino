@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { withRedux } from '../lib/redux';
+import { getLanguage } from '../lib/language';
 import Head from '../components/head';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import PasswordView from '../views/PasswordView'
@@ -21,10 +22,11 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitlePassword']} description={dictionary['headDescriptionPassword']} />
       <PasswordView 
       	error={ error }
       	verifyObject={ verifyObject }

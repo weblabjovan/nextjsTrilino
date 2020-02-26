@@ -7,6 +7,7 @@ import EmailVerificationView from '../views/EmailVerificationView';
 import pages from '../lib/constants/pages';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { getLanguage } from '../lib/language';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -23,10 +24,11 @@ const EmailVerification : NextPage<Props> = ({ userAgent, verifyObject, resoluti
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleEmailVerification']} description={dictionary['headDescriptionEmailVerification']} />
       <EmailVerificationView 
       	userAgent={userAgent} 
       	router={router}

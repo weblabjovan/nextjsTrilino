@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { withRedux } from '../lib/redux';
+import { getLanguage } from '../lib/language';
 import Head from '../components/head';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import PasswordChangeView from '../views/PasswordChangeView'
@@ -21,6 +22,7 @@ const PasswordChange : NextPage<Props> = ({ userAgent, verifyObject, error }) =>
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   if (router.query['page'] !== 'partner' && router.query['page'] !== 'user') {
   	error = true;
@@ -28,7 +30,7 @@ const PasswordChange : NextPage<Props> = ({ userAgent, verifyObject, error }) =>
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitlePasswordChange']} description={dictionary['headDescriptionPasswordChange']}  />
       <PasswordChangeView 
       	error={ error }
       	verifyObject={ verifyObject }

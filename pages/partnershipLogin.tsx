@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
+import { getLanguage } from '../lib/language';
 import PartnershipLoginView from '../views/PartnershipLoginView';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
@@ -23,6 +24,7 @@ const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
 
   let error = false;
   let page = router.query['page'] as string;
+  const dictionary = getLanguage(lang);
 
   if (router.query['page'] === undefined || pages['partnerLogin'].indexOf(page) === -1) {
     error = true;
@@ -30,7 +32,7 @@ const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitlePartnershipLogin']} description={dictionary['headDescriptionPartnershipLogin']} />
       <PartnershipLoginView 
         link={ link }
         userAgent={userAgent} 

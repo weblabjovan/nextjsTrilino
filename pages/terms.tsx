@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
-import { defineLanguage } from '../lib/helpers/generalFunctions';
 import { getLanguage } from '../lib/language';
+import { defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
-import LoginView from '../views/LoginView';
+import TermsView from '../views/TermsView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -14,7 +14,7 @@ interface Props {
 }
 
 
-const Login : NextPage<Props> = ({ userAgent }) => {
+const Terms : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -22,15 +22,15 @@ const Login : NextPage<Props> = ({ userAgent }) => {
 
   return (
     <div>
-      <Head title={dictionary['headTitleLogin']} description={dictionary['headDescriptionLogin']}  />
-      <h1>Ništa od stranice</h1>
+      <Head title={dictionary['headTitleTerms']} description={dictionary['headDescriptionTerms']} />
+      <TermsView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang }  />
     </div>
   )
 }
 
-Login.getInitialProps = async ({ req }) => {
+Terms.getInitialProps = async ({ req }) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   return { userAgent}
 }
 
-export default withRedux(Login)
+export default withRedux(Terms)

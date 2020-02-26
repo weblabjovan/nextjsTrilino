@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { defineLanguage } from '../lib/helpers/generalFunctions';
+import { getLanguage } from '../lib/language';
 import Head from '../components/head';
 import PartnershipView from '../views/PartnershipView'
 import pages from '../lib/constants/pages';
@@ -18,10 +19,11 @@ const Partnership : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitlePartnership']} description={dictionary['headDescriptionPartnership']}/>
       <PartnershipView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
     </div>
   )

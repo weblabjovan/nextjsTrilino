@@ -3,6 +3,7 @@ import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isPartnerLogged, getPartnerToken } from '../lib/helpers/specificPartnerFunctions';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
+import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnerHelpView from '../views/PartnerHelpView';
@@ -20,10 +21,11 @@ const PartnerHelp : NextPage<Props> = ({userAgent, token}) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitlePartnerHelp']} description={dictionary['headDescriptionPartnerHelp']} />
       <PartnerHelpView 
       	userAgent={ userAgent }  
       	path={router.pathname} 

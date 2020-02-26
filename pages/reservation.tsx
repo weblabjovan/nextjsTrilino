@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
+import { getLanguage } from '../lib/language';
 import { getSinglePartnerForReservation } from '../lib/helpers/specificPartnerFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
@@ -20,10 +21,11 @@ const Reservation : NextPage<Props> = ({ userAgent, partner }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleReservation']} description={dictionary['headDescriptionReservation']} />
       <ReservationView
       	userAgent={userAgent} 
         router={ router } 

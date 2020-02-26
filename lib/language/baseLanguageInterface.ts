@@ -1,4 +1,38 @@
 export default interface LanguageInterface {
+	headTitleIndex: string;
+	headDescriptionIndex: string;
+	headTitleAdminLogin: string;
+	headDescriptionAdminLogin: string;
+	headTitleAdminPanel: string;
+	headDescriptionAdminPanel: string;
+	headTitleConfirmation: string;
+	headDescriptionConfirmation: string;
+	headTitleDevLogin: string;
+	headDescriptionDevLogin: string;
+	headTitleEmailVerification: string;
+	headDescriptionEmailVerification: string;
+	headTitleLogin: string;
+	headDescriptionLogin: string;
+	headTitlePartnerHelp: string;
+	headDescriptionPartnerHelp: string;
+	headTitlePartnerProfile: string;
+	headDescriptionPartnerProfile: string;
+	headTitlePartnership: string;
+	headDescriptionPartnership: string;
+	headTitlePartnershipLogin: string;
+	headDescriptionPartnershipLogin: string;
+	headTitlePassword: string;
+	headDescriptionPassword: string;
+	headTitlePasswordChange: string;
+	headDescriptionPasswordChange: string;
+	headTitleReservation: string;
+	headDescriptionReservation: string;
+	headTitleSearch: string;
+	headDescriptionSearch: string;
+	headTitleTerms: string;
+	headDescriptionTerms: string;
+
+
 	navigationLogin: string;
 	navigationSearch: string;
 	navigationFaq: string;
@@ -103,6 +137,7 @@ export default interface LanguageInterface {
 	partnerRegContactEmail: string;
 	partnerRegContactPhone: string;
 	partnerRegFinalWarning: string;
+	partnerRegTerms: string;
 	partnerLogFinalWarning: string;
 	partnerLogThank: string;
 	partnerRegAlertName: string;
@@ -112,6 +147,7 @@ export default interface LanguageInterface {
 	partnerRegAlertEmail: string;
 	partnerRegAlertPhone: string;
 	partnerRegAlertDuplicate: string;
+	partnerRegAlertTerms: string;
 	partnerLogAlertPass: string;
 
 	emailVerificationPartnerVerificTitle: string;

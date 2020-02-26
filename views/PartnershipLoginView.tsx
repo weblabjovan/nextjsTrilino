@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PlainInput from '../components/form/input';
+import CheckBox from '../components/form/checkbox';
 import Loader from '../components/loader';
 import Select from 'react-select';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
@@ -53,6 +54,7 @@ interface MyState {
   contactPhone: string;
   logTax: null | number;
   logPass: string;
+  terms: boolean;
   errorMessages: object;
   regBtnDisabled: boolean;
   logTry: number;
@@ -65,7 +67,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handlelogTaxChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData', 'sendLoginData'];
+    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handlelogTaxChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData', 'sendLoginData', 'handleCheckBox'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -89,7 +91,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       logTax: null,
       logPass: '',
       logTry: 0,
-      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false }},
+      terms: false,
+      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false, terms: false }},
       regBtnDisabled: false,
     };
 
@@ -174,6 +177,11 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }else{
         errorCopy['fields']['contactPhone'] = false;
       }
+      if (!this.state.terms) {
+        errorCopy['fields']['terms'] = true;
+      }else{
+        errorCopy['fields']['terms'] = false;
+      }
 
       errorCopy['fields']['regDuplicate'] = false;
     }
@@ -247,6 +255,10 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     
   }
 
+  handleCheckBox(){
+    this.setState({terms: !this.state.terms });
+  }
+
   handleInputChange(field, value){
      this.setState(prevState => ({
       ...prevState,
@@ -316,6 +328,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                         <p hidden={ !this.state.errorMessages['fields']['contactEmail']} >{ this.state.dictionary['partnerRegAlertEmail'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['contactPhone']} >{ this.state.dictionary['partnerRegAlertPhone'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['regDuplicate'] }>{ this.state.dictionary['partnerRegAlertDuplicate'] }</p>
+                        <p hidden={ !this.state.errorMessages['fields']['terms'] }>{ this.state.dictionary['partnerRegAlertTerms'] }</p>
                       </Alert>
 			              	<div className="box">
 			              		<h2>{this.state.dictionary['partnerRegTitle']}</h2>
@@ -361,8 +374,17 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                           className={`${this.state.errorMessages['fields']['contactPhone'] ? "borderWarrning" : ''} logInput`} 
                           type="number" />
 
+                         <CheckBox
+                          disabled={ false }
+                          checked={ this.state.terms }
+                          label={ this.state.dictionary['partnerRegTerms']  }
+                          field="terms"
+                          onChange={ this.handleCheckBox }
+                          orientation="back"
+                        />
+
     							<div className="middle marginSmall">
-    								<a href="/">{this.state.dictionary['uniTerms']}</a>
+    								<a href={`/terms?language=${this.props.lang}`}>{this.state.dictionary['uniTerms']}</a>
     							</div>
 
     							<div className="middle">

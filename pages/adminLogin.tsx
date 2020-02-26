@@ -4,6 +4,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import AdminLoginView from '../views/AdminLoginView';
 import pages from '../lib/constants/pages';
+import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isAdminLogged } from '../lib/helpers/specificAdminFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,10 +21,11 @@ const AdminLogin : NextPage<Props> = ({ userAgent, link, token }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleAdminLogin']} description={dictionary['headDescriptionAdminLogin']} />
       <AdminLoginView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } link={ link } />
     </div>
   )

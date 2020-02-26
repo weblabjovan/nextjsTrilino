@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { defineLanguage } from '../lib/helpers/generalFunctions';
+import { getLanguage } from '../lib/language';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
@@ -19,10 +20,11 @@ const Home : NextPage<Props> = ({ userAgent }) => {
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   let error = false;
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleIndex']} description={dictionary['headDescriptionIndex']} />
       <HomeView 
         userAgent={userAgent} 
         path={router.pathname} 

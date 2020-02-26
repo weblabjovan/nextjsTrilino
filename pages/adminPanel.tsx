@@ -5,6 +5,7 @@ import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions'
 import { isDevEnvLogged, isAdminLogged, getAdminToken } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
 import AdminPanelView from '../views/AdminPanelView';
+import { getLanguage } from '../lib/language';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -20,10 +21,11 @@ const Login : NextPage<Props> = ({ userAgent, token, link }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleAdminPanel']} description={dictionary['headDescriptionAdminPanel']} />
       <AdminPanelView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } token={token} link={ link } />
     </div>
   )
