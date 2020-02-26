@@ -378,7 +378,7 @@ const serbian: LanguageInterface = {
 	partnerProfileCateringDealsDealCont: 'Sadržaj paketa',
 	partnerProfileCateringDealsDeal: 'Paket',
 	partnerProfileCateringDealsType: 'Tip:',
-	partnerProfileCateringDealsPrice: 'Cena:',
+	partnerProfileCateringDealsPrice: 'Cena/po osobi:',
 	partnerProfileCateringDealsMin: 'Minimum:',
 	partnerProfileCateringDealsEmptyDeal: 'Još uvek nema unetih jela/pića za ovaj paket.',
 	partnerProfileCateringDealsFoodName: 'Naziv jela/pića koji želite dodati:',

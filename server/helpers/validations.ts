@@ -171,7 +171,7 @@ export const isPartnerForActivation = (partnerObj: object): boolean => {
 	}
 
 	if (partnerObj['general']) {
-		if (partnerObj['general']['drink']) {
+		if (partnerObj['general']['drink'] === '1') {
 			if (!isDrinkCardActive(partnerObj)) {
 				return false;
 			}
@@ -181,7 +181,7 @@ export const isPartnerForActivation = (partnerObj: object): boolean => {
 			}
 		}
 
-		if (partnerObj['general']['food']) {
+		if (partnerObj['general']['food'] === '1') {
 			if (!isCateringDealPresent(partnerObj)) {
 				return false;
 			}

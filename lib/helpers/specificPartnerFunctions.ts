@@ -708,21 +708,23 @@ export const calculateActivationProcess = (partnerObj: object): number => {
 	}
 
 	if (partnerObj['general']) {
-		if (partnerObj['general']['drink']) {
+		if (partnerObj['general']['drink'] === '1') {
 			if (isDrinkCardActive(partnerObj)) {
 				num = num + 15;
 			}
 		}else{
-			if (!partnerObj['general']['selfDrink']) {
+			if (partnerObj['general']['selfDrink']) {
+				num = num + 15;
 			}
 		}
 
-		if (partnerObj['general']['food']) {
+		if (partnerObj['general']['food'] === '1') {
 			if (isCateringDealPresent(partnerObj)) {
 				num = num + 15;
 			}
 		}else{
-			if (!partnerObj['general']['selfFood']) {
+			if (partnerObj['general']['selfFood']) {
+				num = num + 15;
 			}
 		}
 	}
@@ -813,6 +815,7 @@ const isCateringDealPresent = (partner: object): boolean => {
 			if (Array.isArray(partner['catering']['deals'])) {
 				if (partner['catering']['deals'].length) {
 					for (var i = 0; i < partner['catering']['deals'].length; ++i) {
+						console.log(partner['catering']['deals'][i])
 							if (!partner['catering']['deals'][i]['type'] || !partner['catering']['deals'][i]['min'] || !partner['catering']['deals'][i]['price'] || !partner['catering']['deals'][i]['regId'] || partner['catering']['deals'][i]['items'].length < 5) {
 							return false;
 						}

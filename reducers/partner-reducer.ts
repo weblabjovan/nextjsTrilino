@@ -240,7 +240,7 @@ const initialState: initialState  = {
   partnerCatering: {
     drinkCard:[],
     deals: [
-      { type: '', price: '', min: null, items: [], currentItem: ''},
+      { type: '', price: '', min: null, items: [], currentItem: '', regId: generateString(12)},
     ],
   },
 
@@ -369,7 +369,7 @@ const actionsMap = {
       partner: action.payload['partner'],
       forActivation: action.payload.partner['forActivation'],
       activationAlert: action.payload.partner['forActivation'] ? false : true,
-      activationProcessPercent: calculateActivationProcess(action.payload.partner),
+      activationProcessPercent: calculateActivationProcess(action.payload['partner']),
       partnerGetStart: false,
     };
   },
@@ -459,7 +459,7 @@ const actionsMap = {
       partner: action.payload.partner,
       forActivation: action.payload.partner['forActivation'],
       activationAlert: action.payload.partner['forActivation'] ? false : true,
-      activationProcessPercent: calculateActivationProcess(action.payload.partner),
+      activationProcessPercent: calculateActivationProcess(action.payload['partner']),
       updateActionGeneralStart: false,
     };
   },
@@ -484,7 +484,7 @@ const actionsMap = {
       partner: action.payload.partner,
       forActivation: action.payload.partner['forActivation'],
       activationAlert: action.payload.partner['forActivation'] ? false : true,
-      activationProcessPercent: calculateActivationProcess(action.payload.partner),
+      activationProcessPercent: calculateActivationProcess(action.payload['partner']),
       updateActionOfferStart: false,
     };
   },
@@ -509,7 +509,7 @@ const actionsMap = {
       partner: action.payload.partner,
       forActivation: action.payload.partner['forActivation'],
       activationAlert: action.payload.partner['forActivation'] ? false : true,
-      activationProcessPercent: calculateActivationProcess(action.payload.partner),
+      activationProcessPercent: calculateActivationProcess(action.payload['partner']),
       updateActionCateringStart: false,
     };
   },
