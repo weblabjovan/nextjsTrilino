@@ -155,12 +155,12 @@ const generalOptions: IGenOptions = {
       { value: '2', label: 'Ne' }
     ],
     cancel_en: [
-      { value: '7', label: '7 days before reservation' },
+      { value: '0', label: 'Cancelation is not allowed' },
       { value: '15', label: '15 days before reservation' },
       { value: '30', label: '30 days before reservation' }
     ],
     cancel_sr: [
-      { value: '7', label: '7 dana pre rezervacije' },
+      { value: '0', label: 'Otkazivanj nije dozvoljeno' },
       { value: '15', label: '15 dana pre rezervacije' },
       { value: '30', label: '30 dana pre rezervacije' }
     ],
