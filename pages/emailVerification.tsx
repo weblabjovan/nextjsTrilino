@@ -50,12 +50,18 @@ EmailVerification.getInitialProps = async (ctx: any) => {
   let verifyObject = { };
   let resolution = 0;
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err);
   }
+
+  
 
   if (link['queryObject']['type'] === 'partner') {
     try{

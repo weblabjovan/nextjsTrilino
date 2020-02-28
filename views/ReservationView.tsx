@@ -55,7 +55,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -245,6 +245,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['general']['adultsNum'] = generalCopy['adultsNum'];
     infoCopy['general']['kidsNum'] = generalCopy['kidsNum'];
 
+    if (generalCopy['double']) {
+      priceCopy['term'] = this.props.partner['isReadyForDouble']['price'] + priceCopy['term'];
+    }
+
     priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
 
     this.setState({ info: infoCopy, price: priceCopy});
@@ -292,7 +296,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1 || step === 4) {
-        return '175px';
+        return '225px';
       }
       if (step === 2) {
         let items = 0;
@@ -313,7 +317,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1 || step === 4) {
-        return '300px';
+        return '350px';
       }
 
       if (step === 2) {
@@ -369,6 +373,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   }
 
+  checkDouble(){
+    const generalCopy = JSON.parse(JSON.stringify(this.props.reservationGeneral));
+    generalCopy['double'] = !generalCopy['double'];
+    this.props.changeSingleReservationField('reservationGeneral', generalCopy);
+  }
+
   checkTheBox(field: string, type: string){
     const additionalCopy = JSON.parse(JSON.stringify(this.props.reservationAdditional));
     if (additionalCopy[field]) {
@@ -406,6 +416,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
+    console.log(this.props.partner)
 		this.props.setUserLanguage(this.props.lang);
 	}
 	
@@ -495,6 +506,29 @@ class ReservationView extends React.Component <MyProps, MyState>{
                             type="text"
                           />
                         </Col>
+
+                        {
+                          this.props.partner.hasOwnProperty('isReadyForDouble')
+                          ?
+                          (
+                            <Col xs="12">
+                              <div className="middle doubleBox">
+                                <CheckBox
+                                  disabled={ false }
+                                  checked={ this.props.reservationGeneral['double'] }
+                                  field="double"
+                                  label={ 'Želim dupli termin'  }
+                                  onChange={ this.checkDouble }
+                                  orientation="back"
+                                />
+                              </div>
+                            </Col>
+                          )
+                          :
+                          null
+                        }
+
+                        
 
                         <Col xs="12">
                           <div className="middle">

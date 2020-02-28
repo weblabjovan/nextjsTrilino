@@ -51,27 +51,26 @@ PasswordChange.getInitialProps = async (ctx: any) => {
 	let verifyObject = { };
 	let error = false;
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    if (link['queryObject']['type'] === 'partner') {
+      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
+      verifyObject = await res.json();
+      if (verifyObject['success']) {
+        error = true;
+      }
+      
+    }
+  }catch(err){
+    console.log(err);
   }
 
-	if (link['queryObject']['type'] === 'partner') {
-		try{
-			const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
-		  verifyObject = await res.json();
-			if (verifyObject['success']) {
-				error = true;
-			}
-		}catch(err){
-			console.log(err);
-		}
-		
-	}
-	
-  
   return { userAgent, error, verifyObject }
 }
 

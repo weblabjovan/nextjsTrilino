@@ -35,6 +35,7 @@ const initialState: initialState  = {
     room:'',
     adultsNum: '',
     kidsNum: '',
+    double: false,
   },
 
   reservationAdditional: {

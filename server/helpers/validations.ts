@@ -370,3 +370,13 @@ export const isGetSinglePartnerDataValid = (data: object): boolean => {
 
 	return true;
 }
+
+export const isReservationAlreadyMade = (reservations: Array<object>, from: string | string[], to: string | string[]): boolean => {
+	for (var i = 0; i < reservations.length; ++i) {
+		if (reservations[i]['from'] == from && reservations[i]['to'] == to) {
+			return true;
+		}
+	}
+
+	return false;
+}

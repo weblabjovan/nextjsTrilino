@@ -42,34 +42,40 @@ Reservation.getInitialProps = async (ctx) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let result = { partner: null};
-  const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  const partnerRes = await getSinglePartnerForReservation(ctx, true);
-  if (partnerRes['status'] === 200) {
-  	result = await partnerRes.json();
-  	if (!result['partner']) {
-  		ctx.res.writeHead(302, {Location: `/?language=sr`});
-    	ctx.res.end();
-  	}else{
-  		if (!result['partner']['reservation']) {
-  			ctx.res.writeHead(302, {Location: `/?language=sr`});
-    		ctx.res.end();
-  		}else{
-  			if (!result['partner']['reservation']['id']) {
-  				ctx.res.writeHead(302, {Location: `/?language=sr`});
-    			ctx.res.end();
-  			}
-  		}
-  	}
-  }else{
-  	ctx.res.writeHead(302, {Location: `/?language=sr`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const partnerRes = await getSinglePartnerForReservation(ctx, true);
+    if (partnerRes['status'] === 200) {
+      result = await partnerRes.json();
+      if (!result['partner']) {
+        ctx.res.writeHead(302, {Location: `/?language=sr`});
+        ctx.res.end();
+      }else{
+        if (!result['partner']['reservation']) {
+          ctx.res.writeHead(302, {Location: `/?language=sr`});
+          ctx.res.end();
+        }else{
+          if (!result['partner']['reservation']['id']) {
+            ctx.res.writeHead(302, {Location: `/?language=sr`});
+            ctx.res.end();
+          }
+        }
+      }
+    }else{
+      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err);
   }
+  
   
 
   return { userAgent, partner: result['partner']}

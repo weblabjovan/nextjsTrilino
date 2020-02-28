@@ -155,4 +155,5 @@ export interface IreservationGeneral{
 	room: string;
 	adultsNum: string | number;
 	kidsNum: string | number;
+	double: boolean;
 }

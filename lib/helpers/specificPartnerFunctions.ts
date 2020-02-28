@@ -434,6 +434,7 @@ const typeTheDeals = (deals: Array<object>): Array<object>  => {
 		deals[i]['price'] = parseInt(deals[i]['price']);
 		deals[i]['min'] = parseInt(deals[i]['min']);
 		deals[i]['type'] = deals[i]['type']['value'];
+		deals[i]['regId'] = deals[i]['regId'] ? deals[i]['regId'] : generateString(12);
 	}
 
 	return deals;
