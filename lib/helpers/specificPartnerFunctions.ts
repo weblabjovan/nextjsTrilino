@@ -698,24 +698,20 @@ export const calculateActivationProcess = (partnerObj: object): number => {
 	let num = 20;
 
 	if (isGeneralFilled(partnerObj)) {
-		console.log('q')
 		num = num + 20;
 	}
 
 	if (isRoomsFilled(partnerObj)) {
-		console.log('w')
 		num = num + 20;
 	}
 
 	if (isFreeContentActive(partnerObj)) {
-		console.log('e')
 		num = num + 10;
 	}
 
 	if (partnerObj['general']) {
 		if (partnerObj['general']['drink'] === '1') {
 			if (isDrinkCardActive(partnerObj)) {
-				console.log('t')
 				num = num + 15;
 			}
 		}else{
@@ -726,7 +722,6 @@ export const calculateActivationProcess = (partnerObj: object): number => {
 
 		if (partnerObj['general']['food'] === '1') {
 			if (isCateringDealPresent(partnerObj)) {
-				console.log('r')
 				num = num + 15;
 			}
 		}else{
