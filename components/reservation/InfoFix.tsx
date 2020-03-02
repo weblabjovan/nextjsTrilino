@@ -7,6 +7,7 @@ type MyProps = {
   time?: string;
   date?: string;
   price?: number;
+  deposit: number;
   lang: string;
   num?: string;
   catering?:Array<object>; 
@@ -71,7 +72,10 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                 <p>{`${this.props.date}, ${this.props.time}`}</p>
               </Col>
                <Col xs="4" sm="2" className="smallColPadd">
-                <span className="price">{`${this.props.price} rsd`}</span>
+                <span className="price">{`${this.props.price.toLocaleString('en')} rsd`}</span>
+              </Col>
+              <Col xs="12">
+                <p className="deposit">{`${this.state.dictionary['uniDeposit']}: ${this.props.deposit.toLocaleString('en')} rsd`}</p>
               </Col>
             </Row>
 
@@ -124,7 +128,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                           <tr key={`cateringKey_${index}`}>
                             <td>{deal['name']}</td>
                             <td>{deal['quantity']}</td>
-                            <td>{`${deal['total']}rsd`}</td>
+                            <td>{`${deal['total'].toLocaleString('en')} rsd`}</td>
                           </tr>
                         )
                       })
@@ -153,7 +157,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                         return(
                           <tr key={`cateringKey_${index}`}>
                             <td>{addon['name']}</td>
-                            <td>{`${addon['total']}rsd`}</td>
+                            <td>{`${parseInt(addon['total']).toLocaleString('en')} rsd`}</td>
                           </tr>
                         )
                       })

@@ -68,6 +68,8 @@ const english: LanguageInterface = {
 	uniPartnerProgressTitle: '% of your profile is done',
 	uniPartnerProgressDescription: 'If you want to find out what needs to be filled out before your profile is active, please visit ',
 	uniPartnerProgressLink: 'activation help',
+	uniDeposit: 'Deposit',
+	uniNotWorkingDay: 'Non-working day',
 
 	emailPartnerRegisterTitle: ', welcome to Trilino',
 	emailPartnerRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. From now on you will be connected to thousands of people that are interested in your space and/or your services. All you have to do is to create your profile that will fairly present your business to visitors of our web site. Before that you should verify your registration and create your password. Click on the button bellow and follow the instractions. Good luck.',

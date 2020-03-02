@@ -38,8 +38,6 @@ Login.getInitialProps = async (ctx: any) => {
   let link = {};
 
   try{
-
-  }catch(err){
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
@@ -56,6 +54,8 @@ Login.getInitialProps = async (ctx: any) => {
     }
 
     token = getAdminToken(ctx);
+  }catch(err){
+    console.log(err)
   }
 
   return { userAgent, link, token }

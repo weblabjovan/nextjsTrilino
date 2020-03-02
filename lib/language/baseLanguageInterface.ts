@@ -66,6 +66,8 @@ export default interface LanguageInterface {
 	uniPartnerProgressTitle: string;
 	uniPartnerProgressDescription: string;
 	uniPartnerProgressLink: string;
+	uniDeposit: string;
+	uniNotWorkingDay: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;

@@ -262,3 +262,12 @@ export const defineLanguage = (language: string | string[] | null | undefined): 
   return 'sr';
 }
 
+export const isTrilinoCatering = (regId: string): boolean => {
+  const cateringCodes = ['0000000000001', '0000000000002'];
+
+  if (cateringCodes.indexOf(regId) === -1) {
+    return false;
+  }
+
+  return true;
+}

@@ -144,6 +144,7 @@ class LocationView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+  	console.log(this.state.selectedRoom)
 
   	if (!this.props.getReservationsStart && prevProps.getReservationsStart && this.props.getReservationsSuccess) {
   		this.props.partner['reservations'] = this.props.reservations;
@@ -157,7 +158,6 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-		console.log(this.props.partner);
 	}
 	
   render() {
@@ -622,7 +622,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          	{
 										          		term['terms'].length
 										          		?
-										          		this.state.selectedRoom
+										          		this.state.selectedRoom && parseInt(this.state.selectedRoom.substr(0,1)) === index
 										          		?
 										          		(	
 										          			<div className="resInfoMsg">
@@ -669,7 +669,137 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		}
 	          		</div>
 	          	</Col>
+
 	          </Row>
+
+	          <Row>
+	          	<Col xs="12" sm="8" lg="9">
+	          		<Row className="cateringCardPr">
+			          	<Col xs="12"><h4>{this.state.dictionary['partnerProfilePreviewCateringCardSub']}</h4></Col>
+			            {
+			              isFieldInObject(this.props.partner, 'drinkCard', 'catering')
+			              ?
+			              this.props.partner['catering']['drinkCard'].length
+			              ?
+			              (
+			                <Col xs="12">
+			                <Row>
+			                  <Col xs="12" sm="4">
+			                    <div>
+			                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarNon']}</h5>
+			                    </div>
+			                    {
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '1').length
+			                      ?
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '1').map( (drink, index) => {
+			                        return(
+			                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                         )
+			                      })
+			                      :
+			                      <div className="middle">
+			                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarNonEmpty']}</h6>
+			                      </div>
+			                    }
+			                  </Col>
+			                  <Col xs="12" sm="4">
+			                    <div>
+			                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarAlco']}</h5>
+			                    </div>
+			                    {
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '2').length
+			                      ?
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '2').map( (drink, index) => {
+			                        return(
+			                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                         )
+			                      })
+			                      :
+			                      <div className="middle">
+			                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarAlcoEmpty']}</h6>
+			                      </div>
+			                    }
+			                  </Col>
+			                  <Col xs="12" sm="4">
+			                    <div>
+			                      <h5>{this.state.dictionary['partnerProfilePreviewCateringCardPillarHot']}</h5>
+			                    </div>
+			                    {
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '3').length
+			                      ?
+			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '3').map( (drink, index) => {
+			                        return(
+			                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                         )
+			                      })
+			                      :
+			                      <div className="middle">
+			                         <h6 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardPillarHotEmpty']}</h6>
+			                      </div>
+			                     
+			                    }
+			                  </Col>
+			                </Row>
+			                </Col>
+			              )
+			              :
+			              (<Col xs="12">
+			              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardEmpty']}</h5>
+			              </Col>)
+			              :
+			              (<Col xs="12">
+			              <h5 className="fadedPrev">{this.state.dictionary['partnerProfilePreviewCateringCardEmpty']}</h5>
+			              </Col>)
+			            }
+			            
+			          </Row>
+	          	</Col>
+
+	          	<Col xs="12" sm="4" lg="3">
+	          		<Row className="workingHours">
+	          			<Col xs="12"><h4>{`${this.state.dictionary['partnerProfileGeneralSubTimes']}:`}</h4></Col>
+	          			<Col xs="12" >
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysMonday']}:`}</h3>
+	          				<h5>{this.props.partner['general']['mondayFrom'] !== '-1' && this.props.partner['general']['mondayTo'] !== '-1' ? `${this.props.partner['general']['mondayFrom']} - ${this.props.partner['general']['mondayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysTuesday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['tuesdayFrom'] !== '-1' && this.props.partner['general']['tuesdayTo'] !== '-1' ? `${this.props.partner['general']['tuesdayFrom']} - ${this.props.partner['general']['tuesdayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysWednesday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['wednesdayFrom'] !== '-1' && this.props.partner['general']['wednesdayTo'] !== '-1' ? `${this.props.partner['general']['wednesdayFrom']} - ${this.props.partner['general']['wednesdayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysThursday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['thursdayFrom'] !== '-1' && this.props.partner['general']['thursdayTo'] !== '-1' ? `${this.props.partner['general']['thursdayFrom']} - ${this.props.partner['general']['thursdayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysFriday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['fridayFrom'] !== '-1' && this.props.partner['general']['fridayTo'] !== '-1' ? `${this.props.partner['general']['fridayFrom']} - ${this.props.partner['general']['fridayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysSatruday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['saturdayFrom'] !== '-1' && this.props.partner['general']['saturdayTo'] !== '-1' ? `${this.props.partner['general']['saturdayFrom']} - ${this.props.partner['general']['saturdayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          				<div className="line">
+	          					<h3>{`${this.state.dictionary['partnerProfileGeneralDaysSunday']}:`}</h3>
+	          					<h5>{this.props.partner['general']['sundayFrom'] !== '-1' && this.props.partner['general']['sundayTo'] !== '-1' ? `${this.props.partner['general']['sundayFrom']} - ${this.props.partner['general']['sundayTo']}` : `${this.state.dictionary['uniNotWorkingDay']}`}</h5>
+	          				</div>
+	          				
+	          			</Col>
+	          		</Row>
+	          	</Col>
+	          </Row>
+
+	          
+	          
 	          
 	        </Container>    
     		</div>
