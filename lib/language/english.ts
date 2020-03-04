@@ -40,6 +40,7 @@ const english: LanguageInterface = {
 	navigationFaq: "FAQ",
 	navigationPartnership: "Partnership",
 	navigationContact: "Contact",
+	navigationTerms: 'Terms of service',
 
 	navigationPartnerGeneral: 'General',
 	navigationPartnerCatering: 'Catering',
@@ -48,7 +49,6 @@ const english: LanguageInterface = {
 	navigationPartnerCalendar: 'Calendar',
 	navigationPartnerPreview: 'Preview',
 	navigationPartnerLogout: 'Logout',
-	navigationTerms: 'Terms of service',
 	
 	uniCity: 'City',
 	uniDistrict: 'District',
