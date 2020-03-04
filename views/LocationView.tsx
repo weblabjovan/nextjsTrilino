@@ -176,6 +176,7 @@ class LocationView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+    			terms={ this.state.dictionary['navigationTerms'] }
     		/>
     		<div className="location">
 	    		<GalleryModal 
@@ -488,6 +489,12 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          	</div>
 	          	</Col>
 
+	          </Row>
+
+	          <Row>
+	          	<Col xs="12" className="cancelation">
+	          		<h5><strong>*</strong>{this.props.partner['general']['cancelation'] === '0' ? `${this.state.dictionary['locationCancelationNone']}` : `${this.state.dictionary['locationCancelationFirst']} ${this.props.partner['general']['cancelation']} ${this.state.dictionary['locationCancelationSecond']}`}</h5>
+	          	</Col>
 	          </Row>
 
 	          <Row className="offer">
@@ -813,6 +820,7 @@ class LocationView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+    			terms={ this.state.dictionary['navigationTerms'] }
     		/>
 
     	</div>

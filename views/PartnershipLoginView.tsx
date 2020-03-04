@@ -312,6 +312,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
     		
     			{this.props.page === 'register'
@@ -481,6 +482,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
 
     	</div>

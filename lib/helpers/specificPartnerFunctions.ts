@@ -233,7 +233,7 @@ export const setUpMainGeneralState = (state: null | object, partner: object, lan
 		const newState = state !== null ? JSON.parse(JSON.stringify(state)) : getProfileGeneralStructure(newGen);
 		
 		const generalKeys = Object.keys(newGen);
-		const plainInputs = ['size', 'description', 'playSize', 'address'];
+		const plainInputs = ['size', 'description', 'playSize', 'address', 'minimalDeposit'];
 		for(let key in newState){
 			if (generalKeys.indexOf(key) !== -1) {
 				if (plainInputs.indexOf(key) !== -1) {

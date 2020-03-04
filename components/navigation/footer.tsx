@@ -11,6 +11,7 @@ type MyProps = {
   faq: string;
   partnership: string;
   contact: string; 
+  terms: string;
   // using `interface` is also ok
 };
 type MyState = {
@@ -29,7 +30,8 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		          	<ul>
 		          		<li><a href={`/login?language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
 		          		<li><a href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</a></li>
-		          		<li><a href="/">{this.props.faq}</a></li>
+		          		<li><a href={`/terms?language=${this.props.language.toLowerCase()}`}>{this.props.terms}</a></li>
+		          		{/*<li><a href="/">{this.props.faq}</a></li>*/}
 		          		<li><a href={`/partnership?language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</a></li>
 		          		<li><a href="/">{this.props.contact}</a></li>
 		          	</ul>

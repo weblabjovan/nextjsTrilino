@@ -1,8 +1,24 @@
 .container{
 	max-width: 1400px;
+	margin: auto;
+
 	@media only screen and (max-width: 1600px) {
-		max-width: 90%;
+		max-width: 1400px;
 	}
+
+	@media only screen and (max-width: 1400px) {
+		max-width: 1250px;
+	}
+
+	@media only screen and (max-width: 1300px) {
+		max-width: 1150px;
+	}
+
+	@media only screen and (max-width: 1200px) {
+		max-width: 95%;
+	}
+
+
 
 	@media only screen and (max-width: 577px) {
 		max-width: 100%;

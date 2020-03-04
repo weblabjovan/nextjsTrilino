@@ -520,7 +520,8 @@ class FoodScreen extends React.Component <MyProps, MyState>{
           <Row>
             <Col xs="12">
             	<div className="remarks">
-								<p>{ this.state.dictionary['partnerProfileGeneralRemark'] } </p>
+								<p>{ this.state.dictionary['partnerProfileGeneralRemark_1'] } </p>
+                <p>{ this.state.dictionary['partnerProfileGeneralRemark_2'] } </p>
 							</div>
             </Col>
           </Row> 

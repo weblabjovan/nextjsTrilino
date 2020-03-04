@@ -83,6 +83,7 @@ export interface IpartnerGeneral {
 	depositPercent: string | object;
 	despositNumber: string | object;
 	doubleDiscount: string | object;
+	minimalDeposit: string | number;
 }
 
 interface IdrinkCardItem {

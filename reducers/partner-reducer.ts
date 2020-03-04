@@ -194,6 +194,7 @@ const initialState: initialState  = {
     depositPercent: '',
     despositNumber: '',
     doubleDiscount: '',
+    minimalDeposit: '',
   },
 
   partnerRooms: [

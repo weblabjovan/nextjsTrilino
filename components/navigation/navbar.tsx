@@ -11,7 +11,8 @@ type MyProps = {
   search: string;
   faq: string;
   partnership: string;
-  contact: string; 
+  contact: string;
+  terms: string;
   // using `interface` is also ok
 };
 type MyState = {
@@ -59,8 +60,11 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     <NavLink href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/">{this.props.faq}</NavLink>
+                    <NavLink href={`/terms?language=${this.props.language.toLowerCase()}`}>{this.props.terms}</NavLink>
                   </NavItem>
+                  {/*<NavItem>
+                    <NavLink href="/">{this.props.faq}</NavLink>
+                  </NavItem>*/}
                   <NavItem>
                     <NavLink href={`/partnership?language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</NavLink>
                   </NavItem>
