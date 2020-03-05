@@ -182,3 +182,27 @@ export function adminBasicDevLogin(link: object, data: object) {
     );
   };
 }
+
+
+export const adminSavePartnerMapActionTypes = {
+  START: 'ADMIN_PARTNER_MAP_SAVE_START',
+  ERROR: 'ADMIN_PARTNER_MAP_SAVE_ERROR',
+  SUCCESS: 'ADMIN_PARTNER_MAP_SAVE_SUCCESS',
+};
+
+export function adminSavePartnerMap(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_PARTNER_MAP_SAVE);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      adminSavePartnerMapActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

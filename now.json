@@ -10,7 +10,8 @@
 		"AWS_PARTNER_PHOTO_LINK":"@aws-partner-photo-link",
 		"ADMIN_BASIC_DEV_STRING":"@admin-basic-dev-string",
 		"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
-		"MONGO_URI_PROD":"@mongo-uri-prod"
+		"MONGO_URI_PROD":"@mongo-uri-prod",
+		"GOOGLE_API_KEY":"@google-api-key"
 	},
 	"build": {
 	    "env": {
@@ -24,7 +25,8 @@
 			"AWS_PARTNER_PHOTO_LINK":"@aws-partner-photo-link",
 			"ADMIN_BASIC_DEV_STRING":"@admin-basic-dev-string",
 			"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
-			"MONGO_URI_PROD":"@mongo-uri-prod"
+			"MONGO_URI_PROD":"@mongo-uri-prod",
+			"GOOGLE_API_KEY":"@google-api-key"
 	    }
 	}
 }

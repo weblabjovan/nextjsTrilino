@@ -1,5 +1,5 @@
 import {
-  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes
+  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerMapActionTypes
 } from '../actions/admin-actions';
 
 import { decoratePartners, changePartnerListItem } from '../lib/helpers/specificAdminFunctions';
@@ -36,6 +36,10 @@ interface initialState {
   adminBasicDevLoginStart: boolean;
   adminBasicDevLoginError: object | boolean;
   adminBasicDevLoginSuccess: null | number;
+
+  adminSaveMapStart: boolean;
+  adminSaveMapError: boolean;
+  adminSaveMapSuccess: null | number;
 
   partners: Array<object>;
   partnerPhoto: null | object;
@@ -75,10 +79,13 @@ const initialState: initialState  = {
   adminBasicDevLoginError: false,
   adminBasicDevLoginSuccess: null,
 
+  adminSaveMapStart: false,
+  adminSaveMapError: false,
+  adminSaveMapSuccess: null,
+
   partners: [],
   partnerPhoto: null,
   devAuth: '',
-
 };
 
 const actionsMap = {
@@ -265,6 +272,29 @@ const actionsMap = {
       adminBasicDevLoginSuccess: action.payload.code,
       devAuth: action.payload['token'],
       adminBasicDevLoginStart: false,
+    };
+  },
+
+  [adminSavePartnerMapActionTypes.START]: (state) => {
+    return {
+      ...state,
+      adminSaveMapStart: true,
+      adminSaveMapSuccess: null,
+    };
+  },
+  [adminSavePartnerMapActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      adminSaveMapStart: false,
+      adminSaveMapError: action.payload.response.body,
+    };
+  },
+  [adminSavePartnerMapActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      adminSaveMapSuccess: action.payload.code,
+      partners: changePartnerListItem(action.payload.partner, [...state['partners']]),
+      adminSaveMapStart: false,
     };
   },
   

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
+import SimpleMap from '../components/map';
 import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
@@ -677,6 +678,18 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		</div>
 	          	</Col>
 
+	          </Row>
+
+
+	          <Row className="mapScreen">
+	          	<Col xs="12"><h4>Mapa</h4></Col>
+	          	<Col>
+	          		<SimpleMap
+	          			lat={this.props.partner['map'] ? this.props.partner['map']['lat'] : 0}
+	          			lng={this.props.partner['map'] ? this.props.partner['map']['lng'] : 0}
+	          			zoom={15}
+	          		/>
+	          	</Col>
 	          </Row>
 
 	          <Row>

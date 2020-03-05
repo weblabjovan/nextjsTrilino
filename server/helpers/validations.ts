@@ -380,3 +380,15 @@ export const isReservationAlreadyMade = (reservations: Array<object>, from: stri
 
 	return false;
 }
+
+export const isPartnerMapSaveDataValid = (data: object): boolean => {
+	if (!data['partnerId'] || !data['map']) {
+		return false;
+	}else{
+		if (!data['map']['lat'] || !data['map']['lng'] || typeof data['partnerId'] !== 'string') {
+			return false;
+		}
+	}
+
+	return true;
+}

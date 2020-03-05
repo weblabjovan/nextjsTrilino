@@ -24,6 +24,8 @@ const partnerSchema = new Schema({
 	photos: [{ type: Object }],
 	forActivation: {type: Boolean, required: true, default: false},
 	active: {type: Boolean, required: true, default: false},
+	map: { type: Object},
+	activationDate: String,
 }, {timestamps: true});
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);
