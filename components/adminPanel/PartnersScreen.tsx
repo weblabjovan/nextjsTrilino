@@ -122,11 +122,14 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   }
 
   partnerActivation(event){
-    this.props.openLoader();
-    const link = setUpLinkBasic(window.location.href);
-    const active = !this.props.adminPartners[parseInt(event.target['id'].substr(15))]['active'];
-    const data = { id: event.target['name'], active };
-    this.props.activatePartner(link, data, this.props.token);
+    if (this.props.adminPartners[parseInt(event.target['id'].substr(15))]['map']) {
+      this.props.openLoader();
+      const link = setUpLinkBasic(window.location.href);
+      const active = !this.props.adminPartners[parseInt(event.target['id'].substr(15))]['active'];
+      const data = { id: event.target['name'], active };
+      this.props.activatePartner(link, data, this.props.token);
+    }
+    
   }
 
   searchPartners(){

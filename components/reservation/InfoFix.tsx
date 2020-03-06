@@ -14,6 +14,7 @@ type MyProps = {
   addon?:Array<object>; 
   general?: object | null;
   mobile: boolean;
+  open?: boolean;
   // using `interface` is also ok
 };
 type MyState = {
@@ -49,11 +50,18 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
   }
 
   calculateAdditionalElementHeight(){
-    const base = this.props.mobile ? 260 : 340;
+    const elem = this.props.mobile ? document.getElementById(`additional_1`) : document.getElementById(`additional_2`);
+    const base = this.props.mobile && elem.offsetWidth < 500 ? 300 : 340;
     const line = this.props.mobile ? 30 : 35;
     const add = (this.props.catering.length + this.props.addon.length) * line;
     const total = base + add;
     return `${total}px`;
+  }
+
+  componentDidMount(){
+    if (this.props.open) {
+      this.toggleAdditional();
+    }
   }
 
   render() {

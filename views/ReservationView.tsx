@@ -417,7 +417,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   refreshInfoHeight(){
     const elem = document.getElementById(`additional_2`);
-    const base = this.state.isMobile ? 260 : 340;
+    const base = this.state.isMobile && elem.offsetWidth < 500 ? 300 : 340;
     const line = this.state.isMobile ? 30 : 35;
     const add = (this.state.info['catering'].length + this.state.info['addon'].length) * line;
 
@@ -429,7 +429,6 @@ class ReservationView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    console.log(this.props.partner)
 		this.props.setUserLanguage(this.props.lang);
 	}
 	
@@ -465,6 +464,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     addon={ this.state.info['addon'] }
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
+                    open={ false }
                     num="1"
                   />
                 </Col>
@@ -489,7 +489,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection" id="step_1">
                       <Row>
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicNameTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicNamePlaceholder']} 
@@ -500,7 +500,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                           />
                         </Col>
 
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicAdultsNumTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicAdultsNumPlaceholder']} 
@@ -511,7 +511,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                           />
                         </Col>
 
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicKidsNumTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicKidsNumPlaceholder']}
@@ -728,6 +728,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
+                    open={ true }
                   />
                 </Col>
               </Row>

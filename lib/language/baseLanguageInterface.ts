@@ -105,6 +105,14 @@ export default interface LanguageInterface {
 	homeCommentName_2: string;
 	homeCommentName_3: string;
 	homePartner: string;
+	homeProcessTitle_1: string;
+	homeProcessText_1: string;
+	homeProcessTitle_2: string;
+	homeProcessText_2: string;
+	homeProcessTitle_3: string;
+	homeProcessText_3: string;
+	homeProcessTitle_4: string;
+	homeProcessText_4: string;
 
 	partnershipTitle: string;
 	partnershipTitle_1: string;

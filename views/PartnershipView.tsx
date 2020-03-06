@@ -267,7 +267,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12">
                 <h3>{this.state.dictionary['partnershipContactTitle']}</h3>
-                <p>{this.state.dictionary['partnershipContactDescription']}<span className="colorLink">support@trilino.com</span> </p>
+                <p>{this.state.dictionary['partnershipContactDescription']}<span className="colorLink">admin@trilino.com</span> </p>
               </Col>
                 
             </Row>
