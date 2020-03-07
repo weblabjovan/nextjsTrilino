@@ -1,0 +1,122 @@
+.registrationWrapper{
+	padding: 50px 0px;
+
+	.middle{
+		width: 80%;
+		margin: auto;
+	    font-size: 22px;
+    	font-weight: 500;
+    	margin-top: 40px;
+
+    	@media only screen and (max-width: 577px){
+	    	width: 100%;
+			font-size: 20px;
+	    }
+
+    	a{
+    		color: $lightBlue;
+    		text-decoration: underline;
+
+    	}
+	}
+
+	.white{
+		color:#fff !important;
+	}
+
+	.box{
+		width: 45%;
+		padding: 40px;
+		margin: auto;
+		border-radius: 20px;
+	    background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
+	    -webkit-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
+		-moz-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
+		box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
+
+	    @media only screen and (max-width: 992px){
+	    	width: 70%;
+			padding: 30px;
+	    }
+
+	    @media only screen and (max-width: 577px){
+	    	width: 100%;
+			padding: 30px;
+	    }
+
+	    h2{
+	    	font-size: 32px;
+	    	text-align: center;
+	    	color: #fff;
+	    }
+
+	    p{
+	    	text-align: center;
+	    	font-size: 18px;
+	    	color: #fff;
+	    	font-weight: 300;
+	    	margin-bottom: 30px;
+	    }
+
+	    .small{
+	    	font-size: 16px;
+	    }
+
+	    .logInput{
+	    	margin-bottom: 20px;
+	    }
+
+	    .middle{
+	    	margin-top: 20px;
+	    }
+
+	    .marginSmall{
+	    	margin-top: 20px;
+	    	margin-bottom: 30px;
+
+	    	a{
+	    		font-size: 16px;
+	    		color: #fff;
+	    		font-style: italic;
+	    		text-decoration: underline;
+	    		line-height: 22px;
+	    	}
+	    }
+
+	    .btn-success{
+		    border-radius: 30px;
+		    padding: 10px 30px;
+		    background: #f8f9fa;
+		    color: #216cf7;
+		    font-weight: 700;
+		    -webkit-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+			-moz-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+			box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
+			 transition: all 1s;
+
+			&:hover{
+				-webkit-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+				-moz-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+				box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
+			}
+		}
+
+		.checkbox-simple-label{
+			color: #fff;
+			margin-left: 10px;
+			font-size: 16px;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		  -webkit-appearance: none;
+		  margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+		  -moz-appearance:textfield;
+		}
+	}
+
+}

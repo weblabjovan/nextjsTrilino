@@ -1,0 +1,685 @@
+.adminScreen{
+	padding-top: 40px;
+	padding-bottom: 60px;
+	.searchButton{
+		position: absolute;
+		bottom: 2px;
+		left: 15px;
+
+		@media only screen and (max-width: 577px) {
+			position: relative;
+			bottom: 0px;
+			left: 0px;
+			margin-top: 10px;
+		}
+	}
+}
+
+.adminScreen.partners{
+
+	h2{
+		margin-bottom: 30px;
+	}
+
+	.partnersList{
+		padding-top: 30px;
+
+		.listLine{
+			border: solid 1px #a7a7a7;
+	    -webkit-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			-moz-box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+			box-shadow: 5px 5px 6px 1px rgba(69,69,69,0.7);
+	    border-radius: 10px;
+	    padding: 5px 20px;
+	    margin-bottom: 20px;
+
+	    .headLine{
+	      border-bottom: solid 1px #ccc;
+		    color: #ccc;
+		    font-size: 12px;
+	    }
+
+	    .infoLine{
+	    	padding-top: 5px;
+
+	    	.info{
+	    		span{
+	    			font-size: 14px;
+	    			font-weight: 300;
+	    			color: $darkGreyCol;
+	    		}
+
+	    		h5{
+	    			font-size: 22px;
+	    			font-weight: 700;
+	    			margin-bottom: 5px;
+	    			color: $darkGreyCol;
+	    		}
+
+	    		p{
+	    			font-size: 16px;
+	    			font-weight: 400;
+	    		}
+
+	    		a{
+	    			text-transform: uppercase;
+	    			color: $purple;
+	    			font-size: 14px;
+	    			text-decoration: underline;
+	    			text-align: center;
+	    			cursor: pointer;
+	    			margin-top: 15px;
+	    		}
+	    	}
+
+	    	.activation{
+	    		border-left: solid 1px #ccc;
+	    		border-right: solid 1px #ccc;
+
+	    		span{
+	    			font-size: 14px;
+	    			font-weight: 300;
+	    			color: $darkGreyCol;
+	    		}
+
+	    	}
+
+	    	.preview{
+	    		border-left: solid 1px #ccc;
+	    		button{
+	    			margin-top: 20px;
+	    		}
+	    	}
+	    }
+		}
+	}
+
+	.partnerPhoto{
+		position: absolute;
+    left: 5%;
+    top: 5%;
+    bottom: 5%;
+    background: #fff;
+    width: 90%;
+    margin: auto;
+    overflow-y: scroll;
+    padding: 15px;
+    padding-top: 30px;
+
+		.icon{
+			display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+      font-size: 40px;
+      line-height: 50px;
+      color: #252525;
+		}
+
+		 .closeIt:before{
+			content: 'close';
+		}
+
+		span.absol{
+			width: unset;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+
+		.mainPhoto{
+			width: 600px;
+			height: 400px;
+			margin: auto;
+		}
+
+		.custom-file{
+			margin-top: 20px;
+			margin-bottom: 20px;
+
+			input{
+				cursor: pointer;
+			}
+		}
+
+		.smallPhoto{
+			height: 220px;
+			cursor: pointer;
+		}
+
+		.fadedPrev{
+			font-style: italic;
+			color: #afafaf;
+			font-size: 36px;
+			margin-top: 30px;
+			text-align: center;
+		}
+
+		.deletBtn{
+			font-size: 12px;
+	    background: #fff;
+    	color: $cancelCol;
+    	border: solid 1px $cancelCol;
+	    padding: 3px 25px;
+	    border-radius: 7px;
+	    margin-top: 5px;
+	    text-transform: uppercase;
+	    font-weight: 400;
+	    font-family: $headFont;
+	    outline: none;
+
+	    &:hover{
+	    	background: $cancelCol;
+	    	color: #fff;
+	    }
+		}
+		
+		.photoBox{
+    	margin-bottom: 15px;
+    }
+	}
+
+	.partnerProflePreview{
+		position: absolute;
+    left: 5%;
+    top: 5%;
+    bottom: 5%;
+    background: #fff;
+    width: 90%;
+    margin: auto;
+    overflow-y: scroll;
+    padding: 15px;
+    padding-top: 30px;
+
+    .closeIt:before{
+			content: 'close';
+		}
+
+		.mainPhoto{
+			background-color: #ccc;
+			width: 100%;
+			height: 280px;
+
+			@media only screen and (max-width: 768px) {
+				height: 215px;
+			}
+
+			@media only screen and (max-width: 577px) {
+				height: 200px;
+			}
+		}
+
+		.supportPhoto{
+			background-color: #ccc;
+			width: 100%;
+			height: 132px;
+			margin-bottom: 15px;
+
+			@media only screen and (max-width: 768px) {
+				height: 100px;
+			}
+
+			@media only screen and (max-width: 577px) {
+				height: 200px;
+			}
+		}
+
+		.smallColPadd{
+			padding-left: 7.5px;
+			padding-right: 7.5px;
+
+			@media only screen and (max-width: 577px) {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+		}
+
+		.subHeadPr{
+			.col-12{
+				padding: 0px;
+			}
+			
+			h3{
+				font-size: 22px;
+			}
+		}
+
+		.generalFirst{
+			h3{
+				line-height: 53px;
+    			font-size: 40px;
+
+    			@media only screen and (max-width: 577px) {
+					line-height: 38px;
+    				font-size: 28px;
+				}
+
+				&.fadedPrev{
+					font-size: 32px;
+				}
+			}
+
+			h5{
+				font-size: 24px;
+			    line-height: 34px;
+			    font-weight: 300;
+
+			    @media only screen and (max-width: 577px) {
+					line-height: 28px;
+    				font-size: 20px;
+				}
+
+				&.fadedPrev{
+					font-size: 20px;
+				}
+			}
+
+			p{
+				font-size: 16px;
+			    line-height: 26px;
+			    font-weight: 400;
+			    @media only screen and (max-width: 577px) {
+					line-height: 22px;
+    				font-size: 14px;
+				}
+
+				&.fadedPrev{
+					font-size: 15px;
+				}
+			}
+		}
+
+
+
+		.generalSecond{
+			ul{
+				list-style-type: none;
+
+				@media only screen and (max-width: 577px) {
+					padding: 0px;
+				}
+
+				li{
+					margin-bottom: 10px;
+				    font-size: 18px;
+				    font-weight: 700;
+				    text-transform: none;
+
+				    @media only screen and (max-width: 577px) {
+						font-size: 16px;
+					}
+
+					&.fadedPrev{
+						font-size: 16px;
+					}
+				}
+			}
+		}
+
+		.icon{
+			display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+	        font-size: 40px;
+	        line-height: 50px;
+	        color: #252525;
+		}
+
+		.iconHolder{
+			text-align: center;
+			border: solid 1px #252525;
+		    padding: 2px;
+		    box-sizing: border-box;
+		    margin-top: 20px;
+
+			p{
+				font-size: 16px;
+				font-weight: 400;
+
+				@media only screen and (max-width: 1024px) {
+					font-size: 13px;
+				}
+				@media only screen and (max-width: 768px) {
+					font-size: 16px;
+				}
+			}
+
+			.parking:before{
+				content: 'local_parking';
+			}
+			.yard:before{
+				content: 'deck';
+			}
+			.balcon:before{
+				content: 'storefront';
+			}
+			.animator:before{
+				content: 'accessibility';
+			}
+			.food:before{
+				content: 'restaurant';
+			}
+			.pool:before{
+				content: 'pool';
+			}
+			.wifi:before{
+				content: 'wifi';
+			}
+			.cake:before{
+				content: 'cake';
+			}
+			.drink:before{
+				content: 'local_bar';
+			}
+			.smoking:before{
+				content: 'smoking_rooms';
+			}
+			.gaming:before{
+				content: 'sports_esports';
+			}
+			.movie:before{
+				content: 'movie';
+			}
+		}
+
+		.selfRemarks{
+			padding: 10px 0px;
+			margin: 30px 0px;
+			border-top: solid 1px #ccc;
+			border-bottom: solid 1px #ccc;
+
+			@media only screen and (max-width: 577px) {
+				margin: 20px 0px;
+			}
+
+			h5{
+				font-size: 20px;
+				font-weight: 300;
+				line-height: 25px;
+
+				@media only screen and (max-width: 577px) {
+					font-size: 16px;
+				}
+
+				&.fadedPrev{
+					font-size: 18px;
+					font-weight: 400;
+				}
+			}
+		}
+
+		.roomsPr{
+			h3{
+				font-size: 20px;
+			}
+
+			.roomList{
+				padding: 30px 0px;
+				margin-bottom: 40px;
+				border-bottom: solid 1px #ccc;
+
+				.item{
+					margin-bottom: 35px;
+
+					p{
+						font-size: 20px;
+					    font-weight: 600;
+					    text-align: center;
+					    color: #7d7d7d;
+					    font-style: italic;
+					}
+
+					label:nth-of-type(1){
+						font-size: 26px;
+						line-height: 32px;
+						font-weight: 300;
+						color: #000;
+						display: block;
+						text-align: center;
+					}
+
+					label:nth-of-type(2){
+						margin-left: 5px;
+						color: $purple;
+						font-size: 30px;
+						line-height: 40px;
+						font-family: $headFont;
+						font-weight: 800;
+						display: block;
+						text-align: center;
+					}
+				}
+			}
+		}
+
+		.contentFree{
+			padding: 30px 0px;
+			margin-bottom: 40px;
+			border-bottom: solid 1px #ccc;
+
+			h3{
+				font-size: 22px;
+			}
+
+			.item{
+				line-height: 25px;
+
+				span{
+					display: inline;
+				}
+
+				span:nth-of-type(1){
+					&:before{
+						content: 'check';
+				        font-family: 'Material Icons';
+				        font-size: 30px;
+				        font-weight: 800;
+				        vertical-align: middle;
+				        color: $purple;
+					}
+				}
+
+				span:nth-of-type(2){
+					line-height: 14px;
+				    font-size: 16px;
+				    margin-left: 10px;
+				    vertical-align: sub;
+				}
+				
+			}
+
+			.payRemark{
+			    font-size: 12px;
+			    font-style: italic;
+			    font-weight: 600;
+			    padding-left: 30px;
+			    line-height: 18px;
+			}
+
+			.col-6{
+				padding: 5px 0px;
+				margin-bottom: 5px;
+				border-bottom: solid 1px #ccc;
+			}
+		}
+
+		.cateringDealsPr{
+			padding-bottom: 25px;
+		    border-bottom: solid 1px #ccc;
+		    margin-bottom: 50px;
+
+			h3{
+				font-size: 22px;
+			}
+
+			h6{
+				font-size: 20px;
+				text-transform: uppercase;
+				font-weight: 400;
+				line-height: 34px;
+
+				&:nth-of-type(2){
+					color: $purple;
+				}
+
+				&:nth-of-type(3){
+					font-size: 17px;
+					font-weight: 700;
+					font-style: italic;
+				}
+			}
+
+			.sub-sm{
+				margin-bottom: 15px;
+			}
+
+			.pillars{
+				border-left: solid 1px #ccc;
+				margin-bottom: 0px;
+				padding-bottom: 5px;
+
+				@media only screen and (max-width: 577px) {
+					border: none;				}
+
+				div{
+					padding: 5px 0px;
+				}
+
+				p{
+					font-style: italic;
+					font-size: 16px;
+					line-height: 22px;
+					font-family: $headFont;
+					display: contents;
+				}
+
+				.icon{
+					display: initial;
+					font-size: 16px;
+					line-height: 22px;
+					color: $purple;
+					vertical-align: text-top;
+				}
+
+				.bullet:before{
+					content: 'arrow_right';
+				}
+			}
+		}
+
+		.decorationPr{
+			padding-bottom: 25px;
+		    border-bottom: solid 1px #ccc;
+		    margin-bottom: 50px;
+
+		    .item{
+				line-height: 25px;
+
+				span{
+					display: inline;
+				}
+
+				span:nth-of-type(1){
+					&:before{
+						content: 'check';
+				        font-family: 'Material Icons';
+				        font-size: 30px;
+				        font-weight: 800;
+				        vertical-align: middle;
+				        color: $purple;
+				        vertical-align: sub;
+					}
+				}
+
+				span:nth-of-type(2){
+					line-height: 14px;
+				    font-size: 16px;
+				    margin-left: 10px;
+				    vertical-align: sub;
+				}
+				
+			}
+		}
+
+		.cateringCardPr{
+			h5{
+			    font-weight: 600;
+			    margin-bottom: 25px;
+			}
+
+			p{
+				font-size: 16px;
+			    line-height: 26px;
+			    margin-bottom: 10px;
+			    font-style: italic;
+			}
+		}
+
+		.fadedPrev{
+			font-style: italic;
+			color: #afafaf;
+		}
+
+		span.absol{
+			width: unset;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+	}
+
+	.partnerActions{
+		position: absolute;
+    left: 5%;
+    top: 5%;
+    bottom: 5%;
+    background: #fff;
+    width: 90%;
+    margin: auto;
+    overflow-y: scroll;
+    padding: 15px;
+    padding-top: 30px;
+
+    .icon{
+			display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+      font-size: 40px;
+      line-height: 50px;
+      color: #252525;
+		}
+
+		 .closeIt:before{
+			content: 'close';
+		}
+
+		span.absol{
+			width: unset;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+
+		.maps{
+			h4{
+				font-size: 20px;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+
+			label{
+				font-size: 14px;
+				line-height: 18px;
+			}
+
+			button{
+				margin-top: 10px;
+			}
+		}
+	}
+}

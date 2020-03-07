@@ -1,3 +1,149 @@
 .container{
-	max-width: 90%;
+	max-width: 1400px;
+	margin: auto;
+
+	@media only screen and (max-width: 1600px) {
+		max-width: 1400px;
+	}
+
+	@media only screen and (max-width: 1400px) {
+		max-width: 1250px;
+	}
+
+	@media only screen and (max-width: 1300px) {
+		max-width: 1150px;
+	}
+
+	@media only screen and (max-width: 1200px) {
+		max-width: 95%;
+	}
+
+
+
+	@media only screen and (max-width: 577px) {
+		max-width: 100%;
+		margin: 0px;
+	}
+}
+
+.hidden-xs{
+
+	@media only screen and (max-width: 577px) {
+		display: none;
+	}
+}
+
+.hidden-sm{
+
+	@media only screen and (max-width: 992px) {
+		display: none;
+	}
+}
+
+.hidden-sm-up{
+
+	@media only screen and (min-width: 992px) {
+		display: none;
+	}
+}
+
+.hidden-xs-up{
+
+	@media only screen and (min-width: 577px) {
+		display: none;
+	}
+}
+
+.no-pading{
+	padding: 0px;
+}
+
+.DayPickerInput{
+	display: block;
+	width: 100%;
+
+	input{
+		color: #444;
+	    width: 100%;
+	    font-size: 16px;
+	    padding: 6px 10px;
+	    border: solid #ccc 1px;
+	    border-radius: 5px;
+	}
+}
+
+.btn-success{
+	text-transform: uppercase;
+	background-color: #6ebf81;
+	border: none;
+	padding: 5px 20px;
+	box-shadow: none;
+}
+
+.navbar-toggler{
+	padding: 5px 10px;
+}
+
+.navbar{
+	background-color: #fff;
+	border-bottom: 1px solid #eaeaea;
+
+	button:focus{
+		outline: none;
+	}
+
+	.navbar-nav{
+		hr{
+			width: 100%;
+			background-color: #ccc;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+	}
+
+	.btn-secondary{
+		color: #000;
+	    background-color: #fff !important;
+	    border: none;
+	    outline: none;
+	    transition: 125000;
+	    box-shadow: none;
+	}
+
+	.btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle{
+		color: #000;
+	    background-color: #fff !important;
+	    border: none;
+	}
+
+	.btn-secondary:not(:disabled):not(.disabled).active:focus, .btn-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-secondary.dropdown-toggle:focus{
+		box-shadow: none;
+	}
+	.dropdown-menu{
+		min-width: 20px;
+	}
+}
+
+.modal-footer{
+	border: none;
+
+	button{
+		margin: auto;
+	}
+}
+
+.modal-body{
+	font-size: 16px;
+}
+
+.modal-header{
+	.close{
+		outline: none;
+	}
+}
+
+.alert{
+	.close{
+		outline: none;
+	}
 }
