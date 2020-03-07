@@ -4,9 +4,9 @@ import bcrypt from 'bcrypt';
 import Partner from '../../../server/models/partner';
 import Reservation from '../../../server/models/reservation';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage, getNextTerm }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid } from '../../../server/helpers/validations';
+import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid, isReservationAlreadyMade } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import DateHandler from '../../../lib/classes/DateHandler';
@@ -154,15 +154,24 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerOne = await Partner.findById(partnerId).select('-password -passSafetyCode -passProvided -verified');
 						if (partnerOne) {
 							if (!isUrlTermValid(partnerOne['general']['rooms'], req['query'])) {
-								return res.status(404).send({ endpoint: 'partners', operation: 'get', success: false, code: 4, error: 'validation error', message: 'send data is not valid 1' });
+								return res.status(404).send({ endpoint: 'partners', operation: 'get', success: false, code: 5, error: 'validation error', message: 'send data is not valid 1' });
 							}else{
 								const dateHandler = new DateHandler(req['query']['date']);
 								const queryDate = dateHandler.formatDateString('server');
-								const reservations = await Reservation.find({partner: partnerId, active: true, date: queryDate, room: req['query']['room'], to: req['query']['to'], from: req['query']['from'] });
-								if (reservations.length) {
+								const reservations = await Reservation.find({partner: partnerId, active: true, date: queryDate, room: req['query']['room'] });
+								if (isReservationAlreadyMade(reservations, req['query']['from'], req['query']['to'])) {
 									return res.status(404).send({ endpoint: 'partners', operation: 'get', success: false, code: 4, error: 'validation error', message: 'send data is not valid 2' });
 								}else{
-									const partnerRes = preparePartnerForReservation(partnerOne, req['query']);
+									let partnerRes = preparePartnerForReservation(partnerOne, req['query']);
+									const nextTerm = getNextTerm(partnerOne, req['query']['room'], req['query']['from'], req['query']['to'], req['query']['date']);
+									if (nextTerm) {
+										const resDouble = reservations.filter(res => { if (res['from'] === nextTerm['from'] && res['to'] === nextTerm['to']) {
+											return res;
+										}});
+										if (!resDouble.length) {
+											partnerRes['isReadyForDouble'] = nextTerm;
+										}
+									}
 									return res.status(200).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partnerRes });
 								}
 							}
@@ -173,9 +182,27 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 					}
 				}
+			}else if(req['query']['type'] === 'verification') {
+				let partnerId = req['query']['partner'].toString();
+
+				if (req['query']['encoded']) {
+					partnerId = encodeId(partnerId);
+				}
+
+				try{
+					await connectToDb(req.headers.host);
+					const partner = await Partner.findById(partnerId, '-password');
+					if (partner) {
+						return res.status(200).json({ endpoint: 'partners', operation: 'get', success: true, code: 1, partner: partner });
+					}else{
+						return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerGetCode2'] });
+					}
+				}catch(err){
+					return res.status(500).send({ endpoint: 'partners', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
+				}
 			}else{
 				if (!isGetSinglePartnerDataValid(req['query'])) {
-					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 2, error: 'validation error', message: 'invalid data sent' });
+					return res.status(404).json({ endpoint: 'partners', operation: 'get', success: false, code: 4, error: 'validation error', message: 'invalid data sent' });
 				}else{
 					let partnerId = req['query']['partner'].toString();
 
@@ -204,7 +231,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				             }
 				          },
 				          { $match: { "date": queryDate }},
-				          { $match: { "active": true }},
+				          { $match: { "active": false }},
 				        ],
 				        as: "reservations"
 							};

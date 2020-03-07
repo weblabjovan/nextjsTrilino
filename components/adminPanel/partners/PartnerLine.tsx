@@ -19,6 +19,7 @@ interface MyProps {
     photoNumber: number;
 	openProfile(outcome: boolean, partner: string): void;
 	openPhoto(outcome: boolean, partner: string): void;
+    openInfo(outcome: boolean, partner: string): void;
 	partnerActivation(event: any): void;
 };
 interface MyState {
@@ -54,11 +55,12 @@ export default class PartnerLine extends React.Component <MyProps, MyState>{
         			<h5><span>Naziv: </span>{this.props.name}</h5>
         			<p><span>PIB: </span>{this.props.taxNum}</p>
         			<p><span>Grad: </span>{this.props.city}</p>
+                    <a onClick={(event)=> this.props.openInfo(true, this.props.partnerId)}>partnerske akcije</a>
         		</Col>
         		<Col xs="12" sm="2" className="activation">
         			<p className="middle">Popunjenost profila</p>
         			<h4 className="middle">{`${this.props.percent}%`}</h4>
-        			<CustomInput type="switch" className="middle" id={`activateSwitch_${this.props.index}`} onClick={(event) => this.props.partnerActivation(event) } checked={ this.props.active } name={`${this.props.partnerId}`} label={this.props.active ? 'Deaktiviraj' : 'Aktiviraj'} />
+        			<CustomInput type="switch" className="middle" id={`activateSwitch_${this.props.index}`} onChange={(event) => this.props.partnerActivation(event) } checked={ this.props.active } name={`${this.props.partnerId}`} label={this.props.active ? 'Deaktiviraj' : 'Aktiviraj'} />
         		</Col>
         		<Col xs="12" sm="3" className="photo">
         			<p className="middle">{`Broj slika: ${this.props.photoNumber}`}</p>

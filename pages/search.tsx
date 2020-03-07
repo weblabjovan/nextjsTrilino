@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import SearchView from '../views/SearchView';
+import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isPartnerLogged, getPartners } from '../lib/helpers/specificPartnerFunctions';
@@ -22,10 +23,11 @@ const Search : NextPage<Props> = ({ userAgent, query, partners }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleSearch']} description={dictionary['headDescriptionSearch']} />
       <SearchView 
         userAgent={userAgent} 
         router={ router } 
@@ -45,20 +47,24 @@ Search.getInitialProps = async (ctx: any) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let partners = [];
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
 
-  const response = await getPartners(ctx);
-  if (response['status'] === 200) {
-    const re = await response.json();
-    partners = re['partners']
-  }else{
-    ctx.res.writeHead(302, {Location: `/?language=sr`});
-    ctx.res.end();
+    const response = await getPartners(ctx);
+    if (response['status'] === 200) {
+      const re = await response.json();
+      partners = re['partners']
+    }else{
+      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err)
   }
 
   return { userAgent, query: ctx['query'], partners }

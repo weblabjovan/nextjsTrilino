@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
+import { getLanguage } from '../lib/language';
 import { defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import ConfirmView from '../views/ConfirmView';
@@ -18,6 +19,7 @@ const Confirm : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   let error = false;
   let page = router.query['page'] as string;
@@ -30,7 +32,7 @@ const Confirm : NextPage<Props> = ({ userAgent }) => {
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleConfirmation']} description={dictionary['headDescriptionConfirmation']}  />
       <ConfirmView 
       	userAgent={userAgent} 
       	router={router}
@@ -47,11 +49,15 @@ Confirm.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err);
   }
 
   return { userAgent}

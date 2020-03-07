@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, CustomInput } from 'reactstrap';
 import { setUserLanguage } from '../../actions/user-actions';
-import { adminGetPartners, activatePartner, preSignPhoto, putPartnerProfilePhoto, adminSavePartnerPhoto, adminDeletePartnerPhoto } from '../../actions/admin-actions';
+import { adminGetPartners, activatePartner, preSignPhoto, putPartnerProfilePhoto, adminSavePartnerPhoto, adminDeletePartnerPhoto, adminSavePartnerMap } from '../../actions/admin-actions';
 import { getLanguage } from '../../lib/language';
 import {  getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import {  getPhotoNumbers, setUpPhotosForSave, findPartnerFromTheList, getPartnerMainPhoto, getNumberOfPartnerSelectionPhotos, setPhotosForDelete } from '../../lib/helpers/specificAdminFunctions';
@@ -14,6 +14,7 @@ import { setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue }
 import PartnerLine from './partners/PartnerLine';
 import AdminPartnerProfile from './partners/PartnerProfile';
 import AdminPartnerPhoto from './partners/PartnerPhoto';
+import AdminPartnerInfo from './partners/PartnerInfo';
 import GalleryModal from '../modals/GalleryModal';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import Keys from '../../server/keys';
@@ -40,8 +41,12 @@ interface MyProps {
   adminDeletePartnerPhotoStart: boolean;
   adminDeletePartnerPhotoError: object | boolean;
   adminDeletePartnerPhotoSuccess: null | number;
+  adminSaveMapStart: boolean;
+  adminSaveMapError: boolean;
+  adminSaveMapSuccess: null | number;
   adminPartners: Array<object>;
   partnerPhoto: null | object;
+  adminSavePartnerMap(link: object, data: object, auth: string): void;
   adminDeletePartnerPhoto(link: object, data: object, auth: string): void;
   adminSavePartnerPhoto(link: object, data: object, auth: string): void;
   adminGetPartners(link: object, data: object, auth: string): Array<object>;
@@ -60,6 +65,7 @@ interface MyState {
 	term: string;
   showProfile: boolean;
   showPhoto: boolean;
+  showInfo: boolean;
   activePartner: null | object;
   photo: string;
   file: null | object;
@@ -79,7 +85,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert'];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo',];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -95,6 +101,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     term: '',
     showProfile: false,
     showPhoto: false,
+    showInfo: false,
     activePartner: null,
     photo: '',
     file: null,
@@ -115,11 +122,14 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   }
 
   partnerActivation(event){
-    this.props.openLoader();
-    const link = setUpLinkBasic(window.location.href);
-    const active = !this.props.adminPartners[parseInt(event.target['id'].substr(15))]['active'];
-    const data = { id: event.target['name'], active };
-    this.props.activatePartner(link, data, this.props.token);
+    if (this.props.adminPartners[parseInt(event.target['id'].substr(15))]['map']) {
+      this.props.openLoader();
+      const link = setUpLinkBasic(window.location.href);
+      const active = !this.props.adminPartners[parseInt(event.target['id'].substr(15))]['active'];
+      const data = { id: event.target['name'], active };
+      this.props.activatePartner(link, data, this.props.token);
+    }
+    
   }
 
   searchPartners(){
@@ -128,6 +138,19 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   	const term = this.state.term;
 
 		this.props.adminGetPartners(link, { field, term }, this.props.token);
+  }
+
+  toggleInfo(outcome: boolean, partner: string){
+    if (outcome === true) {
+      const obj = getArrayObjectByFieldValue(this.props.adminPartners, '_id', partner);
+      console.log(partner);
+      console.log(obj);
+      this.setState({ activePartner: obj}, () => {
+        this.setState({ showInfo: true })
+      });
+    }else{
+      this.setState({showInfo: false, activePartner: null});
+    }
   }
 
   toggleProfile(outcome: boolean, partner: string){
@@ -253,6 +276,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     this.props.adminDeletePartnerPhoto(link, data, this.props.token);
   }
 
+  saveMapInfo(map: object){
+    const link = setUpLinkBasic(window.location.href);
+      this.props.openLoader();
+      this.props.adminSavePartnerMap(link, {partnerId: this.state.activePartner['_id'], map}, this.props.token);
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
     if (this.props.adminGetPartnersStart) {
       this.props.openLoader();
@@ -266,6 +295,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     if (!this.props.adminSavePartnerPhotoStart && prevProps.adminSavePartnerPhotoStart && this.props.adminSavePartnerPhotoSuccess) {
       this.setState({file: null, photo: '', activePartner: findPartnerFromTheList(this.state.activePartner['_id'], this.props.adminPartners)}, () => {
+        this.props.closeLoader();
+      })
+    }
+
+    if (!this.props.adminSaveMapStart && prevProps.adminSaveMapStart && this.props.adminSaveMapSuccess) {
+      this.setState({ activePartner: findPartnerFromTheList(this.state.activePartner['_id'], this.props.adminPartners)}, () => {
         this.props.closeLoader();
       })
     }
@@ -340,6 +375,13 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           openConfirmationModal={ this.openConfirmationModal }
           closeAlert={ this.closePhotoAlert }
         />
+
+        <AdminPartnerInfo
+          show={ this.state.showInfo }
+          partner={ this.state.activePartner }
+          closeInfo={ this.toggleInfo }
+          saveMap={ this.saveMapInfo }
+        />
     		<Row>
           <Col xs='12' className="middle">
             <h2>Trilino Partneri</h2>
@@ -396,6 +438,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
                     partnerActivation={ this.partnerActivation }
                     openProfile={ this.toggleProfile }
                     openPhoto={ this.togglePhoto }
+                    openInfo={ this.toggleInfo }
                     photoNumber={ partner['photos'] ? partner['photos'].length : 0 }
           				/>
           			)
@@ -437,6 +480,10 @@ const mapStateToProps = (state) => ({
   adminDeletePartnerPhotoError: state.AdminReducer.adminDeletePartnerPhotoError,
   adminDeletePartnerPhotoSuccess: state.AdminReducer.adminDeletePartnerPhotoSuccess,
 
+  adminSaveMapStart: state.AdminReducer.adminSaveMapStart,
+  adminSaveMapError: state.AdminReducer.adminSaveMapError,
+  adminSaveMapSuccess: state.AdminReducer.adminSaveMapSuccess,
+
   partnerPhoto: state.AdminReducer.partnerPhoto,
 
   adminPartners: state.AdminReducer.partners,
@@ -452,6 +499,7 @@ const matchDispatchToProps = (dispatch) => {
     putPartnerProfilePhoto,
     adminSavePartnerPhoto,
     adminDeletePartnerPhoto,
+    adminSavePartnerMap,
   },
   dispatch);
 };

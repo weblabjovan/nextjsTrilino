@@ -171,7 +171,7 @@ export const isPartnerForActivation = (partnerObj: object): boolean => {
 	}
 
 	if (partnerObj['general']) {
-		if (partnerObj['general']['drink']) {
+		if (partnerObj['general']['drink'] === '1') {
 			if (!isDrinkCardActive(partnerObj)) {
 				return false;
 			}
@@ -181,7 +181,7 @@ export const isPartnerForActivation = (partnerObj: object): boolean => {
 			}
 		}
 
-		if (partnerObj['general']['food']) {
+		if (partnerObj['general']['food'] === '1') {
 			if (!isCateringDealPresent(partnerObj)) {
 				return false;
 			}
@@ -366,6 +366,28 @@ export const isGetSinglePartnerDataValid = (data: object): boolean => {
 
 	if (!dateHandler.isUrlDateValidDateString()) {
 		return false;
+	}
+
+	return true;
+}
+
+export const isReservationAlreadyMade = (reservations: Array<object>, from: string | string[], to: string | string[]): boolean => {
+	for (var i = 0; i < reservations.length; ++i) {
+		if (reservations[i]['from'] == from && reservations[i]['to'] == to) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+export const isPartnerMapSaveDataValid = (data: object): boolean => {
+	if (!data['partnerId'] || !data['map']) {
+		return false;
+	}else{
+		if (!data['map']['lat'] || !data['map']['lng'] || typeof data['partnerId'] !== 'string') {
+			return false;
+		}
 	}
 
 	return true;

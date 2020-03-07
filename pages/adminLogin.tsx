@@ -4,6 +4,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import AdminLoginView from '../views/AdminLoginView';
 import pages from '../lib/constants/pages';
+import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isAdminLogged } from '../lib/helpers/specificAdminFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,10 +21,11 @@ const AdminLogin : NextPage<Props> = ({ userAgent, link, token }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleAdminLogin']} description={dictionary['headDescriptionAdminLogin']} />
       <AdminLoginView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } link={ link } />
     </div>
   )
@@ -32,21 +34,28 @@ const AdminLogin : NextPage<Props> = ({ userAgent, link, token }) => {
 AdminLogin.getInitialProps = async (ctx: any ) => {
 	const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  let link = {};
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const adminLog = await isAdminLogged(ctx);
+    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+
+    if (adminLog) {
+      ctx.res.writeHead(302, {Location: `/adminPanel?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err)
   }
 
-  const adminLog = await isAdminLogged(ctx);
-  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-
-  if (adminLog) {
-    ctx.res.writeHead(302, {Location: `/adminPanel?language=${link['queryObject']['language']}`});
-    ctx.res.end();
-  }
+  
 
   return { userAgent, link }
 }

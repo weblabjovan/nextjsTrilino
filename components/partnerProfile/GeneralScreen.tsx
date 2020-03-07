@@ -648,6 +648,16 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 placeholder={this.state.dictionary['partnerProfileGeneralDepositReferencePlaceholder']}/>
             </Col>
             <Col xs='6' sm='4'>
+              <label>Iznos minimalnog depozita</label>
+              <PlainInput
+                placeholder={this.state.dictionary['partnerProfileGeneralItemPricePlaceholder']} 
+                onChange={(event) => this.uniInputHandler(event.target.value, 'minimalDeposit')} 
+                value={this.props.partnerGeneral['minimalDeposit']}
+                className="logInput"
+                type="text"
+              />
+            </Col>
+            <Col xs='6' sm='4'>
               <label>{this.state.dictionary['partnerProfileGeneralDouble']}</label>
               <Select 
                 options={genOptions[`percentage`]} 
@@ -679,7 +689,9 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
           <Row>
             <Col xs="12">
             	<div className="remarks">
-								<p>{ this.state.dictionary['partnerProfileGeneralRemark'] } </p>
+								<p>{ this.state.dictionary['partnerProfileGeneralRemark_1'] } </p>
+                <p>{ this.state.dictionary['partnerProfileGeneralRemark_2'] } </p>
+                <p>{ this.state.dictionary['partnerProfileGeneralRemark_3'] } </p>
 							</div>
             </Col>
           </Row>     

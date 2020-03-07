@@ -487,3 +487,32 @@ export const defineUserLanguage = (languageString: string | string[]): string =>
 
   return 'sr';
 }
+
+export const getNextTerm = (partner: object, room: string | string[], from: string | string[], to: string | string[], date: string | string[]): null | object =>{
+  const partnerCopy = JSON.parse(JSON.stringify(partner));
+  const dateHandler = new DateHandler(date);
+  const day = dateHandler.getDayFromDate();
+
+  const filter = partnerCopy['general']['rooms'].filter(item => { if (item['regId'] === room) {
+    return item;
+  }});
+
+  if (filter.length) {
+    const addition = parseFloat(partnerCopy['general']['duration']) + 0.5;
+    dateHandler.addHours(from, addition);
+    const nextFrom = dateHandler.getStringDatePart('time');
+    dateHandler.addHours(to, addition);
+    const nextTo = dateHandler.getStringDatePart('time');
+
+    const res = filter[0]['terms'][day].filter(term => {if (term['to'] === nextTo && term['from'] === nextFrom) {
+      return term;
+    }});
+
+    if (res.length) {
+      return res[0]
+    }
+    
+  }
+
+  return null;
+}

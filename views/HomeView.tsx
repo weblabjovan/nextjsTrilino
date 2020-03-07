@@ -122,6 +122,7 @@ class HomeView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
         <div className="homescreen colorWhite">
           <Container>
@@ -315,32 +316,32 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row className="processWrapper">
                 <Col xs="12">
                   <div className="item">
-                    <h4>Pretražite</h4>
-                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                    <h4>{this.state.dictionary['homeProcessTitle_1']}</h4>
+                    <p>{this.state.dictionary['homeProcessText_1']}</p>
                   </div>
                   <div className="iconHolder">
                     <span className="icon down"></span>
                   </div>
 
                   <div className="item">
-                    <h4>Rezervišite</h4>
-                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                    <h4>{this.state.dictionary['homeProcessTitle_2']}</h4>
+                    <p>{this.state.dictionary['homeProcessText_2']}</p>
                   </div>
                   <div className="iconHolder">
                     <span className="icon down"></span>
                   </div>
 
                   <div className="item">
-                    <h4>Proslavite</h4>
-                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                    <h4>{this.state.dictionary['homeProcessTitle_3']}</h4>
+                    <p>{this.state.dictionary['homeProcessText_3']}</p>
                   </div>
                   <div className="iconHolder">
                     <span className="icon down"></span>
                   </div>
 
                   <div className="item">
-                    <h4>Ocenite</h4>
-                    <p>Izaberite nešto što vama najviše odgovara a nama je kao ok da vam prikaćemo</p>
+                    <h4>{this.state.dictionary['homeProcessTitle_4']}</h4>
+                    <p>{this.state.dictionary['homeProcessText_4']}</p>
                   </div>
                 </Col>
               </Row>
@@ -348,7 +349,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div >
+        {/*<div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -363,7 +364,7 @@ class HomeView extends React.Component <MyProps, MyState>{
               </Row>
 
           </Container>
-        </div>
+        </div>*/}
         <div >
           <Container>
             <Row>
@@ -401,7 +402,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
                         <div className="face">
-                          <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <img src="/static/testemonial_photo_2.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
                         <p>{ this.state.dictionary['homeComment_2'] }</p>
                         <div className="signature">
@@ -417,7 +418,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="homeWhatItem colorGrey">
                         <div className="face">
-                          <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <img src="/static/testemonial_photo_3.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
                         <p>{ this.state.dictionary['homeComment_3'] }</p>
                         <div className="signature">
@@ -457,6 +458,7 @@ class HomeView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
 
     	</div>

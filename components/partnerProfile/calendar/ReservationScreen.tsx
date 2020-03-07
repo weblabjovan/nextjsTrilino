@@ -321,11 +321,11 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
   }
 
   calculateTermPrice(reservation: object){
-    const doubleFactor = isFieldInObject(this.props.partnerObject, 'doubleDiscount', 'general') ? (1 - this.props.partnerObject['general']['doubleDiscount']/100) : 1;
+    const doubleFactor = isFieldInObject(this.props.partnerObject, 'doubleDiscount', 'general') ? (1 - parseInt(this.props.partnerObject['general']['doubleDiscount'])/100) : 1;
 
-    let termPrice = reservation['term'] ? reservation['terms'][reservation['term']['value']]['price'] : 0;
+    let termPrice = reservation['term'] ? parseInt(reservation['terms'][reservation['term']['value']]['price']) : 0;
     if (reservation['double']) {
-      termPrice = reservation['terms'][reservation['term']['value'] + 1] ? termPrice + (reservation['terms'][reservation['term']['value'] + 1]['price'] * doubleFactor) : termPrice;
+      termPrice = reservation['terms'][reservation['term']['value'] + 1] ? termPrice + (parseInt(reservation['terms'][reservation['term']['value'] + 1]['price']) * doubleFactor) : termPrice;
     }
 
     return termPrice;

@@ -7,7 +7,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
 import { isDateDifferenceValid } from '../lib/helpers/specificReservationFunctions';
 import { isNumeric, isEmpty, isInputValueMalicious } from '../lib/helpers/validations';
 import genOptions from '../lib/constants/generalOptions';
@@ -55,7 +55,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -75,7 +75,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       sections: {'1': {active: true, clickable: false }, '2': {active: false, clickable: false }, '3': {active: false, clickable: false }, '4': {active: false, clickable: false } },
       errors: {flag: false, fields: { }},
       info: { general: {name: '', room:'', adultsNum: 0, kidsNum: 0 }, catering: [], addon: []},
-      price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0 },
+      price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0, deposit: this.props.partner['reservation']['term']['price'] * (parseInt(this.props.partner['general']['depositPercent'])/100), trilinoCatering: 0 },
     };
   
 
@@ -205,6 +205,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['addon'] = arr;
     priceCopy['addon'] = num;
     priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
     this.setState({ info: infoCopy, price: priceCopy }, () => {
       this.refreshInfoHeight();
     });
@@ -219,15 +221,24 @@ class ReservationView extends React.Component <MyProps, MyState>{
     if (Object.keys(cateringCopy).length) {
       const arr = [];
       let num = 0;
+      let trilino = 0;
       Object.keys(cateringCopy).map(key => {
         if (!isEmpty(cateringCopy[key]['num'])) {
+          if (isTrilinoCatering(key)) {
+            trilino = trilino + (parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']);
+          }
           num = num + (parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']);
           arr.push({name:cateringCopy[key]['name'], quantity: parseInt(cateringCopy[key]['num']), total: parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']});
         }
       })
       infoCopy['catering'] = arr;
       priceCopy['catering'] = num;
+      priceCopy['trilinoCatering'] = trilino;
       priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
+
+      priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+      priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
+
       this.setState({ info: infoCopy, price: priceCopy},() => {
         this.refreshInfoHeight();
       });
@@ -245,7 +256,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['general']['adultsNum'] = generalCopy['adultsNum'];
     infoCopy['general']['kidsNum'] = generalCopy['kidsNum'];
 
+    if (generalCopy['double']) {
+      priceCopy['term'] = (this.props.partner['isReadyForDouble']['price'] + priceCopy['term']) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
+    }
+
     priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
     this.setState({ info: infoCopy, price: priceCopy});
   }
@@ -292,7 +309,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1 || step === 4) {
-        return '175px';
+        return '225px';
       }
       if (step === 2) {
         let items = 0;
@@ -313,7 +330,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1 || step === 4) {
-        return '300px';
+        return '350px';
       }
 
       if (step === 2) {
@@ -369,6 +386,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   }
 
+  checkDouble(){
+    const generalCopy = JSON.parse(JSON.stringify(this.props.reservationGeneral));
+    generalCopy['double'] = !generalCopy['double'];
+    this.props.changeSingleReservationField('reservationGeneral', generalCopy);
+  }
+
   checkTheBox(field: string, type: string){
     const additionalCopy = JSON.parse(JSON.stringify(this.props.reservationAdditional));
     if (additionalCopy[field]) {
@@ -394,7 +417,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   refreshInfoHeight(){
     const elem = document.getElementById(`additional_2`);
-    const base = this.state.isMobile ? 260 : 340;
+    const base = this.state.isMobile && elem.offsetWidth < 500 ? 300 : 340;
     const line = this.state.isMobile ? 30 : 35;
     const add = (this.state.info['catering'].length + this.state.info['addon'].length) * line;
 
@@ -424,6 +447,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
     		<div className="reservationWrapper">
           <Container>
@@ -434,11 +458,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     date={this.props.router['query']['date']}
                     time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
                     price={ this.state.price['total'] }
+                    deposit={ this.state.price['deposit'] }
                     lang={this.props.lang}
                     catering={ this.state.info['catering'] }
                     addon={ this.state.info['addon'] }
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
+                    open={ false }
                     num="1"
                   />
                 </Col>
@@ -463,7 +489,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection" id="step_1">
                       <Row>
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicNameTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicNamePlaceholder']} 
@@ -474,7 +500,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                           />
                         </Col>
 
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicAdultsNumTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicAdultsNumPlaceholder']} 
@@ -485,7 +511,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                           />
                         </Col>
 
-                        <Col xs="12" sm="6" lg="4">
+                        <Col xs="12" sm="4" lg="4">
                           <label>{this.state.dictionary['reservationFormBasicKidsNumTitle']}</label>
                           <PlainInput
                             placeholder={this.state.dictionary['reservationFormBasicKidsNumPlaceholder']}
@@ -495,6 +521,29 @@ class ReservationView extends React.Component <MyProps, MyState>{
                             type="text"
                           />
                         </Col>
+
+                        {
+                          this.props.partner.hasOwnProperty('isReadyForDouble')
+                          ?
+                          (
+                            <Col xs="12">
+                              <div className="middle doubleBox">
+                                <CheckBox
+                                  disabled={ false }
+                                  checked={ this.props.reservationGeneral['double'] }
+                                  field="double"
+                                  label={ 'Želim dupli termin'  }
+                                  onChange={ this.checkDouble }
+                                  orientation="back"
+                                />
+                              </div>
+                            </Col>
+                          )
+                          :
+                          null
+                        }
+
+                        
 
                         <Col xs="12">
                           <div className="middle">
@@ -672,12 +721,14 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     date={this.props.router['query']['date']}
                     time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
                     price={ this.state.price['total'] }
+                    deposit={ this.state.price['deposit'] }
                     lang={this.props.lang}
                     catering={ this.state.info['catering'] }
                     addon={ this.state.info['addon'] }
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
+                    open={ true }
                   />
                 </Col>
               </Row>
@@ -694,6 +745,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
+          terms={ this.state.dictionary['navigationTerms'] }
     		/>
 
     	</div>

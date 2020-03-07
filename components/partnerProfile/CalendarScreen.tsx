@@ -227,19 +227,19 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
   componentDidMount(){
     if (this.props.partnerObject) {
       if (!this.props.getPartnerReservationsSuccess) {
-
         const ready = isFieldInObject(this.props.partnerObject, 'rooms', 'general') ? this.props.partnerObject['general']['rooms'].length ? true : false : false;
         if (ready) {
           this.props.openLoader();
           const link = setUpLinkBasic(window.location.href);
           this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+          console.log(this.props.partnerRooms);
           this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]});
         }else{
           this.setState({ ready });
         }
+      }else{
+        this.setState({ activeRoom: getRoomsSelector(this.props.partnerRooms)[0]});
       }
-
-      
     }
   }
 	
@@ -340,7 +340,8 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
           <Row>
             <Col xs="12">
               <div className="remarks">
-                <p>{ this.state.dictionary['partnerProfileGeneralRemark'] } </p>
+                <p>{ this.state.dictionary['partnerProfileGeneralRemark_1'] } </p>
+                <p>{ this.state.dictionary['partnerProfileGeneralRemark_2'] } </p>
               </div>
             </Col>
           </Row> 

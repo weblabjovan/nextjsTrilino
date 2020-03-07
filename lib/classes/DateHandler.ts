@@ -78,6 +78,35 @@ export default class DateHandler {
 		}
 	}
 
+	public addHours = (time: string | string[], hours: number): Date => {
+		this.resetDate();
+		const strTime = time as string;
+		this.setDayOnSpecificTime(strTime);
+		this.addTime(hours, 'hours');
+		return this.date;
+	}
+
+	public getStringDatePart = (part: string, date?: Date): string => {
+		let str = this.date.toISOString();
+		if (date) {
+			str = date.toISOString();
+		}
+
+		if (part === 'time') {
+			return str.substring(11,16);
+		}
+
+		return str.substring(0,19);
+	}
+
+	private addTime = (time: number, format: string): void => {
+		const additor = format === 'hours' ? (60*60*1000) : (60*1000);
+		const date = this.date.getTime() + (time*additor);
+		const res = new Date(date);
+
+		this.date = res;
+	}
+
 	private setDateForServer = (): void => {
 	  const strings = this.dateString.split('-')
 	  const d = new Date();

@@ -1,4 +1,38 @@
 export default interface LanguageInterface {
+	headTitleIndex: string;
+	headDescriptionIndex: string;
+	headTitleAdminLogin: string;
+	headDescriptionAdminLogin: string;
+	headTitleAdminPanel: string;
+	headDescriptionAdminPanel: string;
+	headTitleConfirmation: string;
+	headDescriptionConfirmation: string;
+	headTitleDevLogin: string;
+	headDescriptionDevLogin: string;
+	headTitleEmailVerification: string;
+	headDescriptionEmailVerification: string;
+	headTitleLogin: string;
+	headDescriptionLogin: string;
+	headTitlePartnerHelp: string;
+	headDescriptionPartnerHelp: string;
+	headTitlePartnerProfile: string;
+	headDescriptionPartnerProfile: string;
+	headTitlePartnership: string;
+	headDescriptionPartnership: string;
+	headTitlePartnershipLogin: string;
+	headDescriptionPartnershipLogin: string;
+	headTitlePassword: string;
+	headDescriptionPassword: string;
+	headTitlePasswordChange: string;
+	headDescriptionPasswordChange: string;
+	headTitleReservation: string;
+	headDescriptionReservation: string;
+	headTitleSearch: string;
+	headDescriptionSearch: string;
+	headTitleTerms: string;
+	headDescriptionTerms: string;
+
+
 	navigationLogin: string;
 	navigationSearch: string;
 	navigationFaq: string;
@@ -12,6 +46,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
+	navigationTerms: string;
 	
 	uniCity: string;
 	uniDistrict: string;
@@ -32,6 +67,8 @@ export default interface LanguageInterface {
 	uniPartnerProgressTitle: string;
 	uniPartnerProgressDescription: string;
 	uniPartnerProgressLink: string;
+	uniDeposit: string;
+	uniNotWorkingDay: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -68,6 +105,14 @@ export default interface LanguageInterface {
 	homeCommentName_2: string;
 	homeCommentName_3: string;
 	homePartner: string;
+	homeProcessTitle_1: string;
+	homeProcessText_1: string;
+	homeProcessTitle_2: string;
+	homeProcessText_2: string;
+	homeProcessTitle_3: string;
+	homeProcessText_3: string;
+	homeProcessTitle_4: string;
+	homeProcessText_4: string;
 
 	partnershipTitle: string;
 	partnershipTitle_1: string;
@@ -103,6 +148,7 @@ export default interface LanguageInterface {
 	partnerRegContactEmail: string;
 	partnerRegContactPhone: string;
 	partnerRegFinalWarning: string;
+	partnerRegTerms: string;
 	partnerLogFinalWarning: string;
 	partnerLogThank: string;
 	partnerRegAlertName: string;
@@ -112,6 +158,7 @@ export default interface LanguageInterface {
 	partnerRegAlertEmail: string;
 	partnerRegAlertPhone: string;
 	partnerRegAlertDuplicate: string;
+	partnerRegAlertTerms: string;
 	partnerLogAlertPass: string;
 
 	emailVerificationPartnerVerificTitle: string;
@@ -240,7 +287,6 @@ export default interface LanguageInterface {
 	partnerProfileGeneralAlert_error_no_3: string;
 	partnerProfileGeneralAlert_error_no_4: string;
 	partnerProfileGeneralAlert_error_no_5: string;
-	partnerProfileGeneralRemark: string;
 	partnerProfileGeneralSaveButton: string;
 	partnerProfileGeneralDeposit: string;
 	partnerProfileGeneralDepositPlaceholder: string;
@@ -248,6 +294,9 @@ export default interface LanguageInterface {
 	partnerProfileGeneralDepositReferencePlaceholder: string;
 	partnerProfileGeneralDouble: string;
 	partnerProfileGeneralDoublePlaceholder: string;
+	partnerProfileGeneralRemark_1: string;
+	partnerProfileGeneralRemark_2: string;
+	partnerProfileGeneralRemark_3: string;
 
 
 	partnerProfilePreviewTitle: string;
@@ -465,6 +514,10 @@ export default interface LanguageInterface {
 	locationChooseTermBefore: string;
 	locationChooseTermAfter: string;
 	locationButtonReserve: string;
+	locationCancelationNone: string;
+	locationCancelationFirst: string;
+	locationCancelationSecond: string;
+
 
 	reservationInfoTitle: string;
 	reservationInfoBasicMore: string;
@@ -486,7 +539,6 @@ export default interface LanguageInterface {
 	reservationResStep2: string;
 	reservationResStep3: string;
 	reservationResStep4: string;
-
 	reservationFormBasicNameTitle: string;
 	reservationFormBasicNamePlaceholder: string;
 	reservationFormBasicAdultsNumTitle: string;
@@ -513,6 +565,141 @@ export default interface LanguageInterface {
 
 	
 	loginTitle: string;
+
+
+	termsHeadTitle: string;
+	termsIntroTitle: string;
+	termsIntroText_1: string;
+	termsIntroText_2: string;
+	termsIntroText_3: string;
+	termsIntroText_4: string;
+	termsIntroText_5: string;
+	termsIntroText_6: string;
+	termsIntroText_7: string;
+	termsRegTitle: string;
+	termsRegText_1: string;
+	termsRegText_2: string;
+	termsRegText_3: string;
+	termsAuthTitle: string;
+	termsAuthText_1: string;
+	termsAuthText_2: string;
+	termsAuthText_3: string;
+	termsChangeTitle: string;
+	termsChangeText_1: string;
+	termsChangeText_2: string;
+	termsInfoTitle: string;
+	termsInfoText_1: string;
+	termsUseTitle: string;
+	termsUseText_1: string;
+	termsUseText_2: string;
+	termsUseText_3: string;
+	termsUseText_4: string;
+	termsUseText_5: string;
+	termsContentTitle: string;
+	termsContentSub_1: string;
+	termsContentText_1: string;
+	termsContentSub_2: string;
+	termsContentText_2: string;
+	termsContentText_3: string;
+	termsContentSub_3: string;
+	termsContentText_4: string;
+	termsContentText_5: string;
+	termsContentSub_4: string;
+	termsContentText_6: string;
+	termsContentText_7: string;
+	termsContentText_8: string;
+	termsContentText_9: string;
+	termsContentText_10: string;
+	termsContentText_11: string;
+	termsContentText_12: string;
+	termsContentText_13: string;
+	termsBuyTitle: string;
+	termsBuySub_1: string;
+	termsBuyText_1: string;
+	termsBuyText_2: string;
+	termsBuySub_2: string;
+	termsBuyText_3: string;
+	termsBuyText_4: string;
+	termsBuyText_5: string;
+	termsBuyText_6: string;
+	termsBuyText_7: string;
+	termsChangeBuyTitle: string;
+	termsChangeBuyText_1: string;
+	termsReclamationTitle: string;
+	termsReclamationText_1: string;
+	termsReclamationText_2: string;
+	termsReclamationText_3: string;
+	termsReclamationText_4: string;
+	termsPartnersTitle: string;
+	termsPartnersText_1: string;
+	termsPartnersText_2: string;
+	termsPartnersText_3: string;
+	termsPartnersText_4: string;
+	termsPartnersText_5: string;
+	termsPartnersText_6: string;
+	termsPartnersText_7: string;
+	termsPartnersText_8: string;
+	termsConfidentTitle: string;
+	termsConfidentSub_1: string;
+	termsConfidentText_1: string;
+	termsConfidentText_2: string;
+	termsConfidentText_3: string;
+	termsConfidentText_4: string;
+	termsConfidentText_5: string;
+	termsPersonalTitle: string;
+	termsPersonaltText_1: string;
+	termsPersonaltText_2: string;
+	termsPersonaltText_3: string;
+	termsPersonaltText_4: string;
+	termsPersonaltText_5: string;
+	termsPersonaltText_6: string;
+	termsPersonaltText_7: string;
+	termsGenInfoTitle: string;
+	termsGenInfoText_1: string;
+	termsGenInfoText_2: string;
+	termsGenInfoText_3: string;
+	termsEmailTitle: string;
+	termsEmailText_1: string;
+	termsEmailText_2: string;
+	termsEmailText_3: string;
+	termsEmailText_4: string;
+	termsEmailText_5: string;
+	termsEmailText_6: string;
+	termsPaySecTitle: string;
+	termsPaySecText_1: string;
+	termsCommTitle: string;
+	termsCommText_1: string;
+	termsCommText_2: string;
+	termsJuvenTitle: string;
+	termsJuvenText_1: string;
+	termsJuvenText_2: string;
+	termsResponsaTitle: string;
+	termsResponsaText_1: string;
+	termsResponsaText_2: string;
+	termsResponsaText_3: string;
+	termsResponsaText_4: string;
+	termsResponsaText_5: string;
+	termsResponsaText_6: string;
+	termsResponsaText_7: string;
+	termsResponsaText_8: string;
+	termsResponsaText_9: string;
+	termsResponsaText_10: string;
+	termsResponsaText_11: string;
+	termsDisclaimUserTitle: string;
+	termsDisclaimUserText_1: string;
+	termsDisclaimUserText_2: string;
+	termsDisclaimUserText_3: string;
+	termsDisclaimUserText_4: string;
+	termsDisclaimUserText_5: string;
+	termsDisclaimPartnerTitle: string;
+	termsDisclaimPartnerText_1: string;
+	termsTerminationTitle: string;
+	termsTerminationText_1: string;
+	termsNullTitle: string;
+	termsNullText_1: string;
+	termsNullText_2: string;
+	termsDisputeTitle: string;
+	termsDisputeText_1: string;
 
 
 

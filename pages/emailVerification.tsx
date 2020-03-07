@@ -7,6 +7,7 @@ import EmailVerificationView from '../views/EmailVerificationView';
 import pages from '../lib/constants/pages';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { getLanguage } from '../lib/language';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -23,10 +24,11 @@ const EmailVerification : NextPage<Props> = ({ userAgent, verifyObject, resoluti
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
+  const dictionary = getLanguage(lang);
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={dictionary['headTitleEmailVerification']} description={dictionary['headDescriptionEmailVerification']} />
       <EmailVerificationView 
       	userAgent={userAgent} 
       	router={router}
@@ -48,17 +50,23 @@ EmailVerification.getInitialProps = async (ctx: any) => {
   let verifyObject = { };
   let resolution = 0;
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err);
   }
+
+  
 
   if (link['queryObject']['type'] === 'partner') {
     try{
       const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
-      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true`);
+      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         if (verifyObject['partner']['verified']) {

@@ -83,6 +83,7 @@ export interface IpartnerGeneral {
 	depositPercent: string | object;
 	despositNumber: string | object;
 	doubleDiscount: string | object;
+	minimalDeposit: string | number;
 }
 
 interface IdrinkCardItem {
@@ -155,4 +156,5 @@ export interface IreservationGeneral{
 	room: string;
 	adultsNum: string | number;
 	kidsNum: string | number;
+	double: boolean;
 }

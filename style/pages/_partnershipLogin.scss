@@ -71,7 +71,7 @@
 	    }
 
 	    .marginSmall{
-	    	margin-top: 0px;
+	    	margin-top: 20px;
 	    	margin-bottom: 30px;
 
 	    	a{
@@ -79,6 +79,7 @@
 	    		color: #fff;
 	    		font-style: italic;
 	    		text-decoration: underline;
+	    		line-height: 22px;
 	    	}
 	    }
 
@@ -98,6 +99,23 @@
 				-moz-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
 				box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
 			}
+		}
+
+		.checkbox-simple-label{
+			color: #fff;
+			margin-left: 10px;
+			font-size: 16px;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		  -webkit-appearance: none;
+		  margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+		  -moz-appearance:textfield;
 		}
 	}
 

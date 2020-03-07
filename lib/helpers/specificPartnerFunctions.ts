@@ -233,7 +233,7 @@ export const setUpMainGeneralState = (state: null | object, partner: object, lan
 		const newState = state !== null ? JSON.parse(JSON.stringify(state)) : getProfileGeneralStructure(newGen);
 		
 		const generalKeys = Object.keys(newGen);
-		const plainInputs = ['size', 'description', 'playSize', 'address'];
+		const plainInputs = ['size', 'description', 'playSize', 'address', 'minimalDeposit'];
 		for(let key in newState){
 			if (generalKeys.indexOf(key) !== -1) {
 				if (plainInputs.indexOf(key) !== -1) {
@@ -434,6 +434,7 @@ const typeTheDeals = (deals: Array<object>): Array<object>  => {
 		deals[i]['price'] = parseInt(deals[i]['price']);
 		deals[i]['min'] = parseInt(deals[i]['min']);
 		deals[i]['type'] = deals[i]['type']['value'];
+		deals[i]['regId'] = deals[i]['regId'] ? deals[i]['regId'] : generateString(12);
 	}
 
 	return deals;
@@ -454,12 +455,13 @@ export const setUpMainCateringState = (partner: object, lang: string): object =>
 		const catering = newPartner['catering'];
 		res['drinkCard'] = catering['drinkCard'];
 		if (!catering['deals'].length) {
-			res['deals'] = [ { type: '', price: '', min: null, items: [], currentItem: ''} ];
+			res['deals'] = [ { type: '', price: '', min: null, items: [], currentItem: '', regId: generateString(12)} ];
 		}else{
 			catering['deals'].map( deal => {
 				deal['type'] = {value: deal['type'], label: getGeneralOptionLabelByValue(genOptions[`dealType_${lang}`], deal['type'].toString()) };
 				deal['price'] = deal['price'].toString();
 				deal['min'] = deal['min'].toString();
+				deal['regId'] = deal['regId'] ? deal['regId'] : generateString(12);
 			});
 
 			res['deals'] = catering['deals'];
@@ -708,21 +710,23 @@ export const calculateActivationProcess = (partnerObj: object): number => {
 	}
 
 	if (partnerObj['general']) {
-		if (partnerObj['general']['drink']) {
+		if (partnerObj['general']['drink'] === '1') {
 			if (isDrinkCardActive(partnerObj)) {
 				num = num + 15;
 			}
 		}else{
-			if (!partnerObj['general']['selfDrink']) {
+			if (partnerObj['general']['selfDrink']) {
+				num = num + 15;
 			}
 		}
 
-		if (partnerObj['general']['food']) {
+		if (partnerObj['general']['food'] === '1') {
 			if (isCateringDealPresent(partnerObj)) {
 				num = num + 15;
 			}
 		}else{
-			if (!partnerObj['general']['selfFood']) {
+			if (partnerObj['general']['selfFood']) {
+				num = num + 15;
 			}
 		}
 	}
