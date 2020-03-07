@@ -349,7 +349,7 @@ class HomeView extends React.Component <MyProps, MyState>{
           </Container>
         </div>
 
-        <div >
+        {/*<div >
           <Container>
             <Row>
                 <Col xs="12">
@@ -364,7 +364,7 @@ class HomeView extends React.Component <MyProps, MyState>{
               </Row>
 
           </Container>
-        </div>
+        </div>*/}
         <div >
           <Container>
             <Row>

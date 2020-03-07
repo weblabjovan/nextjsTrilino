@@ -54,9 +54,7 @@ const generalOptions: IGenOptions = {
       { value: '3', label: '3 hours' }
     ],
     cities: [
-      { value: '1', label: 'Beograd' },
-      { value: '2', label: 'Novi Sad' },
-      { value: '3', label: 'Niš' }
+      { value: '1', label: 'Beograd' }
     ],
     spaceType_sr:[
       { value: '1', label: 'Igraonica' },
