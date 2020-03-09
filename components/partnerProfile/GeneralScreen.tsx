@@ -180,10 +180,12 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
   saveGeneral(){
   	this.props.openLoader();
-		const link = setUpLinkBasic(window.location.href);
-  	const general = prepareGeneralPartnerObject(this.props.partnerGeneral, this.props.partnerRooms);
-  	const data = { language: this.props.lang, general, partner: this.props.partnerObject };
-  	this.props.updateGeneralPartner('_id', data, link, this.props.token);
+    const link = setUpLinkBasic(window.location.href);
+    const general = prepareGeneralPartnerObject(this.props.partnerGeneral, this.props.partnerRooms);
+    const data = { language: this.props.lang, general, partner: this.props.partnerObject };
+    this.setState({ errorMessages: { show: false, response: {success: true, message: '', day:''}} }, () => {
+      this.props.updateGeneralPartner('_id', data, link, this.props.token);
+    });
   }
 
 	
