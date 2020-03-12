@@ -121,19 +121,24 @@
 					th{
 						padding: 2px;
 						border-bottom: solid 1px #ccc;
-						font-size: 13px;
+						font-size: 14px;
 						font-weight: 600;
 					}
 				}
 
 				td{
-					font-size: 16px;
+					font-size: 14px;
 					font-weight: 400;
 					padding: 3px;
 
 					@media only screen and (max-width: 577px) {
 						font-size: 14px;
 						padding: 2px;
+					}
+
+					p{
+						font-size: 14px;
+						font-style: italic;
 					}
 				}
 			}
@@ -220,6 +225,7 @@
 
 		.stepHeadline.active{
 			background: $purple;
+			cursor: pointer;
 
 			.numWrapper{
 				background: $purple;
@@ -398,6 +404,136 @@
 
 		.hide{
 			height: 0px;
+		}
+	}
+
+	.paymentRoute{
+
+		.smallName{
+			font-size: 18px !important;
+	    text-align: center;
+	    line-height: 26px !important;
+	    width: 80%;
+			margin: auto;
+	    margin-bottom: 20px;
+
+			@media only screen and (max-width: 577px) {
+				width: 100%;
+			}
+		}
+
+		.redirectLinks{
+
+			p{
+				text-align: center;
+    		font-size: 16px;
+
+    		a{
+    			color: #507bff;
+    			cursor: pointer;
+    		}
+			}
+			
+		}
+
+		.additionalExplanation{
+			font-size: 14px;
+			line-height: 20px;
+			
+			font-style: italic;
+			width: 80%;
+			margin: auto;
+			margin-bottom: 30px;
+
+			@media only screen and (max-width: 577px) {
+				font-size: 14px;
+				width: 100%;
+			}
+		}
+
+		.logForm{
+			margin-bottom: 30px;
+			width: 60%;
+			margin: auto;
+
+			@media only screen and (max-width: 577px) {
+				width: 100%;
+			}
+
+			.title{
+				display: none;
+			}
+
+			label{
+				font-size: 16px;
+				font-weight: 400;
+				margin-bottom: 5px;
+				@media only screen and (max-width: 577px) {
+					font-size: 14px;
+				}
+			}
+
+			.marginSmall{
+	    	margin-top: 20px;
+	    	margin-bottom: 30px;
+
+	    	@media only screen and (max-width: 577px) {
+					margin-top: 15px;
+	    		margin-bottom: 20px;
+				}
+
+	    	a{
+	    		font-size: 16px;
+	    		color: #507bff;
+	    		font-style: italic;
+	    		text-decoration: underline;
+	    		line-height: 22px;
+	    	}
+	    }
+
+			.logInput{
+				margin-bottom: 15px;
+			}
+
+			.logInput.short{
+				width: 30%;
+				display: inline-block;
+				@media only screen and (max-width: 577px) {
+					width: 100%;
+					display: block;
+				}
+			}
+			.logInput.long{
+				width: 70%;
+				display: inline-block;
+				@media only screen and (max-width: 577px) {
+					width: 100%;
+					display: block;
+				}
+			}
+
+			.btn-success{
+				margin-top: 25px;
+				margin-bottom: 20px;
+				border: none;
+			    border-radius: 30px;
+			    padding: 7px 20px;
+			    text-transform: uppercase;
+			    background: #38d43d;
+			    outline: none;
+			    color: #ffffff;
+			    font-weight: 700;
+			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				 transition: all 1s;
+
+				&:hover{
+					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					-moz-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+				}
+			}
 		}
 	}
 }

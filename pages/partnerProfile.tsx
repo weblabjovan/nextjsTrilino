@@ -41,23 +41,32 @@ const PartnerProfile : NextPage<Props> = ({userAgent, link, token}) => {
 PartnerProfile.getInitialProps = async (ctx: any) => {
 	const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  let link = { };
+  let token = '';
 
-  const devLog = await isDevEnvLogged(ctx);
+  try{
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    const devLog = await isDevEnvLogged(ctx);
+
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const partnerLog = await isPartnerLogged(ctx);
+    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+
+    if (!partnerLog) {
+      ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
+      ctx.res.end();
+    }
+
+    token = getPartnerToken(ctx);
+
+  }catch(err){
+    console.log(err);
   }
 
-  const partnerLog = await isPartnerLogged(ctx);
-  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-
-  if (!partnerLog) {
-    ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
-    ctx.res.end();
-  }
-
-	const token = getPartnerToken(ctx);
 
   return { userAgent, link, token }
 }

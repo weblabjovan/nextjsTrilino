@@ -392,3 +392,11 @@ export const isPartnerMapSaveDataValid = (data: object): boolean => {
 
 	return true;
 }
+
+export const isUserRegDataValid = (data: object): boolean => {
+	if (!data['firstName'] || !data['lastName'] || !isEmail(data['email']) || !isPhoneNumber(data['phone'], data['language']) || !data['terms'] || data[''] || !data['phoneCode'] ) {
+		return false;
+	}
+
+	return true;
+}

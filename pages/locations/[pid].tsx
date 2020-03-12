@@ -34,7 +34,7 @@ const Location : NextPage<Props> = ({ userAgent, partner }) => {
 
   return (
     <div>
-      <Head title="Trilino" description="Tilino, rodjendani za decu, slavlje za decu" />
+      <Head title={ partner ? `Trilino - ${partner['name']}` : 'Trilino'} description={ partner ? `${partner['description']}` : ''} />
       <LocationView
       	userAgent={userAgent} 
         router={ router } 

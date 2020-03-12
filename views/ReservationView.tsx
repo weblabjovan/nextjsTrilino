@@ -4,17 +4,18 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
-import { setUserLanguage } from '../actions/user-actions';
+import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, changePasswordUser } from '../actions/user-actions';
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
 import { isDateDifferenceValid } from '../lib/helpers/specificReservationFunctions';
-import { isNumeric, isEmpty, isInputValueMalicious } from '../lib/helpers/validations';
+import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
 import CheckBox from '../components/form/checkbox';
 import InfoFix from '../components/reservation/InfoFix';
 import ResStep from '../components/reservation/ResStep';
+import PaymentRoute from '../components/reservation/PaymentRoute';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,17 +27,33 @@ interface MyProps {
   reservationCatering: object;
   reservationGeneral: IreservationGeneral;
   userLanguage: string;
+  userLoginStart: boolean;
+  userLoginError: boolean | object;
+  userLoginSuccess: null | object;
+  userRegistrateStart: boolean;
+  userRegistrateError: boolean | object;
+  userRegistrateSuccess: null | object;
+  userPassChangeStart: boolean;
+  userPassChangeError: boolean | object;
+  userPassChangeSuccess: null | number;
   setUserLanguage(language: string): string;
   changeSingleReservationField(field: string, value: any): void;
+  changeSingleUserField(field: string, value: any): void;
+  loginUser(data: object, link: object): void;
+  registrateUser(data: object, link: object): void;
+  changePasswordUser(param: string, data: object, link: object): object;
   userAgent: string;
   path: string;
   router: object;
   fullPath: string;
   lang: string;
   partner: object;
+  token: string;
+  link: object;
 };
 interface MyState {
 	language: string;
+  logTry: number;
 	dictionary: object;
 	isMobile: boolean;
   alertOpen: boolean;
@@ -46,6 +63,8 @@ interface MyState {
   errors: object;
   info: object;
   price: object;
+  paymentRouteErrors: object;
+  paymentRouteStage: string;
 };
 
 class ReservationView extends React.Component <MyProps, MyState>{
@@ -55,7 +74,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -67,6 +86,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
       language: this.props.lang.toUpperCase(),
+      logTry: 0,
       dictionary: getLanguage(this.props.lang),
       isMobile: isMobile(this.props.userAgent),
       alertOpen: false,
@@ -76,6 +96,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
       errors: {flag: false, fields: { }},
       info: { general: {name: '', room:'', adultsNum: 0, kidsNum: 0 }, catering: [], addon: []},
       price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0, deposit: this.props.partner['reservation']['term']['price'] * (parseInt(this.props.partner['general']['depositPercent'])/100), trilinoCatering: 0 },
+      paymentRouteErrors: { show: false, 
+        fields:{ firstName: false, lastName: false, email: false, phoneCode: false, phone: false, terms: false, logEmail: false, password: false , regDuplicate: false, baseError: false, code: false, pass: false, confirm: false, base: false },
+        messages:{ baseError: ''}
+      },
+      paymentRouteStage: this.props.token ? 'payment' : 'login',
     };
   
 
@@ -308,7 +333,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
-      if (step === 1 || step === 4) {
+      if (step === 1) {
         return '225px';
       }
       if (step === 2) {
@@ -328,8 +353,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
         const height = 150 + (rows * 100);
         return `${height}px`;
       }
+
+      if (step === 4) {
+        return '650px';
+      }
     }else{
-      if (step === 1 || step === 4) {
+      if (step === 1) {
         return '350px';
       }
 
@@ -349,6 +378,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
         const rows = Object.keys(this.props.partner['decoration']).length  + this.props.partner['contentAddon'].length;
         const height = 150 + (rows * 95);
         return `${height}px`;
+      }
+
+      if (step === 4) {
+        return '760px';
       }
     }
   }
@@ -424,8 +457,235 @@ class ReservationView extends React.Component <MyProps, MyState>{
     elem.style.height = `${base + add}px`;
   }
 
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+
+
+////////////////////////////////// PAYMENT ROUTE FUNCTIONS ////////////////////////////////////
+
+  validateRegistrationData(data: object){
+    const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+    if (this.props.userRegistrateError) {
+      this.props.changeSingleUserField('userRegistrateError', false);
+    }
     
+
+    if (isEmpty(data['firstName']) || isInputValueMalicious(data['lastName'])) {
+      errorCopy['fields']['firstName'] = true;
+    }else{
+      errorCopy['fields']['firstName'] = false;
+    }
+    if (isEmpty(data['lastName']) || isInputValueMalicious(data['lastName'])) {
+      errorCopy['fields']['lastName'] = true;
+    }else{
+      errorCopy['fields']['lastName'] = false;
+    }
+    if (!isEmail(data['email'])) {
+      errorCopy['fields']['email'] = true;
+    }else{
+      errorCopy['fields']['email'] = false;
+    }
+    if (isEmpty(data['phoneCode'])) {
+      errorCopy['fields']['phoneCode'] = true;
+    }else{
+      errorCopy['fields']['phoneCode'] = false;
+    }
+    if (!isPhoneNumber(data['phone'], 'sr')) {
+      errorCopy['fields']['phone'] = true;
+    }else{
+      errorCopy['fields']['phone'] = false;
+    }
+    if (!data['terms']) {
+      errorCopy['fields']['terms'] = true;
+    }else{
+      errorCopy['fields']['terms'] = false;
+    }
+
+    errorCopy['fields']['regDuplicate'] = false;
+
+    let showVal = false;
+
+    Object.keys(errorCopy.fields).forEach((key) => {
+      if (errorCopy.fields[key] === true) {
+        showVal = true;
+      }
+    })
+    errorCopy['show'] = showVal;
+    this.setState({paymentRouteErrors: errorCopy}, () => {
+      this.sendRegistrationData(data);
+    });
+
+  }
+
+  sendRegistrationData(data: object){
+    if (!this.state.paymentRouteErrors['show']) {
+        this.setState({ loader: true }, () => {
+         data['language'] = this.props.lang;
+         data['origin'] = 'reservation';
+        this.props.registrateUser(data, this.props.link);
+      })
+     }
+  }
+
+  validateLoginData(data: object){
+    const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+    if (!isEmail(data['email'])) {
+      errorCopy['fields']['logEmail'] = true;
+    }else{
+      errorCopy['fields']['logEmail'] = false;
+    }
+    if (isEmpty(data['password'])) {
+      errorCopy['fields']['password'] = true;
+    }else{
+      errorCopy['fields']['password'] = false;
+    }
+
+    errorCopy['fields']['baseError'] = false;
+    errorCopy['messages']['baseError'] = '';
+
+    let showVal = false;
+
+    Object.keys(errorCopy.fields).forEach((key) => {
+      if (errorCopy.fields[key] === true) {
+        showVal = true;
+      }
+    })
+    errorCopy['show'] = showVal;
+    this.setState({ paymentRouteErrors: errorCopy }, () => {
+      this.sendLoginData(data);
+    });
+  }
+
+  sendLoginData(data: object){
+    if (!this.state.paymentRouteErrors['show']) {
+       this.setState({ loader: true }, () => {
+         data['language'] = this.props.lang;
+        this.props.loginUser(data, this.props.link);
+      })
+    }
+  }
+
+  validatePasswordData(data: object){
+    const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+
+    if (isEmpty(data['password']) || !isMoreThan(data['password'], 7) || !isLessThan(data['password'], 17) || !isOfRightCharacter(data['password'])) {
+      errorCopy['fields']['pass'] = true;
+    }else{
+      errorCopy['fields']['pass'] = false;
+    }
+    if(isEmpty(data['confirmation']) || !isMatch(data['password'], data['confirmation'])){
+      errorCopy['fields']['confirm'] = true;
+    }else{
+      errorCopy['fields']['confirm'] = false;
+    }
+    if (isEmpty(data['code'])) {
+      errorCopy['fields']['code'] = true;
+    }else{
+      errorCopy['fields']['code'] = false;
+    }
+
+    errorCopy['fields']['base'] = false;
+    let showVal = false;
+
+    Object.keys(errorCopy.fields).forEach((key) => {
+      if (errorCopy.fields[key] === true) {
+        showVal = true;
+      }
+    })
+    errorCopy['show'] = showVal;
+    this.setState({paymentRouteErrors: errorCopy }, () => {
+      this.sendUserPass(data);
+    });
+  }
+
+  sendUserPass(data: object){
+    if (!this.state.paymentRouteErrors['show']) {
+      this.setState({ loader: true }, () => {
+        const dataForSend = {
+          id: this.props.userRegistrateSuccess['page'],
+          code: data['code'],
+          password: data['password'],
+          confirmation: data['confirmation'],
+          language: this.props.lang,
+          token: true,
+        }
+
+         this.props.changePasswordUser('_id', dataForSend, this.props.link);
+      });
+    }
+  }
+
+
+  handleLogDataSend(data: object, type: string){
+    if (type === 'registration') {
+      this.validateRegistrationData(data);
+    }
+
+    if (type === 'login') {
+      this.validateLoginData(data);
+    }
+
+    if (type === 'newPassword') {
+      this.validatePasswordData(data);
+    }
+  }
+
+  changePaymentRouteStage(stage: string){
+    const paymentRouteErrors = { show: false, 
+        fields:{ firstName: false, lastName: false, email: false, phoneCode: false, phone: false, terms: false, logEmail: false, password: false , regDuplicate: false, baseError: false, code: false, pass: false, confirm: false, base: false },
+        messages:{ baseError: ''}
+      };
+    this.setState({ paymentRouteStage: stage, paymentRouteErrors });
+  }
+
+  closePaymentRouteAlert(){
+    const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+    errorCopy['show'] = false;
+    this.setState({paymentRouteErrors: errorCopy});
+  }
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (this.state.logTry > 9) {
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+    }
+
+    if (this.props.userLoginError && !prevProps.userLoginError && !this.props.userLoginStart) {
+      const logTry = this.state.logTry + 1;
+      const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+      errorCopy['show'] = true;
+      errorCopy['fields']['baseError'] = true;
+      errorCopy['messages']['baseError'] = this.props.userLoginError['message'];
+
+      this.setState({loader: false, logTry, paymentRouteErrors: errorCopy });
+    }
+
+    if (this.props.userLoginSuccess && !prevProps.userLoginSuccess && !this.props.userLoginStart) {
+      setCookie(this.props.userLoginSuccess['token'],'trilino-user-token', 10);
+      this.setState({ loader: false, paymentRouteStage: 'payment'});
+    }
+
+    if (this.props.userRegistrateError['code'] === 2 && prevProps.userRegistrateError['code'] !== 2) {
+      const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+      errorCopy['show'] = true;
+      errorCopy['fields']['regDuplicate'] = true;
+      this.setState({ paymentRouteErrors: errorCopy, loader: false });
+    }
+
+    if (!this.props.userRegistrateStart && this.props.userRegistrateSuccess && !prevProps.userRegistrateSuccess) {
+      this.setState({loader: false, paymentRouteStage: 'password'});
+    }
+
+     if (!this.props.userPassChangeStart && this.props.userPassChangeError && !prevProps.userPassChangeError) {
+      const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+      errorCopy['show'] = true;
+      errorCopy['fields']['base'] = true;
+      errorCopy['messages']['baseError'] = this.props.userPassChangeError['message'];
+      this.setState({loader: false, paymentRouteErrors: errorCopy });
+    }
+
+    if (this.props.userPassChangeSuccess && !prevProps.userPassChangeSuccess && !this.props.userPassChangeStart) {
+      setCookie(this.props.userPassChangeSuccess['token'],'trilino-user-token', 10);
+      this.setState({ loader: false, paymentRouteStage: 'payment'});
+    }
+
   }
 
 	componentDidMount(){
@@ -645,7 +905,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                                   />
                                 </Col>
                                 <Col xs="12">
-                                  <p className="small">{`*${addon.comment}`}</p>
+                                  <p className="small">{addon.comment ? `*${addon.comment}` : ''}</p>
                                 </Col>
                               </Row>
                             )
@@ -703,14 +963,32 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
                   <Row className="step">
                     <Col xs="12" className="formSection hide" id="step_4">
-                      <h1>Plaćanje</h1>
-                      <Row>
+                      <PaymentRoute
+                        partner={this.props.partner['name']}
+                        date={this.props.router['query']['date']}
+                        time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
+                        price={ this.state.price['total'] }
+                        deposit={ this.state.price['deposit'] }
+                        lang={this.props.lang}
+                        catering={ this.state.info['catering'] }
+                        addon={ this.state.info['addon'] }
+                        general={ this.state.info['general'] }
+                        mobile={ this.state.isMobile }
+
+                        handleSend={ this.handleLogDataSend }
+                        stage={ this.state.paymentRouteStage }
+                        errorMessages={ this.state.paymentRouteErrors }
+                        changeStage={ this.changePaymentRouteStage }
+                        closeAlert={ this.closePaymentRouteAlert }
+                      />
+                      {/*<Row>
+                        <Col xs="12"><h2>Plaćanje</h2></Col>
                          <Col xs="12">
                           <div className="middle">
                             <button className="next" onClick={() => this.openNextSection(4)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
-                      </Row>
+                      </Row>*/}
                     </Col>
                   </Row>
                   
@@ -760,6 +1038,19 @@ const mapStateToProps = (state) => ({
   reservationGeneral: state.ReservationReducer.reservationGeneral,
   reservationAdditional: state.ReservationReducer.reservationAdditional,
   reservationCatering: state.ReservationReducer.reservationCatering,
+
+  userLoginStart: state.UserReducer.userLoginStart,
+  userLoginError: state.UserReducer.userLoginError,
+  userLoginSuccess: state.UserReducer.userLoginSuccess,
+
+  userRegistrateStart: state.UserReducer.userRegistrateStart,
+  userRegistrateError: state.UserReducer.userRegistrateError,
+  userRegistrateSuccess: state.UserReducer.userRegistrateSuccess,
+
+  userPassChangeStart: state.UserReducer.userPassChangeStart,
+  userPassChangeError: state.UserReducer.userPassChangeError,
+  userPassChangeSuccess: state.UserReducer.userPassChangeSuccess,
+
 });
 
 
@@ -767,6 +1058,10 @@ const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
     changeSingleReservationField,
+    changeSingleUserField,
+    loginUser,
+    registrateUser,
+    changePasswordUser,
   },
   dispatch);
 };

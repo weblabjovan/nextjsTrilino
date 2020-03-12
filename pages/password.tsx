@@ -6,6 +6,8 @@ import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import Head from '../components/head';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import PasswordView from '../views/PasswordView'
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,6 +36,7 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
       	path={router.pathname} 
       	fullPath={ router.asPath }
       	page={ router.query['page'] } 
+        type={ router.query['type'] }
       	lang={ lang } />
     </div>
   )
@@ -54,9 +57,25 @@ Password.getInitialProps = async (ctx: any) => {
       ctx.res.writeHead(302, {Location: `/devLogin`});
       ctx.res.end();
     }
+
+    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+
+    const partnerLog = await isPartnerLogged(ctx);
+    if (partnerLog) {
+      ctx.res.writeHead(302, {Location: `/partnerProfile?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
+
+    const userLog = await isUserLogged(ctx);
+    if (userLog) {
+      ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
   }catch(err){
     console.log(err);
   }
+
+
 
 	if (link['queryObject']['type'] === 'partner') {
     try{
@@ -70,6 +89,19 @@ Password.getInitialProps = async (ctx: any) => {
     }
 		
 	}
+
+  if (link['queryObject']['type'] === 'user') {
+    try{
+      const res = await fetch(`${protocol}${req.headers.host}/api/users/get/?user=${link['queryObject']['page']}&encoded=true&type=verification`);
+      verifyObject = await res.json();
+      if (verifyObject['success']) {
+        error = false;
+      }
+    }catch(err){
+      console.log(err);
+    }
+    
+  }
   
   return { userAgent, error, verifyObject }
 }

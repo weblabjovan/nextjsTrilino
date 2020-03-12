@@ -77,7 +77,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'formatDate', 'toggleAdditional', 'checkTheBox', 'checkOfferBox', 'handleSearch'];
+    const bindingFunctions = ['handleInputChange', 'formatDate', 'toggleAdditional', 'checkTheBox', 'checkOfferBox', 'handleSearch', 'goToLocation'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -167,6 +167,12 @@ class SearchView extends React.Component <MyProps, MyState>{
   		this.props.getPartnersMultiple(data, link);
   	})
   	
+  }
+
+  goToLocation(link: string){
+    this.setState({ loader: true }, () => {
+      window.location.href = link;
+    })
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -495,8 +501,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                       const photoList = createDisplayPhotoListObject(item);
                       return(
                         <Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
-                          <a href={`/locations/${setUrlString(item['name'])}/?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`}>
-                          <div className="searchItem">
+                          <div className="searchItem" onClick={ () => this.goToLocation(`/locations/${setUrlString(item['name'])}/?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`)}>
                             <div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
                             <div className="info">
                               <h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
@@ -506,7 +511,6 @@ class SearchView extends React.Component <MyProps, MyState>{
                               <h6> <span className="icon star"></span>4.5</h6>
                             </div>
                           </div>
-                          </a>
                         </Col>
                       )
                     })

@@ -124,7 +124,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
-        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm?language=${this.props.lang}}&page=partner_registration`;
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm?language=${this.props.lang}&page=partner_registration`;
       }
       if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {
         this.setState({ regBtnDisabled: false });
@@ -385,7 +385,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                         />
 
     							<div className="middle marginSmall">
-    								<a href={`/terms?language=${this.props.lang}`}>{this.state.dictionary['uniTerms']}</a>
+    								<a href={`/terms?language=${this.props.lang}`} target="_blank">{this.state.dictionary['uniTerms']}</a>
     							</div>
 
     							<div className="middle">
