@@ -20,6 +20,7 @@ interface MyProps {
   path: string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -53,6 +54,8 @@ class PartnershipView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          user={ this.props.userIsLogged }
+          userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
 
 		    <div className="partnershipHead">

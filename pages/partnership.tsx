@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import { defineLanguage } from '../lib/helpers/generalFunctions';
 import { getLanguage } from '../lib/language';
 import Head from '../components/head';
@@ -12,10 +13,11 @@ import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
+  userIsLogged: boolean;
 }
 
 
-const Partnership : NextPage<Props> = ({ userAgent }) => {
+const Partnership : NextPage<Props> = ({ userAgent, userIsLogged }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -24,7 +26,7 @@ const Partnership : NextPage<Props> = ({ userAgent }) => {
   return (
     <div>
       <Head title={dictionary['headTitlePartnership']} description={dictionary['headDescriptionPartnership']}/>
-      <PartnershipView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } />
+      <PartnershipView userAgent={userAgent} path={router.pathname} fullPath={ router.asPath } lang={ lang } userIsLogged={ userIsLogged } />
     </div>
   )
 }
@@ -32,15 +34,29 @@ const Partnership : NextPage<Props> = ({ userAgent }) => {
 Partnership.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  let userIsLogged = false;
 
- const devLog = await isDevEnvLogged(ctx);
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const userLog = await isUserLogged(ctx);
+
+    if (userLog) {
+      userIsLogged = true;
+    }
+
+  }catch(err){
+    console.log(err);
   }
 
-  return { userAgent}
+ 
+
+  return { userAgent, userIsLogged }
 }
 
 export default withRedux(Partnership)

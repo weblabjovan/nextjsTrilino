@@ -23,6 +23,7 @@ const UserProfile : NextPage<Props> = ({ userAgent, link, token }) => {
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   const dictionary = getLanguage(lang);
+  const passChange = router.query['passChange'] === 'true' ? true : false;
 
   return (
     <div>
@@ -34,6 +35,7 @@ const UserProfile : NextPage<Props> = ({ userAgent, link, token }) => {
         lang={ lang }
         token={ token }
         link={ link }
+        passChange={ passChange }
       />
     </div>
   )

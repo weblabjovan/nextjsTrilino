@@ -7,6 +7,7 @@ import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isPartnerLogged, getPartners } from '../lib/helpers/specificPartnerFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -16,10 +17,11 @@ interface Props {
   link?: null | object;
   query?: object;
   partners?: Array<object>;
+  userIsLogged: boolean;
 }
 
 
-const Search : NextPage<Props> = ({ userAgent, query, partners }) => {
+const Search : NextPage<Props> = ({ userAgent, query, partners, userIsLogged }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -35,6 +37,7 @@ const Search : NextPage<Props> = ({ userAgent, query, partners }) => {
         fullPath={ router.asPath } 
         lang={ lang }
         partners={ partners }
+        userIsLogged={ userIsLogged }
         date={ query['date'] ? query['date'] : null }
         district={ query['district'] ? query['district'] : null }
         city={ query['city'] ? query['city'] : null } />
@@ -46,6 +49,7 @@ Search.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let partners = [];
+  let userIsLogged = false;
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -63,11 +67,18 @@ Search.getInitialProps = async (ctx: any) => {
       ctx.res.writeHead(302, {Location: `/?language=sr`});
       ctx.res.end();
     }
+
+    const userLog = await isUserLogged(ctx);
+
+    if (userLog) {
+      userIsLogged = true;
+    }
+
   }catch(err){
     console.log(err)
   }
 
-  return { userAgent, query: ctx['query'], partners }
+  return { userAgent, query: ctx['query'], partners, userIsLogged }
 }
 
 export default withRedux(Search)

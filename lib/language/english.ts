@@ -43,6 +43,7 @@ const english: LanguageInterface = {
 	navigationPartnership: "Partnership",
 	navigationContact: "Contact",
 	navigationTerms: 'Terms of service',
+	navigationProfile: 'User profile',
 
 	navigationPartnerGeneral: 'General',
 	navigationPartnerCatering: 'Catering',
@@ -73,6 +74,7 @@ const english: LanguageInterface = {
 	uniPartnerProgressLink: 'activation help',
 	uniDeposit: 'Deposit',
 	uniNotWorkingDay: 'Non-working day',
+	uniMap: 'Map',
 
 	emailPartnerRegisterTitle: ', welcome to Trilino',
 	emailPartnerRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. From now on you will be connected to thousands of people that are interested in your space and/or your services. All you have to do is to create your profile that will fairly present your business to visitors of our web site. Before that you should verify your registration and create your password. Click on the button bellow and follow the instractions. Good luck.',
@@ -348,9 +350,9 @@ const english: LanguageInterface = {
 	partnerProfilePreviewCateringDealsSub: 'Catering deals:',
 	partnerProfilePreviewCateringDealsPer: 'per person',
 	partnerProfilePreviewCateringDealsEmpty: 'Catering deals are not yet saved.',
-	partnerProfilePreviewCateringCardSub: 'Drink menu:',
+	partnerProfilePreviewCateringCardSub: 'Drink card:',
 	partnerProfilePreviewCateringCardEmpty: 'Drink menu is not yet saved.',
-	partnerProfilePreviewCateringCardPillarNon: 'Nonalcoholic drinks',
+	partnerProfilePreviewCateringCardPillarNon: 'Nonalcohol drinks',
 	partnerProfilePreviewCateringCardPillarNonEmpty: 'Nonalcoholic drinks are not yet saved.',
 	partnerProfilePreviewCateringCardPillarAlco: 'Alcoholic dinks',
 	partnerProfilePreviewCateringCardPillarAlcoEmpty: 'Alcoholic drinks are not yet saved.',
@@ -576,6 +578,9 @@ const english: LanguageInterface = {
 	reservationAlertGeneralKidsSize: 'Number of expected kid guests is larger than maximum capacity of this room. Please change number of expected kid guests.',
 	reservationAlertCatering: 'Field - Number of guests wanting this deal - expects a number value, please insert number value in highlighted field.',
 	reservationAlertCateringTime: 'Catering is not available for events with such short notice. Please delete all values from highlighted fields.',
+	reservationPaymentLoginTitle: 'You need to login before proceeding to payment.',
+	reservationPaymentRegistrationTitle: 'If you are not Trilino user, you have to register here and than you will proceed to payment.',
+	reservationPaymentPasswordTitle: 'Only one step left. To finish your registration you need to create your user password, we have sent you an email with the security code that you need to input in the field bellow. Please, check your email.',
 
 
 

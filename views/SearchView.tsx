@@ -41,6 +41,7 @@ interface MyProps {
   district: null | string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -205,6 +206,8 @@ class SearchView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          user={ this.props.userIsLogged }
+          userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="searchWrapper">
     			<div className="filter">

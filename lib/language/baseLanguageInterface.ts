@@ -40,6 +40,8 @@ export default interface LanguageInterface {
 	navigationFaq: string;
 	navigationPartnership: string;
 	navigationContact: string;
+	navigationTerms: string;
+	navigationProfile: string;
 
 	navigationPartnerGeneral: string;
 	navigationPartnerCatering: string;
@@ -48,7 +50,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
-	navigationTerms: string;
+	
 	
 	uniCity: string;
 	uniDistrict: string;
@@ -71,6 +73,7 @@ export default interface LanguageInterface {
 	uniPartnerProgressLink: string;
 	uniDeposit: string;
 	uniNotWorkingDay: string;
+	uniMap: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -568,7 +571,9 @@ export default interface LanguageInterface {
 	reservationAlertGeneralKidsSize: string;
 	reservationAlertCatering: string;
 	reservationAlertCateringTime: string;
-
+	reservationPaymentLoginTitle: string;
+	reservationPaymentRegistrationTitle: string;
+	reservationPaymentPasswordTitle: string;
 
 	
 	loginTitle: string;

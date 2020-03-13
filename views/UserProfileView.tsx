@@ -29,6 +29,7 @@ interface MyProps {
   lang: string;
   link?: object;
   token?: string | undefined;
+  passChange: boolean;
 };
 interface MyState {
 	language: string;
@@ -37,7 +38,7 @@ interface MyState {
   logString: string;
   alertOpen: boolean;
   loader: boolean;
-  loginTry: number;
+  passwordChange: boolean;
 };
 
 class UserProfileView extends React.Component <MyProps, MyState>{
@@ -49,12 +50,16 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     logString: '',
     alertOpen: false,
     loader: false,
-    loginTry: 0,
+    passwordChange: this.props.passChange,
   };
 
   logout() {
     unsetCookie('trilino-user-token');
     window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?language=${this.props.lang}`;
+  }
+
+  closePassChangeAlert(){
+    this.setState({ passwordChange: false });
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -84,6 +89,12 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     		<div className="registrationWrapper">
           <Container>
               <Row>
+                <Col xs='12'>
+                  <Alert color="success" isOpen={ this.state.passwordChange } toggle={() => this.closePassChangeAlert()} >
+                    <h3>Vaša lozinka je uspešno promenjena</h3>
+                  </Alert>
+                </Col>
+                
                 <Col xs='12'>
                   <div className="box">
                     <h2>Ovo je stranica user profila</h2>

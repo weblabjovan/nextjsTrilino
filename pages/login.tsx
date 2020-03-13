@@ -42,20 +42,24 @@ const Login : NextPage<Props> = ({ userAgent, link }) => {
 Login.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-
-  const devLog = await isDevEnvLogged(ctx);
-
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
-
-  const userLog = await isUserLogged(ctx);
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
-  if (userLog) {
-    ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
-    ctx.res.end();
+  try{
+    const devLog = await isDevEnvLogged(ctx);
+
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const userLog = await isUserLogged(ctx);
+
+    if (userLog) {
+      ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
+  }catch(err){
+    console.log(err)
   }
 
   

@@ -42,6 +42,7 @@ const serbian: LanguageInterface = {
 	navigationPartnership: "Saradnja",
 	navigationContact: "Kontakt",
 	navigationTerms: 'Uslovi korišćenja',
+	navigationProfile: 'Korisnički profil',
 
 	navigationPartnerGeneral: 'Osnovno',
 	navigationPartnerCatering: 'Hrana i piće',
@@ -72,6 +73,7 @@ const serbian: LanguageInterface = {
 	uniPartnerProgressLink: 'pomoć za aktivaciju',
 	uniDeposit: 'Depozit',
 	uniNotWorkingDay: 'Neradan dan',
+	uniMap: 'Mapa',
 
 	emailPartnerRegisterTitle: ', dobrodošli u Trilino',
 	emailPartnerRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa hiljadama ljudi koji su zainteresovani za vaš prostor i vaše usluge. Sve što treba da uradite je da kreirate vaš profil koji će adekvatno predstaviti ono što možete da ponudite posetiocima našeg sajta. Ali pre toga je potrebno je da verifikujete vašu registraciju i kreirate vašu lozinku. Kliknite na dugme u nastavku i ispratite sledeća uputstva. Srećno.',
@@ -575,6 +577,9 @@ const serbian: LanguageInterface = {
 	reservationAlertGeneralKidsSize: 'Očekivani broj dece prevazilazi maksimalni kapacitet dece ove sale. Molimo vas promenite broj očekivani broj dece.',
 	reservationAlertCatering: 'Broj gostiju koji želi paket mora biti broj. Molimo vas upišite broj u označeno polje.',
 	reservationAlertCateringTime: 'Ketering nije dostupan u ovako bliskom vremenskom periodu. Molimo vas obrišite brojeve zainteresovanih gostiju iz označenih polja.',
+	reservationPaymentLoginTitle: 'Pre nego što nastavite na plaćanje potrebno je da se prijavite.',
+	reservationPaymentRegistrationTitle: 'Ukoliko niste Trilino korisnik, prvo se registrujte a potom možete nastaviti na plaćanje.',
+	reservationPaymentPasswordTitle: 'Još samo ovaj korak i možete nastaviti na plaćanje. Da biste završili registraciju potrebno je da kreirate lozinku, na email vam je poslat sigurnosni kod koji je potrebno upisati u polje u nastavku. Molimo vas proverite vaš email.',
 
 
 

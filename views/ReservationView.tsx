@@ -50,6 +50,7 @@ interface MyProps {
   partner: object;
   token: string;
   link: object;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -708,6 +709,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          user={ this.props.userIsLogged }
+          userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="reservationWrapper">
           <Container>
@@ -981,18 +984,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         changeStage={ this.changePaymentRouteStage }
                         closeAlert={ this.closePaymentRouteAlert }
                       />
-                      {/*<Row>
-                        <Col xs="12"><h2>Plaćanje</h2></Col>
-                         <Col xs="12">
-                          <div className="middle">
-                            <button className="next" onClick={() => this.openNextSection(4)} >{this.state.dictionary['uniSave']}</button>
-                          </div>
-                        </Col>
-                      </Row>*/}
                     </Col>
                   </Row>
-                  
                 </Col>
+                
                 <Col xs='12' lg="5" className="hidden-sm">
                   <InfoFix
                     partner={this.props.partner['name']}

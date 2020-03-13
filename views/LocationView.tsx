@@ -38,6 +38,7 @@ interface MyProps {
   lang: string;
   partner: object;
   date: string;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -178,6 +179,8 @@ class LocationView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
+    			user={ this.props.userIsLogged }
+    			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="location">
 	    		<GalleryModal 
@@ -682,7 +685,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 
 	          <Row className="mapScreen">
-	          	<Col xs="12"><h4>Mapa</h4></Col>
+	          	<Col xs="12"><h4>{this.state.dictionary['uniMap']}</h4></Col>
 	          	<Col>
 	          		<SimpleMap
 	          			lat={this.props.partner['map'] ? this.props.partner['map']['lat'] : 0}

@@ -17,10 +17,11 @@ interface Props {
   partner: object;
   token: string;
   link: object;
+  userIsLogged: boolean;
 }
 
 
-const Reservation : NextPage<Props> = ({ userAgent, partner, token, link }) => {
+const Reservation : NextPage<Props> = ({ userAgent, partner, token, link, userIsLogged }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -38,6 +39,7 @@ const Reservation : NextPage<Props> = ({ userAgent, partner, token, link }) => {
         partner={ partner }
         token={ token }
         link={ link }
+        userIsLogged={ userIsLogged }
       />
     </div>
   )
@@ -49,6 +51,7 @@ Reservation.getInitialProps = async (ctx) => {
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let result = { partner: null};
   let token = '';
+  let userIsLogged = false;
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -85,6 +88,7 @@ Reservation.getInitialProps = async (ctx) => {
 
     if (userLog) {
       token = getUserToken(ctx);
+      userIsLogged = true;
     }
 
   }catch(err){
@@ -93,7 +97,7 @@ Reservation.getInitialProps = async (ctx) => {
   
   
 
-  return { userAgent, partner: result['partner'], token, link }
+  return { userAgent, partner: result['partner'], token, link, userIsLogged }
 }
 
 export default withRedux(Reservation)

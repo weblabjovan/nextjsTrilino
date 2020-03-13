@@ -4,6 +4,7 @@ import { withRedux } from '../../lib/redux';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../../lib/helpers/specificAdminFunctions';
 import { getSinglePartner } from '../../lib/helpers/specificPartnerFunctions';
+import { isUserLogged } from '../../lib/helpers/specificUserFunctions';
 import LocationView from '../../views/LocationView';
 import Head from '../../components/head';
 import pages from '../../lib/constants/pages';
@@ -13,10 +14,11 @@ import '../../style/style.scss';
 interface Props {
   userAgent?: string;
   partner?: object;
+  userIsLogged: boolean;
 }
 
 
-const Location : NextPage<Props> = ({ userAgent, partner }) => {
+const Location : NextPage<Props> = ({ userAgent, partner, userIsLogged }) => {
 
   const router = useRouter();
   let lang = 'sr';
@@ -43,6 +45,7 @@ const Location : NextPage<Props> = ({ userAgent, partner }) => {
         lang={ lang }
         partner={ partner }
         date={ date }
+        userIsLogged={ userIsLogged }
       />
     </div>
   )
@@ -52,32 +55,46 @@ Location.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let result = { partner: null};
-	const devLog = await isDevEnvLogged(ctx);
+  let userIsLogged = false;
 
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
+  try{
+    const devLog = await isDevEnvLogged(ctx);
 
-  const partnerRes = await getSinglePartner(ctx, true);
-  if (partnerRes['status'] === 200) {
-    result = await partnerRes.json();
-    if (!result['partner']) {
-      ctx.res.writeHead(302, {Location: `/?language=sr`});
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
       ctx.res.end();
-    }else{
-      if (!result['partner']['terms']) {
+    }
+
+    const partnerRes = await getSinglePartner(ctx, true);
+    if (partnerRes['status'] === 200) {
+      result = await partnerRes.json();
+      if (!result['partner']) {
         ctx.res.writeHead(302, {Location: `/?language=sr`});
         ctx.res.end();
+      }else{
+        if (!result['partner']['terms']) {
+          ctx.res.writeHead(302, {Location: `/?language=sr`});
+          ctx.res.end();
+        }
       }
+    }else{
+      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.end();
     }
-  }else{
-    ctx.res.writeHead(302, {Location: `/?language=sr`});
-    ctx.res.end();
+
+    const userLog = await isUserLogged(ctx);
+
+    if (userLog) {
+      userIsLogged = true;
+    }
+
+  }catch(err){
+    console.log(err);
   }
+	
 
 
-  return { userAgent, partner: result['partner'] }
+  return { userAgent, partner: result['partner'], userIsLogged }
 }
 
 export default withRedux(Location)

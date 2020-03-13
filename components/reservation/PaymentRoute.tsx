@@ -43,7 +43,7 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         		this.props.stage === 'login'
         		?
         		<Col xs="12">
-        			<h4 className="smallName">Rezervaciju mogu napraviti samo prijavljeni korisnici. Molimo vas prijavite se.</h4>
+        			<h4 className="smallName">{this.state.dictionary['reservationPaymentLoginTitle']}</h4>
         			<Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={ this.props.closeAlert } >
                 <p hidden={ !this.props.errorMessages['fields']['logEmail']} >{ this.state.dictionary['userLoginAlertLogEmail'] }</p>
                 <p hidden={ !this.props.errorMessages['fields']['password'] }>{ this.state.dictionary['userLoginAlertPassword'] }</p>
@@ -66,7 +66,7 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         		this.props.stage === 'registration'
         		?
         		<Col xs="12">
-        			<h4 className="smallName">Registrujte se kao novi korisnik i napravite rezervaciju.</h4>
+        			<h4 className="smallName">{this.state.dictionary['reservationPaymentRegistrationTitle']}</h4>
 
         			<Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={this.props.closeAlert} >
                 <p hidden={ !this.props.errorMessages['fields']['firstName']} >{ this.state.dictionary['userLoginAlertFirst'] }</p>
@@ -96,7 +96,7 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         		this.props.stage === 'password'
         		?
         		<Col xs="12">
-        			<h4 className="smallName">Na email su vam poslati podaci za verifikaciju vaše registracije. Proverite vaš email, verifikujte registraciju i nastavite na plaćanje</h4>
+        			<h4 className="smallName">{this.state.dictionary['reservationPaymentPasswordTitle']}</h4>
         			<p className="additionalExplanation">{this.state.dictionary['passwordExplanation']}</p>
 
         			<Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={this.props.closeAlert} >

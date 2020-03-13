@@ -35,6 +35,7 @@ interface MyProps {
   lang: string;
   verifyObject: object;
   error: boolean;
+  change: boolean;
 };
 interface MyState {
 	language: string;
@@ -202,7 +203,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
     if (this.props.userPassChangeSuccess && !prevProps.userPassChangeSuccess && !this.props.userPassChangeStart) {
       setCookie(this.props.userPassChangeSuccess['token'],'trilino-user-token', 10);
       const link = setUpLinkBasic(window.location.href);
-      window.location.href = `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}`;
+      window.location.href = this.props.change ? `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}&passChange=true` : `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}`;
     }
   }
 

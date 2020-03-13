@@ -155,7 +155,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		  				const templateId = 4;
 
 		  				const page = decodeId(generateString, user._id);
-		  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=user`;
+		  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=user&change=true`;
 
 		  				const params = { title: `${myDecrypt(user.firstName)} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
 		  				const emailObj = { sender, to, bcc, templateId, params };

@@ -25,6 +25,7 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   const dictionary = getLanguage(lang);
+  const change = router.query['change'] ? true : false;
 
   return (
     <div>
@@ -37,7 +38,8 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
       	fullPath={ router.asPath }
       	page={ router.query['page'] } 
         type={ router.query['type'] }
-      	lang={ lang } />
+      	lang={ lang }
+        change={ change } />
     </div>
   )
 }
