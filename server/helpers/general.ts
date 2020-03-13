@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Keys from '../keys';
+import crypto from 'crypto';
 import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
@@ -41,15 +42,14 @@ export const encodeId = (id: string): string => {
 
 export const setToken = (type: string, id: string): object => {
   let token = {};
-  if (type === 'partner' || type === 'admin') {
+  if (type === 'partner' || type === 'admin' || type === 'user') {
     token = jwt.sign({
       iss: 'Trilino',
       sub: id,
       iat: new Date().getTime(),
-      exp: new Date().setDate(new Date().getDate() + 7),
+      exp: new Date().setDate(new Date().getDate() + 10),
     }, Keys.JWT_SECRET);
   }
-
   return token;
 }
 
@@ -515,4 +515,22 @@ export const getNextTerm = (partner: object, room: string | string[], from: stri
   }
 
   return null;
+}
+
+export const myEncrypt = (text: string): string => {
+  const algorithm = 'aes-256-cbc';
+
+  const cipher = crypto.createCipher(algorithm, Keys.CRYPTO_PASSWORD);
+  let crypted = cipher.update(text,'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+export const myDecrypt = (text: string): string => {
+  const algorithm = 'aes-256-cbc';
+
+  const decipher = crypto.createDecipher(algorithm, Keys.CRYPTO_PASSWORD);
+  let dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return dec;
 }

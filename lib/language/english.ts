@@ -33,6 +33,8 @@ const english: LanguageInterface = {
 	headDescriptionSearch: "Trilino - search through locations that are specialized in organizing kids birthdays",
 	headTitleTerms: "Trilino - Terms and Conditions",
 	headDescriptionTerms: "Trilino - Terms and Conditions of Trilino service",
+	headTitleUserProfile: "Trilino - User profile",
+	headDescriptionUserProfile: "Trilino - User profile for tracking down reservations for kids birthdays",
 
 
 	navigationLogin: "Login",
@@ -41,6 +43,7 @@ const english: LanguageInterface = {
 	navigationPartnership: "Partnership",
 	navigationContact: "Contact",
 	navigationTerms: 'Terms of service',
+	navigationProfile: 'User profile',
 
 	navigationPartnerGeneral: 'General',
 	navigationPartnerCatering: 'Catering',
@@ -71,6 +74,7 @@ const english: LanguageInterface = {
 	uniPartnerProgressLink: 'activation help',
 	uniDeposit: 'Deposit',
 	uniNotWorkingDay: 'Non-working day',
+	uniMap: 'Map',
 
 	emailPartnerRegisterTitle: ', welcome to Trilino',
 	emailPartnerRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. From now on you will be connected to thousands of people that are interested in your space and/or your services. All you have to do is to create your profile that will fairly present your business to visitors of our web site. Before that you should verify your registration and create your password. Click on the button bellow and follow the instractions. Good luck.',
@@ -80,6 +84,9 @@ const english: LanguageInterface = {
 	emailPartnerForgotPassText: 'You have informed us that you have forgot your password and you can not access your profile. Do not worry, by clicking on the button bellow you will be able to set up a new password and safely access your profile. Good luck.',
 	emailPartnerForgotPassCode: 'Safety code:',
 	emailPartnerForgotPassButton: 'Change password here',
+	emailUserRegisterTitle: ', you have become new Trilino user',
+	emailUserRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. Now you are connected to the services that can help you organize a perfect birthday party for your kid. You are few clicks away from reserving playrooms, cetering, decoration and animation that your kids deserve. Before that you just need to verify your registration (using security code) and create your profile password. Click on the link bellow and do that. Good luck.',
+
 
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
@@ -170,8 +177,9 @@ const english: LanguageInterface = {
 	emailVerificationPartnerLogTitle: 'Your registration is verified and you password is set',
 	emailValidationPartnerLogArticle: 'You have probably clicked on an older link that was part of the registration process. Please, login to your partner account and continue with using Trilino partner profile.',
 	emailVerificationPartnerLogButton: 'Login',
-	emailVerificationPartnerErrorTitle: 'There is a problem with this link',
+	emailVerificationPartnerErrorTitle: 'Page that you are trying to reach does not exist',
 	emailValidationPartnerErrorArticle: 'The link that you are trying to use is not valid. Please, contact your partner support for more information and help.',
+	emailValidationUserErrorArticle:'he link that you are trying to use is not valid. Please, double check this link and try to access it in a few minutes.',
 	emailVerificationPartnerErrorButton: 'Partner Support',
 
 	confirmPartnerRegTitle: 'Congrats you successfully registrated as a partner',
@@ -181,12 +189,14 @@ const english: LanguageInterface = {
 	passwordExplanation: 'Type in your password in the second field and than confirm it in the third field. Your password needs to be between 8 and 16 characters long, containing at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character. Content of second and third field should match.',
 	passwordUpdateTitle: 'Your new password has been saved',
 	passwordUpdateExplanation: 'IF you want to access your profile you can click on the link bellow and login using your new password.',
+	passwordUpdateUserExplanation: 'IF you want to access your profile you can click on the user icon in the upper left corner of the page.',
 	passwordAlertPass: 'Password is required field  and needs to be between 8 and 16 characters long, containing at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character. Please insert valid password.',
 	passwordAlertCode: 'Safety code is required field. Please insert valid safety code that has been sent to your email.',
 	passwordAlertConfirm: 'Password confirmation is required field and the content of this field has to be same as the content of the password field. Please confirm your password.',
 
 	passwordRequestTitle: 'Password change',
 	passwordRequestExplanation: 'Input your tax identification number and your contact email. If the input data is valid we will send you security code and link for creating your new password.',
+	passwordRequestUserExplanation: 'Insert your email. If the input data is valid we will send you security code and link for creating your new password. Only registrated users can change password.',
 	passwordUpdateRequestTitle: 'Succefully sent',
 	passwordUpdateRequestExplanation: 'Data that you need to change your current password are sent to your email. Please, check your email in few minutes.',
 	passwordUpdateRequestError: 'You are thying to change password as a logged user or link in the address bar is not right. Please sign out and check the link in your address bar.',
@@ -196,7 +206,7 @@ const english: LanguageInterface = {
 	partnerProfileGeneralDescription: 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.  For more information on how to fill out this section visit ',
 	partnerProfileGeneralItemDescription: 'Venue description:',
 	partnerProfileGeneralSubSpace: 'Venue',
-	partnerProfileGeneralItemDescriptionPlaceholder: '288 characters allowed',
+	partnerProfileGeneralItemDescriptionPlaceholder: '450 characters allowed',
 	partnerProfileGeneralItemAddress: 'Venue address:',
 	partnerProfileGeneralItemAddressPlaceholder: 'address',
 	partnerProfileGeneralItemCity: 'City:',
@@ -340,9 +350,9 @@ const english: LanguageInterface = {
 	partnerProfilePreviewCateringDealsSub: 'Catering deals:',
 	partnerProfilePreviewCateringDealsPer: 'per person',
 	partnerProfilePreviewCateringDealsEmpty: 'Catering deals are not yet saved.',
-	partnerProfilePreviewCateringCardSub: 'Drink menu:',
+	partnerProfilePreviewCateringCardSub: 'Drink card:',
 	partnerProfilePreviewCateringCardEmpty: 'Drink menu is not yet saved.',
-	partnerProfilePreviewCateringCardPillarNon: 'Nonalcoholic drinks',
+	partnerProfilePreviewCateringCardPillarNon: 'Nonalcohol drinks',
 	partnerProfilePreviewCateringCardPillarNonEmpty: 'Nonalcoholic drinks are not yet saved.',
 	partnerProfilePreviewCateringCardPillarAlco: 'Alcoholic dinks',
 	partnerProfilePreviewCateringCardPillarAlcoEmpty: 'Alcoholic drinks are not yet saved.',
@@ -568,6 +578,9 @@ const english: LanguageInterface = {
 	reservationAlertGeneralKidsSize: 'Number of expected kid guests is larger than maximum capacity of this room. Please change number of expected kid guests.',
 	reservationAlertCatering: 'Field - Number of guests wanting this deal - expects a number value, please insert number value in highlighted field.',
 	reservationAlertCateringTime: 'Catering is not available for events with such short notice. Please delete all values from highlighted fields.',
+	reservationPaymentLoginTitle: 'You need to login before proceeding to payment.',
+	reservationPaymentRegistrationTitle: 'If you are not Trilino user, you have to register here and than you will proceed to payment.',
+	reservationPaymentPasswordTitle: 'Only one step left. To finish your registration you need to create your user password, we have sent you an email with the security code that you need to input in the field bellow. Please, check your email.',
 
 
 
@@ -712,13 +725,44 @@ const english: LanguageInterface = {
 	termsDisputeText_1: 'Sve sporove koji mogu da nastanu u vezi sa, ili iz ovih UK, Uslova prodaje i Izjave o privatnosti, ili u vezi sa, ili zbog korišćenja trilino.com internet stranice, između Trilino -a i Korisnika, Trilino i Korisnik pokušaće da reše mirnim putem. Ukoliko Trilino i Korisnik ne uspeju da reše spor mirnim putem, za vođenje spora biće nadležan Treći osnovni sud u Beogradu, ukoliko je Korisnik fizičko lice, odnosno Privredni sud u Beogradu, ukoliko je Korisnik pravno lice.',
 
 
+	userLoginRegTitle: 'User registration',
+	userLoginRegDescription: 'Fill out the form with needed data and become Trilino user.',
+	userLoginRegFirstLabel: '*First name:',
+	userLoginRegFirstPlaceholder: 'name',
+	userLoginRegLastLabel: '*Last name:',
+	userLoginRegLastPlaceholder: 'name',
+	userLoginRegEmailLabel: '*Email:',
+	userLoginRegEmailPlaceholder: 'email',
+	userLoginRegPhoneLabel: '*Phone number:',
+	userLoginRegPhonePlaceholder: 'number',
+	userLoginRegPhonecodePlaceholder: 'ctr code',
+	userLoginLogTitle: 'User login',
+	userLoginLogDescription: 'Insert email and password with which you have registered.',
+	userLoginLogPasswordLabel: '*Password:',
+	userLoginLogPasswordPlaceholder: 'password',
+	userLoginAlertFirst: 'First name is requered field. Please insert your first name.',
+	userLoginAlertLast: 'Last name is requered field. Please insert your last name.',
+	userLoginAlertEmail: 'Email is requered field. Please insert your email.',
+	userLoginAlertPhonecode: 'Country code is requered field. Please choose your country code.',
+	userLoginAlertPhone: 'Phone number is requered field. Please insert your phone number.',
+	userLoginAlertTerms: 'You can not register if you do not agree to our terms and conditions. Please,agree to our terms and conditions.',
+	userLoginAlertLogEmail: 'Email is requered field. Please insert your email.',
+	userLoginAlertPassword: 'Password is requered field. Please insert your password.',
+	userLoginAlertDouble: 'USer with this email is already registered. Please, go to login.',
+	userLoginRegConfirmTitle: 'Your registration was successful',
+	userLoginRegConfirmDescription: 'Congratulations your registration was successful, we have sent you a confirmation email with unique safty code that will help you create your password. Just follow the link in the email and set up your password by using provided security code.',
+	userLoginRegConfirmEmail: 'Please, check your email in few minutes.',
+	userLoginLinksReg_1: 'If you are alredy Trilino user, please ',
+	userLoginLinksReg_2: 'login',
+	userLoginLinksLog_1: 'If you are not Trilino user yet, and you will like to become one, please ',
+	userLoginLinksLog_2: 'register',
 
 
 	//////////////////////API
 
 
 
-	apiPartnerSaveCode2: 'Partner with this Tax Number already exists in our records. Please procees to login.',
+	apiPartnerSaveCode2: 'Partner with this Tax Number already exists in our records. Please proceed to login.',
 	apiPartnerSaveCode5: 'Entered data is not valid, please try again.',
 
 	apiPartnerGetCode2: 'There is no partner with requested id.',
@@ -735,6 +779,19 @@ const english: LanguageInterface = {
 
 	apiPartnerAuthCode1: 'Valid token provided.',
 	apiPartnerAuthCode2: 'No authorization token.',
+
+
+
+	apiUserSaveCode2: 'User with this email already exists in our records. Please proceed to login.',
+	apiUserSaveCode5: 'Entered data is not valid, please try again.',
+
+	apiUserUpdateVeriCode2: 'There is no user with requested id.',
+	apiUserUpdatePassCode3: 'Your security code is not matching your email. Maybe you are using old security code which is not valid anymore.',
+	apiUserUpdateReqPassCode3: 'User with this email was not found. Please check the information you have inputted.',
+
+	apiUserLoginCode2: 'Provided password is not valid for this user.',
+	apiUserLoginCode3: 'There is no user with requested email.',
+	apiUserLoginCode5: 'This user is not completly verified. Please verify your registration or change password',
 }
 
 export default english;

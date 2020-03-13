@@ -13,6 +13,8 @@ type MyProps = {
   partnership: string;
   contact: string;
   terms: string;
+  user?: boolean;
+  userProfile?: string;
   // using `interface` is also ok
 };
 type MyState = {
@@ -71,6 +73,15 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   <NavItem>
                     <NavLink href="/">{this.props.contact}</NavLink>
                   </NavItem>
+                  {
+                    this.props.user
+                    ?
+                    <NavItem>
+                      <NavLink href={`/userProfile?language=${this.props.language.toLowerCase()}`}>{this.props.userProfile}</NavLink>
+                    </NavItem>
+                    :
+                    null
+                  }
 
                   <hr/>
 
@@ -91,11 +102,20 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
 	          				<img src="/static/logo_top.png" alt="trilino-logo"></img>
 	          			</div>
           			</NavbarBrand>
-                <div className="navlog">
-                  <a href={`/login?language=${this.props.language.toLowerCase()}`}> 
-                    <img src="/static/userIcon.jpg" alt="trilino-user-profile" />
-                  </a>
-                </div>
+                {
+                  this.props.user
+                  ?
+                  (
+                    <div className="navlog">
+                      <a href={`/userProfile?language=${this.props.language.toLowerCase()}`}> 
+                        <img src="/static/userIcon.jpg" alt="trilino-user-profile" />
+                      </a>
+                    </div>
+                  )
+                  :
+                  null
+                }
+                
                 <UncontrolledButtonDropdown>
                   <DropdownToggle caret>
                     { this.props.language }

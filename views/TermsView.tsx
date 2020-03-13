@@ -13,6 +13,7 @@ type MyProps = {
   path: string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
   // using `interface` is also ok
 };
 interface MyState {
@@ -43,6 +44,8 @@ export default class PartnerHelpen extends React.Component <MyProps, MyState> {
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
+    			user={ this.props.userIsLogged }
+    			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
 				<Container>
 					<Row>

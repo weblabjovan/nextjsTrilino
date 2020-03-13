@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import PlainInput from '../components/form/input';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
-import { setUserLanguage } from '../actions/user-actions';
+import { setUserLanguage, changePasswordUser } from '../actions/user-actions';
 import { changePasswordPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, setCookie } from '../lib/helpers/generalFunctions';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -18,18 +18,24 @@ interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
   page: string;
+  type: string;
   changeSinglePartnerField(field: string, value: any): any;
   changePasswordPartner(param: string, data: object, link: object): object;
+  changePasswordUser(param: string, data: object, link: object): object;
   setUserLanguage(language: string): string;
   partnerPassChangeStart: boolean;
   partnerPassChangeError: boolean | object;
   partnerPassChangeSuccess: null | object;
+  userPassChangeStart: boolean;
+  userPassChangeError: boolean | object;
+  userPassChangeSuccess: null | number;
   userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
   verifyObject: object;
   error: boolean;
+  change: boolean;
 };
 interface MyState {
 	language: string;
@@ -51,7 +57,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'handlePassChange', 'handleConfirmChange', 'handleCodeChange', 'sendPass', 'validatePassData', 'closeAlert', 'handleSavePassword' ];
+    const bindingFunctions = ['handleInputChange', 'handlePassChange', 'handleConfirmChange', 'handleCodeChange', 'sendPass', 'validatePassData', 'closeAlert', 'handleSavePassword' , 'handleSaveUserPassword', 'sendUserPass'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -150,8 +156,29 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
   	}
   }
 
+  sendUserPass(){
+    if (!this.state.errorMessages['show']) {
+      this.setState({ loader: true }, () => {
+        const link = setUpLinkBasic(window.location.href);
+        const data = {
+          id: this.props.page,
+          code: this.state.code,
+          password: this.state.password,
+          confirmation: this.state.confirmation,
+          language: this.props.lang,
+          token: true,
+        }
+        this.props.changePasswordUser('_id', data, link);
+      });
+    }
+  }
+
   handleSavePassword(){
   	this.validatePassData(this.sendPass);
+  }
+
+  handleSaveUserPassword(){
+    this.validatePassData(this.sendUserPass);
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
@@ -164,6 +191,19 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
     	errorCopy['show'] = true;
     	errorCopy['fields']['base'] = true;
     	this.setState({loader: false, errorMessages: errorCopy, baseErrorMessage: this.props.partnerPassChangeError['message'] });
+    }
+
+    if (!this.props.userPassChangeStart && this.props.userPassChangeError && !prevProps.userPassChangeError) {
+      const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
+      errorCopy['show'] = true;
+      errorCopy['fields']['base'] = true;
+      this.setState({loader: false, errorMessages: errorCopy, baseErrorMessage: this.props.userPassChangeError['message'] });
+    }
+
+    if (this.props.userPassChangeSuccess && !prevProps.userPassChangeSuccess && !this.props.userPassChangeStart) {
+      setCookie(this.props.userPassChangeSuccess['token'],'trilino-user-token', 10);
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = this.props.change ? `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}&passChange=true` : `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}`;
     }
   }
 
@@ -190,6 +230,8 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
     		<div className="registrationWrapper">
     				<Container>
     				{
+              this.props.type === 'partner'
+              ?
     					(!this.props.error && !this.state.update) 
     					?
     					(
@@ -270,6 +312,94 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
               ) 
               : 
               null
+              :
+              this.props.type === 'user'
+              ?
+              (!this.props.error && !this.state.update)
+              ?
+              (
+                <Row>
+                  <Col xs='12'>
+                    <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert}  >
+                      <p hidden={ !this.state.errorMessages['fields']['base'] } >{this.state.baseErrorMessage}</p>
+                      <p hidden={ !this.state.errorMessages['fields']['code'] } >{this.state.dictionary['passwordAlertCode']}</p>
+                      <p hidden={ !this.state.errorMessages['fields']['pass'] } >{this.state.dictionary['passwordAlertPass']}.</p>
+                      <p hidden={ !this.state.errorMessages['fields']['confirm'] } >{this.state.dictionary['passwordAlertConfirm']}</p>
+                    </Alert>
+                    <div className="box">
+                      <h2>{this.state.dictionary['passwordTitle']}</h2>
+                      <p className="small">{this.state.dictionary['passwordExplanation']}</p>
+                      <PlainInput 
+                        placeholder={this.state.dictionary['uniSafetyCode']} 
+                        className={`${this.state.errorMessages['fields']['code'] ? "borderWarrning" : ''} logInput`} 
+                        onChange={this.handleCodeChange} 
+                        value={this.state.code}
+                        type="text"
+                        max={ 16 } />
+                      <PlainInput 
+                        placeholder={this.state.dictionary['uniPass']} 
+                        className={`${this.state.errorMessages['fields']['pass'] ? "borderWarrning" : ''} logInput`} 
+                        onChange={this.handlePassChange} 
+                        value={this.state.password}
+                        type="password"
+                        max={ 16 } />
+
+                      <PlainInput 
+                        placeholder={this.state.dictionary['uniConfirmPass']} 
+                        className={`${this.state.errorMessages['fields']['confirm'] ? "borderWarrning" : ''} logInput`} 
+                        onChange={this.handleConfirmChange} 
+                        value={this.state.confirmation}
+                        type="password"
+                        max={ 16 } />
+
+                      <div className="middle">
+                        <Button color="success" onClick={this.handleSaveUserPassword} >{this.state.dictionary['uniSave']}</Button>
+                      </div>
+
+                    </div>
+
+                  </Col>
+                </Row>
+              )
+              : 
+              (!this.props.error && this.state.update) 
+              ? 
+              (
+                <div className="confirmRegistration">
+                  <Row>
+                    <Col xs='12'>
+                      <h2 className="middle">{this.state.dictionary['passwordUpdateTitle']}</h2>
+                      <p className="middle">{this.state.dictionary['passwordUpdateUserExplanation']}</p>
+                    </Col>
+                  </Row>
+                </div>
+              )
+              :
+              this.props.error
+              ?
+              (
+                <div className="confirmRegistration">
+                  <Row>
+                    <Col xs='12'>
+                      <h2 className="middle">{this.state.dictionary['emailVerificationPartnerErrorTitle']}</h2>
+                      <p className="middle">{this.state.dictionary['emailValidationUserErrorArticle']}</p>
+                    </Col>
+                  </Row>
+                </div>
+              )
+              :
+              null
+              :
+              (
+                <div className="confirmRegistration">
+                  <Row>
+                    <Col xs='12'>
+                      <h2 className="middle">{this.state.dictionary['emailVerificationPartnerErrorTitle']}</h2>
+                      <p className="middle">{this.state.dictionary['emailValidationUserErrorArticle']}</p>
+                    </Col>
+                  </Row>
+                </div>
+              )
     				}
     					
     				</Container>
@@ -301,6 +431,10 @@ const mapStateToProps = (state) => ({
   partnerPassChangeError: state.PartnerReducer.partnerPassChangeError,
   partnerPassChangeSuccess: state.PartnerReducer.partnerPassChangeSuccess,
 
+  userPassChangeStart: state.UserReducer.userPassChangeStart,
+  userPassChangeError: state.UserReducer.userPassChangeError,
+  userPassChangeSuccess: state.UserReducer.userPassChangeSuccess,
+
 });
 
 
@@ -309,6 +443,7 @@ const matchDispatchToProps = (dispatch) => {
     setUserLanguage,
     changePasswordPartner,
     changeSinglePartnerField,
+    changePasswordUser,
   },
   dispatch);
 };

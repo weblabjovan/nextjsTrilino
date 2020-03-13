@@ -31,6 +31,8 @@ export default interface LanguageInterface {
 	headDescriptionSearch: string;
 	headTitleTerms: string;
 	headDescriptionTerms: string;
+	headTitleUserProfile: string;
+	headDescriptionUserProfile: string;
 
 
 	navigationLogin: string;
@@ -38,6 +40,8 @@ export default interface LanguageInterface {
 	navigationFaq: string;
 	navigationPartnership: string;
 	navigationContact: string;
+	navigationTerms: string;
+	navigationProfile: string;
 
 	navigationPartnerGeneral: string;
 	navigationPartnerCatering: string;
@@ -46,7 +50,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
-	navigationTerms: string;
+	
 	
 	uniCity: string;
 	uniDistrict: string;
@@ -69,6 +73,7 @@ export default interface LanguageInterface {
 	uniPartnerProgressLink: string;
 	uniDeposit: string;
 	uniNotWorkingDay: string;
+	uniMap: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -78,6 +83,8 @@ export default interface LanguageInterface {
 	emailPartnerForgotPassText: string;
 	emailPartnerForgotPassCode: string;
 	emailPartnerForgotPassButton: string;
+	emailUserRegisterTitle: string;
+	emailUserRegisterText: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -171,6 +178,7 @@ export default interface LanguageInterface {
 	emailVerificationPartnerLogButton: string;
 	emailVerificationPartnerErrorTitle: string;
 	emailValidationPartnerErrorArticle: string;
+	emailValidationUserErrorArticle: string;
 	emailVerificationPartnerErrorButton: string;
 
 	confirmPartnerRegTitle: string;
@@ -180,12 +188,14 @@ export default interface LanguageInterface {
 	passwordExplanation: string;
 	passwordUpdateTitle: string;
 	passwordUpdateExplanation: string;
+	passwordUpdateUserExplanation: string;
 	passwordAlertPass: string;
 	passwordAlertCode: string;
 	passwordAlertConfirm: string;
 
 	passwordRequestTitle: string;
 	passwordRequestExplanation: string;
+	passwordRequestUserExplanation: string;
 	passwordUpdateRequestTitle: string;
 	passwordUpdateRequestExplanation: string;
 	passwordUpdateRequestError: string;
@@ -561,7 +571,9 @@ export default interface LanguageInterface {
 	reservationAlertGeneralKidsSize: string;
 	reservationAlertCatering: string;
 	reservationAlertCateringTime: string;
-
+	reservationPaymentLoginTitle: string;
+	reservationPaymentRegistrationTitle: string;
+	reservationPaymentPasswordTitle: string;
 
 	
 	loginTitle: string;
@@ -701,6 +713,37 @@ export default interface LanguageInterface {
 	termsDisputeTitle: string;
 	termsDisputeText_1: string;
 
+	userLoginRegTitle: string;
+	userLoginRegDescription: string;
+	userLoginRegFirstLabel: string;
+	userLoginRegFirstPlaceholder: string;
+	userLoginRegLastLabel: string;
+	userLoginRegLastPlaceholder: string;
+	userLoginRegEmailLabel: string;
+	userLoginRegEmailPlaceholder: string;
+	userLoginRegPhoneLabel: string;
+	userLoginRegPhonePlaceholder: string;
+	userLoginRegPhonecodePlaceholder: string;
+	userLoginLogTitle: string;
+	userLoginLogDescription: string;
+	userLoginLogPasswordLabel: string;
+	userLoginLogPasswordPlaceholder: string;
+	userLoginAlertFirst: string;
+	userLoginAlertLast: string;
+	userLoginAlertEmail: string;
+	userLoginAlertPhonecode: string;
+	userLoginAlertPhone: string;
+	userLoginAlertTerms: string;
+	userLoginAlertLogEmail: string;
+	userLoginAlertPassword: string;
+	userLoginAlertDouble: string;
+	userLoginRegConfirmTitle: string;
+	userLoginRegConfirmDescription: string;
+	userLoginRegConfirmEmail: string;
+	userLoginLinksReg_1: string;
+	userLoginLinksReg_2: string;
+	userLoginLinksLog_1: string;
+	userLoginLinksLog_2: string;
 
 
 	//////////////////////API
@@ -724,5 +767,18 @@ export default interface LanguageInterface {
 
 	apiPartnerAuthCode1: string;
 	apiPartnerAuthCode2: string;
+
+
+
+	apiUserSaveCode2: string;
+	apiUserSaveCode5: string;
+
+	apiUserUpdateVeriCode2: string;
+	apiUserUpdatePassCode3: string;
+	apiUserUpdateReqPassCode3: string;
+
+	apiUserLoginCode2: string;
+	apiUserLoginCode3: string;
+	apiUserLoginCode5: string;
 
 }

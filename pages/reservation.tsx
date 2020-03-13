@@ -5,6 +5,7 @@ import { getLanguage } from '../lib/language';
 import { getSinglePartnerForReservation } from '../lib/helpers/specificPartnerFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import ReservationView from '../views/ReservationView';
 import pages from '../lib/constants/pages';
@@ -14,10 +15,13 @@ import '../style/style.scss';
 interface Props {
   userAgent?: string;
   partner: object;
+  token: string;
+  link: object;
+  userIsLogged: boolean;
 }
 
 
-const Reservation : NextPage<Props> = ({ userAgent, partner }) => {
+const Reservation : NextPage<Props> = ({ userAgent, partner, token, link, userIsLogged }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -33,6 +37,9 @@ const Reservation : NextPage<Props> = ({ userAgent, partner }) => {
         fullPath={ router.asPath } 
         lang={ lang }
         partner={ partner }
+        token={ token }
+        link={ link }
+        userIsLogged={ userIsLogged }
       />
     </div>
   )
@@ -41,7 +48,10 @@ const Reservation : NextPage<Props> = ({ userAgent, partner }) => {
 Reservation.getInitialProps = async (ctx) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let result = { partner: null};
+  let token = '';
+  let userIsLogged = false;
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -72,13 +82,22 @@ Reservation.getInitialProps = async (ctx) => {
       ctx.res.writeHead(302, {Location: `/?language=sr`});
       ctx.res.end();
     }
+
+    const userLog = await isUserLogged(ctx);
+    
+
+    if (userLog) {
+      token = getUserToken(ctx);
+      userIsLogged = true;
+    }
+
   }catch(err){
     console.log(err);
   }
   
   
 
-  return { userAgent, partner: result['partner']}
+  return { userAgent, partner: result['partner'], token, link, userIsLogged }
 }
 
 export default withRedux(Reservation)

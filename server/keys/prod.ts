@@ -12,6 +12,7 @@ type keyType = {
 	ADMIN_BASIC_DEV_KEY: string;
 	MONGO_URI_PROD: string;
 	GOOGLE_API_KEY: string;
+	CRYPTO_PASSWORD: string;
 }
 
 const keys: keyType = {
@@ -26,7 +27,8 @@ const keys: keyType = {
 	ADMIN_BASIC_DEV_STRING: process.env.ADMIN_BASIC_DEV_STRING,
 	ADMIN_BASIC_DEV_KEY: process.env.ADMIN_BASIC_DEV_KEY,
 	MONGO_URI_PROD: process.env.MONGO_URI_PROD,
-	GOOGLE_API_KEY: process.env.GOOGLE_API_KEY
+	GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+	CRYPTO_PASSWORD: process.env.CRYPTO_PASSWORD
 }
 
 export default keys;

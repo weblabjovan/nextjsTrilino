@@ -33,6 +33,8 @@ const serbian: LanguageInterface = {
 	headDescriptionSearch: "Trilino - pretraga lokacija specijalizovanih za održavanje dečijih rođendana",
 	headTitleTerms: "Trilino - Uslovi korišćenja",
 	headDescriptionTerms: "Trilino - Uslovi korišćenja za partnere i korisnike",
+	headTitleUserProfile: "Trilino - Korisnički profil",
+	headDescriptionUserProfile: "Trilino - Korisnički profil za praćenje rezervacija za dečije rođendane",
 
 	navigationLogin: "Prijava",
 	navigationSearch: "Pretraga",
@@ -40,6 +42,7 @@ const serbian: LanguageInterface = {
 	navigationPartnership: "Saradnja",
 	navigationContact: "Kontakt",
 	navigationTerms: 'Uslovi korišćenja',
+	navigationProfile: 'Korisnički profil',
 
 	navigationPartnerGeneral: 'Osnovno',
 	navigationPartnerCatering: 'Hrana i piće',
@@ -70,6 +73,7 @@ const serbian: LanguageInterface = {
 	uniPartnerProgressLink: 'pomoć za aktivaciju',
 	uniDeposit: 'Depozit',
 	uniNotWorkingDay: 'Neradan dan',
+	uniMap: 'Mapa',
 
 	emailPartnerRegisterTitle: ', dobrodošli u Trilino',
 	emailPartnerRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa hiljadama ljudi koji su zainteresovani za vaš prostor i vaše usluge. Sve što treba da uradite je da kreirate vaš profil koji će adekvatno predstaviti ono što možete da ponudite posetiocima našeg sajta. Ali pre toga je potrebno je da verifikujete vašu registraciju i kreirate vašu lozinku. Kliknite na dugme u nastavku i ispratite sledeća uputstva. Srećno.',
@@ -79,6 +83,9 @@ const serbian: LanguageInterface = {
 	emailPartnerForgotPassText: 'Obavestili ste nas da ste zaboravili vašu lozinku i da niste u stanju da pristupite vašem profilu. Ne brinite, klikom na dugme u nastavku jednostavno i sigurno ćete promeniti lozinku i biti u mogućnosti da ponovo pristupite vašem profilu. Srećno.',
 	emailPartnerForgotPassCode: 'Jednokratni sigurnosni kod:',
 	emailPartnerForgotPassButton: 'Promenite lozinku ovde',
+	emailUserRegisterTitle: ', postali ste novi Trilino korisnik',
+	emailUserRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa uslugama koje vam pomažu da organizujete najlepšu proslavu za vaše dete. Rezervišite igraonicu, ketering, dekoraciju i animaciju kakvu vaše dete zaslužuje. Ali pre toga je potrebno da potvrdite registraciju (koristeći sigurnosni kod) i kreirate vašu lozinku. Kliknite na dugme u nastavku i učinite baš to. Srećno.',
+
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
 	homeImg_1: 'Trilino-dečije-slavlje-homepage',
@@ -171,8 +178,9 @@ const serbian: LanguageInterface = {
 	emailVerificationPartnerLogTitle: 'Vaša registracija je verifikovana i vaša lozinka je kreirana',
 	emailValidationPartnerLogArticle: 'Verovatno ste kliknuli na nevažeći link koji je deo završenog registracionog procesa. Molimo vas prijavite se i nastavite sa korišćenjem Trilino partnerskog progila.',
 	emailVerificationPartnerLogButton: 'Prijavite se',
-	emailVerificationPartnerErrorTitle: 'Postoji problem sa trenutnim linkom',
+	emailVerificationPartnerErrorTitle: 'Stranica kojoj želite da pristupite ne postoji',
 	emailValidationPartnerErrorArticle: 'Pokušavate da aktivirate link koji nije validan. Molimo vas kontaktirajte partnersku podršku za pomoć i više informacija.',
+	emailValidationUserErrorArticle:'Pokušavate da aktivirate link koji nije validan. Molimo vas proverite trenutni link i probajte da mu pristupite za nekoliko minuta.',
 	emailVerificationPartnerErrorButton: 'Partnerska podrška',
 
 	confirmPartnerRegTitle: 'Čestitamo uspešno ste se registrovali kao partner',
@@ -182,12 +190,14 @@ const serbian: LanguageInterface = {
 	passwordExplanation: 'Ukucajte novu lozinku u drugo polje a u trećem polju je ponovite. Vaša lozinka može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Sadržaj drugog i trećeg polja mora biti isti.',
 	passwordUpdateTitle: 'Vaša nova lozinka je uspešno sačuvana',
 	passwordUpdateExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na link u nastavku i prijavite se koristeći novu lozinku.',
+	passwordUpdateUserExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na korisničku ikonicu u gornjem desnom uglu.',
 	passwordAlertPass: 'Lozinka je obavezno polje i može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Molimo vas unesite validnu lozinku.',
 	passwordAlertCode: 'Sigurnosni kod je obavezno polje. Molimo vas unesite sigurnosni kod koji vam je poslat na email.',
 	passwordAlertConfirm: 'Potvrda lozinke je obavezno polje i njen sadržaj mora biti isti kao i sadržaj polja lozinka. Molimo vas potvrdite lozinku.',
 
 	passwordRequestTitle: 'Promena lozinke',
 	passwordRequestExplanation: 'Upišite vaš PIB i validnu email adresu. Ukoliko su podaci ispravni na email će vam stići link i sigurnosni kod za promenu lozinke.',
+	passwordRequestUserExplanation: 'Upišite vašu email adresu. Ukoliko su podaci ispravni na email će vam stići link i sigurnosni kod za promenu lozinke. Promenu lozinke mogu koristiti isključivo registrovani korisnici.',
 	passwordUpdateRequestTitle: 'Uspešno poslato',
 	passwordUpdateRequestExplanation: 'Podaci potrebni za promenu lozinke su vam poslati na email. Molimo vas proverite email za nekoliko minuta.',
 	passwordUpdateRequestError: 'Pokušavate da pristupite opciji promene lozinke kao prijavljeni partner ili koristite nepotpun link. Molimo vas odajvite se ukoliko ste prijavljeni i proverite link u adres baru.',
@@ -197,7 +207,7 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralDescription: 'U nastavku je formular koji za cilj ima prikupljanje osnovnih informacije o vašem prostoru. Ove informacije su jako bitne za vaše potencijalne klijente. Za više informacija o načinu popunjavanja ovog dela posetite ',
 	partnerProfileGeneralItemDescription: 'Opis prostora:',
 	partnerProfileGeneralSubSpace: 'Prostor',
-	partnerProfileGeneralItemDescriptionPlaceholder: 'opis do 288 karaktera',
+	partnerProfileGeneralItemDescriptionPlaceholder: 'opis do 450 karaktera',
 	partnerProfileGeneralItemAddress: 'Adresa prostora:',
 	partnerProfileGeneralItemAddressPlaceholder: 'adresa',
 	partnerProfileGeneralItemCity: 'Grad:',
@@ -567,6 +577,9 @@ const serbian: LanguageInterface = {
 	reservationAlertGeneralKidsSize: 'Očekivani broj dece prevazilazi maksimalni kapacitet dece ove sale. Molimo vas promenite broj očekivani broj dece.',
 	reservationAlertCatering: 'Broj gostiju koji želi paket mora biti broj. Molimo vas upišite broj u označeno polje.',
 	reservationAlertCateringTime: 'Ketering nije dostupan u ovako bliskom vremenskom periodu. Molimo vas obrišite brojeve zainteresovanih gostiju iz označenih polja.',
+	reservationPaymentLoginTitle: 'Pre nego što nastavite na plaćanje potrebno je da se prijavite.',
+	reservationPaymentRegistrationTitle: 'Ukoliko niste Trilino korisnik, prvo se registrujte a potom možete nastaviti na plaćanje.',
+	reservationPaymentPasswordTitle: 'Još samo ovaj korak i možete nastaviti na plaćanje. Da biste završili registraciju potrebno je da kreirate lozinku, na email vam je poslat sigurnosni kod koji je potrebno upisati u polje u nastavku. Molimo vas proverite vaš email.',
 
 
 
@@ -710,6 +723,40 @@ const serbian: LanguageInterface = {
 	termsDisputeText_1: 'Sve sporove koji mogu da nastanu u vezi sa, ili iz ovih UK, Uslova prodaje i Izjave o privatnosti, ili u vezi sa, ili zbog korišćenja trilino.com internet stranice, između Trilino -a i Korisnika, Trilino i Korisnik pokušaće da reše mirnim putem. Ukoliko Trilino i Korisnik ne uspeju da reše spor mirnim putem, za vođenje spora biće nadležan Treći osnovni sud u Beogradu, ukoliko je Korisnik fizičko lice, odnosno Privredni sud u Beogradu, ukoliko je Korisnik pravno lice.',
 
 
+	userLoginRegTitle: 'Korisnička registracija',
+	userLoginRegDescription: 'Popunite formular u nastavku sa traženim podacima i postanite Trilino korisnik.',
+	userLoginRegFirstLabel: '*Ime:',
+	userLoginRegFirstPlaceholder: 'ime',
+	userLoginRegLastLabel: '*Prezime:',
+	userLoginRegLastPlaceholder: 'prezime',
+	userLoginRegEmailLabel: '*Email:',
+	userLoginRegEmailPlaceholder: 'email',
+	userLoginRegPhoneLabel: '*Broj telefona:',
+	userLoginRegPhonePlaceholder: 'broj',
+	userLoginRegPhonecodePlaceholder: 'pozivni',
+	userLoginLogTitle: 'Korisnička prijava',
+	userLoginLogDescription: 'Upišite email i lozinku pod kojom ste registrovani.',
+	userLoginLogPasswordLabel: '*Lozinka:',
+	userLoginLogPasswordPlaceholder: 'lozinka',
+	userLoginAlertFirst: 'Ime je obavezno polje. Molimo vas unesite ime.',
+	userLoginAlertLast: 'Prezime je obavezno polje. Molimo vas unesite prezime.',
+	userLoginAlertEmail: 'Email je obavezno polje. Molimo vas unesite email.',
+	userLoginAlertPhonecode: 'Pozivni broj je obavezno polje. Molimo vas izaberite vaš pozivni broj.',
+	userLoginAlertPhone: 'Broj telefona je obavezno polje. Molimo vas unesite vaš broj telefona.',
+	userLoginAlertTerms: 'Ne možete se registrivati ukoliko niste saglasni sa našim uslovima korišćenja. Molimo vas saglasite se sa našim uslovima korišćenja.',
+	userLoginAlertLogEmail: 'Email je obavezno polje. Molimo vas unesite email.',
+	userLoginAlertPassword: 'Lozinka je obavezno polje. Molimo vas unesite lozinku.',
+	userLoginAlertDouble: 'Korisnik sa ovim email-om je već registrovan. Molimo vas prijavite se.',
+	userLoginRegConfirmTitle: 'Uspešno ste se registrovali',
+	userLoginRegConfirmDescription: 'Čestitamo vaša registracija je uspešna, na email smo vam poslali potvrdu o registraciji sa jednokratnim sigurnosnim kodom za kreiranje lozinke. Molimo vas ispratite link iz emaila i korišćenjem jednokratnog sigurnosnog koda kreirajte vašu lozinku.',
+	userLoginRegConfirmEmail: 'Molimo vas, proverite vaš email za nekoliko minuta',
+	userLoginLinksReg_1: 'Ukoliko ste već Trilino korisnik molimo vas ',
+	userLoginLinksReg_2: 'prijavite se',
+	userLoginLinksLog_1: 'Ukoliko još niste a želite da postanete Trilino korisnik molimo vas ',
+	userLoginLinksLog_2: 'registrujte se',
+
+
+
 
 
 	//////////////////////API
@@ -733,6 +780,17 @@ const serbian: LanguageInterface = {
 
 	apiPartnerAuthCode1: 'Validan token proslat.',
 	apiPartnerAuthCode2: 'Nema validnog tokena.',
+
+	apiUserSaveCode2: 'Korisnik sa ovim email-om je već registrovan. Molimo vas da se ulogujete.',
+	apiUserSaveCode5: 'Upisani podaci nisu validni, molimo vas pokušajte još jednom.',
+
+	apiUserUpdateVeriCode2: 'Ne postoji korisnik sa traženim id-jem.',
+	apiUserUpdatePassCode3: 'Vaš sigurnosni kod se ne slaže sa vašim email-om. Možda koristite sigurnosni kod koji je istekao.',
+	apiUserUpdateReqPassCode3: 'Korisnik sa traženim email-om ne postoji. Molimo vas, proverite upisane podatke.',
+
+	apiUserLoginCode2: 'Upisana lozinka nije validna za ovog korisnika.',
+	apiUserLoginCode3: 'Ne postoji korisnik sa traženim email-om.',
+	apiUserLoginCode5: 'Korisnik sa ovim email-om nije do kraja verifikovan. Molimo vas verifikute se ili promenite lozinku.',
 }
 
 export default serbian;
