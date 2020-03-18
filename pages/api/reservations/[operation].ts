@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Reservation from '../../../server/models/reservation';
 import Partner from '../../../server/models/partner';
+import User from '../../../server/models/users';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
@@ -10,6 +11,7 @@ import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidP
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
+import DateHandler from '../../../lib/classes/DateHandler'
 
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
@@ -25,13 +27,25 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				await connectToDb(req.headers.host);
 				if (type === 'partner' || type === 'user') {
 					if (!isEmpty(token)) {
-						const decoded = verifyToken(token);
-						const identifierId = encodeId(decoded['sub']);
-						const identifier = await Partner.findById(identifierId, '-password -passSafetyCode -passProvided -verified');
+						
 
 						let identification = false;
 						if (type === 'partner') {
+							const decoded = verifyToken(token);
+							const identifierId = encodeId(decoded['sub']);
+							const identifier = await Partner.findById(identifierId, '-password -passSafetyCode -passProvided -verified');
+
 							if (identifier['_id'] == reservation['partner']) {
+								identification = true;
+							}
+						}
+
+						if (type === 'user') {
+							const decoded = verifyToken(token);
+							const identifierId = encodeId(decoded['sub']);
+							const identifier = await User.findById(identifierId, '-password -passSafetyCode -passProvided');
+
+							if (identifier['_id'] == reservation['user']) {
 								identification = true;
 							}
 						}
@@ -40,6 +54,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							if (isReservationSaveDataValid(reservation)) {
 								const reservations = await Reservation.find({ 'date': reservation['date'], 'partner': reservation['partner'], 'room': reservation['room']['value'], active: true }, { new: true }).select('from to _id');
 								if (isReservationStillAvailable(reservation, reservations)) {
+									const dateHandler = new DateHandler(reservation['date'].substring(0,19));
+
 									let arr = [];
 									const main = {
 										partner: reservation['partner'],
@@ -47,9 +63,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 										room: reservation['room']['value'],
 										date: reservation['date'].substring(0,19),
 										from: reservation['from'],
-										fromDate: setDateTime(reservation['date'], reservation['from']),
+										fromDate: dateHandler.getDateWithTimeForServer(reservation['from']),
 										to: reservation['to'],
-										toDate: setDateTime(reservation['date'], reservation['to']),
+										toDate: dateHandler.getDateWithTimeForServer(reservation['to']),
 										double: reservation['double'],
 										user: reservation['user'],
 										userName: reservation['userName'],

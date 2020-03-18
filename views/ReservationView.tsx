@@ -66,6 +66,7 @@ interface MyState {
   price: object;
   paymentRouteErrors: object;
   paymentRouteStage: string;
+  readyToPay: boolean;
 };
 
 class ReservationView extends React.Component <MyProps, MyState>{
@@ -75,7 +76,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -98,10 +99,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
       info: { general: {name: '', room:'', adultsNum: 0, kidsNum: 0 }, catering: [], addon: []},
       price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0, deposit: this.props.partner['reservation']['term']['price'] * (parseInt(this.props.partner['general']['depositPercent'])/100), trilinoCatering: 0 },
       paymentRouteErrors: { show: false, 
-        fields:{ firstName: false, lastName: false, email: false, phoneCode: false, phone: false, terms: false, logEmail: false, password: false , regDuplicate: false, baseError: false, code: false, pass: false, confirm: false, base: false },
+        fields:{ firstName: false, lastName: false, email: false, phoneCode: false, phone: false, terms: false, logEmail: false, password: false , regDuplicate: false, baseError: false, code: false, pass: false, confirm: false, base: false, readyToPay: false },
         messages:{ baseError: ''}
       },
       paymentRouteStage: this.props.token ? 'payment' : 'login',
+      readyToPay: false,
     };
   
 
@@ -643,6 +645,32 @@ class ReservationView extends React.Component <MyProps, MyState>{
     this.setState({paymentRouteErrors: errorCopy});
   }
 
+  changePaymentReady(){
+    this.setState({ readyToPay: !this.state.readyToPay });
+  }
+
+  paymentFunction(){
+    
+    if (!this.state.readyToPay) {
+      const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
+      errorCopy['show'] = true;
+      errorCopy['fields']['readyToPay'] = true;
+      this.setState({ paymentRouteErrors: errorCopy });
+    }else{
+      
+      const mydiv = document.getElementById('myformcontainer').innerHTML = '<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> <input type="hidden" name="clientid" value="13xxxxxxxx"/> <input type="hidden" name="storetype" value="3d_pay_hosting" />  <input type="hidden" name="hash" value="iej6cPOjDd4IKqXWQEznXWqLzLI=" /> <input type="hidden" name="trantype" value="PreAuth" /> <input type="hidden" name="amount" value="91.96" /> <input type="hidden" name="currency" value="941" /> <input type="hidden" name="oid" value="1291899411421" /> <input type="hidden" name="okUrl" value="https://www.trilino.com"/> <input type="hidden" name="failUrl" value="https://www.google.com" /> <input type="hidden" name="lang" value="sr" /> <input type="hidden" name="rnd" value="N2855INH5EM5T7VYL9LA" /> <input type="hidden" name="encoding" value="utf-8" /> <input type="submit" style="visibility: hidden" /> </form> ';
+      const form =document.getElementById('reviseCombi');
+
+      if(form){
+        let element: HTMLElement = form.querySelector('input[type="submit"]') as HTMLElement;
+        this.setState({ loader: true }, () => {
+          element.click();
+        })
+      }
+    }
+    
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     if (this.state.logTry > 9) {
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
@@ -968,6 +996,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     <Col xs="12" className="formSection hide" id="step_4">
                       <PaymentRoute
                         partner={this.props.partner['name']}
+                        address={this.props.partner['general']['address']}
                         date={this.props.router['query']['date']}
                         time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
                         price={ this.state.price['total'] }
@@ -977,13 +1006,18 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         addon={ this.state.info['addon'] }
                         general={ this.state.info['general'] }
                         mobile={ this.state.isMobile }
+                        trilino={ this.state.price['trilinoCatering'] }
 
                         handleSend={ this.handleLogDataSend }
                         stage={ this.state.paymentRouteStage }
                         errorMessages={ this.state.paymentRouteErrors }
                         changeStage={ this.changePaymentRouteStage }
                         closeAlert={ this.closePaymentRouteAlert }
+                        paymentFunction={ this.paymentFunction }
+                        readyToPay={ this.state.readyToPay }
+                        changePaymentReady={ this.changePaymentReady }
                       />
+                      <div id="myformcontainer"></div>
                     </Col>
                   </Row>
                 </Col>

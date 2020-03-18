@@ -279,7 +279,7 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
     if (!this.state.errorMessages['show']) {
       this.props.openLoader();
       const link = setUpLinkBasic(window.location.href);
-      const data = {language: this.props.lang, reservation: prepareReservationObjectForSave(this.props.partnerReservation), type: 'partner'}
+      const data = {language: this.props.lang, reservation: prepareReservationObjectForSave(this.props.partnerReservation), type: 'partner'};
       this.props.savePartnerReservation(link, data, this.props.token);
     }
   }

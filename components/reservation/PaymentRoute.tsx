@@ -3,16 +3,22 @@ import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 import LoginScreen from '../user/LoginScreen';
 import RegistrationScreen from '../user/RegistrationScreen';
 import PasswordScreen from '../user/PasswordScreen';
+import CheckBox from '../form/checkbox';
 import { getLanguage } from '../../lib/language';
 
 type MyProps = {
 	handleSend(data: object, type: string): void;
 	changeStage(stage: string): void;
+  changePaymentReady(): void;
 	closeAlert(): void;
+  paymentFunction(): void;
 	stage: string;
+  readyToPay: boolean;
 	errorMessages: object;
+  trilino: number;
 
   partner?: string;
+  address?: string;
   time?: string;
   date?: string;
   price?: number;
@@ -119,9 +125,62 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         	{
         		this.props.stage === 'payment'
         		?
-        		<Col xs="12">
-        			<h4 className="smallName">Ovo je deo za plaćanje</h4>
-        			
+        		<Col xs="12" className="paymentStage">
+              <Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={ this.props.closeAlert } >
+                <p hidden={ !this.props.errorMessages['fields']['readyToPay']} >Morate potvrditi da razumete uslove uplate i da ste spremni za plaćanje.</p>
+              </Alert>
+        			<Table>
+                  <thead>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{"width": "30%"}}>Igraonica:</td>
+                      <td>{this.props.partner}</td>
+                    </tr>
+                    <tr>
+                      <td>Adresa:</td>
+                      <td>{this.props.address}</td>
+                    </tr>
+                     <tr>
+                      <td>Datum i vreme:</td>
+                      <td>{`${this.props.date}, ${this.props.time}`}</td>
+                    </tr>
+                    <tr>
+                      <td>Sala:</td>
+                      <td>{this.props.general['room']}</td>
+                    </tr>
+                    <tr>
+                      <td>Slavljenik/ca:</td>
+                      <td>{this.props.general['name']}</td>
+                    </tr>
+                    <tr>
+                      <td>Cena:</td>
+                      <td>{`${this.props.price.toLocaleString('en')} rsd`}</td>
+                    </tr>
+                    <tr>
+                      <td>Depozit:</td>
+                      <td>{`${this.props.deposit.toLocaleString('en')} rsd`}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+
+        			  <p>{`Za uplatu na sajtu, u nastavku, ${this.props.deposit.toLocaleString('en')} rsd`}</p>
+                <p>{`Za uplatu na adresi, na dan slavlja, ${(this.props.price - (this.props.deposit + this.props.trilino)).toLocaleString('en')} rsd`}</p>
+                <p>{this.props.trilino ? `Za usluge ketringa, ${this.props.trilino.toLocaleString('en')} rsd za uplatu najkasnije 7 dana pre održavanja proslave, preko vašeg korisničkog profila.` : ''}</p>
+
+                <CheckBox
+                  disabled={ false }
+                  checked={ this.props.readyToPay }
+                  field="paymentReady"
+                  onChange={ this.props.changePaymentReady }
+                  label={ 'Razumem uslove uplate i spreman/na sam da nastavim na plaćanje'  }
+                  orientation="back"
+                />
+
+                <div className="middle">
+                  <Button color="success" onClick={ this.props.paymentFunction }>Nastavite na plaćanje</Button>
+                </div>
+                
 	          </Col>
 	          :
 	          null

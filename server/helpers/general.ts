@@ -518,19 +518,41 @@ export const getNextTerm = (partner: object, room: string | string[], from: stri
 }
 
 export const myEncrypt = (text: string): string => {
-  const algorithm = 'aes-256-cbc';
+  let iv = crypto.randomBytes(16);
+  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(Keys.CRYPTO_PASSWORD), iv);
+  let encrypted = cipher.update(text);
 
-  const cipher = crypto.createCipher(algorithm, Keys.CRYPTO_PASSWORD);
-  let crypted = cipher.update(text,'utf8','hex')
-  crypted += cipher.final('hex');
-  return crypted;
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+  return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
 export const myDecrypt = (text: string): string => {
-  const algorithm = 'aes-256-cbc';
+  let textParts = text.split(':');
+  let iv = Buffer.from(textParts.shift(), 'hex');
+  let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+  let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(Keys.CRYPTO_PASSWORD), iv);
+  let decrypted = decipher.update(encryptedText);
 
-  const decipher = crypto.createDecipher(algorithm, Keys.CRYPTO_PASSWORD);
-  let dec = decipher.update(text,'hex','utf8')
-  dec += decipher.final('utf8');
-  return dec;
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+  return decrypted.toString();
+}
+
+export const coverMyEmail = (email: string): string => {
+  return convertValueTo(email, 'hex');
+}
+
+export const unCoverMyEmail = (encriptEmail: string): string => {
+  return convertValueTo(encriptEmail, 'utf8');
+}
+
+const convertValueTo = (str: string, type: string): string => {
+  if (type === 'hex') {
+    return Buffer.from(str, 'utf8').toString('hex');
+  }
+
+  if (type === 'utf8') {
+    return Buffer.from(str, 'hex').toString('utf8');
+  }
 }

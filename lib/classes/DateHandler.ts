@@ -11,6 +11,13 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
+	public getDateWithTimeForServer = (time: string): Date => {
+		this.setDateForServer('code');
+		this.setDayOnSpecificTime(time);
+
+		return this.date;
+	}
+
 	public isUrlDateValidDateString = (): boolean => {
 		if (!this.dateString) {
 			return false;
@@ -107,14 +114,20 @@ export default class DateHandler {
 		this.date = res;
 	}
 
-	private setDateForServer = (): void => {
-	  const strings = this.dateString.split('-')
-	  const d = new Date();
-	  d.setFullYear(parseInt(strings[2]));
-	  d.setMonth(parseInt(strings[1])-1);
-	  d.setDate(parseInt(strings[0]));
+	private setDateForServer = (origin?: string): void => {
+		let strings = this.dateString.split('-')
+		if (origin === 'code') {
+			const first = this.dateString.split('T');
+			const sec = first[0].split('-');
+			strings = [sec[2], sec[1], sec[0]]
+		}
 
-	  this.date = this.setDayOnBegining(d);
+		const d = new Date();
+		d.setFullYear(parseInt(strings[2]));
+		d.setMonth(parseInt(strings[1])-1);
+		d.setDate(parseInt(strings[0]));
+
+	  	this.date = this.setDayOnBegining(d);
 	}
 
 	private resetDate = (): void => {
