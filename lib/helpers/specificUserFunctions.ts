@@ -3,6 +3,7 @@ import { isEmpty } from './validations';
 import { setUpLinkBasic } from './generalFunctions';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
+import Crypto from 'crypto';
 
 
 
@@ -40,4 +41,8 @@ export const getUserToken = (context: any): string => {
 	const allCookies = nextCookie(context);
 	const token = allCookies['trilino-user-token'] ? allCookies['trilino-user-token'] : '';
 	return token;
+}
+
+export const sha512 = (str: string): string => {
+  return 'abc';
 }

@@ -8,6 +8,7 @@ import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, chan
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
+import { sha512 } from '../lib/helpers/specificUserFunctions';
 import { isDateDifferenceValid } from '../lib/helpers/specificReservationFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
 import genOptions from '../lib/constants/generalOptions';
@@ -657,8 +658,26 @@ class ReservationView extends React.Component <MyProps, MyState>{
       errorCopy['fields']['readyToPay'] = true;
       this.setState({ paymentRouteErrors: errorCopy });
     }else{
-      
-      const mydiv = document.getElementById('myformcontainer').innerHTML = '<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> <input type="hidden" name="clientid" value="13xxxxxxxx"/> <input type="hidden" name="storetype" value="3d_pay_hosting" />  <input type="hidden" name="hash" value="iej6cPOjDd4IKqXWQEznXWqLzLI=" /> <input type="hidden" name="trantype" value="PreAuth" /> <input type="hidden" name="amount" value="91.96" /> <input type="hidden" name="currency" value="941" /> <input type="hidden" name="oid" value="1291899411421" /> <input type="hidden" name="okUrl" value="https://www.trilino.com"/> <input type="hidden" name="failUrl" value="https://www.google.com" /> <input type="hidden" name="lang" value="sr" /> <input type="hidden" name="rnd" value="N2855INH5EM5T7VYL9LA" /> <input type="hidden" name="encoding" value="utf-8" /> <input type="submit" style="visibility: hidden" /> </form> ';
+      const plain =  `13IN000650|123|91.96|https://www.trilino.com|https://www.trilino.com/login|PreAuth||asdf||||941|Beograd123!`;
+      // const sha = sha512(plain);
+      // const hash = btoa(sha);
+      // console.log(hash);
+      const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
+      <input type="hidden" name="clientid" value="13IN000650"/> 
+      <input type="hidden" name="storetype" value="3d_pay_hosting" />  
+      <input type="hidden" name="hash" value="4emfmikYuok7aCSPFLRxTDER+PxLAgf2x+yDjlhrlfCd029AkHkcKTC9+dzYmktQ9HjN4RE289FWTyp56kudEQ==" /> 
+      <input type="hidden" name="trantype" value="PreAuth" /> 
+      <input type="hidden" name="amount" value="91.96" /> 
+      <input type="hidden" name="currency" value="941" /> 
+      <input type="hidden" name="oid" value="123" /> 
+      <input type="hidden" name="okUrl" value="https://www.trilino.com"/> 
+      <input type="hidden" name="failUrl" value="https://www.trilino.com/login" /> 
+      <input type="hidden" name="lang" value="en" /> 
+      <input type="hidden" name="hashAlgorithm" value="ver2" /> 
+      <input type="hidden" name="rnd" value="asdf" /> 
+      <input type="hidden" name="encoding" value="utf-8" />
+      <input type="submit" style="visibility: hidden" /> </form>`;
+      console.log(mydiv);
       const form =document.getElementById('reviseCombi');
 
       if(form){

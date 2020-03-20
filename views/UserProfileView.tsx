@@ -8,6 +8,8 @@ import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, unsetCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
+import UserBill from '../components/userProfile/UserBill';
+import Modal from '../components/modals/ConfirmationModal';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,6 +35,9 @@ interface MyState {
   loader: boolean;
   passwordChange: boolean;
   activeScreen: string;
+  reservationBill: string;
+  userBillShow: boolean;
+  modal: boolean;
 };
 
 class UserProfileView extends React.Component <MyProps, MyState>{
@@ -41,7 +46,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen'];
+    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -58,6 +63,9 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     loader: false,
     passwordChange: this.props.passChange,
     activeScreen: 'reservation',
+    reservationBill: '',
+    userBillShow: false,
+    modal: false,
   };
 
   logout() {
@@ -73,6 +81,22 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   closePassChangeAlert(){
     this.setState({ passwordChange: false });
+  }
+
+  openUserBill(reservationIndex: number){
+    this.setState({ reservationBill: `bill_${reservationIndex}`, userBillShow: true });
+  }
+
+  closeUserBill(){
+    this.setState({ reservationBill: '', userBillShow: false });
+  }
+
+  toggleModal(){
+    this.setState({ modal: !this.state.modal });
+  }
+
+  activateCancelReservation(){
+    console.log('otkazujem')
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -106,6 +130,24 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           screen={ this.state.activeScreen }
           changeScreen={ this.changeScreen }
         />
+
+        <UserBill
+          lang={ this.props.lang }
+          isMobile={ this.state.isMobile }
+          show={ this.state.userBillShow }
+          close={ this.closeUserBill }
+        />
+
+        <Modal
+          isOpen={ this.state.modal }
+          title={"Otkazivanje rezervacije"}
+          text={"Otkazivanjem rezervacije dogadja se to to i to. Ne znam sada ali ćemo na vreme smisliti neki tekst koji će obavestiti korisnika šta ga čeka kada klikne dugme u nastavku."}
+          buttonColor="danger"
+          buttonText={"Otkazujem"}
+          toggle={ this.toggleModal }
+          clickFunction={ this.activateCancelReservation }
+        />
+
     		<div>
           <Container>
               <Row className="userProfileScreen">
@@ -127,7 +169,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                         {
                           [1,2,3,4,5,6].map( (item, index) => {
                             return(
-                              <div className="item">
+                              <div className="item" key={`reservationItem_${index}`}>
                                 <div className="info">
                                   <div className="date">
                                     <p>30-03-2020, 07:00 - 9:30</p>
@@ -151,9 +193,9 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                       <div className="middle">
                                         <button>Ocenite</button>
                                         <button>Platite Trilino Ketering</button>
-                                        <button>Detaljan račun</button>
+                                        <button onClick={ () => this.openUserBill(index)}>Pogledajte detaljnije</button>
+                                        <button className="decline" onClick={ this.toggleModal }>Otkažite</button>
                                       </div>
-                                      
                                     </div>
                                   </div>
                                 </div>
@@ -190,8 +232,9 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                   (
                     <Col xs='12'>
                       <div className="middle">
-                        <h2>Ovo je odjava</h2>
-                        <button onClick={() => { this.logout() }}>Odjavi se</button>
+                        <h3 className="screenTitle">Odjava</h3>
+                        <p>Ukoliko se odjavite napustićete svoj korisnički profil</p>
+                        <Button color="success" onClick={() => { this.logout() }}>Odjavite se</Button>
                       </div>
                     </Col>
                   )
