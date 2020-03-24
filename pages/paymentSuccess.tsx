@@ -5,6 +5,8 @@ import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
+import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
+import parse from 'urlencoded-body-parser';
 import Head from '../components/head';
 import PaymentSuccessView from '../views/PaymentSuccessView';
 import pages from '../lib/constants/pages';
@@ -15,10 +17,11 @@ interface Props {
   userAgent?: string;
   link?: object;
   token?: string | undefined;
+  paymentInfo: object;
 }
 
 
-const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token }) => {
+const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token, paymentInfo }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -36,6 +39,7 @@ const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token }) => {
         token={ token }
         link={ link }
         passChange={ passChange }
+        paymentInfo={ paymentInfo }
       />
     </div>
   )
@@ -44,7 +48,8 @@ const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token }) => {
 PaymentSuccess.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  let link = { };
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+  const paymentInfo = { card: '', transId: '', transDate: '', transAuth: '', transProc: '', transMd: '', error: '', payment: ''};
   let token = '';
 
   try{
@@ -56,15 +61,28 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
     }
 
     const userLog = await isUserLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-
-    if (!userLog) {
-      ctx.res.writeHead(302, {Location: `/login?language=${link['queryObject']['language']}&page=login`});
-      ctx.res.end();
-    }
 
     token = getUserToken(ctx);
 
+    const resOne = await getSingleReservation(ctx);
+    if (resOne['status'] === 200) {
+      const nestPayData = await parse(req);
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
+        ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+        ctx.res.end();
+      }else{
+        paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
+        paymentInfo['transId'] = nestPayData['TransId'];
+        paymentInfo['transAuth'] = nestPayData['AuthCode'];
+        paymentInfo['transDate'] = nestPayData['EXTRA.TRXDATE'];
+        paymentInfo['transProc'] = nestPayData['ProcReturnCode'];
+        paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '33';
+        paymentInfo['payment'] = nestPayData['Response'];
+      }
+    }else{
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
   }catch(err){
     console.log(err)
   }
@@ -72,7 +90,7 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   
 
   
-  return { userAgent, link, token }
+  return { userAgent, link, token, paymentInfo }
 }
 
 export default withRedux(PaymentSuccess)

@@ -229,7 +229,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	if (req.query.operation === 'auth') {
 		const userlanguage = defineUserLanguage(req['query']['language']);
 		const dictionary = getLanguage(userlanguage);
-
+		
 		const token = req.headers.authorization;
 		if (!isEmpty(token)) {
 				

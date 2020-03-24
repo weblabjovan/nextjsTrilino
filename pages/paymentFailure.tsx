@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import PaymentFailureView from '../views/PaymentFailureView';
+import parse from 'urlencoded-body-parser';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -15,10 +17,11 @@ interface Props {
   userAgent?: string;
   link?: object;
   token?: string | undefined;
+  paymentInfo: object;
 }
 
 
-const PaymentFailure : NextPage<Props> = ({ userAgent, link, token }) => {
+const PaymentFailure : NextPage<Props> = ({ userAgent, link, token, paymentInfo }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
@@ -36,6 +39,7 @@ const PaymentFailure : NextPage<Props> = ({ userAgent, link, token }) => {
         token={ token }
         link={ link }
         passChange={ passChange }
+        paymentInfo={ paymentInfo }
       />
     </div>
   )
@@ -44,7 +48,8 @@ const PaymentFailure : NextPage<Props> = ({ userAgent, link, token }) => {
 PaymentFailure.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  let link = { };
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+  const paymentInfo = { card: 'x', transId: 'x', transDate: 'x', transAuth: 'x', transProc: 'x', transMd: 'x', error: 'x', payment: 'x'};
   let token = '';
 
   try{
@@ -56,14 +61,30 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
     }
 
     const userLog = await isUserLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+    token = getUserToken(ctx);
 
-    if (!userLog) {
-      ctx.res.writeHead(302, {Location: `/login?language=${link['queryObject']['language']}&page=login`});
+    const resOne = await getSingleReservation(ctx);
+    if (resOne['status'] === 200) {
+      const nestPayData = await parse(req);
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
+        ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+        ctx.res.end();
+      }else{
+        if (Object.keys(nestPayData).length) {
+          paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
+          paymentInfo['transId'] = nestPayData['TransId'];
+          paymentInfo['transAuth'] = nestPayData['AuthCode'];
+          paymentInfo['transDate'] = nestPayData['EXTRA.TRXDATE'];
+          paymentInfo['transProc'] = nestPayData['ProcReturnCode'];
+          paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '33';
+          paymentInfo['error'] = nestPayData['ErrMsg'];
+          paymentInfo['payment'] = nestPayData['Response'];
+        }
+      }
+    }else{
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}`});
       ctx.res.end();
     }
-
-    token = getUserToken(ctx);
 
   }catch(err){
     console.log(err)
@@ -72,7 +93,7 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
   
 
   
-  return { userAgent, link, token }
+  return { userAgent, link, token, paymentInfo }
 }
 
 export default withRedux(PaymentFailure)

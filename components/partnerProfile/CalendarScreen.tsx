@@ -164,7 +164,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
     const partnerReservation = JSON.parse(JSON.stringify(this.props.partnerReservation));
 
     partnerReservation['partner'] = reservation['partner'];
-    partnerReservation['type'] = 'partner';
+    partnerReservation['type'] = reservation['type'];
     partnerReservation['room'] = {label: getFieldValueByRegId(this.props.partnerRooms, reservation['room'], 'name'), value: reservation['room']};
     partnerReservation['date'] = new Date(reservation['date']);
     partnerReservation['term'] = {label: `${reservation['from']} - ${reservation['to']}`, value: 0};

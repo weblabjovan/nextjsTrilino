@@ -127,3 +127,25 @@ export function loginUser(data: object, link: object) {
     );
   };
 }
+
+export const saveReservationUserActionTypes = {
+  START: 'USER_SAVE_RESRVATION_START',
+  ERROR: 'USER_SAVE_RESRVATION_ERROR',
+  SUCCESS: 'USER_SAVE_RESRVATION_SUCCESS',
+};
+
+export function saveUserReservation(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_SAVE);
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      saveReservationUserActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

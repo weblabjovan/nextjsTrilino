@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Loader from '../components/loader';
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
-import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, changePasswordUser } from '../actions/user-actions';
+import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, changePasswordUser, saveUserReservation } from '../actions/user-actions';
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
+import DateHandler from '../lib/classes/DateHandler';
 import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
-import { sha512 } from '../lib/helpers/specificUserFunctions';
+import { prepareObjForUserReservation } from '../lib/helpers/specificUserFunctions';
 import { isDateDifferenceValid } from '../lib/helpers/specificReservationFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
+import { setNestPayHash } from '../server/helpers/general';
 import genOptions from '../lib/constants/generalOptions';
+import Loader from '../components/loader';
 import PlainInput from '../components/form/input';
 import CheckBox from '../components/form/checkbox';
 import InfoFix from '../components/reservation/InfoFix';
@@ -19,6 +21,7 @@ import ResStep from '../components/reservation/ResStep';
 import PaymentRoute from '../components/reservation/PaymentRoute';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
+import Keys from '../server/keys';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -37,12 +40,16 @@ interface MyProps {
   userPassChangeStart: boolean;
   userPassChangeError: boolean | object;
   userPassChangeSuccess: null | number;
+  userSaveReservationStart: boolean;
+  userSaveReservationError: boolean | object;
+  userSaveReservationSuccess: null | object;
   setUserLanguage(language: string): string;
   changeSingleReservationField(field: string, value: any): void;
   changeSingleUserField(field: string, value: any): void;
   loginUser(data: object, link: object): void;
   registrateUser(data: object, link: object): void;
   changePasswordUser(param: string, data: object, link: object): object;
+  saveUserReservation(link: object, data: object, auth: string): void;
   userAgent: string;
   path: string;
   router: object;
@@ -98,7 +105,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       sections: {'1': {active: true, clickable: false }, '2': {active: false, clickable: false }, '3': {active: false, clickable: false }, '4': {active: false, clickable: false } },
       errors: {flag: false, fields: { }},
       info: { general: {name: '', room:'', adultsNum: 0, kidsNum: 0 }, catering: [], addon: []},
-      price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, addon: 0, deposit: this.props.partner['reservation']['term']['price'] * (parseInt(this.props.partner['general']['depositPercent'])/100), trilinoCatering: 0 },
+      price: {total: this.props.partner['reservation']['term']['price'], term: this.props.partner['reservation']['term']['price'], catering: 0, trilinoCatering: 0, addon: 0, decoration: 0, addition: 0, deposit: this.props.partner['reservation']['term']['price'] * (parseInt(this.props.partner['general']['depositPercent'])/100),  },
       paymentRouteErrors: { show: false, 
         fields:{ firstName: false, lastName: false, email: false, phoneCode: false, phone: false, terms: false, logEmail: false, password: false , regDuplicate: false, baseError: false, code: false, pass: false, confirm: false, base: false, readyToPay: false },
         messages:{ baseError: ''}
@@ -211,13 +218,16 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     const arr = []
     let num = 0;
+    let decorNum = 0;
+    let additioNum = 0;
     Object.keys(additionalCopy).map( key => {
       if (additionalCopy[key]['check']) {
         if (additionalCopy[key]['section'] === 'decoration') {
           const item = getObjectFieldByFieldValue(decorationCopy, 'regId', key);
           if (item) {
             num = num + parseInt(item['price']);
-            arr.push({name: genOptions['decorType'][item['value'].toString()][`name_${this.props.lang}`], total: item['price']});
+            decorNum = decorNum + parseInt(item['price']);
+            arr.push({name: genOptions['decorType'][item['value'].toString()][`name_${this.props.lang}`], regId: item['regId'], total: item['price'], type: 'decoration'});
           }
         }
 
@@ -225,7 +235,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
           const match = getArrayObjectByFieldValue(addonCopy, 'regId', key);
           if (match) {
             num = num + parseInt(match['price']);
-            arr.push({name:match['name'], total: match['price']});
+            additioNum = additioNum + parseInt(match['price']);
+            arr.push({name:match['name'], regId: match['regId'], total: match['price'], type: 'addition'});
           }
         }
       }
@@ -233,10 +244,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     infoCopy['addon'] = arr;
     priceCopy['addon'] = num;
+    priceCopy['decoration'] = decorNum;
+    priceCopy['addition'] = additioNum;
     priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
     priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
     this.setState({ info: infoCopy, price: priceCopy }, () => {
+      console.log(this.state.info);
       this.refreshInfoHeight();
     });
 
@@ -257,7 +271,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
             trilino = trilino + (parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']);
           }
           num = num + (parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']);
-          arr.push({name:cateringCopy[key]['name'], quantity: parseInt(cateringCopy[key]['num']), total: parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']});
+          arr.push({name:cateringCopy[key]['name'], regId:cateringCopy[key]['regId'], quantity: parseInt(cateringCopy[key]['num']), total: parseInt(cateringCopy[key]['num']) * cateringCopy[key]['price']});
         }
       })
       infoCopy['catering'] = arr;
@@ -658,27 +672,68 @@ class ReservationView extends React.Component <MyProps, MyState>{
       errorCopy['fields']['readyToPay'] = true;
       this.setState({ paymentRouteErrors: errorCopy });
     }else{
-      const plain =  `13IN000650|123|91.96|https://www.trilino.com|https://www.trilino.com/login|PreAuth||asdf||||941|Beograd123!`;
-      // const sha = sha512(plain);
-      // const hash = btoa(sha);
-      // console.log(hash);
+      const dateHandler = new DateHandler(this.props.router['query']['date'])
+      this.setState({ loader: true }, () => {
+        const userReservation = {
+          partner: this.props.partner['_id'],
+          type: 'user',
+          room: this.props.partner['reservation']['id'],
+          date: dateHandler.getDateForServer(),
+          from: this.props.router['query']['from'],
+          to: this.props.router['query']['to'],
+          double: this.props.reservationGeneral['double'],
+          guest: this.state.info['general']['name'],
+          food: prepareObjForUserReservation('catering', this.state.info['catering']),
+          animation: prepareObjForUserReservation('addition', this.state.info['addon']),
+          decoration: prepareObjForUserReservation('decoration', this.state.info['addon']),
+          comment: '',
+          edit: false,
+          id: '',
+          showPrice: true,
+          termPrice: this.state.price['term'].toFixed(2),
+          animationPrice: this.state.price['addition'].toFixed(2),
+          decorationPrice: this.state.price['decoration'].toFixed(2),
+          foodPrice: this.state.price['catering'].toFixed(2),
+          price: this.state.price['total'].toFixed(2),
+          deposit: this.state.price['deposit'].toFixed(2),
+          trilinoPrice: this.state.price['trilinoCatering'].toFixed(2),
+        };
+
+        const data = {language: this.props.lang, reservation: userReservation, type: 'user'};
+        this.props.saveUserReservation(this.props.link, data, this.props.token);
+      })
+    }
+  }
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (this.state.logTry > 9) {
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+    }
+
+    if (!this.props.userSaveReservationStart && this.props.userSaveReservationSuccess && !prevProps.userSaveReservationSuccess) {
+      this.setState({ loader: false });
+      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+      const hash = setNestPayHash(plainText);
+
       const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
-      <input type="hidden" name="clientid" value="13IN000650"/> 
+      <input type="hidden" name="clientid" value="${Keys.NEST_PAY_CLIENT_ID}"/> 
       <input type="hidden" name="storetype" value="3d_pay_hosting" />  
-      <input type="hidden" name="hash" value="4emfmikYuok7aCSPFLRxTDER+PxLAgf2x+yDjlhrlfCd029AkHkcKTC9+dzYmktQ9HjN4RE289FWTyp56kudEQ==" /> 
-      <input type="hidden" name="trantype" value="PreAuth" /> 
-      <input type="hidden" name="amount" value="91.96" /> 
+      <input type="hidden" name="hash" value="${hash}" /> 
+      <input type="hidden" name="trantype" value="Auth" /> 
+      <input type="hidden" name="amount" value="${this.state.price['deposit'].toFixed(2)}" /> 
       <input type="hidden" name="currency" value="941" /> 
-      <input type="hidden" name="oid" value="123" /> 
-      <input type="hidden" name="okUrl" value="https://www.trilino.com"/> 
-      <input type="hidden" name="failUrl" value="https://www.trilino.com/login" /> 
-      <input type="hidden" name="lang" value="en" /> 
+      <input type="hidden" name="oid" value="${this.props.userSaveReservationSuccess[0]['_id']}" /> 
+      <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 
+      <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" /> 
+      <input type="hidden" name="lang" value="${this.props.lang}" /> 
       <input type="hidden" name="hashAlgorithm" value="ver2" /> 
-      <input type="hidden" name="rnd" value="asdf" /> 
+      <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
       <input type="hidden" name="encoding" value="utf-8" />
+      <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" />
       <input type="submit" style="visibility: hidden" /> </form>`;
-      console.log(mydiv);
+      
       const form =document.getElementById('reviseCombi');
+      // console.log(form);
 
       if(form){
         let element: HTMLElement = form.querySelector('input[type="submit"]') as HTMLElement;
@@ -686,13 +741,6 @@ class ReservationView extends React.Component <MyProps, MyState>{
           element.click();
         })
       }
-    }
-    
-  }
-
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-    if (this.state.logTry > 9) {
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
     }
 
     if (this.props.userLoginError && !prevProps.userLoginError && !this.props.userLoginStart) {
@@ -738,6 +786,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+    console.log(this.props.partner);
 	}
 	
   render() {
@@ -1036,7 +1085,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         readyToPay={ this.state.readyToPay }
                         changePaymentReady={ this.changePaymentReady }
                       />
-                      <div id="myformcontainer"></div>
+                      <div id="myformcontainer" style={{"visibility":"hidden"}}></div>
                     </Col>
                   </Row>
                 </Col>
@@ -1099,6 +1148,10 @@ const mapStateToProps = (state) => ({
   userPassChangeError: state.UserReducer.userPassChangeError,
   userPassChangeSuccess: state.UserReducer.userPassChangeSuccess,
 
+  userSaveReservationStart: state.UserReducer.userSaveReservationStart,
+  userSaveReservationError: state.UserReducer.userSaveReservationError,
+  userSaveReservationSuccess: state.UserReducer.userSaveReservationSuccess,
+
 });
 
 
@@ -1110,6 +1163,7 @@ const matchDispatchToProps = (dispatch) => {
     loginUser,
     registrateUser,
     changePasswordUser,
+    saveUserReservation,
   },
   dispatch);
 };

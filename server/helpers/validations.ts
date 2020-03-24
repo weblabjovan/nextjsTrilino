@@ -400,3 +400,17 @@ export const isUserRegDataValid = (data: object): boolean => {
 
 	return true;
 }
+
+export const isReservationConfirmDataValid = (data: object): boolean => {
+	if (!data['payment'] || !data['transId'] || !data['id'] || !data['card'] || !data['language'] || !data['transDate'] || !data['transProc'] || !data['transMd']) {
+		return false;
+	}
+
+	if (data['confirm']) {
+		if (!data['transAuth']) {
+			return false;
+		}
+	}
+
+	return true;
+}

@@ -600,6 +600,7 @@ export const prepareReservationObjectForSave = (obj: object): object => {
 	partnerReservation['date']  = setDateToDayStart(partnerReservation['date']);
 	partnerReservation['animation'] = returnOnlyTrueForObjects(partnerReservation['animation']);
 	partnerReservation['decoration'] = returnOnlyTrueForObjects(partnerReservation['decoration']);
+	partnerReservation['room'] = partnerReservation['room']['value'];
 
 	return partnerReservation;
 }

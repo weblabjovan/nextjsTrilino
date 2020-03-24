@@ -43,6 +43,20 @@ export const getUserToken = (context: any): string => {
 	return token;
 }
 
-export const sha512 = (str: string): string => {
-  return 'abc';
+export const prepareObjForUserReservation = (obj: string, data: Array<object>): object => {
+	const result = {};
+
+	if (obj === 'catering') {
+		for (var i = 0; i < data.length; ++i) {
+			result[data[i]['regId']] = data[i]['quantity'].toString();
+		}
+	}else{
+		for (var i = 0; i < data.length; ++i) {
+			if (data[i]['type'] === obj) {
+				result[data[i]['regId']] = true;
+			}
+		}
+	}
+
+	return result;
 }

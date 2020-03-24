@@ -65,3 +65,49 @@ export function getReservationsOnDate(link: object, data: object) {
     );
   };
 }
+
+export const confirmReservationActionType = {
+  START: 'CONFIRM_RESERVATION_START',
+  ERROR: 'CONFIRM_RESERVATION__ERROR',
+  SUCCESS: 'CONFIRM_RESERVATION_SUCCESS',
+};
+
+export function confirmReservationAfterPay(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_CONFIRM);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      confirmReservationActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const disconfirmReservationActionType = {
+  START: 'DISCONFIRM_RESERVATION_START',
+  ERROR: 'DISCONFIRM_RESERVATION__ERROR',
+  SUCCESS: 'DISCONFIRM_RESERVATION_SUCCESS',
+};
+
+export function disconfirmReservationAfterPay(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_DISCONFIRM);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      confirmReservationActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

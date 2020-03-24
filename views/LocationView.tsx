@@ -160,6 +160,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+		console.log(this.props.partner);
 	}
 	
   render() {
