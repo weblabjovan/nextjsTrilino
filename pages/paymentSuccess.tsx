@@ -68,8 +68,9 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
       if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
-        ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
-        ctx.res.end();
+        console.log(nestPayData);
+        // ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+        // ctx.res.end();
       }else{
         paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
         paymentInfo['transId'] = nestPayData['TransId'];
