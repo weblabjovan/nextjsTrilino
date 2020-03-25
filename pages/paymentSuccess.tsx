@@ -51,7 +51,7 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   const paymentInfo = { card: '', transId: '', transDate: '', transAuth: '', transProc: '', transMd: '', error: '', payment: ''};
   let token = '';
-
+  console.log('checking my console....')
   try{
     const devLog = await isDevEnvLogged(ctx);
 
@@ -59,7 +59,6 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
       ctx.res.writeHead(302, {Location: `/devLogin`});
       ctx.res.end();
     }
-
     const userLog = await isUserLogged(ctx);
 
     token = getUserToken(ctx);
