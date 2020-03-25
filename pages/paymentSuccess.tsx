@@ -53,23 +53,23 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   let token = '';
   console.log('checking my console....')
   try{
-    const devLog = await isDevEnvLogged(ctx);
+    // const devLog = await isDevEnvLogged(ctx);
 
-    if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
-      ctx.res.end();
-    }
-    const userLog = await isUserLogged(ctx);
+    // if (!devLog) {
+    //   ctx.res.writeHead(302, {Location: `/devLogin`});
+    //   ctx.res.end();
+    // }
+    // const userLog = await isUserLogged(ctx);
 
-    token = getUserToken(ctx);
+    // token = getUserToken(ctx);
 
     const resOne = await getSingleReservation(ctx);
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
       if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
         console.log(nestPayData);
-        // ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
-        // ctx.res.end();
+        ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
+        ctx.res.end();
       }else{
         paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
         paymentInfo['transId'] = nestPayData['TransId'];
