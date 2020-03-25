@@ -75,6 +75,7 @@ interface MyState {
   paymentRouteErrors: object;
   paymentRouteStage: string;
   readyToPay: boolean;
+  token: string;
 };
 
 class ReservationView extends React.Component <MyProps, MyState>{
@@ -112,6 +113,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       },
       paymentRouteStage: this.props.token ? 'payment' : 'login',
       readyToPay: false,
+      token: '',
     };
   
 
@@ -698,9 +700,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
           deposit: this.state.price['deposit'].toFixed(2),
           trilinoPrice: this.state.price['trilinoCatering'].toFixed(2),
         };
-
+        const tkn = this.props.token ? this.props.token : this.state.token;
         const data = {language: this.props.lang, reservation: userReservation, type: 'user'};
-        this.props.saveUserReservation(this.props.link, data, this.props.token);
+        this.props.saveUserReservation(this.props.link, data, tkn);
       })
     }
   }
@@ -755,7 +757,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     if (this.props.userLoginSuccess && !prevProps.userLoginSuccess && !this.props.userLoginStart) {
       setCookie(this.props.userLoginSuccess['token'],'trilino-user-token', 10);
-      this.setState({ loader: false, paymentRouteStage: 'payment'});
+      this.setState({ loader: false, paymentRouteStage: 'payment', token: this.props.userLoginSuccess['token']});
     }
 
     if (this.props.userRegistrateError['code'] === 2 && prevProps.userRegistrateError['code'] !== 2) {
@@ -779,7 +781,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     if (this.props.userPassChangeSuccess && !prevProps.userPassChangeSuccess && !this.props.userPassChangeStart) {
       setCookie(this.props.userPassChangeSuccess['token'],'trilino-user-token', 10);
-      this.setState({ loader: false, paymentRouteStage: 'payment'});
+      this.setState({ loader: false, paymentRouteStage: 'payment', token: this.props.userPassChangeSuccess['token'] });
     }
 
   }

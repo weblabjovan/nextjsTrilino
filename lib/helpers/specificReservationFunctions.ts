@@ -70,10 +70,10 @@ export const getSingleReservation = async (context: any): Promise<any> => {
   return response;
 }
 
-export const isPaymentResponseValid = (response: object, id: string): boolean => {
+export const isPaymentResponseValid = (response: object, id: string, req: object): boolean => {
   if (Object.keys(response).length) {
     const outcome = response['Response'];
-    if (response['ReturnOid'] === id && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting') {
+    if (response['ReturnOid'] === id && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting' && req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'POST') {
       const split = response['HASHPARAMSVAL'].split('|');
       if (split[1] === id && split[4] === outcome) {
         return true;
@@ -81,7 +81,10 @@ export const isPaymentResponseValid = (response: object, id: string): boolean =>
     }
     return false;
   }else{
-    return true;
+    if (req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'GET') {
+      return true;
+    }
+    
   }
 
   return false;

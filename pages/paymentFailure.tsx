@@ -4,8 +4,7 @@ import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
+import { getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import PaymentFailureView from '../views/PaymentFailureView';
 import parse from 'urlencoded-body-parser';
@@ -49,24 +48,17 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-  const paymentInfo = { card: 'x', transId: 'x', transDate: 'x', transAuth: 'x', transProc: 'x', transMd: 'x', error: 'x', payment: 'x'};
+  const paymentInfo = { card: '-', transId: '-', transDate: '-', transAuth: '-', transProc: '-', transMd: '-', error: '-', payment: '-'};
   let token = '';
 
   try{
-    const devLog = await isDevEnvLogged(ctx);
-
-    if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
-      ctx.res.end();
-    }
-
-    const userLog = await isUserLogged(ctx);
+    
     token = getUserToken(ctx);
 
     const resOne = await getSingleReservation(ctx);
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
-      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req)) {
         ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
         ctx.res.end();
       }else{
@@ -89,9 +81,6 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
   }catch(err){
     console.log(err)
   }
-
-  
-
   
   return { userAgent, link, token, paymentInfo }
 }

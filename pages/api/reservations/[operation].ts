@@ -314,7 +314,6 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 			try{
 				await connectToDb(req.headers.host);
-				console.log('here')
 				const one = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
 				if (one) {
 					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: one });

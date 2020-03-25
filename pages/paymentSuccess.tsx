@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
+import { getUserToken } from '../lib/helpers/specificUserFunctions';
 import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
 import parse from 'urlencoded-body-parser';
 import Head from '../components/head';
@@ -51,23 +50,12 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   const paymentInfo = { card: '', transId: '', transDate: '', transAuth: '', transProc: '', transMd: '', error: '', payment: ''};
   let token = '';
-  console.log('checking my console....')
   try{
-    // const devLog = await isDevEnvLogged(ctx);
-
-    // if (!devLog) {
-    //   ctx.res.writeHead(302, {Location: `/devLogin`});
-    //   ctx.res.end();
-    // }
-    // const userLog = await isUserLogged(ctx);
-
-    // token = getUserToken(ctx);
-
+    
     const resOne = await getSingleReservation(ctx);
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
-      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'])) {
-        console.log(nestPayData);
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req)) {
         ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
         ctx.res.end();
       }else{
@@ -86,9 +74,6 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   }catch(err){
     console.log(err)
   }
-
-  
-
   
   return { userAgent, link, token, paymentInfo }
 }
