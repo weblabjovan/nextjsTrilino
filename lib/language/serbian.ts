@@ -529,7 +529,7 @@ const serbian: LanguageInterface = {
 	locationChooseTermBefore: 'Izaberite termin',
 	locationChooseTermAfter: 'Izabrali ste termin:',
 	locationButtonReserve: 'Rezervišite',
-	locationCancelationNone: 'Besplatno otkazivanje retervacije nije dostupno na ovoj lokaciji.',
+	locationCancelationNone: 'Besplatno otkazivanje rezervacije nije dostupno na ovoj lokaciji.',
 	locationCancelationFirst: 'Rezervacije proslava na ovoj lokaciji moguće je otkazati besplatno najkasnije ',
 	locationCancelationSecond: ' dana pre zakazanog početka.',
 

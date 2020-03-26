@@ -35,7 +35,9 @@ const reservationSchema = new Schema({
 	transactionDate: String,
 	transactionMdStatus: String,
 	transactionErrMsg: String,
+	trilino: Boolean,
 	doubleReference: {type: String, required: true},
+	doubleNumber: Number,
 }, {timestamps: true});
 
 reservationSchema.index({'date': 1});

@@ -171,7 +171,7 @@ const generalOptions: IGenOptions = {
       { value: '5', label: '5' },
     ],
     contentOfferForSearch:[
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 18, 22, 23, 26, 30, 31, 33, 34, 37
+      1, 4, 5, 6, 7, 12, 13, 16, 23, 24, 25, 37, 48, 42, 33, 34, 15
     ],
     contentOffer_sr: [
       {value: '1', label: 'Lavirint'},

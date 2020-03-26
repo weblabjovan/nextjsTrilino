@@ -83,7 +83,7 @@
 	    margin-top: 15%;
 	    text-align: center;
 	    padding: 50px 30px;
-	    border-radius: 30px;
+	    border-radius: 10px;
 	    background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
 	    -webkit-box-shadow: 7px 7px 12px 0px rgba(98,102,110,1);
 		-moz-box-shadow: 7px 7px 12px 0px rgba(98,102,110,1);
@@ -98,10 +98,17 @@
 		@media only screen and (max-width: 992px) {
 	    	margin-top: 5%;
 	    	margin-bottom: 50px;
+
+		}
+
+		@media only screen and (max-width: 768px) {
+	    	margin-bottom: 80px;
+	    	width: 70%;
 		}
 
 		@media only screen and (max-width: 577px) {
 	    	margin-top: 10%;
+	    	margin-bottom: 40px;
   			width: 90%;
   			padding: 0px;
 	    	background-image: none;
@@ -211,7 +218,9 @@
 	margin: auto;
 	margin-bottom: 50px;
 	width: 100%;
-	border-radius: 20px;
+	background: #e6e6e6;
+	border: solid 1px #d4d4d4;
+	border-radius: 8px;
 	-webkit-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
 	-moz-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
 	box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
@@ -230,13 +239,20 @@
 	}
 
 	p{
-		line-height: 32px;
-		font-size: 20px;
+		line-height: 28px;
+		font-size: 18px;
 		font-weight: 300;
 		margin-top: 15px;
+		height: 100px;
+		text-align: justify;
+		vertical-align: middle;
+
+		@media only screen and (max-width: 768px) {
+			height: 100px;
+		}
 		@media only screen and (max-width: 577px) {
 	    	font-size: 17px;
-	    	line-height: 30px;
+	    	height: auto;
 	    	text-align: center;
 		}
 	}
@@ -304,8 +320,9 @@
 
 	margin-bottom: 30px;
 	padding-bottom: 20px;
-	border-radius: 20px;
-	background-image: linear-gradient(to right top, #cccccc, #b5b5b5, #9f9f9f, #898989, #747474);
+	border-radius: 8px;
+	background: #e6e6e6;
+	border: solid 1px #d4d4d4;
 	-webkit-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
 	-moz-box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);
 	box-shadow: 7px 7px 12px 0px rgba(61,61,61,1);

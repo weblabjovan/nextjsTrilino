@@ -540,8 +540,8 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
                   </Col>
                   <Col xs="12" sm="6">
                     <ul>
-                      <li>{this.state.dictionary['partnerProfileReservationPrice']} <span className="textHighlightGrey">{`${this.props.partnerReservation['price']}rsd`}</span></li>
-                      <li>{this.state.dictionary['partnerProfileReservationDeposit']} <span className="textHighlightGrey">{`${this.props.partnerReservation['deposit']}rsd`}</span></li>
+                      <li>{this.state.dictionary['partnerProfileReservationPrice']} <span className="textHighlightGrey">{`${this.props.partnerReservation['price'] ? this.props.partnerReservation['price'] : '' } rsd`}</span></li>
+                      <li>{this.state.dictionary['partnerProfileReservationDeposit']} <span className="textHighlightGrey">{`${this.props.partnerReservation['deposit'] ? this.props.partnerReservation['deposit'] : ''} rsd`}</span></li>
                     </ul>
                   </Col>
                 </Row>

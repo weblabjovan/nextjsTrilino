@@ -245,7 +245,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	              <div className="icon-section">
 	              	<p>{this.props.partner['general']['description']}</p>
 
-		          		<Row>
+		          		<Row className="justify-content-sm-center">
 				            {
 				              isFieldInObject(this.props.partner, 'parking', 'general')
 				              ?
@@ -503,7 +503,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          </Row>
 
 	          <Row className="offer">
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleFree']}</h3>
 	          			{
@@ -521,7 +521,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		
 	          	</Col>
 
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleAddon']}</h3>
 	          			{
@@ -542,7 +542,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		</div>
 	          	</Col>
 
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleDecor']}</h3>

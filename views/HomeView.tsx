@@ -252,16 +252,16 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/watch.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy1'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/watch.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy1'] }</p></Col>
                   <hr></hr>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/toys.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy2'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/toys.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy2'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -269,15 +269,15 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/gift.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy3'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/gift.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy3'] }</p></Col>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/simple.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy4'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/simple.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy4'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -285,15 +285,15 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/paper.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy5'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/paper.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy5'] }</p></Col>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/smile.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy6'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/smile.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy6'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -383,11 +383,11 @@ class HomeView extends React.Component <MyProps, MyState>{
 
          <div className=" bigPadDown">
           <Container>
-            <Row>
+            <Row className="justify-content-sm-center">
                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
@@ -403,7 +403,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_2.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
@@ -419,7 +419,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_3.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>

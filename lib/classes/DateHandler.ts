@@ -11,6 +11,11 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
+	public setNewDateString = (datestring: string): void => {
+		this.date = new Date();
+		this.dateString = datestring as string;
+	}
+
 	public getDateWithTimeForServer = (time: string): Date => {
 		this.setDateForServer('code');
 		this.setDayOnSpecificTime(time);
@@ -56,6 +61,18 @@ export default class DateHandler {
 
 		const begining = this.setDayOnBegining(this.now);
 		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
+
+		return timeDiff;
+	}
+
+	public getDifferenceBetweenTwoTimes = (earlyTime: string, laterTime: string): number => {
+		const devider = (1000 * 60);
+		const e = new Date();
+		const er = this.setSpecificTime(earlyTime, e);
+		const l = new Date();
+		const la = this.setSpecificTime(laterTime, l);
+
+		const timeDiff = (la.getTime() - er.getTime()) / devider;
 
 		return timeDiff;
 	}
@@ -145,12 +162,18 @@ export default class DateHandler {
 	}
 
 	private setDayOnSpecificTime = (time: string): void => {
+		this.date = this.setSpecificTime(time, this.date);
+	}
+
+	private setSpecificTime = (time: string, date: Date): Date => {
 		const split = time.split(':');
 
-		this.date.setUTCHours(parseInt(split[0]))
-		this.date.setMinutes(parseInt(split[1]))
-		this.date.setSeconds(0);
-	  	this.date.setMilliseconds(0);
+		date.setUTCHours(parseInt(split[0]))
+		date.setMinutes(parseInt(split[1]))
+		date.setSeconds(0);
+	  	date.setMilliseconds(0);
+
+	  	return date;
 	}
 
 	private getServerDateString = () => {

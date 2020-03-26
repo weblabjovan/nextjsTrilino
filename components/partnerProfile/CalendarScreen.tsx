@@ -134,6 +134,15 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
   }
 
 
+  eventStyleGetter(event: any, start: any, end:any, isSelected:any) {
+    const backgroundColor = event['type'] === 'user' ? '#5b92f8' : '#325390';
+    const style = { backgroundColor: backgroundColor, border: "none" };
+    return {
+        style: style
+    };
+  }
+
+
   handleCalendarDateRangeChange(event: any){
     if (this.state.ready) {
       if (event['start']) {
@@ -150,7 +159,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
         }
         this.setState({ dates }, () => {
           const link = setUpLinkBasic(window.location.href);
-          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: this.state.activeRoom['value'], dates: this.state.dates });
         });
       }
     }
@@ -328,6 +337,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
                   // onView={ (event) => { console.log(event)}}
                   onRangeChange={ (event) => { this.handleCalendarDateRangeChange(event)} }
                   onSelectEvent={ (event, e) =>{ this.openExistingReservation(event) } }
+                  eventPropGetter={(this.eventStyleGetter)}
                 />
               </div>
               

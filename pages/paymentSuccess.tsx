@@ -61,10 +61,10 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
       }else{
         paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
         paymentInfo['transId'] = nestPayData['TransId'];
-        paymentInfo['transAuth'] = nestPayData['AuthCode'];
+        paymentInfo['transAuth'] = nestPayData['AuthCode'] ? nestPayData['AuthCode'] : '-';
         paymentInfo['transDate'] = nestPayData['EXTRA.TRXDATE'];
         paymentInfo['transProc'] = nestPayData['ProcReturnCode'];
-        paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '33';
+        paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '-';
         paymentInfo['payment'] = nestPayData['Response'];
       }
     }else{

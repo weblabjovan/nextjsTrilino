@@ -692,6 +692,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
           edit: false,
           id: '',
           showPrice: true,
+          potentialDouble: this.props.partner['isReadyForDouble'] ? this.props.partner['isReadyForDouble'] : null,
           termPrice: this.state.price['term'].toFixed(2),
           animationPrice: this.state.price['addition'].toFixed(2),
           decorationPrice: this.state.price['decoration'].toFixed(2),
@@ -817,7 +818,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
-                    time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
+                    time={!this.props.reservationGeneral['double'] ? `${this.props.router['query']['from']} - ${this.props.router['query']['to']}` : `${this.props.router['query']['from']} - ${this.props.partner['isReadyForDouble']['to']}`}
                     price={ this.state.price['total'] }
                     deposit={ this.state.price['deposit'] }
                     lang={this.props.lang}
@@ -1068,7 +1069,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                         partner={this.props.partner['name']}
                         address={this.props.partner['general']['address']}
                         date={this.props.router['query']['date']}
-                        time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
+                        time={!this.props.reservationGeneral['double'] ? `${this.props.router['query']['from']} - ${this.props.router['query']['to']}` : `${this.props.router['query']['from']} - ${this.props.partner['isReadyForDouble']['to']}`}
                         price={ this.state.price['total'] }
                         deposit={ this.state.price['deposit'] }
                         lang={this.props.lang}
@@ -1096,7 +1097,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
-                    time={`${this.props.router['query']['from']} - ${this.props.router['query']['to']}`}
+                    time={!this.props.reservationGeneral['double'] ? `${this.props.router['query']['from']} - ${this.props.router['query']['to']}` : `${this.props.router['query']['from']} - ${this.props.partner['isReadyForDouble']['to']}`}
                     price={ this.state.price['total'] }
                     deposit={ this.state.price['deposit'] }
                     lang={this.props.lang}

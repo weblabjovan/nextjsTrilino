@@ -6,11 +6,13 @@ import Partner from '../../../server/models/partner';
 import User from '../../../server/models/users';
 import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes }  from '../../../server/helpers/general';
+import generalOptions from '../../../lib/constants/generalOptions';
+import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes, unCoverMyEmail, myDecrypt }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
-import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
+import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue } from '../../../lib/helpers/generalFunctions';
+import { getGeneralOptionLabelByValue } from '../../../lib/helpers/specificPartnerFunctions';
 import { getLanguage } from '../../../lib/language';
 import DateHandler from '../../../lib/classes/DateHandler';
 import Keys from '../../../server/keys';
@@ -60,7 +62,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							if (isReservationSaveDataValid(reservation)) {
 								const reservations = await Reservation.find({ 'date': reservation['date'], 'partner': reservation['partner'], 'room': reservation['room']['value'], active: true }, { new: true }).select('from to _id');
 								if (isReservationStillAvailable(reservation, reservations)) {
-									const dateHandler = new DateHandler(reservation['date'].substring(0,19));
+									const dateString = reservation['date'].substring(0,19);
+									const dateHandler = new DateHandler(dateString);
 									const catering = sortCateringTypes(reservation['food']);
 									const doubleReference = generateString(17);
 
@@ -69,7 +72,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 										partner: reservation['partner'],
 										type: reservation['type'],
 										room: reservation['room'],
-										date: reservation['date'].substring(0,19),
+										date: dateString,
 										from: reservation['from'],
 										fromDate: dateHandler.getDateWithTimeForServer(reservation['from']),
 										to: reservation['to'],
@@ -89,6 +92,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 								    price: reservation['price'],
 								    doubleReference: doubleReference,
 								    deposit: reservation['deposit'],
+								    trilino: Object.keys(catering['trilino']).length ? true : false,
+								    doubleNumber: 1,
 										active: true,
 									};
 									if (type === 'user') {
@@ -97,15 +102,34 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 									arr.push(main);
 
 									if (reservation['double']) {
+
+										if (!reservation['terms']) {
+											if (reservation['potentialDouble']) {
+												if (!reservation['potentialDouble']['from'] || !reservation['potentialDouble']['to'] || !reservation['potentialDouble']['price']) {
+													return res.status(401).json({ endpoint: 'reservations', operation: 'save', success: false, code: 8, error: 'double term error', message: dictionary['apiPartnerLoginCode4'] });
+												}else{
+													const diff = dateHandler.getDifferenceBetweenTwoTimes(reservation['to'], reservation['potentialDouble']['from'])
+													if (diff < 30 || diff > 60) {
+														return res.status(401).json({ endpoint: 'reservations', operation: 'save', success: false, code: 8, error: 'double term error', message: dictionary['apiPartnerLoginCode4'] });
+													}
+												}
+												
+											}else{
+												return res.status(401).json({ endpoint: 'reservations', operation: 'save', success: false, code: 8, error: 'double term error', message: dictionary['apiPartnerLoginCode4'] });
+											}
+										}
+
+										dateHandler.setNewDateString(dateString);
+
 										const double = {
 											partner: reservation['partner'],
 											type: reservation['type'],
 											room: reservation['room'],
 											date: reservation['date'].substring(0,19),
-											from: reservation['terms'][reservation['term']['value'] + 1]['from'],
-											fromDate: setDateTime(reservation['date'], reservation['terms'][reservation['term']['value'] + 1]['from']),
-											to: reservation['terms'][reservation['term']['value'] + 1]['to'],
-											toDate: setDateTime(reservation['date'], reservation['terms'][reservation['term']['value'] + 1]['to']),
+											from: reservation['terms'] ? reservation['terms'][reservation['term']['value'] + 1]['from'] : reservation['potentialDouble']['from'],
+											fromDate: reservation['terms'] ? dateHandler.getDateWithTimeForServer(reservation['terms'][reservation['term']['value'] + 1]['from']) : dateHandler.getDateWithTimeForServer(reservation['potentialDouble']['from']),
+											to: reservation['terms'] ? reservation['terms'][reservation['term']['value'] + 1]['to'] : reservation['potentialDouble']['to'],
+											toDate: reservation['terms'] ? dateHandler.getDateWithTimeForServer(reservation['terms'][reservation['term']['value'] + 1]['to']) : dateHandler.getDateWithTimeForServer(reservation['potentialDouble']['to']) ,
 											double: reservation['double'],
 											user: reservation['user'],
 											userName: reservation['userName'],
@@ -115,6 +139,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 											decoration: reservation['decoration'],
 											comment: reservation['comment'],
 											doubleReference: doubleReference,
+											doubleNumber: 2,
 											active: true,
 										}
 										arr.push(double);
@@ -230,7 +255,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const { partner, room, dates } = req.body;
 				try{
 					await connectToDb(req.headers.host);
-					const query = await Reservation.find({partner, room, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}});
+					const query = await Reservation.find({partner, room, active: true, "fromDate": {"$gte": setReservationDateForBase(dates['start']), "$lt":setReservationDateForBase(dates['end'])}}).select('-trilinoCatering -confirmed -payment -transactionId -transactionCard -transactionAuthCode -transactionProcReturnCode -transactionMdStatus -transactionErrMsg -trilino ');
 					if (query) {
 						return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
 					}else{
@@ -311,11 +336,94 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		}else{
 			const { id, transId, card, transDate, transAuth, transProc, transMd, error, confirm, payment, language } = req.body;
 			const dictionary = getLanguage(language);
+			let trilinoCat = false;
+			let double = false;
 
 			try{
 				await connectToDb(req.headers.host);
 				const one = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+				const partner = await Partner.findById(one['partner'], '-password -passSafetyCode -passProvided -verified');
+				const user = await User.findById(one['user'], '-password -passSafetyCode -passProvided');
+				if (one['double']) {
+					double = await Reservation.findOneAndUpdate({"doubleReference": one['doubleReference'], "deposit": {"$exists": false}}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+				}
+				if (one['trilino']) {
+					trilinoCat = await Catering.findOneAndUpdate({"reservation": one['_id']}, {"$set" : {active: confirm, status: confirm ? 'confirmed' : 'declined'} }, { new: true });
+				}
+
+				let flag = false;
+
 				if (one) {
+					if (one['trilino']) {
+						if (trilinoCat) {
+							if (one['double']) {
+								if (double) {
+									flag = true;
+								}
+							}
+						}
+					}else{
+						if (one['double']) {
+							if (double) {
+								flag = true;
+							}
+						}else{
+							flag = true;
+						}
+					}
+				}
+				
+				
+				if (flag) {
+					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
+					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
+					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+					const userTo = [{name:myDecrypt(user['firstName']), email: unCoverMyEmail(user['contactEmail']) }];
+					const bcc = null;
+					const userTemplateId = 6;
+					const userParams = { 
+						title: confirm ? 'Uspešno ste rezervisali termin' : 'Vaš pokušaj da rezervišete termin nije uspeo', 
+						reservationTitle: 'Podaci o rezervaciji:', 
+						partnerName: `Prostor: ${partner['name']}`, 
+						address: `Adresa: ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
+						date: `Datum i vreme: ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
+						room: `Sala: ${roomObj['name']}`, 
+						fullPrice: `Za uplatu na licu mesta ostalo vam je ${(one['price'] - one['deposit']).toFixed(2)}`, 
+						deposit: `Uplatili ste deposit od ${one['deposit'].toFixed(2)}`, 
+						transactionTitle: 'Podaci o transakciji:', 
+						orderId: `Broj narudžbine: ${one['_id']}`, 
+						authCode: `Autorizacioni kod: ${one['transactionAuthCode']}`, 
+						paymentStatus: `Status transakcije: ${confirm ? 'Prihvaćeno' : 'Odbijeno'}`, 
+						transactionId: `Broj transakcije: ${one['transactionId']}`, 
+						transactionDate: `Datum transakcije: ${one['transactionDate']}`, 
+						mdStatus: `Kod statusa transakcije: ${one['transactionMdStatus']}`, 
+						finish: confirm ? `Sve vaše transakcije možete pratiti preko vašeg korisničkog profila. Lep provod i uspešno slavlje želimo vama i vašim gostima. Vaš Trilino.` : `Molimo vas proverite stanje na vašoj platnoj kartici i pokušajte da rezervišete termin ponovo. Vaš Trilino.`
+					};
+	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
+
+					const emailSeUser =	await sendEmail(userEmail);
+
+					if (confirm) {
+						const partnerSender = {name:'Trilino', email:'no.reply@trilino.com'};
+						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
+						const partnerTemplateId = 7;
+						const partnerParams = { 
+							title: 'Nova rezervacija', 
+							sub: 'Podaci o rezervaciji:', 
+							date: `Datum i vreme: ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
+							room: `Sala: ${roomObj['name']}`, 
+							guest: `Slavljenik/ca: ${one['guest']}`, 
+							catering: '1', 
+							decoration: '1', 
+							addons: '1', 
+							onsitePrice: `Za uplatu na licu mesta ostalo vam je ${(one['price'] - one['deposit']).toFixed(2)}`,
+							finish: 'Sve vaše rezervacije možete pratiti preko vašeg partnerskog profila. Želimo vam uspešnu organizaciju ovog slavlja. Vaš Trilino.'
+						};
+		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
+
+						const emailSePartner = await sendEmail(partnerEmail);
+					}
+
 					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: one });
 				}else{
 					return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
