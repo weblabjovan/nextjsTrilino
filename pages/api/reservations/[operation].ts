@@ -378,11 +378,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
 					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
 					console.log('1')
-					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
-					console.log(myDecrypt(user['firstName']));
-					console.log(unCoverMyEmail(user['contactEmail']));
-					const userTo = [{name: myDecrypt(user['firstName']), email: unCoverMyEmail(user['contactEmail']) }];
+					console.log(myDecrypt(user.lastName));
+					console.log(unCoverMyEmail(user.contactEmail));
+					console.log('0')
+					const userSender = {name:'Trilino', email:'no.reply@trilino.com'};
 					console.log('2')
+					const userTo = [{name: `${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`, email: unCoverMyEmail(user.contactEmail) }];
+					console.log('3')
 					const bcc = null;
 					const userTemplateId = 6;
 					const userParams = { 
@@ -404,7 +406,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						finish: confirm ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
 					};
 					console.log('3')
-	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
+	  			const userEmail = { sender: userSender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
 	  			console.log('4')
 					const emailSeUser =	await sendEmail(userEmail);
 					console.log('5')
