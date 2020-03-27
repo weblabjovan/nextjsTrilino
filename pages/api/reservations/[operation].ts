@@ -375,12 +375,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				
 				
 				if (flag) {
-					console.log('0')
 					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
 					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
 					console.log('1')
 					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
-					const userTo = [{name:myDecrypt(user['firstName']), email: unCoverMyEmail(user['contactEmail']) }];
+					console.log(myDecrypt(user['firstName']));
+					console.log(unCoverMyEmail(user['contactEmail']));
+					const userTo = [{name: myDecrypt(user['firstName']), email: unCoverMyEmail(user['contactEmail']) }];
 					console.log('2')
 					const bcc = null;
 					const userTemplateId = 6;
