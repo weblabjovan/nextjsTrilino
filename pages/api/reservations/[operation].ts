@@ -402,7 +402,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					};
 	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
 
-					const emailSeUser =	await sendEmail(userEmail);
+					// const emailSeUser =	await sendEmail(userEmail);
 
 					if (confirm) {
 						const partnerSender = {name:'Trilino', email:'no.reply@trilino.com'};
@@ -447,7 +447,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						};
 		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
 
-						const emailSePartner = await sendEmail(partnerEmail);
+						// const emailSePartner = await sendEmail(partnerEmail);
 					}
 
 					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: userParams });
