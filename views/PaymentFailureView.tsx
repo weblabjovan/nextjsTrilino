@@ -18,7 +18,7 @@ interface MyProps {
   userLanguage: string;
   confirmReservationStart: boolean;
   confirmReservationError: object | boolean;
-  confirmReservationSuccess: null | number;
+  confirmReservationSuccess: null | object;
   confirmReservationAfterPay(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
@@ -86,12 +86,57 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                 
                 <Col xs='12'>
                   <div className="middle">
-                    <h2>Na žalost vaša uplata nije bila uspešna</h2>
-                    <p>{`Sve podatke u vezi sa ovom neupešnom transakcijom možete pratiti na vašem korisničkom profilu u opciji REZERVACIJE (reg: ${this.props.link['queryObject']['reservation']}).`}</p>
-                    <a href={`/userProfile?languege=${this.props.lang}`}>vaš korisnički profil</a>
+                    <h2>{this.state.dictionary['paymentPageTitleFalse']}</h2>
                   </div>
                 </Col>
               </Row>
+
+              {
+                this.props.confirmReservationSuccess
+                ?
+                (
+                  <Row className="paymentEnd">
+                    <Col xs="12">
+                      <h3>{this.state.dictionary['paymentPageSub']}</h3>
+                    </Col>
+                    <Col xs="12" sm="6">
+                      <h4>{this.props.confirmReservationSuccess['reservationTitle']}</h4>
+                      <p>{this.props.confirmReservationSuccess['partnerName']}</p>
+                      <p>{this.props.confirmReservationSuccess['address']}</p>
+                      <p>{this.props.confirmReservationSuccess['date']}</p>
+                      <p>{this.props.confirmReservationSuccess['room']}</p>
+                      <p>{this.props.confirmReservationSuccess['fullPrice']}</p>
+                      <p>{this.props.confirmReservationSuccess['deposit']}</p>
+                    </Col>
+                    <Col xs="12" sm="6">
+                      <h4>{this.props.confirmReservationSuccess['transactionTitle']}</h4>
+                      <p>{this.props.confirmReservationSuccess['orderId']}</p>
+                      <p>{this.props.confirmReservationSuccess['authCode']}</p>
+                      <p>{this.props.confirmReservationSuccess['paymentStatus']}</p>
+                      <p>{this.props.confirmReservationSuccess['transactionId']}</p>
+                      <p>{this.props.confirmReservationSuccess['transactionDate']}</p>
+                      <p>{this.props.confirmReservationSuccess['mdStatus']}</p>
+                    </Col>
+                    <Col xs="12">
+                      <p className="remarkVAT">{this.state.dictionary['uniVAT']}</p>
+                    </Col>
+                  </Row>
+                )
+                :
+                null
+              }
+
+              <Row>
+                
+                <Col xs='12'>
+                  <div className="middle">
+                    <p>{this.state.dictionary['paymentPageFinishFalse']}</p>
+                    <a href={`/userProfile?languege=${this.props.lang}`}>{this.state.dictionary['paymentPageLink']}</a>
+                  </div>
+                </Col>
+              </Row>
+
+
             </Container>
             
           </div> 

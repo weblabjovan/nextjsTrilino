@@ -127,58 +127,58 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         		?
         		<Col xs="12" className="paymentStage">
               <Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={ this.props.closeAlert } >
-                <p hidden={ !this.props.errorMessages['fields']['readyToPay']} >Morate potvrditi da razumete uslove uplate i da ste spremni za plaćanje.</p>
+                <p hidden={ !this.props.errorMessages['fields']['readyToPay']} >{ this.state.dictionary['paymentStageAlert'] }</p>
               </Alert>
         			<Table>
                   <thead>
                   </thead>
                   <tbody>
                     <tr>
-                      <td style={{"width": "30%"}}>Igraonica:</td>
+                      <td style={{"width": "30%"}}>{ this.state.dictionary['paymentStageVenue'] }</td>
                       <td>{this.props.partner}</td>
                     </tr>
                     <tr>
-                      <td>Adresa:</td>
+                      <td>{ this.state.dictionary['paymentStageAddress'] }</td>
                       <td>{this.props.address}</td>
                     </tr>
                      <tr>
-                      <td>Datum i vreme:</td>
+                      <td>{ this.state.dictionary['paymentStageDate'] }</td>
                       <td>{`${this.props.date}, ${this.props.time}`}</td>
                     </tr>
                     <tr>
-                      <td>Sala:</td>
+                      <td>{ this.state.dictionary['paymentStageRoom'] }</td>
                       <td>{this.props.general['room']}</td>
                     </tr>
                     <tr>
-                      <td>Slavljenik/ca:</td>
+                      <td>{ this.state.dictionary['paymentStageGuest'] }</td>
                       <td>{this.props.general['name']}</td>
                     </tr>
                     <tr>
-                      <td>Cena:</td>
-                      <td>{`${this.props.price.toLocaleString('en')} rsd`}</td>
+                      <td>{ this.state.dictionary['paymentStagePrice'] }</td>
+                      <td>{`${this.props.price.toLocaleString('en')}`}</td>
                     </tr>
                     <tr>
-                      <td>Depozit:</td>
-                      <td>{`${this.props.deposit.toLocaleString('en')} rsd`}</td>
+                      <td>{ this.state.dictionary['paymentStageDeposit'] }</td>
+                      <td>{`${this.props.deposit.toLocaleString('en')}`}</td>
                     </tr>
                   </tbody>
                 </Table>
 
-        			  <p>{`Za uplatu na sajtu, u nastavku, ${this.props.deposit.toLocaleString('en')} rsd`}</p>
-                <p>{`Za uplatu na adresi, na dan slavlja, ${(this.props.price - (this.props.deposit + this.props.trilino)).toLocaleString('en')} rsd`}</p>
-                <p>{this.props.trilino ? `Za usluge ketringa, ${this.props.trilino.toLocaleString('en')} rsd za uplatu najkasnije 7 dana pre održavanja proslave, preko vašeg korisničkog profila.` : ''}</p>
+        			  <p>{`${ this.state.dictionary['paymentStageMsgWeb'] } ${this.props.deposit.toLocaleString('en')}`}</p>
+                <p>{`${ this.state.dictionary['paymentStageMsgOnsite'] } ${(this.props.price - (this.props.deposit + this.props.trilino)).toLocaleString('en')}`}</p>
+                <p>{this.props.trilino ? `${ this.state.dictionary['paymentStageMsgTrilino'] } ${this.props.trilino.toLocaleString('en')}` : ''}</p>
 
                 <CheckBox
                   disabled={ false }
                   checked={ this.props.readyToPay }
                   field="paymentReady"
                   onChange={ this.props.changePaymentReady }
-                  label={ 'Razumem uslove uplate i spreman/na sam da nastavim na plaćanje'  }
+                  label={ this.state.dictionary['paymentStageCheck'] }
                   orientation="back"
                 />
 
                 <div className="middle">
-                  <Button color="success" onClick={ this.props.paymentFunction }>Nastavite na plaćanje</Button>
+                  <Button color="success" onClick={ this.props.paymentFunction }>{ this.state.dictionary['paymentStageButton'] }</Button>
                 </div>
                 
 	          </Col>

@@ -14,7 +14,7 @@ interface initialState {
 
   confirmReservationStart: boolean;
   confirmReservationError: object | boolean;
-  confirmReservationSuccess: null | number;
+  confirmReservationSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -128,7 +128,7 @@ const actionsMap = {
     return {
       ...state,
       confirmReservationStart: false,
-      confirmReservationSuccess: action.payload.code,
+      confirmReservationSuccess: action.payload.reservation,
     };
   },
   

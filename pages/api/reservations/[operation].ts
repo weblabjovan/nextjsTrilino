@@ -11,7 +11,7 @@ import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomT
 import { sendEmail }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
-import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue } from '../../../lib/helpers/generalFunctions';
+import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../../../lib/helpers/generalFunctions';
 import { getGeneralOptionLabelByValue } from '../../../lib/helpers/specificPartnerFunctions';
 import { getLanguage } from '../../../lib/language';
 import DateHandler from '../../../lib/classes/DateHandler';
@@ -377,27 +377,28 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				if (flag) {
 					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
 					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
+
 					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
 					const userTo = [{name:myDecrypt(user['firstName']), email: unCoverMyEmail(user['contactEmail']) }];
 					const bcc = null;
 					const userTemplateId = 6;
 					const userParams = { 
-						title: confirm ? 'Uspešno ste rezervisali termin' : 'Vaš pokušaj da rezervišete termin nije uspeo', 
-						reservationTitle: 'Podaci o rezervaciji:', 
-						partnerName: `Prostor: ${partner['name']}`, 
-						address: `Adresa: ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
-						date: `Datum i vreme: ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
-						room: `Sala: ${roomObj['name']}`, 
-						fullPrice: `Za uplatu na licu mesta ostalo vam je ${(one['price'] - one['deposit']).toFixed(2)}`, 
-						deposit: `Uplatili ste deposit od ${one['deposit'].toFixed(2)}`, 
-						transactionTitle: 'Podaci o transakciji:', 
-						orderId: `Broj narudžbine: ${one['_id']}`, 
-						authCode: `Autorizacioni kod: ${one['transactionAuthCode']}`, 
-						paymentStatus: `Status transakcije: ${confirm ? 'Prihvaćeno' : 'Odbijeno'}`, 
-						transactionId: `Broj transakcije: ${one['transactionId']}`, 
-						transactionDate: `Datum transakcije: ${one['transactionDate']}`, 
-						mdStatus: `Kod statusa transakcije: ${one['transactionMdStatus']}`, 
-						finish: confirm ? `Sve vaše transakcije možete pratiti preko vašeg korisničkog profila. Lep provod i uspešno slavlje želimo vama i vašim gostima. Vaš Trilino.` : `Molimo vas proverite stanje na vašoj platnoj kartici i pokušajte da rezervišete termin ponovo. Vaš Trilino.`
+						title: confirm ? dictionary['paymentUserEmailTitleTrue'] : dictionary['paymentUserEmailTitleFalse'], 
+						reservationTitle: dictionary['paymentUserEmailResSub'], 
+						partnerName: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`, 
+						address: `${dictionary['paymentUserEmailAddress']} ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
+						date: `${dictionary['paymentUserEmailDate']} ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
+						room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+						fullPrice: confirm ? `${dictionary['paymentUserEmailFullPriceTrue']} ${(one['price'] - one['deposit']).toFixed(2)}` : `${dictionary['paymentUserEmailFullPriceFalse']} ${one['price'].toFixed(2)}`, 
+						deposit: confirm ? `${dictionary['paymentUserEmailDepositTrue']} ${one['deposit'].toFixed(2)}` : `${dictionary['paymentUserEmailDepositFalse']}`, 
+						transactionTitle: dictionary['paymentUserEmailTransSub'], 
+						orderId: `${dictionary['paymentUserEmailOrderId']} ${one['_id']}`, 
+						authCode: `${dictionary['paymentUserEmailAuthCode']} ${one['transactionAuthCode']}`, 
+						paymentStatus: `${dictionary['paymentUserEmailPaymentStatus']} ${confirm ? dictionary['paymentUserEmailPaymentStatusTrue'] : dictionary['paymentUserEmailPaymentStatusFalse']}`, 
+						transactionId: `${dictionary['paymentUserEmailTransactionId']} ${one['transactionId']}`, 
+						transactionDate: `${dictionary['paymentUserEmailTransactionDate']} ${one['transactionDate']}`, 
+						mdStatus: `${dictionary['paymentUserEmailMdStatus']} ${one['transactionMdStatus']}`, 
+						finish: confirm ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
 					};
 	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
 
@@ -407,24 +408,49 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerSender = {name:'Trilino', email:'no.reply@trilino.com'};
 						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
 						const partnerTemplateId = 7;
+
+						let cateringMsg = '';
+						Object.keys(one['food']).map( key => {
+							let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
+							if (i !== -1) {
+								cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
+							}
+						});
+
+						let decorationMsg = '';
+						Object.keys(one['decoration']).map( key => {
+							const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
+							if (find) {
+								decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
+							}
+						});
+
+						let addonMsg = '';
+						Object.keys(one['animation']).map( key => {
+							const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
+							if (find) {
+								addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
+							}
+						});
+
 						const partnerParams = { 
-							title: 'Nova rezervacija', 
-							sub: 'Podaci o rezervaciji:', 
-							date: `Datum i vreme: ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
-							room: `Sala: ${roomObj['name']}`, 
-							guest: `Slavljenik/ca: ${one['guest']}`, 
-							catering: '1', 
-							decoration: '1', 
-							addons: '1', 
-							onsitePrice: `Za uplatu na licu mesta ostalo vam je ${(one['price'] - one['deposit']).toFixed(2)}`,
-							finish: 'Sve vaše rezervacije možete pratiti preko vašeg partnerskog profila. Želimo vam uspešnu organizaciju ovog slavlja. Vaš Trilino.'
+							title: dictionary['paymentPartnerEmailTitle'], 
+							sub: dictionary['paymentPartnerEmailSub'], 
+							date: `${dictionary['paymentUserEmailDate']} ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
+							room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+							guest: `${dictionary['paymentPartnerEmailCelebrant']} ${one['guest']}`, 
+							catering: `${dictionary['paymentPartnerEmailCatering']} ${cateringMsg}`, 
+							decoration: `${dictionary['paymentPartnerEmailDecoration']} ${decorationMsg}`, 
+							addons: `${dictionary['paymentPartnerEmailAddon']} ${addonMsg}`, 
+							onsitePrice: `${dictionary['paymentPartnerEmailPrice']} ${(one['price'] - one['deposit']).toFixed(2)}`,
+							finish: dictionary['paymentPartnerEmailFinish']
 						};
 		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
 
 						const emailSePartner = await sendEmail(partnerEmail);
 					}
 
-					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: one });
+					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: userParams });
 				}else{
 					return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
 				}

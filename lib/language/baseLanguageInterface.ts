@@ -74,6 +74,7 @@ export default interface LanguageInterface {
 	uniDeposit: string;
 	uniNotWorkingDay: string;
 	uniMap: string;
+	uniVAT: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -744,6 +745,61 @@ export default interface LanguageInterface {
 	userLoginLinksReg_2: string;
 	userLoginLinksLog_1: string;
 	userLoginLinksLog_2: string;
+
+
+	paymentUserEmailTitleTrue: string;
+	paymentUserEmailTitleFalse: string;
+	paymentUserEmailResSub: string;
+	paymentUserEmailPartnerName: string;
+	paymentUserEmailAddress: string;
+	paymentUserEmailDate: string;
+	paymentUserEmailRoom: string;
+	paymentUserEmailFullPriceTrue: string;
+	paymentUserEmailFullPriceFalse: string;
+	paymentUserEmailDepositTrue: string;
+	paymentUserEmailDepositFalse: string;
+	paymentUserEmailTransSub: string;
+	paymentUserEmailOrderId: string;
+	paymentUserEmailAuthCode: string;
+	paymentUserEmailPaymentStatus: string;
+	paymentUserEmailPaymentStatusTrue: string;
+	paymentUserEmailPaymentStatusFalse: string;
+	paymentUserEmailTransactionId: string;
+	paymentUserEmailTransactionDate: string;
+	paymentUserEmailMdStatus: string;
+	paymentUserEmailFinishTrue: string;
+	paymentUserEmailFinishFalse: string;
+	paymentPartnerEmailCateringDeal: string;
+	paymentPartnerEmailCateringPerson: string;
+	paymentPartnerEmailTitle: string;
+	paymentPartnerEmailSub: string;
+	paymentPartnerEmailCelebrant: string;
+	paymentPartnerEmailCatering: string;
+	paymentPartnerEmailDecoration: string;
+	paymentPartnerEmailAddon: string;
+	paymentPartnerEmailPrice: string;
+	paymentPartnerEmailFinish: string;
+	paymentPageTitleTrue: string;
+	paymentPageTitleFalse: string;
+	paymentPageSub: string;
+	paymentPageFinishTrue: string;
+	paymentPageFinishFalse: string;
+	paymentPageLink: string;
+	paymentStageAlert: string;
+	paymentStageVenue: string;
+	paymentStageAddress: string;
+	paymentStageDate: string;
+	paymentStageRoom: string;
+	paymentStageGuest: string;
+	paymentStagePrice: string;
+	paymentStageDeposit: string;
+	paymentStageMsgWeb: string;
+	paymentStageMsgOnsite: string;
+	paymentStageMsgTrilino: string;
+	paymentStageCheck: string;
+	paymentStageButton: string;
+
+
 
 
 	//////////////////////API

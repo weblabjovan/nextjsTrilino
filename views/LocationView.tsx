@@ -822,7 +822,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          	</Col>
 	          </Row>
 
-	          
+	          <Row>
+	          	<Col xs="12">
+	          		<p className="remarkVAT">{this.state.dictionary['uniVAT']}</p>
+	          	</Col>
+	          </Row>
 	          
 	          
 	        </Container>    
