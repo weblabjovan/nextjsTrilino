@@ -338,17 +338,22 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			const dictionary = getLanguage(language);
 			let trilinoCat = false;
 			let double = false;
-
+			console.log('1')
 			try{
 				await connectToDb(req.headers.host);
 				const one = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+				console.log('2')
 				const partner = await Partner.findById(one['partner'], '-password -passSafetyCode -passProvided -verified');
+				console.log('3')
 				const user = await User.findById(one['user'], '-password -passSafetyCode -passProvided');
+				console.log('4')
 				if (one['double']) {
 					double = await Reservation.findOneAndUpdate({"doubleReference": one['doubleReference'], "deposit": {"$exists": false}}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+					console.log('5')
 				}
 				if (one['trilino']) {
 					trilinoCat = await Catering.findOneAndUpdate({"reservation": one['_id']}, {"$set" : {active: confirm, status: confirm ? 'confirmed' : 'declined'} }, { new: true });
+					console.log('6')
 				}
 
 				let flag = false;
@@ -375,6 +380,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				
 				
 				if (flag) {
+					console.log('7')
 					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
 					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
 
@@ -401,10 +407,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						finish: confirm ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
 					};
 	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
-
-					// const emailSeUser =	await sendEmail(userEmail);
+	  			console.log('8')
+					const emailSeUser =	await sendEmail(userEmail);
 
 					if (confirm) {
+						console.log('9')
 						const partnerSender = {name:'Trilino', email:'no.reply@trilino.com'};
 						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
 						const partnerTemplateId = 7;
@@ -446,10 +453,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							finish: dictionary['paymentPartnerEmailFinish']
 						};
 		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
-
-						// const emailSePartner = await sendEmail(partnerEmail);
+		  			console.log('10')
+						const emailSePartner = await sendEmail(partnerEmail);
 					}
-
+					console.log('11')
 					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: userParams });
 				}else{
 					return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
