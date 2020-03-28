@@ -533,6 +533,7 @@ export const myDecrypt = (text: string): string => {
   let iv = Buffer.from(textParts.shift(), 'hex');
   let encryptedText = Buffer.from(textParts.join(':'), 'hex');
   console.log('3');
+  console.log(Keys.JWT_SECRET);
   console.log(Keys.CRYPTO_PASSWORD);
   console.log(iv)
   console.log(typeof crypto);
