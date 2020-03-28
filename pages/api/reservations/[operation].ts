@@ -451,7 +451,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							onsitePrice: `${dictionary['paymentPartnerEmailPrice']} ${(one['price'] - one['deposit']).toFixed(2)}`,
 							finish: dictionary['paymentPartnerEmailFinish']
 						};
-		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
+		  			const partnerEmail = { sender: userSender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
 						const emailSePartner = await sendEmail(partnerEmail);
 					}
 
