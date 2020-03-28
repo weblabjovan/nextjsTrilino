@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Keys from '../keys';
+import btoa from 'btoa';
 import crypto from 'crypto';
 import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
@@ -517,20 +518,52 @@ export const getNextTerm = (partner: object, room: string | string[], from: stri
   return null;
 }
 
-export const myEncrypt = (text: string): string => {
-  const algorithm = 'aes-256-cbc';
+export const setNestPayHash = (str: string): string => {
+  const hashVal = crypto.createHash("sha512").update(str).digest('hex');
+  const pack = packIt(hashVal);
+  const hash = btoa(pack);
 
-  const cipher = crypto.createCipher(algorithm, Keys.CRYPTO_PASSWORD);
-  let crypted = cipher.update(text,'utf8','hex')
-  crypted += cipher.final('hex');
-  return crypted;
+  return hash;
 }
 
-export const myDecrypt = (text: string): string => {
-  const algorithm = 'aes-256-cbc';
+const packIt = (str: string): string => {
+  const quantifier = str.length;
+  let result = '';
 
-  const decipher = crypto.createDecipher(algorithm, Keys.CRYPTO_PASSWORD);
-  let dec = decipher.update(text,'hex','utf8')
-  dec += decipher.final('utf8');
-  return dec;
+  for (let i = 0; i < quantifier; i += 2) {
+    // Always get per 2 bytes...
+    let word = str[i]
+    if (((i + 1) >= quantifier) || typeof str[i + 1] === 'undefined') {
+      word += '0'
+    } else {
+      word += str[i + 1]
+    }
+    // The fastest way to reverse?
+    
+    result += String.fromCharCode(parseInt(word, 16))
+  }
+
+  return result;
+}
+
+export const sortCateringTypes = (catering: object): object => {
+  const trilinoIds = products['trilinoCatering'].map( product => { return product['regId']});
+  const res = { trilino: { }, partner: { }}
+  Object.keys(catering).map( key => { if (trilinoIds.indexOf(key) !== -1) {
+    res['trilino'][key] = catering[key];
+  }else{
+    res['partner'][key] = catering[key];
+  }});
+
+  return res;
+}
+
+export const setLinksInApi = (host: string, page: string): string => {
+  let start = 'http://';
+
+  if (host !== 'localhost:3000') {
+    start = 'https://www.';
+  }
+
+  return `${start}${host}/${page}`;
 }

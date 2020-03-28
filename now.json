@@ -12,7 +12,10 @@
 		"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
 		"MONGO_URI_PROD":"@mongo-uri-prod",
 		"GOOGLE_API_KEY":"@google-api-key",
-		"CRYPTO_PASSWORD":"@crypto-password"
+		"CRYPTO_PASSWORD":"@crypto-password",
+		"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
+		"NEST_PAY_RANDOM":"@nest-pay-random",
+		"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	},
 	"build": {
 	    "env": {
@@ -28,7 +31,10 @@
 			"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
 			"MONGO_URI_PROD":"@mongo-uri-prod",
 			"GOOGLE_API_KEY":"@google-api-key",
-			"CRYPTO_PASSWORD":"@crypto-password"
+			"CRYPTO_PASSWORD":"@crypto-password",
+			"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
+			"NEST_PAY_RANDOM":"@nest-pay-random",
+			"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	    }
 	}
 }

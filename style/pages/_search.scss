@@ -202,7 +202,7 @@
 	.searchItem{
 		cursor: pointer;
 		margin-bottom: 20px;
-		border-radius: 15px;
+		border-radius: 8px;
 		-webkit-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
 		-moz-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
 		box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
@@ -210,8 +210,8 @@
 		.photo{
 			width: 100%;
 			height: 200px;
-	    border-top-left-radius: 15px;
-  		border-top-right-radius: 15px;
+	    border-top-left-radius: 8px;
+  		border-top-right-radius: 8px;
 
 			@media only screen and (max-width: 320px){
 				height: 150px;
@@ -223,8 +223,8 @@
 			padding-right: 40px;
 			background: #fff;
 			position: relative;
-			border-bottom-left-radius: 15px;
-  		border-bottom-right-radius: 15px;
+			border-bottom-left-radius: 8px;
+  		border-bottom-right-radius: 8px;
 		    border-bottom: solid 1px #ccc;
 		    border-right: solid 1px #ccc;
 		    border-left: solid 1px #ccc;

@@ -279,7 +279,7 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
     if (!this.state.errorMessages['show']) {
       this.props.openLoader();
       const link = setUpLinkBasic(window.location.href);
-      const data = {language: this.props.lang, reservation: prepareReservationObjectForSave(this.props.partnerReservation), type: 'partner'}
+      const data = {language: this.props.lang, reservation: prepareReservationObjectForSave(this.props.partnerReservation), type: 'partner'};
       this.props.savePartnerReservation(link, data, this.props.token);
     }
   }
@@ -540,8 +540,8 @@ class ReservationScreen extends React.Component <MyProps, MyState>{
                   </Col>
                   <Col xs="12" sm="6">
                     <ul>
-                      <li>{this.state.dictionary['partnerProfileReservationPrice']} <span className="textHighlightGrey">{`${this.props.partnerReservation['price']}rsd`}</span></li>
-                      <li>{this.state.dictionary['partnerProfileReservationDeposit']} <span className="textHighlightGrey">{`${this.props.partnerReservation['deposit']}rsd`}</span></li>
+                      <li>{this.state.dictionary['partnerProfileReservationPrice']} <span className="textHighlightGrey">{`${this.props.partnerReservation['price'] ? this.props.partnerReservation['price'] : '' } rsd`}</span></li>
+                      <li>{this.state.dictionary['partnerProfileReservationDeposit']} <span className="textHighlightGrey">{`${this.props.partnerReservation['deposit'] ? this.props.partnerReservation['deposit'] : ''} rsd`}</span></li>
                     </ul>
                   </Col>
                 </Row>

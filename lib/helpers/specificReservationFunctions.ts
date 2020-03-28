@@ -1,4 +1,5 @@
 import DateHandler from '../classes/DateHandler';
+import { setUpLinkBasic } from './generalFunctions';
 
 const dayForSearch = (date: Date): string => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -56,6 +57,34 @@ export const isDateDifferenceValid = (difference: number, date: string, time: st
 
   if (dateHandler.getDateDifferenceFromNow('hour') > difference) {
     return true;
+  }
+
+  return false;
+}
+
+export const getSingleReservation = async (context: any): Promise<any> => {
+  const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+  const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/getOne/?language=${link['queryObject']['language']}&id=${link['queryObject']['reservation']}`;
+  const response = await fetch(apiUrl);
+
+  return response;
+}
+
+export const isPaymentResponseValid = (response: object, id: string, req: object): boolean => {
+  if (Object.keys(response).length) {
+    const outcome = response['Response'];
+    if (response['ReturnOid'] === id && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting' && req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'POST') {
+      const split = response['HASHPARAMSVAL'].split('|');
+      if (split[1] === id && split[4] === outcome) {
+        return true;
+      }
+    }
+    return false;
+  }else{
+    if (req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'GET') {
+      return true;
+    }
+    
   }
 
   return false;

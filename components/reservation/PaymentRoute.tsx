@@ -3,16 +3,22 @@ import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 import LoginScreen from '../user/LoginScreen';
 import RegistrationScreen from '../user/RegistrationScreen';
 import PasswordScreen from '../user/PasswordScreen';
+import CheckBox from '../form/checkbox';
 import { getLanguage } from '../../lib/language';
 
 type MyProps = {
 	handleSend(data: object, type: string): void;
 	changeStage(stage: string): void;
+  changePaymentReady(): void;
 	closeAlert(): void;
+  paymentFunction(): void;
 	stage: string;
+  readyToPay: boolean;
 	errorMessages: object;
+  trilino: number;
 
   partner?: string;
+  address?: string;
   time?: string;
   date?: string;
   price?: number;
@@ -119,9 +125,62 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
         	{
         		this.props.stage === 'payment'
         		?
-        		<Col xs="12">
-        			<h4 className="smallName">Ovo je deo za plaćanje</h4>
-        			
+        		<Col xs="12" className="paymentStage">
+              <Alert color="danger" isOpen={ this.props.errorMessages["show"] } toggle={ this.props.closeAlert } >
+                <p hidden={ !this.props.errorMessages['fields']['readyToPay']} >{ this.state.dictionary['paymentStageAlert'] }</p>
+              </Alert>
+        			<Table>
+                  <thead>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{"width": "30%"}}>{ this.state.dictionary['paymentStageVenue'] }</td>
+                      <td>{this.props.partner}</td>
+                    </tr>
+                    <tr>
+                      <td>{ this.state.dictionary['paymentStageAddress'] }</td>
+                      <td>{this.props.address}</td>
+                    </tr>
+                     <tr>
+                      <td>{ this.state.dictionary['paymentStageDate'] }</td>
+                      <td>{`${this.props.date}, ${this.props.time}`}</td>
+                    </tr>
+                    <tr>
+                      <td>{ this.state.dictionary['paymentStageRoom'] }</td>
+                      <td>{this.props.general['room']}</td>
+                    </tr>
+                    <tr>
+                      <td>{ this.state.dictionary['paymentStageGuest'] }</td>
+                      <td>{this.props.general['name']}</td>
+                    </tr>
+                    <tr>
+                      <td>{ this.state.dictionary['paymentStagePrice'] }</td>
+                      <td>{`${this.props.price.toLocaleString('en')}`}</td>
+                    </tr>
+                    <tr>
+                      <td>{ this.state.dictionary['paymentStageDeposit'] }</td>
+                      <td>{`${this.props.deposit.toLocaleString('en')}`}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+
+        			  <p>{`${ this.state.dictionary['paymentStageMsgWeb'] } ${this.props.deposit.toLocaleString('en')}`}</p>
+                <p>{`${ this.state.dictionary['paymentStageMsgOnsite'] } ${(this.props.price - (this.props.deposit + this.props.trilino)).toLocaleString('en')}`}</p>
+                <p>{this.props.trilino ? `${ this.state.dictionary['paymentStageMsgTrilino'] } ${this.props.trilino.toLocaleString('en')}` : ''}</p>
+
+                <CheckBox
+                  disabled={ false }
+                  checked={ this.props.readyToPay }
+                  field="paymentReady"
+                  onChange={ this.props.changePaymentReady }
+                  label={ this.state.dictionary['paymentStageCheck'] }
+                  orientation="back"
+                />
+
+                <div className="middle">
+                  <Button color="success" onClick={ this.props.paymentFunction }>{ this.state.dictionary['paymentStageButton'] }</Button>
+                </div>
+                
 	          </Col>
 	          :
 	          null

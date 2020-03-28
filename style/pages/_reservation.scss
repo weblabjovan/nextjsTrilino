@@ -535,5 +535,45 @@
 				}
 			}
 		}
+
+		.paymentStage{
+			p{
+				font-size: 17px;
+			    font-weight: 600;
+			    margin-left: 15px;
+			    margin-bottom: 5px;
+			}
+
+			.btn-success{
+				margin-top: 25px;
+				margin-bottom: 20px;
+				border: none;
+			    border-radius: 30px;
+			    padding: 7px 20px;
+			    text-transform: uppercase;
+			    background: #38d43d;
+			    outline: none;
+			    color: #ffffff;
+			    font-weight: 700;
+			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
+				 transition: all 1s;
+
+				&:hover{
+					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					-moz-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+				}
+			}
+
+			.React__checkbox{
+				margin-top: 15px;
+				
+				.checkbox-simple-label{
+					margin-left: 5px;
+				}
+			}
+		}
 	}
 }

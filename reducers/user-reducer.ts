@@ -1,5 +1,5 @@
 import {
-  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes
+  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes, saveReservationUserActionTypes
 } from '../actions/user-actions';
 
 interface initialState {
@@ -21,6 +21,10 @@ interface initialState {
   userPassChangeReqStart: boolean;
   userPassChangeReqError: boolean | object;
   userPassChangeReqSuccess: null | number;
+
+  userSaveReservationStart: boolean;
+  userSaveReservationError: boolean | object;
+  userSaveReservationSuccess: null | object;
 
   activeUser: null | object;
 }
@@ -44,6 +48,10 @@ const initialState: initialState  = {
   userPassChangeReqStart: false,
   userPassChangeReqError: false,
   userPassChangeReqSuccess: null,
+
+  userSaveReservationStart: false,
+  userSaveReservationError: false,
+  userSaveReservationSuccess: null,
 
   activeUser: null,
 
@@ -163,6 +171,29 @@ const actionsMap = {
       ...state,
       userPassChangeReqSuccess: action.payload,
       userPassChangeReqStart: false,
+    };
+  },
+
+  [saveReservationUserActionTypes.START]: (state) => {
+    return {
+      ...state,
+      userSaveReservationStart: true,
+      userSaveReservationSuccess: null,
+      userSaveReservationError: false,
+    };
+  },
+  [saveReservationUserActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      userSaveReservationStart: false,
+      userSaveReservationError: action.payload.response.body,
+    };
+  },
+  [saveReservationUserActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      userSaveReservationSuccess: action.payload.reservation,
+      userSaveReservationStart: false,
     };
   },
 

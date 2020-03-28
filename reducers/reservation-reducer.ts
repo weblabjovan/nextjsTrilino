@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -11,6 +11,10 @@ interface initialState {
   getReservationsStart: boolean;
   getReservationsError: object | boolean;
   getReservationsSuccess: null | number;
+
+  confirmReservationStart: boolean;
+  confirmReservationError: object | boolean;
+  confirmReservationSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -27,6 +31,10 @@ const initialState: initialState  = {
   getReservationsStart: false,
   getReservationsError: false,
   getReservationsSuccess: null,
+
+  confirmReservationStart: false,
+  confirmReservationError: false,
+  confirmReservationSuccess: null,
 
   reservations: [],
 
@@ -99,6 +107,28 @@ const actionsMap = {
       getReservationsStart: false,
       getReservationsSuccess: action.payload.code,
       reservations: action.payload.reservations,
+    };
+  },
+
+  [confirmReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      confirmReservationStart: true,
+      confirmReservationSuccess: null,
+    };
+  },
+  [confirmReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      confirmReservationStart: false,
+      confirmReservationError: action.payload.response.body,
+    };
+  },
+  [confirmReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      confirmReservationStart: false,
+      confirmReservationSuccess: action.payload.reservation,
     };
   },
   

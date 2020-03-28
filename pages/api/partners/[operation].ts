@@ -104,7 +104,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	                }
 	             }
 	          },
-	          { $match: { "date": queryDate }}
+	          { $match: { "date": queryDate }},
+	          { $match: { "active": true }},
 	        ],
 	        as: "reservations"
 				};
@@ -231,7 +232,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				             }
 				          },
 				          { $match: { "date": queryDate }},
-				          { $match: { "active": false }},
+				          { $match: { "active": true }},
 				        ],
 				        as: "reservations"
 							};
