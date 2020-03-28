@@ -530,13 +530,17 @@ export const myEncrypt = (text: string): string => {
 
 export const myDecrypt = (text: string): string => {
   let textParts = text.split(':');
+  console.log('1')
   let iv = Buffer.from(textParts.shift(), 'hex');
+  console.log('2')
   let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+  console.log('3')
   let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(Keys.CRYPTO_PASSWORD), iv);
+  console.log('4')
   let decrypted = decipher.update(encryptedText);
-
+  console.log('5')
   decrypted = Buffer.concat([decrypted, decipher.final()]);
-
+  console.log('6')
   return decrypted.toString();
 }
 
