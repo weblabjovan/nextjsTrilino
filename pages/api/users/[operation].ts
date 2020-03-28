@@ -148,7 +148,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						if (user) {
 							const passSafetyCode = generateString(8);
 							const update = await User.findOneAndUpdate({ '_id': user._id }, {"$set" : { passSafetyCode } }, { new: true }).select('-password');
-							console.log('1');
+							console.log(myDecrypt(user.firstName));
 							const sender = {name:'Trilino', email:'no.reply@trilino.com'};
 							console.log('2')
 							console.log(`${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`);
