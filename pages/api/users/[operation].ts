@@ -149,19 +149,19 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							const passSafetyCode = generateString(8);
 							const update = await User.findOneAndUpdate({ '_id': user._id }, {"$set" : { passSafetyCode } }, { new: true }).select('-password');
 							console.log('1');
-							const activeSender = {name:'Trilino', email:'no.reply@trilino.com'};
-							console.log(activeSender)
-							console.log('2');
-		  				const to = [{name:`${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`, email: unCoverMyEmail(user.contactEmail) }];
+							const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+							console.log('2')
+							console.log(`${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`);
+		  				const to = [{name: 'Jovan', email: unCoverMyEmail(user.contactEmail) }];
 		  				const bcc = null;
 		  				const templateId = 4;
-
+		  				console.log('3')
 		  				const page = decodeId(generateString, user._id);
 		  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=user&change=true`;
 
 		  				const params = { title: `${myDecrypt(user.firstName)} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
-		  				const emailObj = { sender: activeSender, to, bcc, templateId, params };
-		  				console.log('3');
+		  				const emailObj = { sender, to, bcc, templateId, params };
+		  				console.log('4');
 		  				const emailSe =	await sendEmail(emailObj);
 	  					return res.status(200).json({ endpoint: 'users', operation: 'update', success: true, code: 1 });
 						}else{
