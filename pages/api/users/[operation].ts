@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 import Reservation from '../../../server/models/reservation';
 import User from '../../../server/models/users';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, defineUserLanguage, myEncrypt, myDecrypt, coverMyEmail, unCoverMyEmail }  from '../../../server/helpers/general';
+import MyCriptor from '../../../server/helpers/MyCriptor';
+import { generateString, encodeId, decodeId, setToken, verifyToken, defineUserLanguage }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isUserRegDataValid, dataHasValidProperty } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -29,16 +30,19 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		if (isUserRegDataValid(req.body)) {
   		try{
   			await connectToDb(req.headers.host);
-  			const replica = await User.findOne({ contactEmail });
+  			const myCriptor = new MyCriptor();
+
+  			const replica = await User.findOne({ contactEmail: myCriptor.encrypt(contactEmail, false) });
   			if (replica) {
 		    	return res.status(401).send({ endpoint: 'users', operation: 'save', success: false, code: 2, error: 'validation error', message: dictionary['apiUserSaveCode2'] });
 				}else{
+					
 	    		const country = 'Serbia';
 	    		const passProvided = false;
 	    		const verified = true;
 	    		const passSafetyCode = generateString(7);
 
-	    		const newUser = new User({ firstName: myEncrypt(firstName), lastName: myEncrypt(lastName), contactEmail: coverMyEmail(contactEmail), contactPhone: myEncrypt(contactPhone), phoneCode, verified, passProvided, userlanguage, passSafetyCode, origin });
+	    		const newUser = new User({ firstName: myCriptor.encrypt(firstName, true), lastName: myCriptor.encrypt(lastName, true), contactEmail: myCriptor.encrypt(contactEmail, false), contactPhone: myCriptor.encrypt(contactPhone, true), phoneCode, verified, passProvided, userlanguage, passSafetyCode, origin });
 	    		
 	    		const userBack = await newUser.save();
 	    		const sender = {name:'Trilino', email:'no.reply@trilino.com'};
@@ -143,25 +147,21 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				}else{
 					try{
 						await connectToDb(req.headers.host);
-						const user = await User.findOne({ contactEmail: coverMyEmail(data['email']) });
+						const myCriptor = new MyCriptor();
+						const user = await User.findOne({ contactEmail: myCriptor.encrypt(data['email'], false) });
 
 						if (user) {
 							const passSafetyCode = generateString(8);
 							const update = await User.findOneAndUpdate({ '_id': user._id }, {"$set" : { passSafetyCode } }, { new: true }).select('-password');
-							console.log(myDecrypt(user.firstName));
 							const sender = {name:'Trilino', email:'no.reply@trilino.com'};
-							console.log('2')
-							console.log(`${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`);
-		  				const to = [{name: 'Jovan', email: unCoverMyEmail(user.contactEmail) }];
+		  				const to = [{name: `${myCriptor.decrypt(user.firstName, true)} ${myCriptor.decrypt(user.lastName, true)}`, email: myCriptor.decrypt(user.contactEmail, false) }];
 		  				const bcc = null;
 		  				const templateId = 4;
-		  				console.log('3')
 		  				const page = decodeId(generateString, user._id);
 		  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=user&change=true`;
 
-		  				const params = { title: `${myDecrypt(user.firstName)} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
+		  				const params = { title: `${myCriptor.decrypt(user.firstName, true)} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
 		  				const emailObj = { sender, to, bcc, templateId, params };
-		  				console.log('4');
 		  				const emailSe =	await sendEmail(emailObj);
 	  					return res.status(200).json({ endpoint: 'users', operation: 'update', success: true, code: 1 });
 						}else{
@@ -197,7 +197,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}else{
 				try{
 					await connectToDb(req.headers.host);
-					const user = await User.findOne({contactEmail: coverMyEmail(email)});
+					const myCriptor = new MyCriptor();
+					const user = await User.findOne({contactEmail: myCriptor.encrypt(email, false)});
 					if (user) {
 						if (user.passProvided) {
 							const match = await bcrypt.compare(password, user.password);

@@ -518,52 +518,6 @@ export const getNextTerm = (partner: object, room: string | string[], from: stri
   return null;
 }
 
-export const myEncrypt = (text: string): string => {
-  let iv = crypto.randomBytes(16);
-  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(Keys.CRYPTO_PASSWORD), iv);
-  let encrypted = cipher.update(text);
-
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-
-  return iv.toString('hex') + ':' + encrypted.toString('hex');
-}
-
-export const myDecrypt = (text: string): string => {
-  let textParts = text.split(':');
-  let iv = Buffer.from(textParts.shift(), 'hex');
-  let encryptedText = Buffer.from(textParts.join(':'), 'hex');
-  console.log('3');
-  console.log(Keys.JWT_SECRET);
-  console.log(Keys.CRYPTO_PASSWORD);
-  console.log(iv)
-  console.log(typeof crypto);
-  let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(Keys.CRYPTO_PASSWORD), iv);
-  console.log('4')
-  let decrypted = decipher.update(encryptedText);
-  console.log('5')
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  console.log('6')
-  return decrypted.toString();
-}
-
-export const coverMyEmail = (email: string): string => {
-  return convertValueTo(email, 'hex');
-}
-
-export const unCoverMyEmail = (encriptEmail: string): string => {
-  return convertValueTo(encriptEmail, 'utf8');
-}
-
-const convertValueTo = (str: string, type: string): string => {
-  if (type === 'hex') {
-    return Buffer.from(str, 'utf8').toString('hex');
-  }
-
-  if (type === 'utf8') {
-    return Buffer.from(str, 'hex').toString('utf8');
-  }
-}
-
 export const setNestPayHash = (str: string): string => {
   const hashVal = crypto.createHash("sha512").update(str).digest('hex');
   const pack = packIt(hashVal);

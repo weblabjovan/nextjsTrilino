@@ -6,8 +6,9 @@ import Partner from '../../../server/models/partner';
 import User from '../../../server/models/users';
 import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
+import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes, unCoverMyEmail, myDecrypt }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -376,15 +377,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				
 				if (flag) {
 					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
+					const myCriptor = new MyCriptor();
 					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
-					console.log('1')
-					console.log(myDecrypt(user.lastName));
-					console.log(unCoverMyEmail(user.contactEmail));
-					console.log('0')
-					const userSender = {name:'Trilino', email:'no.reply@trilino.com'};
-					console.log('2')
-					const userTo = [{name: `${myDecrypt(user.firstName)} ${myDecrypt(user.lastName)}`, email: unCoverMyEmail(user.contactEmail) }];
-					console.log('3')
+					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+
+					const userTo = [{name: `${myCriptor.decrypt(user.firstName, true)} ${myCriptor.decrypt(user.lastName, true)}`, email: myCriptor.decrypt(user.contactEmail, false) }];
+
 					const bcc = null;
 					const userTemplateId = 6;
 					const userParams = { 
@@ -405,13 +403,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						mdStatus: `${dictionary['paymentUserEmailMdStatus']} ${one['transactionMdStatus']}`, 
 						finish: confirm ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
 					};
-					console.log('3')
-	  			const userEmail = { sender: userSender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
-	  			console.log('4')
+	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
 					const emailSeUser =	await sendEmail(userEmail);
-					console.log('5')
 					if (confirm) {
-						const partnerSender = {name:'Trilino', email:'no.reply@trilino.com'};
 						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
 						const partnerTemplateId = 7;
 
@@ -451,7 +445,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							onsitePrice: `${dictionary['paymentPartnerEmailPrice']} ${(one['price'] - one['deposit']).toFixed(2)}`,
 							finish: dictionary['paymentPartnerEmailFinish']
 						};
-		  			const partnerEmail = { sender: userSender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
+		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
 						const emailSePartner = await sendEmail(partnerEmail);
 					}
 
