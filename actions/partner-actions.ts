@@ -94,7 +94,6 @@ export function getPartnersMultiple(data: object, link: object) {
   const point = setApiBasLink(link, apiRoot.PARTNERS_GET);
   const query = setGetQuery('search', data);
   const endpoint = `${point}?${query}`;
-  console.log(endpoint);
 
   return function (dispatch: dispatch) {
     apiEndpoint(

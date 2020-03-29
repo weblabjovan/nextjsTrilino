@@ -96,7 +96,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   }
 
   activateCancelReservation(){
-    console.log('otkazujem')
+    console.log()
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 

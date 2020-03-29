@@ -146,7 +146,6 @@ class LocationView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-  	console.log(this.state.selectedRoom)
 
   	if (!this.props.getReservationsStart && prevProps.getReservationsStart && this.props.getReservationsSuccess) {
   		this.props.partner['reservations'] = this.props.reservations;
@@ -160,7 +159,6 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-		console.log(this.props.partner);
 	}
 	
   render() {
