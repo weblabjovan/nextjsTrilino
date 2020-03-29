@@ -410,28 +410,35 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerTemplateId = 7;
 
 						let cateringMsg = '';
-						Object.keys(one['food']).map( key => {
-							let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
-							if (i !== -1) {
-								cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
-							}
-						});
+						if (one['food']) {
+							Object.keys(one['food']).map( key => {
+								let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
+								if (i !== -1) {
+									cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
+								}
+							});
+						}
+
 
 						let decorationMsg = '';
-						Object.keys(one['decoration']).map( key => {
-							const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
-							if (find) {
-								decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
-							}
-						});
+						if (one['decoration']) {
+							Object.keys(one['decoration']).map( key => {
+								const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
+								if (find) {
+									decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
+								}
+							});
+						}
 
 						let addonMsg = '';
-						Object.keys(one['animation']).map( key => {
-							const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
-							if (find) {
-								addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
-							}
-						});
+						if (one['animation']) {
+							Object.keys(one['animation']).map( key => {
+								const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
+								if (find) {
+									addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
+								}
+							});
+						}
 
 						const partnerParams = { 
 							title: dictionary['paymentPartnerEmailTitle'], 

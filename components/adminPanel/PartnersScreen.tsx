@@ -143,8 +143,6 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   toggleInfo(outcome: boolean, partner: string){
     if (outcome === true) {
       const obj = getArrayObjectByFieldValue(this.props.adminPartners, '_id', partner);
-      console.log(partner);
-      console.log(obj);
       this.setState({ activePartner: obj}, () => {
         this.setState({ showInfo: true })
       });
