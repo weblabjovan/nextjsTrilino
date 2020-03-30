@@ -13,6 +13,8 @@ export default class MyCriptor {
 		if (withPrefix) {
 			const rnd = Math.ceil(Math.random() * this.table.length);
 			this.reorderTable(rnd);
+		}else{
+			this.table = Keys.CRYPTO_PASSWORD.split('');
 		}
 		const num = this.changeTextToNum(text);
 		const enc = this.changeNumToEnc(num);
