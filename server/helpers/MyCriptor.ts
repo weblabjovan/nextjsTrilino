@@ -2,11 +2,9 @@ import Keys from '../keys';
 
 export default class MyCriptor {
 	private table: Array<string>;
-	private index: number;
 	
 	constructor() {
 		this.table = Keys.CRYPTO_PASSWORD.split('');
-		this.index = 0;
 	}
 
 	public encrypt = (text: string, withPrefix: boolean): string => {
@@ -35,7 +33,6 @@ export default class MyCriptor {
 		}
 
 		this.table = strArr;
-		this.index = num;
 	}
 
 	private changeTextToNum = (text: string): string => {
@@ -58,7 +55,6 @@ export default class MyCriptor {
 
 	private changeNumToEnc = (num: string): string => {
 		let enc = '';
-
 		for (var i = 0; i < num.length; ++i) {
 			const add = this.table[parseInt(num[i])];
 			enc = enc + add;
@@ -73,7 +69,7 @@ export default class MyCriptor {
 		if (prefix) {
 			const n = Math.floor(Math.random()*90000) + 10000;
 			const na = n.toString();
-			inStr = this.table[this.index];
+			inStr = this.table[0];
 
 			for (var i = 0; i < na.length; ++i) {
 				const add = this.table[parseInt(na[i])];
@@ -93,19 +89,18 @@ export default class MyCriptor {
 
 	private decomposeEncription = (text: string, prefix: boolean): Array<string> => {
 		if (prefix) {
-			const index = this.table.indexOf(text.charAt(0));
+			const index = Keys.CRYPTO_PASSWORD.indexOf(text.charAt(0));
 			this.reorderTable(index);
 			const base = text.substr(6);
-
 			return base.match(/.{1,5}/g);
 		}else{
+			this.table = Keys.CRYPTO_PASSWORD.split('');
 			return text.match(/.{1,5}/g);
 		}
 	}
 
 	private encItemsToNum = (arr: Array<string>): Array<number> => {
 		const nums = [];
-
 		for (var i = 0; i < arr.length; ++i) {
 			let str = '';
 			const sp = arr[i].split('');
