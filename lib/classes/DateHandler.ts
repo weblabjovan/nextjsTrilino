@@ -50,7 +50,26 @@ export default class DateHandler {
 		return true;
 	}
 
+	public getDateDifference = (later: Date, scale?: string, earlier?: Date): number => {
+		const devider = this.setDevider(scale);
+
+		const lateTime = later.getTime();
+		const earlyTime = earlier ? earlier.getTime() : this.now.getTime();
+		const timeDiff =  (earlyTime - lateTime) / devider;
+
+		return Math.floor(timeDiff);
+	}
+
 	public getDateDifferenceFromNow = (scale: null | string = null): number => {
+		const devider = this.setDevider(scale);
+
+		const begining = this.setDayOnBegining(this.now);
+		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
+
+		return timeDiff;
+	}
+
+	private setDevider = (scale?: null | string): number => {
 		let devider = (1000 * 60 * 60);
 		if (scale === 'minute') {
 			devider = (1000 * 60);
@@ -59,10 +78,7 @@ export default class DateHandler {
 			devider = (1000 * 60 * 60 * 24);
 		}
 
-		const begining = this.setDayOnBegining(this.now);
-		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
-
-		return timeDiff;
+		return devider;
 	}
 
 	public getDifferenceBetweenTwoTimes = (earlyTime: string, laterTime: string): number => {
@@ -140,9 +156,9 @@ export default class DateHandler {
 		}
 
 		const d = new Date();
+		const month = parseInt(strings[1]) - 1;
 		d.setFullYear(parseInt(strings[2]));
-		d.setMonth(parseInt(strings[1])-1);
-		d.setDate(parseInt(strings[0]));
+		d.setMonth(month, parseInt(strings[0]));
 
 	  	this.date = this.setDayOnBegining(d);
 	}

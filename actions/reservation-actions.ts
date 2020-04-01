@@ -68,7 +68,7 @@ export function getReservationsOnDate(link: object, data: object) {
 
 export const confirmReservationActionType = {
   START: 'CONFIRM_RESERVATION_START',
-  ERROR: 'CONFIRM_RESERVATION__ERROR',
+  ERROR: 'CONFIRM_RESERVATION_ERROR',
   SUCCESS: 'CONFIRM_RESERVATION_SUCCESS',
 };
 
@@ -91,7 +91,7 @@ export function confirmReservationAfterPay(link: object, data: object, auth: str
 
 export const disconfirmReservationActionType = {
   START: 'DISCONFIRM_RESERVATION_START',
-  ERROR: 'DISCONFIRM_RESERVATION__ERROR',
+  ERROR: 'DISCONFIRM_RESERVATION_ERROR',
   SUCCESS: 'DISCONFIRM_RESERVATION_SUCCESS',
 };
 
@@ -104,6 +104,52 @@ export function disconfirmReservationAfterPay(link: object, data: object, auth: 
       endpoint,
       data,
       confirmReservationActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const getReservationsForUserActionType = {
+  START: 'GET_RESERVATIONS_FOR_USER_START',
+  ERROR: 'GET_RESERVATIONS_FOR_USER_ERROR',
+  SUCCESS: 'GET_RESERVATIONS_FOR_USER_SUCCESS',
+};
+
+export function getReservationsForUser(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_GETFORUSER);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getReservationsForUserActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const cancelReservationActionType = {
+  START: 'CANCEL_RESERVATION_START',
+  ERROR: 'CANCEL_RESERVATION_ERROR',
+  SUCCESS: 'CANCEL_RESERVATION_SUCCESS',
+};
+
+export function cancelReservation(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_CANCEL);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      cancelReservationActionType,
       null,
       false,
       "POST",

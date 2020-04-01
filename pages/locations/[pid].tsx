@@ -66,8 +66,9 @@ Location.getInitialProps = async (ctx: any) => {
     }
 
     const partnerRes = await getSinglePartner(ctx, true);
-    if (partnerRes['status'] === 200) {
+    if (partnerRes) {
       result = await partnerRes.json();
+
       if (!result['partner']) {
         ctx.res.writeHead(302, {Location: `/?language=sr`});
         ctx.res.end();

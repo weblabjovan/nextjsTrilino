@@ -189,8 +189,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 	}
 	
   render() {
-
-    const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+    const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth()+1}-${this.state.date.getFullYear()}`;
 
     return(
     	<div className="totalWrapper">

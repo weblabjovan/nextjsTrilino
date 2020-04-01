@@ -6,6 +6,8 @@ import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
 import { languageList } from '../../lib/language/locale';
+import { getLanguage } from '../../lib/language';
+import generalOptions from '../../lib/constants/generalOptions';
 
 export const generateString = (length: number):string => {
 	let str = '';
@@ -120,6 +122,41 @@ export const addMinutesToString = (time: string, minutes: number): string => {
   return `${newDate.getHours}:${newDate.getMinutes}`;
 }
 
+export const getArrayObjectByFieldValue = (arr: Array<object>, field: string, value: any): null | object => {
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i][field]) {
+      if (arr[i][field] === value) {
+        return arr[i];
+      }
+    }
+  }
+
+  return null;
+}
+
+export const getArrayIndexByFieldValue = (arr: Array<object>, field: string, value: any): number => {
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i][field]) {
+      if (arr[i][field] === value) {
+        return i;
+      }
+    }
+  }
+
+  return -1;
+}
+
+export const getObjectFieldByFieldValue = (obj: object, field: string, value: any): null | object => {
+
+  for(let key in obj){
+    if (obj[key][field] === value) {
+      return obj[key];
+    }
+  }
+
+  return null;
+}
+
 export const setDateTime = (date: string, time: string): Date => {
   const splitTime = time.split(':');
   const d = new Date(date);
@@ -155,18 +192,13 @@ export const setDateForServer = (date: string): Date => {
   return d;
 }
 
-const dayForSearch = (date: string): string => {
-  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const d = setDateForServer(date);
-
-  return days[d.getDay()];
-}
-
 export const createSearchQuery = (fields: object): object => {
   const result = { 'active': true, 'forActivation': true };
   for(let key in fields){
     if (key === 'date') {
-      const day = dayForSearch(fields['date']);
+      const dateHandler = new DateHandler(fields['date']);
+      const day = dateHandler.getDayFromDate();
+
       if (result['$and']) {
         result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'from': {$exists: true }}}}} });
       }else{
@@ -232,7 +264,8 @@ export const createSearchQuery = (fields: object): object => {
 
     if (key === 'priceFrom') {
       if (fields[key] !== null && fields[key] !== 'null') {
-        const day = dayForSearch(fields['date']);
+        const dateHandler = new DateHandler(fields['date']);
+        const day = dateHandler.getDayFromDate();
         if (Object.keys(fields).indexOf('priceTo') !== -1) {
           if (result['$and']) {
             result['$and'].push({ 'general.rooms': { $elemMatch: {[`terms.${day}`]: {$elemMatch: {'price': { $lte: parseInt(fields['priceTo']), $gte: parseInt(fields[key])}}}}} });
@@ -252,7 +285,8 @@ export const createSearchQuery = (fields: object): object => {
 
     if (key === 'priceTo') {
       if (fields[key] !== null && fields[key] !== 'null') {
-        const day = dayForSearch(fields['date']);
+        const dateHandler = new DateHandler(fields['date']);
+        const day = dateHandler.getDayFromDate();
         if (Object.keys(fields).indexOf('priceFrom') !== -1) {
 
         }else{
@@ -329,7 +363,8 @@ export const createSearchQuery = (fields: object): object => {
 }
 
 export const getFreeTermPartners = (partners: Array<object>, date: string): Array<object> => {
-  const day = dayForSearch(date);
+  const dateHandler = new DateHandler(date);
+  const day = dateHandler.getDayFromDate();
   const result = [];
 
   for (var i = 0; i < partners.length; ++i) {
@@ -377,7 +412,9 @@ export const calculatePartnerCapacity = (rooms: Array<object>): object => {
 }
 
 export const preparePartnerForLocation = (partner: object, date: string): object => {
-  const day = dayForSearch(date);
+  const dateHandler = new DateHandler(date);
+  const day = dateHandler.getDayFromDate();
+
   let freeTerms = [];
 
   if (!partner['reservations'].length) {
@@ -423,7 +460,8 @@ const isInReservationArray = (reservations: Array<object>, room: string, from: s
 }
 
 export const preparePartnerForReservation = (partner: object, data: object): object => {
-  const day = dayForSearch(data['date']);
+  const dateHandler = new DateHandler(data['date']);
+  const day = dateHandler.getDayFromDate();
   let partnerCopy = JSON.parse(JSON.stringify(partner));
   partnerCopy['reservation'] = setUserReservation(partner['general']['rooms'], day, data['room'], data['from']);
   if (partner['general']['selfFood'] === '1') {
@@ -566,4 +604,207 @@ export const setLinksInApi = (host: string, page: string): string => {
   }
 
   return `${start}${host}/${page}`;
+}
+
+export const prepareReservationsForUserList = (reservations: Array<object>): Array<object> => {
+  const newReservations = integrateDoubleReservations(reservations);
+  newReservations.map( (reserve, index) => {
+    if (reserve['type'] === 'user' && reserve['doubleNumber'] === 1) {
+      reserve['status'] = setReservationStatus(reserve);
+      reserve['dateTime'] = setReservationTimeString(reserve);
+      reserve['isForRate'] = isReservationForRate(reserve);
+      reserve['cancelPolicy'] = getCancelPolicy(reserve);
+      reserve['isForTrilino'] = isReservationWithTrilinoCatering(reserve) ? true : false;
+      reserve['cateringString'] = setCateringString(reserve, reserve['partnerObj'][0]);
+      reserve['decorationString'] = setDecorationString(reserve, reserve['partnerObj'][0]);
+      reserve['addonString'] = setAddonString(reserve, reserve['partnerObj'][0]);
+    }
+  })
+  return newReservations;
+}
+
+const integrateDoubleReservations = (reservations: Array<object>): Array<object> => {
+  const double = {};
+  const result = [];
+
+  reservations.map((reserve, index) => {
+    if (reserve['double']) {
+      if (double.hasOwnProperty(reserve['doubleReference'])) {
+        if (reserve['doubleNumber'] === 2) {
+          result[double[reserve['doubleReference']]]['doubleObj'] = reserve;
+        }else{
+          reserve['doubleObj'] = reservations[double[reserve['doubleReference']]];
+          result.push(reserve);
+        }
+      }else{
+        if (reserve['doubleNumber'] === 2){
+          double[reserve['doubleReference']] = index;
+        }else{
+          result.push(reserve);
+          double[reserve['doubleReference']] = result.length - 1;
+        }
+      }
+    }else{
+      result.push(reserve);
+    }
+  });
+
+  return result;
+}
+
+const setReservationStatus = (reservation: object): string => {
+  if (reservation['confirmed'] && reservation['active'] && !reservation['canceled']) {
+    return 'accepted';
+  }
+
+  if (!reservation['confirmed'] && !reservation['active']) {
+    return 'declined';
+  }
+
+  if (reservation['confirmed'] && !reservation['active'] && reservation['canceled']) {
+    return 'canceled';
+  }
+}
+
+export const setReservationTimeString = (reservation: object): string => {
+  if (reservation['date'] && reservation['from'] && reservation['to']) {
+    const date = reservation['date'].substr(0,10);
+    if (reservation['doubleObj']) {
+      return `${date.split('-')[2]}.${date.split('-')[1]}.${date.split('-')[0]}, ${reservation['from']} - ${reservation['doubleObj']['to']}`;
+    }else{
+      return `${date.split('-')[2]}.${date.split('-')[1]}.${date.split('-')[0]}, ${reservation['from']} - ${reservation['to']}`;
+    }
+    
+    
+  }
+  
+  return '';
+} 
+
+const isReservationForRate = (reservation: object): boolean => {
+  if (reservation['toDate']) {
+    const dateHandler = new DateHandler();
+    const dateDiff = dateHandler.getDateDifference(reservation['toDate'], 'day');
+    if (reservation['confirmed']  && reservation['active'] && dateDiff > 1 && dateDiff < 10 ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export const getCancelPolicy = (reservation: object): object => {
+  if (reservation['confirmed'] && !reservation['canceled']) {
+    if (Array.isArray(reservation['partnerObj'])) {
+      if (reservation['partnerObj'].length) {
+        if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) > 0) {
+          const dateHandler = new DateHandler();
+          const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
+          if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) + dateDiff < 1 ) {
+            return {cancel: true, free: true, days: reservation['partnerObj'][0]['general']['cancelation'] ? parseInt(reservation['partnerObj'][0]['general']['cancelation']) : 0};
+          }
+          return {cancel: true, free: false, days: reservation['partnerObj'][0]['general']['cancelation'] ? parseInt(reservation['partnerObj'][0]['general']['cancelation']) : 0};
+        }
+        return {cancel: true, free: false, days: reservation['partnerObj'][0]['general']['cancelation'] ? parseInt(reservation['partnerObj'][0]['general']['cancelation']) : 0};
+      }
+      return {cancel: true, free: false, days: 0};
+    }
+    
+    return {cancel: true, free: false, days: 0};
+  }
+
+  return {cancel: false, free: false, days: 0};
+}
+
+const isReservationWithTrilinoCatering = (reservation: object): boolean => {
+  if (reservation['confirmed']) {
+    if (reservation['trilino']) {
+      const dateHandler = new DateHandler();
+      const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
+      if (dateDiff < -6) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+export const setCateringString = (reservation: object, partner: object): string => {
+  let str = '';
+  if (reservation['food']) {
+    if (Object.keys(reservation['food']).length) {
+      const dictionary = getLanguage(partner['userlanguage']);
+      Object.keys(reservation['food']).map( key => {
+        let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
+        if (i !== -1) {
+          str = `${str}${str ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + reservation['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
+        }
+      });
+    }else{
+      str = '-'
+    }
+  }else{
+    str = '-'
+  }
+
+  return str;
+}
+
+export const setDecorationString = (reservation: object, partner: object): string => {
+  let str = '';
+  if (reservation['decoration']) {
+    if (Object.keys(reservation['decoration']).length) {
+      Object.keys(reservation['decoration']).map( key => {
+        const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
+        if (find) {
+          str = `${str}${str ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+partner['userlanguage']]}`;
+        }
+      });
+    }else{
+      str = '-';
+    }
+  }else{
+    str = '-';
+  }
+
+  return str;
+}
+
+export const setAddonString = (reservation: object, partner: object): string => {
+  let str = '';
+  if (reservation['animation']) {
+    if (Object.keys(reservation['animation']).length) {
+      Object.keys(reservation['animation']).map( key => {
+        const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
+        if (find) {
+          str = `${str}${str ? ',' : ''} ${find['name']}`;
+        }
+      });
+    }else{
+      str = '-';
+    }
+  }else{
+    str = '-';
+  }
+
+  return str;
+}
+
+export const packReservationwithDouble = (arr: Array<object>): object => {
+  if (arr.length === 1) {
+    return arr[0];
+  }
+
+  if (!arr.length) {
+    return {};
+  }
+
+  if (arr.length > 1) {
+    const double = getArrayIndexByFieldValue(arr, 'doubleNumber', 2);
+    const single = getArrayIndexByFieldValue(arr, 'doubleNumber', 1);
+    const res = JSON.parse(JSON.stringify(arr[single]));
+    res['doubleObj'] = arr[double];
+    return res;
+  }
 }

@@ -38,6 +38,10 @@ const reservationSchema = new Schema({
 	trilino: Boolean,
 	doubleReference: {type: String, required: true},
 	doubleNumber: Number,
+	canceled: Boolean,
+	cancelDate: Date,
+	returnPolicy: Boolean,
+	returnPrice: Number, 
 }, {timestamps: true});
 
 reservationSchema.index({'date': 1});

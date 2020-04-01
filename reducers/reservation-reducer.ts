@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -15,6 +15,14 @@ interface initialState {
   confirmReservationStart: boolean;
   confirmReservationError: object | boolean;
   confirmReservationSuccess: null | object;
+
+  getUserReservationStart: boolean;
+  getUserReservationError: object | boolean;
+  getUserReservationSuccess: null | number;
+
+  cancelReservationStart: boolean;
+  cancelReservationError: object | boolean;
+  cancelReservationSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -35,6 +43,14 @@ const initialState: initialState  = {
   confirmReservationStart: false,
   confirmReservationError: false,
   confirmReservationSuccess: null,
+
+  getUserReservationStart: false,
+  getUserReservationError: false,
+  getUserReservationSuccess: null,
+
+  cancelReservationStart: false,
+  cancelReservationError: false,
+  cancelReservationSuccess: null,
 
   reservations: [],
 
@@ -129,6 +145,51 @@ const actionsMap = {
       ...state,
       confirmReservationStart: false,
       confirmReservationSuccess: action.payload.reservation,
+    };
+  },
+
+  [getReservationsForUserActionType.START]: (state) => {
+    return {
+      ...state,
+      getUserReservationStart: true,
+      getUserReservationSuccess: null,
+    };
+  },
+  [getReservationsForUserActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getUserReservationStart: false,
+      getUserReservationError: action.payload.response.body,
+    };
+  },
+  [getReservationsForUserActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getUserReservationStart: false,
+      getUserReservationSuccess: action.payload.code,
+      reservations: action.payload.reservations,
+    };
+  },
+
+  [cancelReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      cancelReservationStart: true,
+      cancelReservationSuccess: null,
+    };
+  },
+  [cancelReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      cancelReservationStart: false,
+      cancelReservationError: action.payload.response.body,
+    };
+  },
+  [cancelReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      cancelReservationStart: false,
+      cancelReservationSuccess: action.payload.result,
     };
   },
   

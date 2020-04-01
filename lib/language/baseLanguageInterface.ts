@@ -764,6 +764,7 @@ export default interface LanguageInterface {
 	paymentUserEmailPaymentStatus: string;
 	paymentUserEmailPaymentStatusTrue: string;
 	paymentUserEmailPaymentStatusFalse: string;
+	paymentUserEmailPaymentStatusCancel: string;
 	paymentUserEmailTransactionId: string;
 	paymentUserEmailTransactionDate: string;
 	paymentUserEmailMdStatus: string;

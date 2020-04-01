@@ -775,6 +775,7 @@ const serbian: LanguageInterface = {
 	paymentUserEmailPaymentStatus: 'Status transakcije:',
 	paymentUserEmailPaymentStatusTrue: 'Prihvaćeno',
 	paymentUserEmailPaymentStatusFalse: 'Odbijeno',
+	paymentUserEmailPaymentStatusCancel: 'Otkazano',
 	paymentUserEmailTransactionId: 'Broj transakcije:',
 	paymentUserEmailTransactionDate: 'Datum transakcije:',
 	paymentUserEmailMdStatus: 'Kod statusa transakcije:',

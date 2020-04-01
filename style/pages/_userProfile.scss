@@ -95,12 +95,12 @@
 		    padding: 10px;
 		    margin-left: 10px;
 		    color: $purple;
-		    font-size: 20px;
+		    font-size: 22px;
 		    font-weight: 300;
 		    text-align: center;
 		    background: transparent;
-		    border-top-left-radius: 20px;
-		    border-top-right-radius: 20px;
+		    border-top-left-radius: 8px;
+		    border-top-right-radius: 8px;
 		    cursor: pointer;
 		    transition: all 0.5s;
 
@@ -185,180 +185,144 @@
 
 .userProfileScreen{
 	.screenTitle{
-		font-size: 28px;
+		font-size: 32px;
 		font-weight: 800;
-		line-height: 32px;
+		line-height: 40px;
 		margin-top: 20px;
 
 		@media only screen and (max-width: 577px) {
+			font-size: 26px;
+			line-height: 32px;
 			margin-top: 0px;
 		}
 	}
 	.reservationList{
 		padding-top: 40px;
 		padding-bottom: 60px;
+		@media only screen and (max-width: 577px) {
+			padding-top: 15px;
+			padding-bottom: 40px;
+		}
+
 		.item{
 			margin-bottom: 20px;
+			background: #fff;
+			border-radius: 8px;
+			-webkit-box-shadow: 0px 4px 7px 1px rgba(71,71,71,1);
+			-moz-box-shadow: 0px 4px 7px 1px rgba(71,71,71,1);
+			box-shadow: 0px 4px 7px 1px rgba(71,71,71,1);
+
 
 			@media only screen and (max-width: 577px) {
-				margin-bottom: 30px;
+				margin-bottom: 20px;
+			}
+
+			.outcome{
+				padding: 5px;
+				background: $purple;
+				border: solid 1px $purple;
+				border-bottom: none;
+				border-top-right-radius: 8px;
+				border-top-left-radius: 8px;
+
+				p{
+					font-size: 20px;
+					font-weight: 600;
+					color: #fff;
+					line-height: 32px;
+					text-align: center;
+
+				}
+			}
+
+			.outcome.declined, .outcome.canceled{
+				background: $cancelCol;
+				border: solid 1px $cancelCol;
+				border-bottom: none;
 			}
 
 			.info{
-				.date{
-					width: 30%;
-					background: #989898;
-					border-top-left-radius: 10px;
-					border-top-right-radius: 10px;
-					padding: 5px 20px;
-					-webkit-box-shadow: 4px 4px 6px 0px rgba(71,71,71,1);
-					-moz-box-shadow: 4px 4px 6px 0px rgba(21,71,71,1);
-					box-shadow: 4px 4px 6px 0px rgba(71,71,71,1);
+				padding: 10px 15px;
+				padding-left: 20px;
+				border: solid 1px $greyCol;
+				height: 175px;
+				border-bottom-right-radius: 8px;
+				border-bottom-left-radius: 8px;
+				border-top: none;
 
-					@media only screen and (max-width: 577px) {
-						width: 60%;
-					}
-					@media only screen and (max-width: 340px) {
-						width: 90%;
-					}
+				@media only screen and (max-width: 577px) {
+					height: auto;
+				}
 
-					p{
-						color: #fff;
-						font-size: 14px;
-						line-height: 17px;
-						margin: 0px;
+				span{
+					display: block;
+					font-size: 14px;
+					line-height: 20px;
+					font-weight: 600;
+					color: $darkGreyCol;
+					margin-bottom: 10px;
+
+					&:nth-of-type(odd){
+						font-weight: 400;
+						margin-bottom: 0px;
 					}
 				}
 
-				.restWrapper{
-					background: #fff;
-					padding: 5px 15px;
-					border: solid 1px #989898;
-					-webkit-box-shadow: 4px 4px 6px 0px rgba(71,71,71,1);
-					-moz-box-shadow: 4px 4px 6px 0px rgba(21,71,71,1);
-					box-shadow: 4px 4px 6px 0px rgba(71,71,71,1);
+				.actions{
+					text-align: center;
 
-					.venue{
-						display: inline-block;
-						vertical-align: top;
-						width: 25%;
-						padding: 5px 15px;
+					button{
+					    text-align: center;
+					    width: 100%;
+					    margin: auto;
+					    margin-bottom: 10px;
+					    display: block;
+					    padding: 5px 3px;
+					    font-weight: 700;
+					    font-size: 11px;
+					    color: $purple;
+					    text-transform: uppercase;
+					    background: #ffffff;
+					    border: solid 1px $purple;
+					    outline: none;
+					    border-radius: 15px;
 
-						@media only screen and (max-width: 768px) {
-							width: 50%;
+					    @media only screen and (max-width: 577px) {
+							width: 200px;
+							font-size: 12px;
+							color: #ffffff;
+						    background: $purple;
+						    border: solid 1px $purple;
 						}
 
-						@media only screen and (max-width: 577px) {
-							width: 100%;
-							padding: 8px 15px;
-						}
-					}
+					    &:hover{
+					    	color: #ffffff;
+						    background: $purple;
+						    border: solid 1px $purple;
+					    }
 
-					.price{
-						display: inline-block;
-						vertical-align: top;
-						width: 35%;
-						padding: 5px 15px;
-						border-left: solid 1px #ccc;
-						border-right: solid 1px #ccc;
-
-						@media only screen and (max-width: 768px) {
-							width: 50%;
-							border-right: none;
-						}
-
-						@media only screen and (max-width: 577px) {
-							border: none;
-							border-top: solid 1px #ccc;
-							border-bottom: solid 1px #ccc;
-							width: 100%;
-							padding: 8px 15px;
-						}
-					}
-
-					.actions{
-						display: inline-block;
-						vertical-align: top;
-						width: 40%;
-						padding: 5px 15px;
-						text-align: center;
-
-						@media only screen and (max-width: 768px) {
-							width: 100%;
-							padding-top: 15px;
-							border-top: solid 1px #ccc;
-						}
-
-						@media only screen and (max-width: 577px) {
-							width: 100%;
-							border: none;
-							padding: 8px 15px;
-						}
-
-						button{
-							display: inline-block;
-							width: 45%;
-						    font-weight: 500;
-						    font-size: 12px;
-						    color: $purple;
-						    text-transform: uppercase;
-						    background: #fff;
-						    border: solid 2px #ccc;
-						    border-radius: 30px;
-						    padding: 5px 0px;
-						    margin-left: 1%;
-						    margin-right: 1%;
-						    margin-bottom: 10px;
-						    outline: none;
-						    transition: all 0.7s;
+					    &.decline{
+					    	color: $cancelCol;
+						    background: #ffffff;
+						    border: solid 1px $cancelCol;
 
 						    @media only screen and (max-width: 577px) {
-								width: 80%;
-								margin-left: 0px;
-						    	margin-right: 0px;
-						    	margin-top: 5px;
-						    	padding: 7px 0px;
-						    	color: #fff;
-						    	border: solid 2px $purple;
-						    	background: $purple;
-							}
-							@media only screen and (max-width: 340px) {
-								width: 90%;
+								color: #ffffff;
+							    background: $cancelCol;
+							    border: solid 1px $cancelCol;
 							}
 
 						    &:hover{
-						    	color: #fff;
-						    	border: solid 2px $lightBlue;
-						    	background: $lightBlue;
+						    	color: #ffffff;
+							    background: $cancelCol;
+							    border: solid 1px $cancelCol;
 						    }
-						}
-
-						button.decline{
-							color: $cancelCol;
-							border: solid 2px $cancelCol;
-
-							@media only screen and (max-width: 577px) {
-						    	color: #fff;
-						    	border: solid 2px $cancelCol;
-						    	background: $cancelCol;
-							}
-
-							&:hover{
-						    	color: #fff;
-						    	border: solid 2px $cancelCol;
-						    	background: $cancelCol;
-						    }
-						}
-					}
-
-					p{
-						font-size: 15px;
-						line-height: 20px;
-						font-weight: 300;
-						color: $darkGreyCol;
+					    }
 					}
 				}
 			}
+
+			
 		}
 	}
 

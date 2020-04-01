@@ -778,6 +778,7 @@ const english: LanguageInterface = {
 	paymentUserEmailPaymentStatus: 'Payment Status:',
 	paymentUserEmailPaymentStatusTrue: 'Accepted',
 	paymentUserEmailPaymentStatusFalse: 'Declined',
+	paymentUserEmailPaymentStatusCancel: 'Canceled',
 	paymentUserEmailTransactionId: 'Transaction ID:',
 	paymentUserEmailTransactionDate: 'Trnasaction Date:',
 	paymentUserEmailMdStatus: 'Transaction Status Code:',

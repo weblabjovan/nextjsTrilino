@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Table } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
+import { getArrayObjectByFieldValue } from '../../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
@@ -10,6 +11,7 @@ interface MyProps {
   isMobile: boolean;
   show: boolean;
   close(): void;
+  reservation: null | object;
 };
 
 interface MyState {
@@ -76,63 +78,100 @@ export default class UserBill extends React.Component <MyProps, MyState>{
 
                       <tbody>
                         <tr>
-                          <td>Lokacija:</td>
-                          <td>Igraonica Adalgo Group</td>
+                          <td>{this.state.dictionary['paymentUserEmailPartnerName']}</td>
+                          <td>{this.props.reservation['partnerObj'][0]['name']}</td>
                         </tr>
                         <tr>
-                          <td>Adresa:</td>
-                          <td>Ruzveltova 44, Beograd</td>
+                          <td>{this.state.dictionary['paymentUserEmailAddress']}</td>
+                          <td>{this.props.reservation['partnerObj'][0]['general']['address']}</td>
                         </tr>
                         <tr>
-                          <td>Sala:</td>
-                          <td>Neka sala</td>
+                          <td>{this.state.dictionary['paymentUserEmailDate']}</td>
+                          <td>{this.props.reservation['dateTime']}</td>
                         </tr>
                         <tr>
-                          <td>Datum i vreme:</td>
-                          <td>30-03-2020, 07:00 - 09:30</td>
+                          <td>{this.state.dictionary['paymentUserEmailRoom']}</td>
+                          <td>{getArrayObjectByFieldValue(this.props.reservation['partnerObj'][0]['general']['rooms'], 'regId', this.props.reservation['room'])['name']}</td>
+                        </tr>
+                         <tr>
+                          <td>{this.state.dictionary['paymentPartnerEmailCatering']}</td>
+                          <td>{this.props.reservation['cateringString']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentPartnerEmailDecoration']}</td>
+                          <td>{this.props.reservation['decorationString']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentPartnerEmailAddon']}</td>
+                          <td>{this.props.reservation['addonString']}</td>
                         </tr>
                         <tr>
                           <td>Ukupna cena:</td>
-                          <td>56.000 rsd</td>
+                          <td>{this.props.reservation['price']}</td>
                         </tr>
                         <tr>
                           <td>Cena termina:</td>
-                          <td>10.000 rsd</td>
+                          <td>{this.props.reservation['termPrice']}</td>
                         </tr>
                         <tr>
                           <td>Cena keteringa:</td>
-                          <td>30.000 rsd</td>
+                          <td>{this.props.reservation['foodPrice']}</td>
+                        </tr>
+                         <tr>
+                          <td>Cena dekoracije:</td>
+                          <td>{this.props.reservation['decorationPrice']}</td>
                         </tr>
                         <tr>
                           <td>Cena dodatnih sadržaja:</td>
-                          <td>16.000 rsd</td>
+                          <td>{this.props.reservation['animationPrice']}</td>
                         </tr>
                         <tr>
-                          <td>Odabrani dodatni sadržaji:</td>
-                          <td>Baloni, Klovn, Prskalice, Laser tag, Još neke stvari</td>
-                        </tr>
-                        <tr>
-                          <td>Cena plaćenog depozita:</td>
-                          <td>10.000 rsd</td>
+                          <td>Deposit:</td>
+                          <td>{this.props.reservation['deposit']}</td>
                         </tr>
                         <tr>
                           <td>Za uplatu na licu mesta:</td>
-                          <td>16.000 rsd</td>
+                          <td>Srediti kasnije</td>
                         </tr>
                          <tr>
                           <td>Za uplatu preko korisničkog profila:</td>
-                          <td>30.000 rsd</td>
+                          <td>Srediti kasnije</td>
                         </tr>
                         <tr>
                           <td>Rok za uplatu preko korisničkog profila:</td>
-                          <td>23-03-2020, 23:59</td>
+                          <td>Srediti kasnije</td>
                         </tr>
                          <tr>
                           <td>Tip uplate preko korisničkog profila:</td>
-                          <td>Trilino ketering lux za 30 osoba</td>
+                          <td>Srediti kasnije</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailOrderId']}</td>
+                          <td>{this.props.reservation['_id']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailAuthCode']}</td>
+                          <td>{this.props.reservation['transactionAuthCode']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailPaymentStatus']}</td>
+                          <td>{ this.props.reservation['confirmed'] ? this.state.dictionary['paymentUserEmailPaymentStatusTrue'] : this.state.dictionary['paymentUserEmailPaymentStatusFalse']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailTransactionId']}</td>
+                          <td>{this.props.reservation['transactionId']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailTransactionDate']}</td>
+                          <td>{this.props.reservation['transactionDate']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['paymentUserEmailMdStatus']}</td>
+                          <td>{this.props.reservation['transactionMdStatus']}</td>
                         </tr>
                       </tbody>
                     </Table>
+                    <p className="remarkVAT">{this.state.dictionary['uniVAT']}</p>
                   </div>    
                 </Col>
 			        </Row>

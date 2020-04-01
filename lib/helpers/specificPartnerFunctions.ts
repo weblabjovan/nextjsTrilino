@@ -629,11 +629,12 @@ const returnOnlyTrueForObjects = (obj: object, field: string | null = null): obj
 }
 
 export const dateForSearch = (date: string): Date => {
+	
 	const strings = date.split('-')
 	const d = new Date();
+	let month = parseInt(strings[1]) - 1;
 	d.setFullYear(parseInt(strings[2]));
-	d.setMonth(parseInt(strings[1])-1);
-	d.setDate(parseInt(strings[0]));
+	d.setMonth(month ,parseInt(strings[0]));
 
 	return d;
 }

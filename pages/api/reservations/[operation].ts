@@ -8,7 +8,7 @@ import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -132,7 +132,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 											to: reservation['terms'] ? reservation['terms'][reservation['term']['value'] + 1]['to'] : reservation['potentialDouble']['to'],
 											toDate: reservation['terms'] ? dateHandler.getDateWithTimeForServer(reservation['terms'][reservation['term']['value'] + 1]['to']) : dateHandler.getDateWithTimeForServer(reservation['potentialDouble']['to']) ,
 											double: reservation['double'],
-											user: reservation['user'],
+											user: type === 'user' ? identifierId : reservation['user'],
 											userName: reservation['userName'],
 											guest: reservation['guest'],
 											food: reservation['food'],
@@ -270,10 +270,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 			if (type === 'user') {
 				const {partner, date} = req.body;
-				const queryDate = setDateForServer(date).toISOString().substring(0,19);
+				const dateHandler = new DateHandler(date);
+				const queryDate = dateHandler.formatDateString('server');
+				
 				try{
 					await connectToDb(req.headers.host);
-					const query = await Reservation.find({partner, date: queryDate});
+					const query = await Reservation.find({partner, date: queryDate}).select('-trilinoCatering -confirmed -payment -transactionId -transactionCard -transactionAuthCode -transactionProcReturnCode -transactionMdStatus -transactionErrMsg -trilino ');
 					if (query) {
 						return res.status(200).json({ endpoint: 'reservations', operation: 'get', success: true, code: 1, reservations: query });
 					}else{
@@ -286,6 +288,54 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}
 		}
 	}
+
+
+//////////////////////////////////////   GETFORUSER   ///////////////////////////////////////////////
+
+	if (req.query.operation === 'getForUser') {
+		const token = req.headers.authorization;
+		if (!token) {
+			return res.status(401).json({ endpoint: 'reservations', operation: 'getForUser', success: false, code: 4, error: 'auth error', message: 'unauthorized user'  });
+		}else{
+			if (!dataHasValidProperty(req.body, ['type', 'language'])) {
+				return res.status(404).json({ endpoint: 'reservations', operation: 'get', success: false, code: 5, error: 'basic validation error' });
+			}else{
+				const { language, type } = req.body;
+				const dictionary = getLanguage(language);
+
+				const decoded = verifyToken(token);
+				const userId = encodeId(decoded['sub']);
+
+				try{
+					const lookup = { 
+						from: 'partners', 
+						let: { partner: '$partner'}, //
+						pipeline: [
+							{ $addFields: { "partner": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$partner", "$partner" ] }
+		             }
+		          }
+		        ],
+		        as: "partnerObj"
+					};
+					await connectToDb(req.headers.host);
+					const reservationsDb = await Reservation.aggregate([{ $match: {"user": userId} }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.contactPhone': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}} ]);
+					const reservations = prepareReservationsForUserList(reservationsDb);
+
+					if (reservations) {
+						return res.status(200).json({ endpoint: 'reservations', operation: 'getForUser', success: true, code: 1, reservations });
+					}else{
+						return res.status(404).json({ endpoint: 'reservations', operation: 'getForUser', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
+					}
+				}catch(err){
+					return res.status(500).send({ endpoint: 'reservations', operation: 'getForUser', success: false, code: 3, error: 'db error', message: err  });
+				}
+			}
+		}
+	}
+
 
 
 	//////////////////////////////////////   DELETE   ///////////////////////////////////////////////
@@ -326,6 +376,94 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}
 		}
 	}
+
+
+
+	//////////////////////////////////////   CANCEL   ///////////////////////////////////////////////
+
+
+
+	if (req.query.operation === 'cancel') {
+		if (!dataHasValidProperty(req.body, ['id', 'language', 'doubleReference'])) {
+			return res.status(401).json({ endpoint: 'reservations', operation: 'cancel', success: false, code: 7, error: 'basic validation error' });
+		}else{
+			const { id, language, doubleReference } = req.body;
+			const dictionary = getLanguage(language);
+			const token = req.headers.authorization;
+
+			try{
+				await connectToDb(req.headers.host);
+				if (!isEmpty(token)) {
+					const decoded = verifyToken(token);
+					const identifierId = encodeId(decoded['sub']);
+					const userObj = await User.findById(identifierId, '-password');
+					const today = new Date();
+
+					if (userObj) {
+						const resArr = await Reservation.find({'doubleReference': doubleReference, 'type': 'user', 'fromDate':{'$gt': today}});
+						const result = packReservationwithDouble(resArr);
+
+						if (result['_id'] == id) {
+							const partner = await Partner.findById(result['partner'], '-password -passSafetyCode -passProvided -verified');
+							if (partner) {
+								const policy = getCancelPolicy(result);
+								const cancel = await Reservation.where({ 'user': userObj['_id'], doubleReference: result['doubleReference'] }).updateMany({ $set: { active: false, canceled: true, cancelDate: today, return: policy['free'], returnPrice: policy['free'] ? (result['deposit'] * 0.95) : 0 }});
+								
+								const myCriptor = new MyCriptor();
+								const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', result['room']);
+								const dateStr = setReservationTimeString(result);
+								const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+								const bcc = null;
+								const userTemplateId = 8;
+								const partnerTemplateId = 9;
+								const userTo = [{name: `${myCriptor.decrypt(userObj.firstName, true)} ${myCriptor.decrypt(userObj.lastName, true)}`, email: myCriptor.decrypt(userObj.contactEmail, false) }];
+								const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
+
+								const userParams = {
+									title: 'Otkazivanje rezervacije',
+									text: 'Žao nam je što ste morali da otkažete ovu rezervaciju. Sada ovaj termin na datoj lokaciji postaje slobodan i dostupan drugima na potencijalnu rezervaciju. U nastavku možete videti osnovne podatke o otkazivanju a sve dodatno možete pratiti preko vašeg korisničkog profila.',
+									orderId: `${dictionary['paymentUserEmailOrderId']} ${result['_id']}`,
+									date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
+									partner: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`,
+									returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. U narednih 7 dana možete očekivati vraćena sredstva uz troškove obrade 2% - 5% od iznosa depozita.' : 'Povraćaj depozita: Na žalost uslovi za povraćaj depozita nisu ispunjeni.',
+									returnPrice: `Iznos povraćaja: ${policy['free'] ? (result['deposit'] * 0.95) : 0}`,
+									finish: 'Vaš Trilino.'
+								};
+
+								const partnerParams = {
+									title: 'Korisnik je otkazao rezervaciju',
+									text: 'U nastavku možete videti osnovne podatke o rezervaciji koju je korisnik otkazao. Sada ovaj termin postaje slobodan i dostupan za buduću potencijalnu rezervaciju.',
+									date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
+									room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+									guest: `${dictionary['paymentPartnerEmailCelebrant']} ${result['guest']}`,
+									returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. Korisniku će biti vraćen depozit u roku od 7 dana.' : 'Povraćaj depozita: Uslovi za povraćaj depozita nisu ispunjeni.',
+									finish: 'Vaš Trilino.'
+								}
+
+								const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
+								const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
+								await sendEmail(userEmail);
+								await sendEmail(partnerEmail);
+
+								return res.status(200).json({ endpoint: 'reservations', operation: 'cancel', success: true, code: 1, result: cancel });
+							}else{
+								return res.status(401).json({ endpoint: 'reservations', operation: 'cancel', success: false, code: 2, error: 'sent data error', message: dictionary['apiPartnerLoginCode4'] });
+							}
+						}else{
+							return res.status(401).json({ endpoint: 'reservations', operation: 'cancel', success: false, code: 3, error: 'sent data error', message: dictionary['apiPartnerLoginCode4'] });
+						}
+					}else{
+						return res.status(401).json({ endpoint: 'reservations', operation: 'cancel', success: false, code: 4, error: 'sent data error', message: dictionary['apiPartnerLoginCode4'] });
+					}
+				}else{
+					return res.status(401).json({ endpoint: 'reservations', operation: 'cancel', success: false, code: 5, error: 'auth error', message: dictionary['apiPartnerLoginCode4'] });
+				}
+			}catch(err){
+				return res.status(500).send({ endpoint: 'reservations', operation: 'cancel', success: false, code: 6, error: 'db error', message: err  });
+			}
+		}
+	}
+
 
 
 	//////////////////////////////////////   CONFIRM   ///////////////////////////////////////////////
@@ -409,36 +547,36 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
 						const partnerTemplateId = 7;
 
-						let cateringMsg = '';
-						if (one['food']) {
-							Object.keys(one['food']).map( key => {
-								let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
-								if (i !== -1) {
-									cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
-								}
-							});
-						}
+						let cateringMsg = setCateringString(one, partner);
+						// if (one['food']) {
+						// 	Object.keys(one['food']).map( key => {
+						// 		let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
+						// 		if (i !== -1) {
+						// 			cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
+						// 		}
+						// 	});
+						// }
 
 
-						let decorationMsg = '';
-						if (one['decoration']) {
-							Object.keys(one['decoration']).map( key => {
-								const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
-								if (find) {
-									decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
-								}
-							});
-						}
+						let decorationMsg = setDecorationString(one, partner);
+						// if (one['decoration']) {
+						// 	Object.keys(one['decoration']).map( key => {
+						// 		const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
+						// 		if (find) {
+						// 			decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
+						// 		}
+						// 	});
+						// }
 
-						let addonMsg = '';
-						if (one['animation']) {
-							Object.keys(one['animation']).map( key => {
-								const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
-								if (find) {
-									addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
-								}
-							});
-						}
+						let addonMsg = setAddonString(one, partner);
+						// if (one['animation']) {
+						// 	Object.keys(one['animation']).map( key => {
+						// 		const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
+						// 		if (find) {
+						// 			addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
+						// 		}
+						// 	});
+						// }
 
 						const partnerParams = { 
 							title: dictionary['paymentPartnerEmailTitle'], 
