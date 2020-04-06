@@ -26,6 +26,7 @@ const reservationSchema = new Schema({
 	price: Number,
 	deposit: Number,
 	trilinoCatering: String,
+	trilinoPrice: Number,
 	confirmed: Boolean,
 	payment: String,
 	transactionId: String,

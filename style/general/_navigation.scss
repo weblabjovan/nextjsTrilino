@@ -37,14 +37,24 @@
 	.leftWrap{
 		margin-bottom: 15px;
 
-		.logo{
-			@media only screen and (max-width: 577px) {
-			    margin: auto;
-				margin-bottom: 5px;
-			}
+		@media only screen and (max-width: 776px) {
+		    text-align: center;
+		}
 
+		
+
+		@media only screen and (max-width: 577px) {
+		    border-top: 1px solid $darkGreyCol;
+		    padding-top: 15px;
+		}
+
+		.logo{
 			margin-bottom: 5px;
 			width: 120px;
+
+			@media only screen and (max-width: 776px) {
+			    margin: auto;
+			}
 		}
 
 		.socialWrapper{
@@ -61,23 +71,106 @@
 		}
 	}
 
-	ul{
-		list-style-type: none;
+	.menuOptions{
 		text-align: right;
-		@media only screen and (max-width: 577px) {
-			text-align: center;
-			padding: 0px;
-		}
 
-		li{
-			padding: 4px 0px;
+		ul{
+			list-style-type: none;
+			display: inline-block;
+			padding-left: 100px;
 
-			a{
-				font-size: 18px;
-				color: #000;
-				text-decoration: none;
+			@media only screen and (max-width: 776px) {
+				padding-left: 80px;
+			}
+
+			@media only screen and (max-width: 577px) {
+				text-align: center;
+				display: block;
+				padding: 0px;
+				
+			}
+
+			li{
+				padding: 4px 0px;
+
+				a{
+					font-size: 18px;
+					color: #000;
+					text-decoration: none;
+					@media only screen and (max-width: 776px) {
+						font-size: 16px;
+					}
+				}
 			}
 		}
+	}
+
+	
+
+	.cardBrands{
+		text-align: center;
+	    padding-top: 15px;
+	    background: #bdbdbd;
+	    padding-bottom: 10px;
+
+		@media only screen and (max-width: 577px) {
+			margin: none;
+			padding: none;
+			border: none;
+		}
+
+		.cards{
+			text-align: center;
+			@media only screen and (max-width: 577px) {
+				margin-bottom: 15px;
+			}
+			img{
+				width: 50px;
+				margin-right: 15px;
+
+				@media only screen and (max-width: 776px) {
+					width: 40px;
+					margin-right: 15px;
+				}
+			}
+		}
+
+		.banks{
+			text-align: center;
+			@media only screen and (max-width: 577px) {
+				margin-bottom: 15px;
+			}
+			a{
+				vertical-align: sub;
+
+				img{
+					width: 200px;
+					
+
+					@media only screen and (max-width: 776px) {
+						width: 180px;
+					}
+				}
+			}
+			
+		}
+
+		.security{
+			text-align: center;
+			@media only screen and (max-width: 577px) {
+				margin-bottom: 15px;
+			}
+			img{
+				width: 80px;
+				margin-right: 15px;
+
+				@media only screen and (max-width: 776px) {
+					width: 60px;
+					margin-right: 20px;
+				}
+			}
+		}
+		
 	}
 
 	.footerLastStripe{

@@ -139,7 +139,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     errorsCopy['fields'] = {};
     errorsCopy['flag'] = false;
 
-    if (isDateDifferenceValid(48, this.props.router['query']['date'], this.props.router['query']['from'])) {
+    if (isDateDifferenceValid((24*8), this.props.router['query']['date'], this.props.router['query']['from'])) {
       Object.keys(objCopy).map(key => {
         if (!isEmpty(objCopy[key]['num'])) {
           if (!isNumeric(objCopy[key]['num'])) {

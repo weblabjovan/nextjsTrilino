@@ -93,6 +93,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 								    price: reservation['price'],
 								    doubleReference: doubleReference,
 								    deposit: reservation['deposit'],
+								    trilinoPrice: reservation['trilinoPrice'],
 								    trilino: Object.keys(catering['trilino']).length ? true : false,
 								    doubleNumber: 1,
 										active: true,
@@ -499,6 +500,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 								if (double) {
 									flag = true;
 								}
+							}else{
+								flag = true;
 							}
 						}
 					}else{
@@ -530,7 +533,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						address: `${dictionary['paymentUserEmailAddress']} ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
 						date: `${dictionary['paymentUserEmailDate']} ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
 						room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
-						fullPrice: confirm ? `${dictionary['paymentUserEmailFullPriceTrue']} ${(one['price'] - one['deposit']).toFixed(2)}` : `${dictionary['paymentUserEmailFullPriceFalse']} ${one['price'].toFixed(2)}`, 
+						fullPrice: confirm ? `${dictionary['paymentUserEmailFullPriceTrue']} ${(one['price'] - one['deposit'] - one['trilinoPrice']).toFixed(2)}` : `${dictionary['paymentUserEmailFullPriceFalse']} ${one['price'].toFixed(2)}`, 
 						deposit: confirm ? `${dictionary['paymentUserEmailDepositTrue']} ${one['deposit'].toFixed(2)}` : `${dictionary['paymentUserEmailDepositFalse']}`, 
 						transactionTitle: dictionary['paymentUserEmailTransSub'], 
 						orderId: `${dictionary['paymentUserEmailOrderId']} ${one['_id']}`, 
@@ -548,35 +551,10 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const partnerTemplateId = 7;
 
 						let cateringMsg = setCateringString(one, partner);
-						// if (one['food']) {
-						// 	Object.keys(one['food']).map( key => {
-						// 		let i = getArrayIndexByFieldValue(partner['catering']['deals'], 'regId', key);
-						// 		if (i !== -1) {
-						// 			cateringMsg = `${cateringMsg}${cateringMsg ? ',' : ''} ${dictionary['paymentPartnerEmailCateringDeal'] + (i+1) + ' x ' + one['food'][key] + dictionary['paymentPartnerEmailCateringPerson'] }`;
-						// 		}
-						// 	});
-						// }
-
 
 						let decorationMsg = setDecorationString(one, partner);
-						// if (one['decoration']) {
-						// 	Object.keys(one['decoration']).map( key => {
-						// 		const find = getObjectFieldByFieldValue(partner['decoration'], 'regId', key);
-						// 		if (find) {
-						// 			decorationMsg = `${decorationMsg}${decorationMsg ? ',' : ''} ${generalOptions['decorType'][find['value']]['name_'+language]}`;
-						// 		}
-						// 	});
-						// }
 
 						let addonMsg = setAddonString(one, partner);
-						// if (one['animation']) {
-						// 	Object.keys(one['animation']).map( key => {
-						// 		const find = getObjectFieldByFieldValue(partner['contentAddon'], 'regId', key);
-						// 		if (find) {
-						// 			addonMsg = `${addonMsg}${addonMsg ? ',' : ''} ${find['name']}`;
-						// 		}
-						// 	});
-						// }
 
 						const partnerParams = { 
 							title: dictionary['paymentPartnerEmailTitle'], 
