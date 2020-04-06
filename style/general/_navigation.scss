@@ -35,9 +35,11 @@
 	}
 
 	.leftWrap{
+		padding-left: 50px;
 		margin-bottom: 15px;
 
 		@media only screen and (max-width: 776px) {
+			padding-left: 0px;
 		    text-align: center;
 		}
 

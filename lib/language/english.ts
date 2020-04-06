@@ -816,6 +816,32 @@ const english: LanguageInterface = {
 
 
 
+	contactHeadTitle: 'If you have questions, please contact us.',
+	contactGeneralSub: 'General information',
+	contactGeneralPart: 'Trilino is a part of Adalgo Group Consult DOO',
+	contactGeneralAddress: 'Address:',
+	contactGeneralPhone: 'Phone:',
+	contactGeneralWebsite: 'Website:',
+	contactGeneralCompanyNum: 'Company number:',
+	contactGeneralTaxNum: 'Tax ID number:',
+	contactGeneralDirector: 'Legal representative:',
+	contactContactSub: 'Contact information',
+	contactContactGeneralEmail: 'General inquiries:',
+	contactContactUserEmail: 'General inquiries:',
+	contactContactPartnerEmail: 'User inquiries:',
+
+
+		onlinePaymentTitle: 'Online payments',
+	onlinePaymentSub1: 'Payment instructions on Trilino web page',
+	onlinePaymentText1: 'Svoju rezervaciju plaćate koristeći Visa, Visa Electron, MasterCard, Maestro ili Amex platnu karticu. Kartica mora biti odobrena od strane banke izdavaoca za online (Internet) plaćanje. Nakon odabira prostora i ćeljenog slobodnog termina, kada kreirate vašu rezervaciju, bićete preusmereni na stranicu koja je predviđena za online plaćanje (slika u nastavku). Sigurnost podataka prilikom kupovine garantuje procesor platnih kartica Banca Intesa ad Beograd, pa se tako kompletni proces naplate i obavlja na stranicama banke. Niti jednog trenutka podaci o Vašoj platnoj kartici nisu dostupni našem sistemu.',
+	onlinePaymentPhotoTitle1: 'payment instructions',
+	onlinePaymentSub2: 'Payment card information',
+	onlinePaymentText2: 'Slika u nastavku vam može pomoći da na vašoj platnoj kartici pronađete podatke koji su vam potrebni da bi izvršili uplatu na stranici predviđenoj za online plaćanje.',
+	onlinePaymentText3: 'Nakon unošenja podataka, i izvršenog plaćanja procesor platnih kartica Banca Intesa-e će vas automatski preusmeriti na našu stranicu predviđenu za potvrdu o plaćanju. Takođe, na vaš email će biti poslata potvrda o ishodu plaćanja i uspešnoj/neuspešnoj rezervaciji. Želimo vam uspešno plaćanje.',
+	onlinePaymentPhotoTitle2: 'payment card information',
+
+
+
 
 	//////////////////////API
 

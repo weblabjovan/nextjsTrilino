@@ -51,18 +51,18 @@ export default class OnlinePaymentsView extends React.Component <MyProps, MyStat
 					<Row>
 		    		<Col xs="12">
 		    			<div className="helpPage terms">
-		    				<h2>Plaćanje karticama</h2>
+		    				<h2>{ this.state.dictionary['onlinePaymentTitle'] }</h2>
 		    				<div className="section" >
-		    					<h4>Instrukcija za plaćanje na Trilino internet stranici</h4>
-		    					<p>{this.state.dictionary['termsIntroText_1']}</p>
-		    					<img src="/static/intesaPayment.jpg" alt="intesa-payment-instruction" title="instrukcija za plaćanje"></img>
+		    					<h4>{ this.state.dictionary['onlinePaymentSub1'] }</h4>
+		    					<p>{ this.state.dictionary['onlinePaymentText1'] }</p>
+		    					<img src="/static/intesaPayment.jpg" alt="intesa-payment-instruction" title={ this.state.dictionary['onlinePaymentPhotoTitle1'] }></img>
 		    				</div>
 
 		    				<div className="section" >
-		    					<h4>Podaci na vašoj platnoj kartici</h4>
-		    					<p>{this.state.dictionary['termsIntroText_1']}</p>
-		    					<img src="/static/cardExplain.jpg" alt="payment-card-information" title="podaci sa platne kartice"></img>
-		    					<p>{this.state.dictionary['termsIntroText_1']}</p>
+		    					<h4>{ this.state.dictionary['onlinePaymentSub2'] }</h4>
+		    					<p>{ this.state.dictionary['onlinePaymentText2'] }</p>
+		    					<img src="/static/cardExplain.jpg" alt="payment-card-information" title={ this.state.dictionary['onlinePaymentPhotoTitle2'] }></img>
+		    					<p>{ this.state.dictionary['onlinePaymentText3'] }</p>
 		    				</div>
 		    			</div>
 		    		</Col>

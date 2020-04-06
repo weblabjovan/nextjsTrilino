@@ -71,7 +71,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     <NavLink href={`/partnership?language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/">{this.props.contact}</NavLink>
+                    <NavLink href={`/contact?language=${this.props.language.toLowerCase()}`}>{this.props.contact}</NavLink>
                   </NavItem>
                   {
                     this.props.user
