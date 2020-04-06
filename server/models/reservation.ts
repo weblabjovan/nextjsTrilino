@@ -26,6 +26,7 @@ const reservationSchema = new Schema({
 	price: Number,
 	deposit: Number,
 	trilinoCatering: String,
+	trilinoPrice: Number,
 	confirmed: Boolean,
 	payment: String,
 	transactionId: String,
@@ -38,6 +39,10 @@ const reservationSchema = new Schema({
 	trilino: Boolean,
 	doubleReference: {type: String, required: true},
 	doubleNumber: Number,
+	canceled: Boolean,
+	cancelDate: Date,
+	returnPolicy: Boolean,
+	returnPrice: Number, 
 }, {timestamps: true});
 
 reservationSchema.index({'date': 1});

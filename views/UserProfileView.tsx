@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
+import { getReservationsForUser, cancelReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, unsetCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
@@ -18,6 +19,15 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  getUserReservationStart: boolean;
+  getUserReservationError: object | boolean;
+  getUserReservationSuccess: null | number;
+  reservations: Array<object>;
+  cancelReservationStart: boolean;
+  cancelReservationError: object | boolean;
+  cancelReservationSuccess: null | object;
+  cancelReservation(link: object, data: object, auth: string): void;
+  getReservationsForUser(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
@@ -36,6 +46,7 @@ interface MyState {
   passwordChange: boolean;
   activeScreen: string;
   reservationBill: string;
+  reservationBillObject: null | object;
   userBillShow: boolean;
   modal: boolean;
 };
@@ -60,10 +71,11 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
     isMobile: isMobile(this.props.userAgent),
-    loader: false,
+    loader: true,
     passwordChange: this.props.passChange,
     activeScreen: 'reservation',
     reservationBill: '',
+    reservationBillObject: null,
     userBillShow: false,
     modal: false,
   };
@@ -84,27 +96,42 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   }
 
   openUserBill(reservationIndex: number){
-    this.setState({ reservationBill: `bill_${reservationIndex}`, userBillShow: true });
+    this.setState({ reservationBill: `bill_${reservationIndex}`, userBillShow: true, reservationBillObject: this.props.reservations[reservationIndex] });
   }
 
   closeUserBill(){
-    this.setState({ reservationBill: '', userBillShow: false });
+    this.setState({ reservationBill: '', userBillShow: false, reservationBillObject: null });
   }
 
-  toggleModal(){
-    this.setState({ modal: !this.state.modal });
+  toggleModal(index?: number){
+    if (typeof index === 'number') {
+      this.setState({ modal: !this.state.modal, reservationBillObject: this.props.reservations[index] });
+    }else{
+      this.setState({ modal: !this.state.modal, reservationBillObject: null });
+    }
+    
   }
 
   activateCancelReservation(){
-    console.log()
+    this.setState({loader: true}, () => {
+      this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, this.props.token);
+    })
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (!this.props.cancelReservationStart && prevProps.cancelReservationStart && !this.props.cancelReservationError && this.props.cancelReservationSuccess && !prevProps.cancelReservationSuccess) {
+      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+    }
+
+    if (!this.props.getUserReservationStart && prevProps.getUserReservationStart && !this.props.getUserReservationError && this.props.getUserReservationSuccess && !prevProps.getUserReservationSuccess) {
+      this.setState({loader: false, modal: false, reservationBillObject: null });
+    }
 
   }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+    this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
 	}
 	
   render() {
@@ -136,14 +163,15 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           isMobile={ this.state.isMobile }
           show={ this.state.userBillShow }
           close={ this.closeUserBill }
+          reservation={ this.state.reservationBillObject }
         />
 
         <Modal
           isOpen={ this.state.modal }
           title={"Otkazivanje rezervacije"}
-          text={"Otkazivanjem rezervacije dogadja se to to i to. Ne znam sada ali ćemo na vreme smisliti neki tekst koji će obavestiti korisnika šta ga čeka kada klikne dugme u nastavku."}
+          text={this.state.reservationBillObject ? this.state.reservationBillObject['cancelPolicy']['free'] ? "Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru. U ovom trenutku otkazivanje rezervacije je praktično besplatno, plaćaju se samo troškovi obrade transakcije 2%-5% uplaćenog depozita. Da li i dalje želite da otkažete ovu rezervaciju?" : "Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru i gubite novac koji ste uplatili kao depozit. Da li i dalje želite da otkažete ovu rezervaciju?" : ''}
           buttonColor="danger"
-          buttonText={"Otkazujem"}
+          buttonText={"Da, otkažite"}
           toggle={ this.toggleModal }
           clickFunction={ this.activateCancelReservation }
         />
@@ -165,46 +193,75 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                       <div className="middle">
                         <h3 className="screenTitle">Vaše rezervacije</h3>
                       </div>
-                      <div className="reservationList">
-                        {
-                          [1,2,3,4,5,6].map( (item, index) => {
-                            return(
-                              <div className="item" key={`reservationItem_${index}`}>
-                                <div className="info">
-                                  <div className="date">
-                                    <p>30-03-2020, 07:00 - 9:30</p>
-                                  </div>
+                      <Row className="reservationList justify-content-sm-center">
 
-                                  <div className="restWrapper">
-                                    <div className="venue">
-                                      <p>Igraonica Adalgo Group</p>
-                                      <p>Sala: Neka sala</p>
-                                      <p>Puna cena: 56.000 rsd</p>
-                                      <p>Rejting: Trenutno neocenjeno</p>
-                                    </div>
-                                    <div className="price">
-                                      
-                                      <p>Plaćen depozit: 6.000 rsd</p>
-                                      <p>Za uplatu na licu mesta: 20.000 rsd</p>
-                                      <p>Za Trilino ketring: 30.000 rsd</p>
-                                      <p>Za uplatu do 23-03-2020: 30.000 rsd</p>
-                                    </div>
-                                    <div className="actions">
-                                      <div className="middle">
-                                        <button>Ocenite</button>
-                                        <button>Platite Trilino Ketering</button>
-                                        <button onClick={ () => this.openUserBill(index)}>Pogledajte detaljnije</button>
-                                        <button className="decline" onClick={ this.toggleModal }>Otkažite</button>
-                                      </div>
-                                    </div>
+                        {
+                          this.props.reservations.length
+                          ?
+                          this.props.reservations.map((reser, index) => {
+                            return(
+                              <Col xs="12" sm="6" lg="4" key={`resKEy_${index}`}>
+                                <div className="item">
+                                  <div className={`outcome ${reser['status']}`}>
+                                    <p>{ reser['status'] === 'accepted' ? this.state.dictionary['paymentUserEmailPaymentStatusTrue'] : reser['status'] === 'declined' ? this.state.dictionary['paymentUserEmailPaymentStatusFalse'] : this.state.dictionary['paymentUserEmailPaymentStatusCancel']}</p>
                                   </div>
+                                  <div className="info">
+                                    <Row>
+                                      <Col xs="12" sm="8">
+                                        <span>{this.state.dictionary['paymentUserEmailOrderId']}</span>
+                                        <span>{ reser['_id']}</span>
+                                        <span>{this.state.dictionary['paymentUserEmailDate']}</span>
+                                        <span>{ reser['dateTime']}</span>
+                                        <span>{this.state.dictionary['paymentUserEmailPartnerName']}</span>
+                                        <span>{ reser['partnerObj'][0]['name']}</span>
+                                      </Col>
+                                      <Col xs="12" sm="4">
+                                        <div className="actions">
+                                          <button onClick={ () => this.openUserBill(index)}>Detaljnije</button>
+                                          {
+                                            reser['isForRate']
+                                            ?
+                                            <button>Ocenite</button>
+                                            :
+                                            null
+                                          }
+
+                                          {
+                                            reser['isForTrilino']
+                                            ?
+                                            <button>Ketering</button>
+                                            :
+                                            null
+                                          }
+                                          
+                                          {
+                                            reser['cancelPolicy']['cancel']
+                                            ?
+                                            <button className="decline" onClick={ () => this.toggleModal(index) }>Otkažite</button>
+                                            :
+                                            null
+                                          }
+                                          
+                                         </div>
+                                      </Col>
+                                    </Row>
+                                    
+                                  </div>
+                                 
                                 </div>
-                              </div>
-                             )
+                              </Col>
+                            )
                           })
+                          :
+                          <Col xs="12">
+                            <div className="middle">
+                              <h4 className="noMatch">Do sada nije kreirana nijedna rezervacija</h4>
+                            </div>
+                            
+                          </Col>
                         }
-                        
-                      </div>
+
+                      </Row>
                       
                     </Col>
                   )
@@ -268,12 +325,24 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+
+  getUserReservationStart: state.ReservationReducer.getUserReservationStart,
+  getUserReservationError: state.ReservationReducer.getUserReservationError,
+  getUserReservationSuccess: state.ReservationReducer.getUserReservationSuccess,
+
+  cancelReservationStart: state.ReservationReducer.cancelReservationStart,
+  cancelReservationError: state.ReservationReducer.cancelReservationError,
+  cancelReservationSuccess: state.ReservationReducer.cancelReservationSuccess,
+
+  reservations: state.ReservationReducer.reservations,
 });
 
 
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
+    getReservationsForUser,
+    cancelReservation,
   },
   dispatch);
 };

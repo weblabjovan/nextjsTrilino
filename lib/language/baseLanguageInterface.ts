@@ -764,6 +764,7 @@ export default interface LanguageInterface {
 	paymentUserEmailPaymentStatus: string;
 	paymentUserEmailPaymentStatusTrue: string;
 	paymentUserEmailPaymentStatusFalse: string;
+	paymentUserEmailPaymentStatusCancel: string;
 	paymentUserEmailTransactionId: string;
 	paymentUserEmailTransactionDate: string;
 	paymentUserEmailMdStatus: string;
@@ -800,6 +801,29 @@ export default interface LanguageInterface {
 	paymentStageButton: string;
 
 
+
+	contactHeadTitle: string;
+	contactGeneralSub: string;
+	contactGeneralPart: string;
+	contactGeneralAddress: string;
+	contactGeneralPhone: string;
+	contactGeneralWebsite: string;
+	contactGeneralCompanyNum: string;
+	contactGeneralTaxNum: string;
+	contactGeneralDirector: string;
+	contactContactSub: string;
+	contactContactGeneralEmail: string;
+	contactContactUserEmail: string;
+	contactContactPartnerEmail: string;
+
+	onlinePaymentTitle: string;
+	onlinePaymentSub1: string;
+	onlinePaymentText1: string;
+	onlinePaymentPhotoTitle1: string;
+	onlinePaymentSub2: string;
+	onlinePaymentText2: string;
+	onlinePaymentText3: string;
+	onlinePaymentPhotoTitle2: string;
 
 
 	//////////////////////API
