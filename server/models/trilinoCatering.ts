@@ -10,6 +10,13 @@ const cateringSchema = new Schema({
 	deliveryDate: {type: String, required: true},
 	deliveryTime: {type: String, required: true},
 	deliveryFullDate: {type: Date, required: true},
+	transactionResult: String,
+	transactionId: String,
+	transactionAuthCode: String,
+	transactionProcReturnCode: String,
+	transactionDate: String,
+	transactionMdStatus: String,
+	transactionErrMsg: String,
 }, {timestamps: true});
 
 cateringSchema.index({'reservation': 1});

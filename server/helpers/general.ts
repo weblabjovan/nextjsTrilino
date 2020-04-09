@@ -7,7 +7,9 @@ import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
 import { languageList } from '../../lib/language/locale';
 import { getLanguage } from '../../lib/language';
+import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import generalOptions from '../../lib/constants/generalOptions';
+import { IemailGeneral } from '../../lib/constants/interfaces';
 
 export const generateString = (length: number):string => {
 	let str = '';
@@ -157,17 +159,9 @@ export const getObjectFieldByFieldValue = (obj: object, field: string, value: an
   return null;
 }
 
-export const setDateTime = (date: string, time: string): Date => {
-  const splitTime = time.split(':');
-  const d = new Date(date);
-  const z = d.getTime() + (2*60*60*1000);
-  const newDate = new Date(z);
-  newDate.setUTCHours(parseInt(splitTime[0]));
-  newDate.setMinutes(parseInt(splitTime[1]));
-  newDate.setSeconds(0);
-  newDate.setMilliseconds(0);
-
-  return newDate;
+export const currencyFormat = (num: number): string => {
+  const ra = new Number(num);
+  return ra.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
 export const setReservationDateForBase = (dateString: string): Date => {
@@ -176,20 +170,6 @@ export const setReservationDateForBase = (dateString: string): Date => {
   const newDate = new Date(z);
 
   return newDate;
-}
-
-export const setDateForServer = (date: string): Date => {
-  const strings = date.split('-')
-  const d = new Date();
-  d.setFullYear(parseInt(strings[2]));
-  d.setMonth(parseInt(strings[1])-1);
-  d.setDate(parseInt(strings[0]));
-  d.setUTCHours(0);
-  d.setMinutes(0);
-  d.setSeconds(0);
-  d.setMilliseconds(0);
-
-  return d;
 }
 
 export const createSearchQuery = (fields: object): object => {
@@ -614,8 +594,11 @@ export const prepareReservationsForUserList = (reservations: Array<object>): Arr
       reserve['dateTime'] = setReservationTimeString(reserve);
       reserve['isForRate'] = isReservationForRate(reserve);
       reserve['cancelPolicy'] = getCancelPolicy(reserve);
-      reserve['isForTrilino'] = isReservationWithTrilinoCatering(reserve) ? true : false;
-      reserve['cateringString'] = setCateringString(reserve, reserve['partnerObj'][0]);
+      reserve['isForTrilino'] = isReservationWithTrilinoCatering(reserve);
+      reserve['trilinoPaymentDeadline'] = setTrilinoPaymentDeadline(reserve);
+      reserve['trilinoCateringString'] = setTrilinoCateringString(reserve);
+      reserve['isTrilinoCateringPaid'] = isTrilinoCateringPaid(reserve);
+      reserve['cateringString'] = setCateringForUserList(reserve);
       reserve['decorationString'] = setDecorationString(reserve, reserve['partnerObj'][0]);
       reserve['addonString'] = setAddonString(reserve, reserve['partnerObj'][0]);
     }
@@ -717,12 +700,83 @@ export const getCancelPolicy = (reservation: object): object => {
 }
 
 const isReservationWithTrilinoCatering = (reservation: object): boolean => {
-  if (reservation['confirmed']) {
+  if (reservation['confirmed'] && reservation['active']) {
+    if (reservation['trilino']) {
+      if (reservation['cateringObj']) {
+        if (Array.isArray(reservation['cateringObj'])) {
+          if (reservation['cateringObj'].length) {
+            const dateHandler = new DateHandler();
+            const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
+            if (dateDiff < -6 && reservation['cateringObj'][0]['status'] !== 'paid' && !reservation['cateringObj'][0].hasOwnProperty('transactionId')) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+const setTrilinoPaymentDeadline = (reservation: object): string => {
+  if (reservation['confirmed'] && reservation['active']) {
     if (reservation['trilino']) {
       const dateHandler = new DateHandler();
-      const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
-      if (dateDiff < -6) {
-        return true;
+      return dateHandler.getNewDateFor(reservation['fromDate'], 'before', 7, 'text');
+    }
+  }
+
+  return '-';
+}
+
+const setCateringForUserList = (reservation: object): string => {
+  const partnerCatering = setCateringString(reservation, reservation['partnerObj'][0]);
+  const trilinoCatering = setTrilinoCateringString(reservation);
+  const res = `${ partnerCatering === '-' ? '' : partnerCatering + ', '} ${ trilinoCatering === '-' ? '' : trilinoCatering + ', ' }`;
+
+  return res ? res : '-';
+}
+
+const setTrilinoCateringString = (reservation: object): string =>{
+  let str = '';
+  if (reservation['cateringObj']) {
+    if (Array.isArray(reservation['cateringObj'])) {
+      if (reservation['cateringObj'].length) {
+        const dictionary = getLanguage(reservation['partnerObj'][0]['userlanguage']);
+        str = getTrilinoCateringString(reservation['cateringObj'][0], dictionary);
+      }else{
+        str = '-'
+      }
+    }else{
+      str = '-'
+    }
+  }
+  else{
+    str = '-'
+  }
+
+  return str;
+}
+
+const getTrilinoCateringString = (catering: object, dictionary: object): string => {
+  let str = '';
+
+  for (let key in catering['content']) {
+    const obj = getArrayObjectByFieldValue(products['trilinoCatering'], 'regId', key);
+    str = `${str}${str ? ',' : ''} ${obj['name'] + ' x ' + catering['content'][key] + ' ' + dictionary['paymentPartnerEmailCateringPerson']}`;
+  }
+
+  return str;
+}
+
+const isTrilinoCateringPaid = (reservation: object): boolean => {
+  if (reservation['cateringObj']) {
+    if (Array.isArray(reservation['cateringObj'])) {
+      if (reservation['cateringObj'].length) {
+        if (reservation['cateringObj'][0]['status'] === 'paid') {
+          return true;
+        }
       }
     }
   }
@@ -807,4 +861,62 @@ export const packReservationwithDouble = (arr: Array<object>): object => {
     res['doubleObj'] = arr[double];
     return res;
   }
+}
+
+export const getConfirmationUserParams = (data: IemailGeneral): object => {
+  const { language, reservation, partner, double } = data;
+  const dictionary = getLanguage(language);
+  const dateHandler = new DateHandler();
+
+  const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', reservation['room']);
+
+  const params = { 
+    title: reservation['confirmed'] ? dictionary['paymentUserEmailTitleTrue'] : dictionary['paymentUserEmailTitleFalse'], 
+    reservationTitle: dictionary['paymentUserEmailResSub'], 
+    partnerName: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`, 
+    address: `${dictionary['paymentUserEmailAddress']} ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
+    date: `${dictionary['paymentUserEmailDate']} ${dateHandler.getDateString(reservation['fromDate'])}, ${reservation['from']} - ${reservation['double'] ? double['to'] : reservation['to']}`, 
+    room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+    fullPrice: reservation['confirmed'] ? `${dictionary['paymentUserEmailFullPriceTrue']} ${currencyFormat(reservation['price'] - reservation['deposit'] - reservation['trilinoPrice'])}` : `${dictionary['paymentUserEmailFullPriceFalse']} ${currencyFormat(reservation['price'])}`, 
+    deposit: reservation['confirmed'] ? `${dictionary['paymentUserEmailDepositTrue']} ${currencyFormat(reservation['deposit'])}` : `${dictionary['paymentUserEmailDepositFalse']}`, 
+    forTrilino: reservation['confirmed'] && reservation['trilino'] ? `${dictionary['paymentUserEmailForTrilinoTrue']} ${currencyFormat(reservation['trilinoPrice'])}` : `${dictionary['paymentUserEmailForTrilinoFalse']}`,
+    transactionTitle: dictionary['paymentUserEmailTransSub'], 
+    orderId: `${dictionary['paymentUserEmailOrderId']} ${reservation['_id']}`, 
+    authCode: `${dictionary['paymentUserEmailAuthCode']} ${reservation['transactionAuthCode']}`, 
+    paymentStatus: `${dictionary['paymentUserEmailPaymentStatus']} ${reservation['confirmed'] ? dictionary['paymentUserEmailPaymentStatusTrue'] : dictionary['paymentUserEmailPaymentStatusFalse']}`, 
+    transactionId: `${dictionary['paymentUserEmailTransactionId']} ${reservation['transactionId']}`, 
+    transactionDate: `${dictionary['paymentUserEmailTransactionDate']} ${reservation['transactionDate']}`, 
+    mdStatus: `${dictionary['paymentUserEmailMdStatus']} ${reservation['transactionMdStatus']}`, 
+    finish: reservation['confirmed'] ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
+  }
+
+  return params;
+}
+
+export const getCateringConfirmationParams = (data: IemailGeneral): object => {
+  const { language, reservation, catering, partner } = data;
+  const dictionary = getLanguage(language);
+
+  const dateHandler = new DateHandler();
+  const trilinoDeal = getTrilinoCateringString(catering, dictionary);
+
+  const params = { 
+    title: dictionary['emailCateringConfirmationTitle'], 
+    text: dictionary['emailCateringConfirmationText'],
+    sub: dictionary['emailCateringConfirmationSub'],
+    deliveryPartner: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`,
+    deliveryAddress: `${dictionary['paymentUserEmailAddress']} ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`,
+    deliveryTime: `${dictionary['emailCateringConfirmationTime']} ${dateHandler.getDateString(reservation['fromDate'])}, ${reservation['from']}`,
+    deal: `${dictionary['emailCateringConfirmationDeal']} ${trilinoDeal}`,
+    price: `${dictionary['emailCateringConfirmationPrice']} ${currencyFormat(catering['price'])}`,
+    orderId: `${dictionary['paymentUserEmailOrderId']} ${catering['_id']}`, 
+    authCode: `${dictionary['paymentUserEmailAuthCode']} ${catering['transactionAuthCode']}`, 
+    paymentStatus: `${dictionary['paymentUserEmailPaymentStatus']} ${dictionary['paymentUserEmailPaymentStatusTrue']}`, 
+    transactionId: `${dictionary['paymentUserEmailTransactionId']} ${catering['transactionId']}`, 
+    transactionDate: `${dictionary['paymentUserEmailTransactionDate']} ${catering['transactionDate']}`, 
+    mdStatus: `${dictionary['paymentUserEmailMdStatus']} ${catering['transactionMdStatus']}`, 
+    finish: dictionary['emailCateringConfirmationFinish']
+  };
+
+  return params;
 }

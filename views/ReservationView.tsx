@@ -7,9 +7,9 @@ import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, chan
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import DateHandler from '../lib/classes/DateHandler';
-import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering, currencyFormat } from '../lib/helpers/generalFunctions';
 import { prepareObjForUserReservation } from '../lib/helpers/specificUserFunctions';
-import { isDateDifferenceValid } from '../lib/helpers/specificReservationFunctions';
+import { isDateDifferenceValid, isTrilinoCateringOrdered } from '../lib/helpers/specificReservationFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
 import { setNestPayHash } from '../server/helpers/general';
 import genOptions from '../lib/constants/generalOptions';
@@ -136,10 +136,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
   cateringSectionValidation(){
     const errorsCopy = JSON.parse(JSON.stringify(this.state.errors));
     const objCopy = JSON.parse(JSON.stringify(this.props.reservationCatering));
+    const timeDiff = isTrilinoCateringOrdered(objCopy) ? 24*8 : 24*2;
     errorsCopy['fields'] = {};
     errorsCopy['flag'] = false;
 
-    if (isDateDifferenceValid((24*8), this.props.router['query']['date'], this.props.router['query']['from'])) {
+    console.log(objCopy);
+    if (isDateDifferenceValid((timeDiff), this.props.router['query']['date'], this.props.router['query']['from'])) {
       Object.keys(objCopy).map(key => {
         if (!isEmpty(objCopy[key]['num'])) {
           if (!isNumeric(objCopy[key]['num'])) {
@@ -408,20 +410,26 @@ class ReservationView extends React.Component <MyProps, MyState>{
   changeCateringNumber(num: string, regId: string, index: number){
     const cateringCopy = JSON.parse(JSON.stringify(this.props.reservationCatering));
 
-    if (cateringCopy[regId]) {
-      cateringCopy[regId]['num'] = num;
-    }else{
-      const dealsCopy = JSON.parse(JSON.stringify(this.props.partner['catering']['deals']));
-      const cateringItem = getArrayObjectByFieldValue(dealsCopy, 'regId', regId);
-      if (cateringItem) {
-        delete cateringItem['items'];
-        cateringItem['num'] = num;
-        cateringCopy[regId] = cateringItem;
-        if (!cateringItem['name']) {
-          cateringItem['name'] = `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`;
+    if (num) {
+      if (cateringCopy[regId]) {
+        cateringCopy[regId]['num'] = num;
+      }else{
+        const dealsCopy = JSON.parse(JSON.stringify(this.props.partner['catering']['deals']));
+        const cateringItem = getArrayObjectByFieldValue(dealsCopy, 'regId', regId);
+        if (cateringItem) {
+          delete cateringItem['items'];
+          cateringItem['num'] = num;
+          cateringCopy[regId] = cateringItem;
+          if (!cateringItem['name']) {
+            cateringItem['name'] = `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`;
+          }
         }
       }
+    }else{
+      delete cateringCopy[regId];
     }
+
+    
 
     this.props.changeSingleReservationField('reservationCatering', cateringCopy);
   }
@@ -735,7 +743,6 @@ class ReservationView extends React.Component <MyProps, MyState>{
       <input type="submit" style="visibility: hidden" /> </form>`;
       
       const form =document.getElementById('reviseCombi');
-      // console.log(form);
 
       if(form){
         let element: HTMLElement = form.querySelector('input[type="submit"]') as HTMLElement;
@@ -930,7 +937,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                            <Row className="cateringDeal" key={`cateringKey_${index}`}>
                             <Col xs="12" sm="5">
                               <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
-                              <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${deal['price']}rsd`}</p>
+                              <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
                             </Col>
 
@@ -994,7 +1001,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <Row className="item" key={`addonKey_${index}`}>
                                 <Col xs="10">
                                   <p className="name">{addon.name}</p>
-                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${addon.price}rsd`}</p>
+                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${currencyFormat(parseInt(addon.price))}`}</p>
                                 </Col>
                                 <Col xs="2">
                                  <CheckBox
@@ -1024,7 +1031,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <Row className="item" key={`decorKey_${index}`}>
                                 <Col xs="10">
                                   <p className="name">{genOptions['decorType'][item['value'].toString()][`name_${this.props.lang}`]}</p>
-                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${item.price}rsd`}</p>
+                                  <p>{`${this.state.dictionary['reservationFormAddonPrice']} ${currencyFormat(parseInt(item.price))}`}</p>
                                 </Col>
                                 <Col xs="2">
                                  <CheckBox

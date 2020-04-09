@@ -9,7 +9,7 @@ import { adminBasicDevLogin } from '../actions/admin-actions';
 import { getReservationsOnDate } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import { datePickerLang } from '../lib/language/dateLanguage';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, currencyFormat } from '../lib/helpers/generalFunctions';
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, createDisplayPhotoListObject, dateForSearch, addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import { preparePartnerForLocation } from '../lib/helpers/specificReservationFunctions'
 import generalOptions from '../lib/constants/generalOptions';
@@ -529,7 +529,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	                    return(
 	                    	<div className="item" key={`addonKey_${index}`}>
 				          				<span className="icon check"></span>
-				          				<p>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${addon['price']} rsd`}</p>
+				          				<p>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${currencyFormat(parseInt(addon['price']))}`}</p>
 				          				<p className="payRemark">{addon['comment'] ? `*${addon['comment']}` : ''}</p>
 				          			</div>
 	                     )
@@ -554,7 +554,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              return(
 				              	<div className="item" key={`decorKey_${index}`}>
 				          				<span className="icon check"></span>
-				          				<p>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? (decor['price'] + 'rsd') : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</p>
+				          				<p>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? currencyFormat(parseInt(decor['price'])) : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</p>
 				          			</div>
 				              )
 				            })
@@ -620,7 +620,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          		?
 										          		term['terms'].map( (item, itemIndex) => {
 										          			return(
-										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${item['price']}rsd`}</span></Button>
+										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${currencyFormat(item['price'])}`}</span></Button>
 										          			)
 										          		})
 										          		:
@@ -639,7 +639,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          				<p>{this.state.dictionary['locationChooseTermAfter']}</p>
 											          			<p>{this.state.term['room']}</p>
 											          			<p>{`${this.state.term['from']} - ${this.state.term['to']}`}</p>
-											          			<p>{`${this.state.term['price']} rsd`}</p>
+											          			<p>{`${currencyFormat(this.state.term['price'])}`}</p>
 											          			<Button color="success" onClick={ this.makeReservation } className="hidden-xs">{this.state.dictionary['locationButtonReserve']}</Button>
 										          			</div>
 										          			
@@ -715,7 +715,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '1').map( (drink, index) => {
 			                        return(
-			                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :
@@ -733,7 +733,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '2').map( (drink, index) => {
 			                        return(
-			                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :
@@ -751,7 +751,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '3').map( (drink, index) => {
 			                        return(
-			                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :

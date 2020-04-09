@@ -89,21 +89,21 @@ export function confirmReservationAfterPay(link: object, data: object, auth: str
   };
 }
 
-export const disconfirmReservationActionType = {
-  START: 'DISCONFIRM_RESERVATION_START',
-  ERROR: 'DISCONFIRM_RESERVATION_ERROR',
-  SUCCESS: 'DISCONFIRM_RESERVATION_SUCCESS',
+export const confirmCateringActionType = {
+  START: 'CONFIRM_CATERING_START',
+  ERROR: 'CONFIRM_CATERING_ERROR',
+  SUCCESS: 'CONFIRM_CATERING_SUCCESS',
 };
 
-export function disconfirmReservationAfterPay(link: object, data: object, auth: string) {
-  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_DISCONFIRM);
+export function confirmCateringAfterPay(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_CONFIRM_CATERING);
 
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
       endpoint,
       data,
-      confirmReservationActionType,
+      confirmCateringActionType,
       null,
       false,
       "POST",

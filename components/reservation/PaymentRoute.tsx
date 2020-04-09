@@ -4,6 +4,7 @@ import LoginScreen from '../user/LoginScreen';
 import RegistrationScreen from '../user/RegistrationScreen';
 import PasswordScreen from '../user/PasswordScreen';
 import CheckBox from '../form/checkbox';
+import { currencyFormat } from '../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../lib/language';
 
 type MyProps = {
@@ -155,18 +156,18 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
                     </tr>
                     <tr>
                       <td>{ this.state.dictionary['paymentStagePrice'] }</td>
-                      <td>{`${this.props.price.toLocaleString('en')}`}</td>
+                      <td>{`${currencyFormat(this.props.price)}`}</td>
                     </tr>
                     <tr>
                       <td>{ this.state.dictionary['paymentStageDeposit'] }</td>
-                      <td>{`${this.props.deposit.toLocaleString('en')}`}</td>
+                      <td>{`${currencyFormat(this.props.deposit)}`}</td>
                     </tr>
                   </tbody>
                 </Table>
 
-        			  <p>{`${ this.state.dictionary['paymentStageMsgWeb'] } ${this.props.deposit.toLocaleString('en')}`}</p>
-                <p>{`${ this.state.dictionary['paymentStageMsgOnsite'] } ${(this.props.price - (this.props.deposit + this.props.trilino)).toLocaleString('en')}`}</p>
-                <p>{this.props.trilino ? `${ this.state.dictionary['paymentStageMsgTrilino'] } ${this.props.trilino.toLocaleString('en')}` : ''}</p>
+        			  <p>{`${ this.state.dictionary['paymentStageMsgWeb'] } ${currencyFormat(this.props.deposit)}`}</p>
+                <p>{`${ this.state.dictionary['paymentStageMsgOnsite'] } ${currencyFormat(this.props.price - (this.props.deposit + this.props.trilino))}`}</p>
+                <p>{this.props.trilino ? `${ this.state.dictionary['paymentStageMsgTrilino'] } ${currencyFormat(this.props.trilino)}` : ''}</p>
 
                 <CheckBox
                   disabled={ false }

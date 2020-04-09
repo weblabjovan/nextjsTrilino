@@ -6,13 +6,16 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getReservationsForUser, cancelReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, unsetCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, unsetCookie, setUpLinkBasic, currencyFormat } from '../lib/helpers/generalFunctions';
+import { setNestPayHash } from '../server/helpers/general';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
 import UserBill from '../components/userProfile/UserBill';
 import Modal from '../components/modals/ConfirmationModal';
+import PaymentModal from '../components/modals/PaymentModal';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
+import Keys from '../server/keys';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -49,6 +52,7 @@ interface MyState {
   reservationBillObject: null | object;
   userBillShow: boolean;
   modal: boolean;
+  paymentModal: boolean;
 };
 
 class UserProfileView extends React.Component <MyProps, MyState>{
@@ -57,7 +61,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation'];
+    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation', 'togglePaymentModal','activatePayCatering'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -78,6 +82,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     reservationBillObject: null,
     userBillShow: false,
     modal: false,
+    paymentModal: false,
   };
 
   logout() {
@@ -109,13 +114,60 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     }else{
       this.setState({ modal: !this.state.modal, reservationBillObject: null });
     }
-    
+  }
+
+  togglePaymentModal(index?: number){
+    if (typeof index === 'number') {
+      this.setState({ paymentModal: !this.state.paymentModal, reservationBillObject: this.props.reservations[index] });
+    }else{
+      this.setState({ paymentModal: !this.state.paymentModal, reservationBillObject: null });
+    }
   }
 
   activateCancelReservation(){
     this.setState({loader: true}, () => {
       this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, this.props.token);
     })
+  }
+
+  activatePayCatering(){
+    if (this.state.reservationBillObject['cateringObj']) {
+      if (Array.isArray(this.state.reservationBillObject['cateringObj'])) {
+        if (this.state.reservationBillObject['cateringObj'].length) {
+          const id = this.state.reservationBillObject['cateringObj'][0]['_id'];
+          const price = this.state.reservationBillObject['cateringObj'][0]['price'];
+
+          const plainText = `${Keys.NEST_PAY_CLIENT_ID}|cat-${id}|${price.toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+          const hash = setNestPayHash(plainText);
+
+          const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
+          <input type="hidden" name="clientid" value="${Keys.NEST_PAY_CLIENT_ID}"/> 
+          <input type="hidden" name="storetype" value="3d_pay_hosting" />  
+          <input type="hidden" name="hash" value="${hash}" /> 
+          <input type="hidden" name="trantype" value="Auth" /> 
+          <input type="hidden" name="amount" value="${price.toFixed(2)}" /> 
+          <input type="hidden" name="currency" value="941" /> 
+          <input type="hidden" name="oid" value="cat-${id}" /> 
+          <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success"/> 
+          <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" /> 
+          <input type="hidden" name="lang" value="${this.props.lang}" /> 
+          <input type="hidden" name="hashAlgorithm" value="ver2" /> 
+          <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
+          <input type="hidden" name="encoding" value="utf-8" />
+          <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" />
+          <input type="submit" style="visibility: hidden" /> </form>`;
+          
+          const form =document.getElementById('reviseCombi');
+
+          if(form){
+            let element: HTMLElement = form.querySelector('input[type="submit"]') as HTMLElement;
+            this.setState({ loader: true }, () => {
+              element.click();
+            })
+          }
+        }
+      }
+    }
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -168,12 +220,25 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
         <Modal
           isOpen={ this.state.modal }
-          title={"Otkazivanje rezervacije"}
-          text={this.state.reservationBillObject ? this.state.reservationBillObject['cancelPolicy']['free'] ? "Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru. U ovom trenutku otkazivanje rezervacije je praktično besplatno, plaćaju se samo troškovi obrade transakcije 2%-5% uplaćenog depozita. Da li i dalje želite da otkažete ovu rezervaciju?" : "Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru i gubite novac koji ste uplatili kao depozit. Da li i dalje želite da otkažete ovu rezervaciju?" : ''}
+          title={this.state.dictionary['userProfileListModalTitle']}
+          text={this.state.reservationBillObject ? this.state.reservationBillObject['cancelPolicy']['free'] ? this.state.dictionary['userProfileListModalTextFree'] : this.state.dictionary['userProfileListModalTextPaid'] : ''}
           buttonColor="danger"
-          buttonText={"Da, otkažite"}
+          buttonText={this.state.dictionary['userProfileListModalButton']}
           toggle={ this.toggleModal }
           clickFunction={ this.activateCancelReservation }
+        />
+
+        <PaymentModal
+          isOpen={ this.state.paymentModal }
+          title={this.state.dictionary['userProfileListCateringModalTitle']}
+          text={this.state.reservationBillObject ? `${this.state.dictionary['userProfileListCateringModalText1']} ${this.state.reservationBillObject['trilinoCateringString']}, ${this.state.dictionary['userProfileListCateringModalText2']} ${currencyFormat(this.state.reservationBillObject['trilinoPrice'])} ${this.state.dictionary['userProfileListCateringModalText3']} ${this.state.reservationBillObject['trilinoPaymentDeadline']} ${this.state.dictionary['userProfileListCateringModalText4']}` : ''}
+          buttonColor="danger"
+          checkboxLabel={this.state.dictionary['paymentStageCheck']}
+          buttonText={this.state.dictionary['userProfileListCateringModalButton']}
+          vatInfo={this.state.dictionary['uniVAT'] }
+          toggle={ this.togglePaymentModal }
+          clickFunction={ this.activatePayCatering }
+
         />
 
     		<div>
@@ -181,7 +246,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
               <Row className="userProfileScreen">
                 <Col xs='12'>
                   <Alert color="success" isOpen={ this.state.passwordChange } toggle={() => this.closePassChangeAlert()} >
-                    <h3>Vaša lozinka je uspešno promenjena</h3>
+                    <h3>{this.state.dictionary['userProfileListAlert']}</h3>
                   </Alert>
                 </Col>
 
@@ -191,7 +256,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                   (
                     <Col xs='12'>
                       <div className="middle">
-                        <h3 className="screenTitle">Vaše rezervacije</h3>
+                        <h3 className="screenTitle">{this.state.dictionary['userProfileListTitle']}</h3>
                       </div>
                       <Row className="reservationList justify-content-sm-center">
 
@@ -217,11 +282,11 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                       </Col>
                                       <Col xs="12" sm="4">
                                         <div className="actions">
-                                          <button onClick={ () => this.openUserBill(index)}>Detaljnije</button>
+                                          <button onClick={ () => this.openUserBill(index)}>{this.state.dictionary['userProfileListButtonMore']}</button>
                                           {
                                             reser['isForRate']
                                             ?
-                                            <button>Ocenite</button>
+                                            <button>{this.state.dictionary['userProfileListButtonRate']}</button>
                                             :
                                             null
                                           }
@@ -229,7 +294,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                           {
                                             reser['isForTrilino']
                                             ?
-                                            <button>Ketering</button>
+                                            <button onClick={ () => this.togglePaymentModal(index)}>{this.state.dictionary['userProfileListButtonCatering']}</button>
                                             :
                                             null
                                           }
@@ -237,7 +302,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                           {
                                             reser['cancelPolicy']['cancel']
                                             ?
-                                            <button className="decline" onClick={ () => this.toggleModal(index) }>Otkažite</button>
+                                            <button className="decline" onClick={ () => this.toggleModal(index) }>{this.state.dictionary['userProfileListButtonCancel']}</button>
                                             :
                                             null
                                           }
@@ -255,7 +320,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                           :
                           <Col xs="12">
                             <div className="middle">
-                              <h4 className="noMatch">Do sada nije kreirana nijedna rezervacija</h4>
+                              <h4 className="noMatch">{this.state.dictionary['userProfileListNoList']}</h4>
                             </div>
                             
                           </Col>
@@ -298,7 +363,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                   :
                   null
                 }
-                
+                <div id="myformcontainer" style={{"visibility":"hidden"}}></div>
                 
               </Row>
             </Container>

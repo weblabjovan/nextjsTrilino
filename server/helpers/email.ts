@@ -1,5 +1,12 @@
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 import Keys from '../keys';
+import MyCriptor from './MyCriptor';
+import { IemailGeneral } from '../../lib/constants/interfaces';
+import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString }  from './general';
+import { getLanguage } from '../../lib/language';
+import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
+import DateHandler from '../../lib/classes/DateHandler';
+import generalOptions from '../../lib/constants/generalOptions';
 
 type emailSMTP = {
 	sender: object;
@@ -40,3 +47,113 @@ export const sendEmail = async (email: emailSMTP ): Promise<any> => {
 	// });
 }
 
+
+export const sendEmailCancelReservationUser = async (data: IemailGeneral): Promise<any> => {
+	const { language, result, partner, user, policy } = data;
+
+	const dictionary = getLanguage(language);
+	const myCriptor = new MyCriptor();
+	const dateStr = setReservationTimeString(result);
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const bcc = null;
+	const templateId = 8;
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+
+	const params = {
+		title: 'Otkazivanje rezervacije',
+		text: 'Žao nam je što ste morali da otkažete ovu rezervaciju. Sada ovaj termin na datoj lokaciji postaje slobodan i dostupan drugima na potencijalnu rezervaciju. U nastavku možete videti osnovne podatke o otkazivanju a sve dodatno možete pratiti preko vašeg korisničkog profila.',
+		orderId: `${dictionary['paymentUserEmailOrderId']} ${result['_id']}`,
+		date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
+		partner: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`,
+		returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. U narednih 7 dana možete očekivati vraćena sredstva uz troškove obrade 2% - 5% od iznosa depozita.' : 'Povraćaj depozita: Na žalost uslovi za povraćaj depozita nisu ispunjeni.',
+		returnPrice: `Iznos povraćaja: ${policy['free'] ? currencyFormat(result['deposit'] * 0.95) : 0}`,
+		finish: 'Vaš Trilino.'
+	};
+	const email = { sender, to, bcc, templateId, params };
+
+	return sendEmail(email);
+}
+
+export const sendEmailCancelReservationPartner = async (data: IemailGeneral): Promise<any> => {
+	const { language, result, partner, policy } = data;
+
+	const dictionary = getLanguage(language);
+	const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', result['room']);
+	const dateStr = setReservationTimeString(result);
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const bcc = null;
+	const templateId = 9;
+	const to = [{name: partner['name'], email: partner['contactEmail'] }];
+
+	const params = {
+		title: 'Korisnik je otkazao rezervaciju',
+		text: 'U nastavku možete videti osnovne podatke o rezervaciji koju je korisnik otkazao. Sada ovaj termin postaje slobodan i dostupan za buduću potencijalnu rezervaciju.',
+		date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
+		room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+		guest: `${dictionary['paymentPartnerEmailCelebrant']} ${result['guest']}`,
+		returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. Korisniku će biti vraćen depozit u roku od 7 dana.' : 'Povraćaj depozita: Uslovi za povraćaj depozita nisu ispunjeni.',
+		finish: 'Vaš Trilino.'
+	}
+
+	const email = { sender, to, bcc, templateId, params };
+
+	return sendEmail(email);
+}
+
+export const sendEmailReservationConfirmationUser = async (user: object, userParams: object): Promise<any> => {
+	const myCriptor = new MyCriptor();
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 6;
+	const email = { sender, to, bcc, templateId, params: userParams};
+
+	return sendEmail(email);
+}
+
+
+export const sendEmailReservationConfirmationPartner = async (data: IemailGeneral): Promise<any> => {
+	const { language, reservation, partner, double } = data;
+	const dictionary = getLanguage(language);
+	const dateHandler = new DateHandler();
+	const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', reservation['room']);
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: partner['name'], email: partner['contactEmail'] }];
+	const bcc = null;
+	const templateId = 7;
+
+	let cateringMsg = setCateringString(reservation, partner);
+	let decorationMsg = setDecorationString(reservation, partner);
+	let addonMsg = setAddonString(reservation, partner);
+
+	const params = { 
+		title: dictionary['paymentPartnerEmailTitle'], 
+		sub: dictionary['paymentPartnerEmailSub'], 
+		date: `${dictionary['paymentUserEmailDate']} ${dateHandler.getDateString(reservation['fromDate'])}, ${reservation['from']} - ${reservation['double'] ? double['to'] : reservation['to']}`, 
+		room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
+		guest: `${dictionary['paymentPartnerEmailCelebrant']} ${reservation['guest']}`, 
+		catering: `${dictionary['paymentPartnerEmailCatering']} ${cateringMsg}`, 
+		decoration: `${dictionary['paymentPartnerEmailDecoration']} ${decorationMsg}`, 
+		addons: `${dictionary['paymentPartnerEmailAddon']} ${addonMsg}`, 
+		onsitePrice: `${dictionary['paymentPartnerEmailPrice']} ${currencyFormat(reservation['price'] - reservation['deposit'] - reservation['trilinoPrice'])}`,
+		finish: dictionary['paymentPartnerEmailFinish']
+	};
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
+
+export const senEmailCateringConfirmationUser =  async (user: object, cateringParams: object): Promise<any> => {
+	const myCriptor = new MyCriptor();
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 10;
+
+	const email = { sender, to, bcc, templateId, params: cateringParams };
+	return sendEmail(email);
+}

@@ -402,7 +402,7 @@ export const isUserRegDataValid = (data: object): boolean => {
 }
 
 export const isReservationConfirmDataValid = (data: object): boolean => {
-	if (!data['payment'] || !data['transId'] || !data['id'] || !data['card'] || !data['language'] || !data['transDate'] || !data['transProc'] || !data['transMd']) {
+	if (!data['payment'] || !data['transId'] || !data['id'] || !data['language'] || !data['transDate'] || !data['transProc'] || !data['transMd']) {
 		return false;
 	}
 

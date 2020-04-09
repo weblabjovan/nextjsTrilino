@@ -134,6 +134,10 @@
 
 .modal-body{
 	font-size: 16px;
+
+	@media only screen and (max-width: 577px) {
+		text-align: justify;
+	}
 }
 
 .modal-header{
@@ -146,4 +150,26 @@
 	.close{
 		outline: none;
 	}
+}
+
+.paymentModal{
+	margin-top: 20px;
+	.React__checkbox{
+	  .checkbox-simple-label{
+	    display: inline !important;
+	    margin: 0px;
+	    margin-left: 5px;
+	  }
+	}
+}
+
+.paymentModalVAT{
+	width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 17px;
+    color: #737373;
+    text-align: justify;
 }

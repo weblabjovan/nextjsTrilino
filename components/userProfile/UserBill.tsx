@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Table } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
-import { getArrayObjectByFieldValue } from '../../lib/helpers/generalFunctions';
+import { getArrayObjectByFieldValue, currencyFormat } from '../../lib/helpers/generalFunctions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style/style.scss';
 
@@ -67,7 +67,7 @@ export default class UserBill extends React.Component <MyProps, MyState>{
 			        	<Col xs="12">
                   <div className="billTable">
                     <div className="middle">
-                      <h4>Detaljne informacije</h4>
+                      <h4>{this.state.dictionary['userProfileBillTitle']}</h4>
                     </div>
                     
                     <Table>
@@ -84,6 +84,10 @@ export default class UserBill extends React.Component <MyProps, MyState>{
                         <tr>
                           <td>{this.state.dictionary['paymentUserEmailAddress']}</td>
                           <td>{this.props.reservation['partnerObj'][0]['general']['address']}</td>
+                        </tr>
+                        <tr>
+                          <td>{this.state.dictionary['userProfileBillPhone']}</td>
+                          <td>{this.props.reservation['partnerObj'][0]['contactPhone']}</td>
                         </tr>
                         <tr>
                           <td>{this.state.dictionary['paymentUserEmailDate']}</td>
@@ -106,44 +110,44 @@ export default class UserBill extends React.Component <MyProps, MyState>{
                           <td>{this.props.reservation['addonString']}</td>
                         </tr>
                         <tr>
-                          <td>Ukupna cena:</td>
-                          <td>{this.props.reservation['price']}</td>
+                          <td>{this.state.dictionary['userProfileBillTotalPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['price'])}</td>
                         </tr>
                         <tr>
-                          <td>Cena termina:</td>
-                          <td>{this.props.reservation['termPrice']}</td>
+                          <td>{this.state.dictionary['userProfileBillTermPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['termPrice'])}</td>
                         </tr>
                         <tr>
-                          <td>Cena keteringa:</td>
-                          <td>{this.props.reservation['foodPrice']}</td>
+                          <td>{this.state.dictionary['userProfileBillCateringPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['foodPrice'])}</td>
                         </tr>
                          <tr>
-                          <td>Cena dekoracije:</td>
-                          <td>{this.props.reservation['decorationPrice']}</td>
+                          <td>{this.state.dictionary['userProfileBillDecorationPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['decorationPrice'])}</td>
                         </tr>
                         <tr>
-                          <td>Cena dodatnih sadržaja:</td>
-                          <td>{this.props.reservation['animationPrice']}</td>
+                          <td>{this.state.dictionary['userProfileBillAddonPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['animationPrice'])}</td>
                         </tr>
                         <tr>
-                          <td>Deposit:</td>
-                          <td>{this.props.reservation['deposit']}</td>
+                          <td>{this.state.dictionary['userProfileBillDepositPrice']}</td>
+                          <td>{currencyFormat(this.props.reservation['deposit'])}</td>
                         </tr>
                         <tr>
-                          <td>Za uplatu na licu mesta:</td>
-                          <td>Srediti kasnije</td>
+                          <td>{this.state.dictionary['userProfileBillOnsitePayment']}</td>
+                          <td>{currencyFormat(this.props.reservation['price'] - this.props.reservation['trilinoPrice'] - this.props.reservation['deposit'])}</td>
                         </tr>
                          <tr>
-                          <td>Za uplatu preko korisničkog profila:</td>
-                          <td>Srediti kasnije</td>
+                          <td>{this.state.dictionary['userProfileBillUserprofilPayment']}</td>
+                          <td>{ `${currencyFormat(this.props.reservation['trilinoPrice'])} ${this.props.reservation['isTrilinoCateringPaid'] ? this.state.dictionary['userProfileBillPaid'] : ''}`}</td>
                         </tr>
                         <tr>
-                          <td>Rok za uplatu preko korisničkog profila:</td>
-                          <td>Srediti kasnije</td>
+                          <td>{this.state.dictionary['userProfileBillUserprofilDeadline']}</td>
+                          <td>{`${this.props.reservation['trilinoPaymentDeadline']} ${this.props.reservation['isTrilinoCateringPaid'] ? this.state.dictionary['userProfileBillPaid'] : ''}`}</td>
                         </tr>
                          <tr>
-                          <td>Tip uplate preko korisničkog profila:</td>
-                          <td>Srediti kasnije</td>
+                          <td>{this.state.dictionary['userProfileBillUserprofilType']}</td>
+                          <td>{`${this.props.reservation['trilinoCateringString']} ${this.props.reservation['isTrilinoCateringPaid'] ? this.state.dictionary['userProfileBillPaid'] : ''}`}</td>
                         </tr>
                         <tr>
                           <td>{this.state.dictionary['paymentUserEmailOrderId']}</td>

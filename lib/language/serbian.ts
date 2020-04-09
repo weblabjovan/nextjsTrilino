@@ -87,6 +87,14 @@ const serbian: LanguageInterface = {
 	emailUserRegisterTitle: ', postali ste novi Trilino korisnik',
 	emailUserRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa uslugama koje vam pomažu da organizujete najlepšu proslavu za vaše dete. Rezervišite igraonicu, ketering, dekoraciju i animaciju kakvu vaše dete zaslužuje. Ali pre toga je potrebno da potvrdite registraciju (koristeći sigurnosni kod) i kreirate vašu lozinku. Kliknite na dugme u nastavku i učinite baš to. Srećno.',
 
+	emailCateringConfirmationTitle: 'Uspešno plaćen Trilino Ketering',
+	emailCateringConfirmationText: 'Želimo da vas obavestimo da ste uspešno platili Trilino Ketering i da će paket koji ste naručili biti isporučen na vašu proslavu.',
+	emailCateringConfirmationSub: 'Podaci o narudžbini',
+	emailCateringConfirmationTime: 'Vreme isporuke keteringa:',
+	emailCateringConfirmationDeal: 'Ketering paket:',
+	emailCateringConfirmationPrice: 'Cena:',
+	emailCateringConfirmationFinish: 'Uživajte u vašoj proslavi i hvala što koristite koristie usluge Trilino-a.',
+
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
 	homeImg_1: 'Trilino-dečije-slavlje-homepage',
@@ -769,6 +777,8 @@ const serbian: LanguageInterface = {
 	paymentUserEmailFullPriceFalse: 'Cena:',
 	paymentUserEmailDepositTrue: 'Uplatili ste depozit od:',
 	paymentUserEmailDepositFalse: 'Depozit nije uplaćen zbog čega rezervacije nije uspela.',
+	paymentUserEmailForTrilinoTrue: 'Za uplatu preko korisničkog profila:',
+	paymentUserEmailForTrilinoFalse: 'Uplata preko korisničkog profila nije potrebna.',
 	paymentUserEmailTransSub: 'Podaci o transakciji:',
 	paymentUserEmailOrderId: 'Broj narudžbine:',
 	paymentUserEmailAuthCode: 'Autorizacioni kod:',
@@ -796,6 +806,7 @@ const serbian: LanguageInterface = {
 	paymentPageSub: 'Osnovni podaci o rezervaciji i transakciji',
 	paymentPageFinishTrue: 'Sve podatke u vezi sa ovom rezervacijom i izvršenom transakcijom možete pratiti na vašem korisničkom profilu u opciji REZERVACIJE.',
 	paymentPageFinishFalse: 'Sve podatke u vezi sa ovom neupešnom transakcijom možete pratiti na vašem korisničkom profilu u opciji REZERVACIJE.',
+	paymentPageFinishUniversal: 'Sve podatke o rezervacijama i transakcijama ožete pratiti na vašem korisničkom profilu u opciji REZERVACIJE.',
 	paymentPageLink: 'vaš korisnički profil',
 	paymentStageAlert: 'Morate potvrditi da razumete uslove kupovine i da ste spremni za plaćanje.',
 	paymentStageVenue: 'Prostor:',
@@ -810,6 +821,9 @@ const serbian: LanguageInterface = {
 	paymentStageMsgTrilino: 'Za usluge Trilino ketringa,za uplatu najkasnije 7 dana pre održavanja proslave, preko vašeg korisničkog profila:',
 	paymentStageCheck: 'Razumem uslove kupovine, predstavljene cene i spreman/na sam da nastavim na plaćanje',
 	paymentStageButton: 'Nastavite na plaćanje',
+	paymentCateringSubCatering: 'Podaci o keteringu:',
+	paymentCateringSubTransaction: 'Podaci o transakciji:',
+	paymentCateringTextFail: 'Iz nekog razloga prethodna transakcija nije bila uspešna. Molimo vas proverite sredstva na vašoj platnoj kartici i prokušajte ponovo ponovo.',
 
 
 	contactHeadTitle: 'Ukoliko imate pitanja, kontaktirajte nas.',
@@ -827,7 +841,6 @@ const serbian: LanguageInterface = {
 	contactContactPartnerEmail: 'Partnerska pitanja:',
 
 
-
 	onlinePaymentTitle: 'Plaćanje karticama',
 	onlinePaymentSub1: 'Instrukcija za plaćanje na Trilino internet stranici',
 	onlinePaymentText1: 'Svoju rezervaciju plaćate koristeći Visa, Visa Electron, MasterCard, Maestro ili Amex platnu karticu. Kartica mora biti odobrena od strane banke izdavaoca za online (Internet) plaćanje. Nakon odabira prostora i ćeljenog slobodnog termina, kada kreirate vašu rezervaciju, bićete preusmereni na stranicu koja je predviđena za online plaćanje (slika u nastavku). Sigurnost podataka prilikom kupovine garantuje procesor platnih kartica Banca Intesa ad Beograd, pa se tako kompletni proces naplate i obavlja na stranicama banke. Niti jednog trenutka podaci o Vašoj platnoj kartici nisu dostupni našem sistemu.',
@@ -838,6 +851,39 @@ const serbian: LanguageInterface = {
 	onlinePaymentPhotoTitle2: 'podaci sa platne kartice',
 
 
+	userProfileSubNavReservation: 'Rezervacije',
+	userProfileSubNavMessage: 'Poruke',
+	userProfileSubNavLogout: 'Odjava',
+	userProfileListAlert: 'Vaša lozinka je uspešno promenjena',
+	userProfileListTitle: 'Vaše rezervacije',
+	userProfileListButtonMore: 'Detaljnije',
+	userProfileListButtonRate: 'Ocenite',
+	userProfileListButtonCatering: 'Ketering',
+	userProfileListButtonCancel: 'Otkažite',
+	userProfileListNoList: 'Do sada nije kreirana nijedna rezervacija',
+	userProfileListModalTitle: 'Otkazivanje rezervacije',
+	userProfileListModalButton: 'Da, otkažite',
+	userProfileListModalTextFree: 'Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru. U ovom trenutku otkazivanje rezervacije je praktično besplatno, plaćaju se samo troškovi obrade transakcije 2%-5% uplaćenog depozita. Da li i dalje želite da otkažete ovu rezervaciju?',
+	userProfileListModalTextPaid: 'Ukoliko otkažete ovu rezervaciju, gubite pravo na rezervisani termin u datom prostoru i gubite novac koji ste uplatili kao depozit. Takodje, ukoliko ste preko vašeg korisničkog profila platili Trilino Ketering, potrebno je da uložite reklamaciju u skladu sa trenutnim uslovima korišćenja. Da li i dalje želite da otkažete ovu rezervaciju?',
+	userProfileListCateringModalTitle: 'Plaćanje Trilino Keteringa',
+	userProfileListCateringModalButton: 'Želim da nastavim na plaćanje',
+	userProfileListCateringModalText1: 'U okviru ove rezervacije postoji narudžbina za Trilino ketering paket:',
+	userProfileListCateringModalText2: 'sa ukupnom cenom od',
+	userProfileListCateringModalText3: 'Narudžbinu je potrebno platiti najkasnije do',
+	userProfileListCateringModalText4: 'nakon ovog datum ova narudžbina se automatski otkazuje. Ukoliko sada želite da platite ovu narudžbinu molimo vas saglasite se sa uslovima kupovine i nastavite na plaćanje.',
+	userProfileBillTitle: 'Detaljne informacije',
+	userProfileBillPhone: 'Kontakt telefon:',
+	userProfileBillTotalPrice: 'Ukupna cena:',
+	userProfileBillTermPrice: 'Cena termina:',
+	userProfileBillCateringPrice: 'Cena keteringa:',
+	userProfileBillDecorationPrice: 'Cena dekoracije:',
+	userProfileBillAddonPrice: 'Cena dodatnih sadržaja:',
+	userProfileBillDepositPrice: 'Plaćen deposit:',
+	userProfileBillOnsitePayment: 'Za uplatu na licu mesta:',
+	userProfileBillUserprofilPayment: 'Za uplatu preko korisničkog profila:',
+	userProfileBillUserprofilDeadline: 'Rok za uplatu preko korisničkog profila:',
+	userProfileBillUserprofilType: 'Tip uplate preko korisničkog profila:',
+	userProfileBillPaid: ' - Plaćeno',
 
 
 	//////////////////////API

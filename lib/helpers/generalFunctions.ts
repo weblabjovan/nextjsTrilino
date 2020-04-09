@@ -174,6 +174,11 @@ export const unsetCookie = (name: string): void => {
   cookie.remove(name);
 }
 
+export const getCookie = (cookieName: string): string => {
+  const name = cookie.get(cookieName);
+  return name;
+}
+
 export const setUpLinkBasic = (url: string | object): object => {
   const linkClass = new LinkClass();
 
@@ -270,4 +275,9 @@ export const isTrilinoCatering = (regId: string): boolean => {
   }
 
   return true;
+}
+
+export const currencyFormat = (num: number): string => {
+  const ra = new Number(num);
+  return ra.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
