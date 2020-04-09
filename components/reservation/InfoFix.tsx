@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
+import { currencyFormat } from '../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../lib/language';
 
 type MyProps = {
@@ -80,10 +81,10 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                 <p>{`${this.props.date}, ${this.props.time}`}</p>
               </Col>
                <Col xs="4" sm="2" className="smallColPadd">
-                <span className="price">{`${this.props.price.toLocaleString('en')} rsd`}</span>
+                <span className="price">{`${currencyFormat(this.props.price)}`}</span>
               </Col>
               <Col xs="12">
-                <p className="deposit">{`${this.state.dictionary['uniDeposit']}: ${this.props.deposit.toLocaleString('en')} rsd`}</p>
+                <p className="deposit">{`${this.state.dictionary['uniDeposit']}: ${currencyFormat(this.props.deposit)} `}</p>
               </Col>
             </Row>
 
@@ -136,7 +137,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                           <tr key={`cateringKey_${index}`}>
                             <td>{deal['name']}</td>
                             <td>{deal['quantity']}</td>
-                            <td>{`${deal['total'].toLocaleString('en')} rsd`}</td>
+                            <td>{`${currencyFormat(parseInt(deal['total']))}`}</td>
                           </tr>
                         )
                       })
@@ -165,7 +166,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
                         return(
                           <tr key={`cateringKey_${index}`}>
                             <td>{addon['name']}</td>
-                            <td>{`${parseInt(addon['total']).toLocaleString('en')} rsd`}</td>
+                            <td>{`${currencyFormat(parseInt(addon['total']))}`}</td>
                           </tr>
                         )
                       })

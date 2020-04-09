@@ -88,6 +88,14 @@ const english: LanguageInterface = {
 	emailUserRegisterTitle: ', you have become new Trilino user',
 	emailUserRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. Now you are connected to the services that can help you organize a perfect birthday party for your kid. You are few clicks away from reserving playrooms, cetering, decoration and animation that your kids deserve. Before that you just need to verify your registration (using security code) and create your profile password. Click on the link bellow and do that. Good luck.',
 
+	emailCateringConfirmationTitle: 'Trilino Catering has been paid',
+	emailCateringConfirmationText: 'We would like to inform you that Trilino Catering has been successfuly paid and that the order will be delivered to your celebration:',
+	emailCateringConfirmationSub: 'Order information',
+	emailCateringConfirmationTime: 'Catering delivery time:',
+	emailCateringConfirmationDeal: 'Catering deal:',
+	emailCateringConfirmationPrice: 'Price:',
+	emailCateringConfirmationFinish: 'We would like to thank you for using Trilino Catering services and wish you a happy celebration.',
+
 
 	homeTitle: 'Now you can organize the best party for your kid',
 	homeImg_1: 'Trilino-kids-party-homepage',
@@ -772,6 +780,8 @@ const english: LanguageInterface = {
 	paymentUserEmailFullPriceFalse: 'Price:',
 	paymentUserEmailDepositTrue: 'You payed deposit of:',
 	paymentUserEmailDepositFalse: 'Deposit was not payed that is why your reservation was not successful.',
+	paymentUserEmailForTrilinoTrue: 'For payment through your user profile you need:',
+	paymentUserEmailForTrilinoFalse: 'User profile payment is not needed.',
 	paymentUserEmailTransSub: 'Transaction data:',
 	paymentUserEmailOrderId: 'Order ID:',
 	paymentUserEmailAuthCode: 'Authorization Code:',
@@ -799,6 +809,7 @@ const english: LanguageInterface = {
 	paymentPageSub: 'Basic data about your transaction and reservation',
 	paymentPageFinishTrue: 'You can track all of your transactions and reservations on your user profile, in the RESERVATION tab.',
 	paymentPageFinishFalse: 'You can track all of your unsuccessful transactions and reservations on your user profile, in the RESERVATION tab.',
+	paymentPageFinishUniversal: 'You can track all of your transactions and reservations on your user profile, in the RESERVATION tab.',
 	paymentPageLink: 'your user profile',
 	paymentStageAlert: 'You have to confirm that you understand buying terms and that you are ready to pay.',
 	paymentStageVenue: 'Venue:',
@@ -813,7 +824,9 @@ const english: LanguageInterface = {
 	paymentStageMsgTrilino: 'For Trilino Catering payment, at latest 7 days before the reservation start, through your user profile:',
 	paymentStageCheck: 'I understand the buying terms, the prices and I am ready to go to payment.',
 	paymentStageButton: 'Go to payment',
-
+	paymentCateringSubCatering: 'Catering info:',
+	paymentCateringSubTransaction: 'Transaction info:',
+	paymentCateringTextFail: 'For some reason previous transaction was not successful. Please, check your balance on the payment card and try again later.',
 
 
 	contactHeadTitle: 'If you have questions, please contact us.',
@@ -841,6 +854,39 @@ const english: LanguageInterface = {
 	onlinePaymentPhotoTitle2: 'payment card information',
 
 
+	userProfileSubNavReservation: 'Reservations',
+	userProfileSubNavMessage: 'Messages',
+	userProfileSubNavLogout: 'Logout',
+	userProfileListAlert: 'You have successfuly changed your password',
+	userProfileListTitle: 'Your reservations',
+	userProfileListButtonMore: 'More',
+	userProfileListButtonRate: 'Rate',
+	userProfileListButtonCatering: 'Catering',
+	userProfileListButtonCancel: 'Cancel',
+	userProfileListNoList: 'There are no reservations yet',
+	userProfileListModalTitle: 'Reservation cancelation',
+	userProfileListModalButton: 'Yes, cancel',
+	userProfileListModalTextFree: 'If you cancel this reservation, you are loosing your right for reserved period in the reserved space. At this point in time you can cancel this reservation at minimal cost, only the cost of the transaction will be charged 2%-5% of the paid deposit. Do you still want to cancel this reservation?',
+	userProfileListModalTextPaid: 'If you cancel this reservation, you are loosing your right for reserved period in the reserved space and you are looseing the money you have paid as deposit. If you have ordered and paid Trilino Catering you have to file a claim according the current terms and conditions. Do you still want to cancel this reservation?',
+	userProfileListCateringModalTitle: 'Trilino Catering Payment',
+	userProfileListCateringModalButton: 'I want to go to payment',
+	userProfileListCateringModalText1: 'Within this reservation there is an order for Trilino Catering deal: ',
+	userProfileListCateringModalText2: 'with the total price of ',
+	userProfileListCateringModalText3: '.This order has to be paid until',
+	userProfileListCateringModalText4: 'after this date the order will be canceled automaticaly. If you want to pay the order now, please confirm that you understand buying terms and that you are ready to pay.',
+	userProfileBillTitle: 'Detailed information',
+	userProfileBillPhone: 'Contact phone:',
+	userProfileBillTotalPrice: 'Total price:',
+	userProfileBillTermPrice: 'Term price:',
+	userProfileBillCateringPrice: 'Catering price:',
+	userProfileBillDecorationPrice: 'Decoration price:',
+	userProfileBillAddonPrice: 'Additional content price:',
+	userProfileBillDepositPrice: 'Paid deposit:',
+	userProfileBillOnsitePayment: 'For on site payment:',
+	userProfileBillUserprofilPayment: 'For on profile payment (Trilino Catering):',
+	userProfileBillUserprofilDeadline: 'Deadline for on profile payment:',
+	userProfileBillUserprofilType: 'Type of on profile payment:',
+	userProfileBillPaid: ' - Paid',
 
 
 	//////////////////////API

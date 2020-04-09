@@ -15,17 +15,15 @@ import '../style/style.scss';
 interface Props {
   userAgent?: string;
   link?: object;
-  token?: string | undefined;
   paymentInfo: object;
 }
 
 
-const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token, paymentInfo }) => {
+const PaymentSuccess : NextPage<Props> = ({ userAgent, link, paymentInfo }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   const dictionary = getLanguage(lang);
-  const passChange = router.query['passChange'] === 'true' ? true : false;
 
   return (
     <div>
@@ -35,9 +33,7 @@ const PaymentSuccess : NextPage<Props> = ({ userAgent, link, token, paymentInfo 
         path={router.pathname} 
         fullPath={ router.asPath } 
         lang={ lang }
-        token={ token }
         link={ link }
-        passChange={ passChange }
         paymentInfo={ paymentInfo }
       />
     </div>
@@ -49,13 +45,12 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   const paymentInfo = { card: '', transId: '', transDate: '', transAuth: '', transProc: '', transMd: '', error: '', payment: ''};
-  let token = '';
   try{
     
     const resOne = await getSingleReservation(ctx);
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
-      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req)) {
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req, 'reservation')) {
         ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
         ctx.res.end();
       }else{
@@ -75,7 +70,7 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
     console.log(err)
   }
   
-  return { userAgent, link, token, paymentInfo }
+  return { userAgent, link, paymentInfo }
 }
 
 export default withRedux(PaymentSuccess)

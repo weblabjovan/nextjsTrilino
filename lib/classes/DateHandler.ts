@@ -11,6 +11,23 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
+	public getDateString = (date: Date): string =>{
+		return this.formatDate(date, 'text');
+	}
+
+	public getNewDateFor = (date: Date, relation: string, days: number, format: string): any => {
+		if (relation === 'before') {
+			const a = new Date(date.setDate(date.getDate() - days));
+			return format === 'text' ? this.formatDate(a, format) : a;
+		}else{
+			const b = new Date(date.setDate(date.getDate() - days));
+			return format === 'text' ? this.formatDate(b, format) : b;
+		}
+		
+		return '1.1.1970';
+
+	}
+
 	public setNewDateString = (datestring: string): void => {
 		this.date = new Date();
 		this.dateString = datestring as string;
@@ -180,6 +197,21 @@ export default class DateHandler {
 	private setDayOnSpecificTime = (time: string): void => {
 		this.date = this.setSpecificTime(time, this.date);
 	}
+
+	private formatDate = (date: Date, type: string): string => {
+		const d = date.toISOString();
+		const base = d.split('T');
+		if (type === 'text') {
+			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		if (type === 'url') {
+			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		return '1.1.1970';
+	}
+
 
 	private setSpecificTime = (time: string, date: Date): Date => {
 		const split = time.split(':');

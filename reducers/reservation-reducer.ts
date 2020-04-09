@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -23,6 +23,10 @@ interface initialState {
   cancelReservationStart: boolean;
   cancelReservationError: object | boolean;
   cancelReservationSuccess: null | object;
+
+  confirmCateringStart: boolean;
+  confirmCateringError: object | boolean;
+  confirmCateringSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -51,6 +55,10 @@ const initialState: initialState  = {
   cancelReservationStart: false,
   cancelReservationError: false,
   cancelReservationSuccess: null,
+
+  confirmCateringStart: false,
+  confirmCateringError: false,
+  confirmCateringSuccess: null,
 
   reservations: [],
 
@@ -190,6 +198,28 @@ const actionsMap = {
       ...state,
       cancelReservationStart: false,
       cancelReservationSuccess: action.payload.result,
+    };
+  },
+
+  [confirmCateringActionType.START]: (state) => {
+    return {
+      ...state,
+      confirmCateringStart: true,
+      confirmCateringSuccess: null,
+    };
+  },
+  [confirmCateringActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      confirmCateringStart: false,
+      confirmCateringError: action.payload.response.body,
+    };
+  },
+  [confirmCateringActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      confirmCateringStart: false,
+      confirmCateringSuccess: action.payload.catering,
     };
   },
   

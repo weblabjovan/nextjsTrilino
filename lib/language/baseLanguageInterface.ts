@@ -87,6 +87,14 @@ export default interface LanguageInterface {
 	emailUserRegisterTitle: string;
 	emailUserRegisterText: string;
 
+	emailCateringConfirmationTitle: string;
+	emailCateringConfirmationText: string;
+	emailCateringConfirmationSub: string;
+	emailCateringConfirmationTime: string;
+	emailCateringConfirmationDeal: string;
+	emailCateringConfirmationPrice: string;
+	emailCateringConfirmationFinish: string;
+
 	homeTitle: string;
 	homeImg_1: string;
 	homeImg_2: string;
@@ -758,6 +766,8 @@ export default interface LanguageInterface {
 	paymentUserEmailFullPriceFalse: string;
 	paymentUserEmailDepositTrue: string;
 	paymentUserEmailDepositFalse: string;
+	paymentUserEmailForTrilinoTrue: string;
+	paymentUserEmailForTrilinoFalse: string;
 	paymentUserEmailTransSub: string;
 	paymentUserEmailOrderId: string;
 	paymentUserEmailAuthCode: string;
@@ -785,6 +795,7 @@ export default interface LanguageInterface {
 	paymentPageSub: string;
 	paymentPageFinishTrue: string;
 	paymentPageFinishFalse: string;
+	paymentPageFinishUniversal: string;
 	paymentPageLink: string;
 	paymentStageAlert: string;
 	paymentStageVenue: string;
@@ -799,8 +810,9 @@ export default interface LanguageInterface {
 	paymentStageMsgTrilino: string;
 	paymentStageCheck: string;
 	paymentStageButton: string;
-
-
+	paymentCateringSubCatering: string;
+	paymentCateringSubTransaction: string;
+	paymentCateringTextFail: string;
 
 	contactHeadTitle: string;
 	contactGeneralSub: string;
@@ -824,6 +836,40 @@ export default interface LanguageInterface {
 	onlinePaymentText2: string;
 	onlinePaymentText3: string;
 	onlinePaymentPhotoTitle2: string;
+
+	userProfileSubNavReservation: string;
+	userProfileSubNavMessage: string;
+	userProfileSubNavLogout: string;
+	userProfileListAlert: string;
+	userProfileListTitle: string;
+	userProfileListButtonMore: string;
+	userProfileListButtonCancel: string;
+	userProfileListButtonCatering: string;
+	userProfileListButtonRate: string;
+	userProfileListNoList: string;
+	userProfileListModalTitle: string;
+	userProfileListModalButton: string;
+	userProfileListModalTextFree: string;
+	userProfileListModalTextPaid: string;
+	userProfileListCateringModalTitle: string;
+	userProfileListCateringModalButton: string;
+	userProfileListCateringModalText1: string;
+	userProfileListCateringModalText2: string;
+	userProfileListCateringModalText3: string;
+	userProfileListCateringModalText4: string;
+	userProfileBillTitle: string;
+	userProfileBillPhone: string;
+	userProfileBillTotalPrice: string;
+	userProfileBillTermPrice: string;
+	userProfileBillCateringPrice: string;
+	userProfileBillDecorationPrice: string;
+	userProfileBillAddonPrice: string;
+	userProfileBillDepositPrice: string;
+	userProfileBillOnsitePayment: string;
+	userProfileBillUserprofilPayment: string;
+	userProfileBillUserprofilDeadline: string;
+	userProfileBillUserprofilType: string;
+	userProfileBillPaid: string;
 
 
 	//////////////////////API

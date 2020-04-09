@@ -8,8 +8,8 @@ import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, extractRoomTerms, getFreeTerms, setDateTime, setReservationDateForBase, setDateForServer, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble }  from '../../../server/helpers/general';
-import { sendEmail }  from '../../../server/helpers/email';
+import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams }  from '../../../server/helpers/general';
+import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, senEmailCateringConfirmationUser }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../../../lib/helpers/generalFunctions';
@@ -241,6 +241,31 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 
+	//////////////////////////////////////   GET CATERING   ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'getCatering') {
+		if (!req['query']['id'] || !req['query']['language']) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'getCatering', success: false, code: 4, error: 'basic validation error' });
+		}else{
+			const dictionary = getLanguage(`req['query']['language']`);
+
+			try{
+				await connectToDb(req.headers.host);
+				const one = await Catering.findOne({"_id": req['query']['id']})
+				if (one) {
+					return res.status(200).json({ endpoint: 'reservations', operation: 'getCatering', success: true, code: 1, catering: one });
+				}else{
+					return res.status(404).json({ endpoint: 'reservations', operation: 'getCatering', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
+				}
+			}catch(err){
+				return res.status(500).send({ endpoint: 'reservations', operation: 'getCatering', success: false, code: 3, error: 'db error', message: err  });
+			}
+		}
+		
+	}
+
+
 
 	//////////////////////////////////////   GET   ///////////////////////////////////////////////
 
@@ -321,8 +346,23 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		        ],
 		        as: "partnerObj"
 					};
+
+					const lookupCatering = { 
+						from: 'caterings', 
+						let: { reservationId: '$_id'}, //
+						pipeline: [
+							{ $addFields: { "reservationId": { "$toObjectId": "$reservation" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$reservationId", "$reservationId" ] }
+		             }
+		          }
+		        ],
+		        as: "cateringObj"
+					};
+
 					await connectToDb(req.headers.host);
-					const reservationsDb = await Reservation.aggregate([{ $match: {"user": userId} }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.contactPhone': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}} ]);
+					const reservationsDb = await Reservation.aggregate([{ $match: {"user": userId} }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupCatering} ]);
 					const reservations = prepareReservationsForUserList(reservationsDb);
 
 					if (reservations) {
@@ -409,42 +449,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							if (partner) {
 								const policy = getCancelPolicy(result);
 								const cancel = await Reservation.where({ 'user': userObj['_id'], doubleReference: result['doubleReference'] }).updateMany({ $set: { active: false, canceled: true, cancelDate: today, return: policy['free'], returnPrice: policy['free'] ? (result['deposit'] * 0.95) : 0 }});
-								
-								const myCriptor = new MyCriptor();
-								const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', result['room']);
-								const dateStr = setReservationTimeString(result);
-								const sender = {name:'Trilino', email:'no.reply@trilino.com'};
-								const bcc = null;
-								const userTemplateId = 8;
-								const partnerTemplateId = 9;
-								const userTo = [{name: `${myCriptor.decrypt(userObj.firstName, true)} ${myCriptor.decrypt(userObj.lastName, true)}`, email: myCriptor.decrypt(userObj.contactEmail, false) }];
-								const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
-
-								const userParams = {
-									title: 'Otkazivanje rezervacije',
-									text: 'Žao nam je što ste morali da otkažete ovu rezervaciju. Sada ovaj termin na datoj lokaciji postaje slobodan i dostupan drugima na potencijalnu rezervaciju. U nastavku možete videti osnovne podatke o otkazivanju a sve dodatno možete pratiti preko vašeg korisničkog profila.',
-									orderId: `${dictionary['paymentUserEmailOrderId']} ${result['_id']}`,
-									date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
-									partner: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`,
-									returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. U narednih 7 dana možete očekivati vraćena sredstva uz troškove obrade 2% - 5% od iznosa depozita.' : 'Povraćaj depozita: Na žalost uslovi za povraćaj depozita nisu ispunjeni.',
-									returnPrice: `Iznos povraćaja: ${policy['free'] ? (result['deposit'] * 0.95) : 0}`,
-									finish: 'Vaš Trilino.'
-								};
-
-								const partnerParams = {
-									title: 'Korisnik je otkazao rezervaciju',
-									text: 'U nastavku možete videti osnovne podatke o rezervaciji koju je korisnik otkazao. Sada ovaj termin postaje slobodan i dostupan za buduću potencijalnu rezervaciju.',
-									date: `${dictionary['paymentUserEmailDate']} ${dateStr}`,
-									room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
-									guest: `${dictionary['paymentPartnerEmailCelebrant']} ${result['guest']}`,
-									returnPolicy: policy['free'] ? 'Povraćaj depozita: Ispunjeni su uslovi za puni povraćaj depozita. Korisniku će biti vraćen depozit u roku od 7 dana.' : 'Povraćaj depozita: Uslovi za povraćaj depozita nisu ispunjeni.',
-									finish: 'Vaš Trilino.'
+								if (result['trilino']) {
+									const cateringCancel = await Catering.where({ 'reservation': id }).updateMany({ $set: { active: false, status: 'canceled' }});
 								}
 
-								const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
-								const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
-								await sendEmail(userEmail);
-								await sendEmail(partnerEmail);
+								await sendEmailCancelReservationUser({language, partner, user: userObj, result, policy });
+								await sendEmailCancelReservationPartner({language, partner, result, policy });
 
 								return res.status(200).json({ endpoint: 'reservations', operation: 'cancel', success: true, code: 1, result: cancel });
 							}else{
@@ -472,115 +482,127 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 	if (req.query.operation === 'confirm') {
 		if (!isReservationConfirmDataValid(req.body)) {
-			return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 4, error: 'basic validation error' });
+			return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 6, error: 'basic validation error' });
 		}else{
 			const { id, transId, card, transDate, transAuth, transProc, transMd, error, confirm, payment, language } = req.body;
 			const dictionary = getLanguage(language);
+			const token = req.headers.authorization;
 			let trilinoCat = false;
 			let double = false;
 
 			try{
-				await connectToDb(req.headers.host);
-				const one = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
-				const partner = await Partner.findById(one['partner'], '-password -passSafetyCode -passProvided -verified');
-				const user = await User.findById(one['user'], '-password -passSafetyCode -passProvided');
-				if (one['double']) {
-					double = await Reservation.findOneAndUpdate({"doubleReference": one['doubleReference'], "deposit": {"$exists": false}}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
-				}
-				if (one['trilino']) {
-					trilinoCat = await Catering.findOneAndUpdate({"reservation": one['_id']}, {"$set" : {active: confirm, status: confirm ? 'confirmed' : 'declined'} }, { new: true });
-				}
+				if (!isEmpty(token)) {
+					const decoded = verifyToken(token);
+					const identifierId = encodeId(decoded['sub']);
 
-				let flag = false;
+					await connectToDb(req.headers.host);
+					const user = await User.findById(identifierId, '-password');
 
-				if (one) {
-					if (one['trilino']) {
-						if (trilinoCat) {
-							if (one['double']) {
-								if (double) {
-									flag = true;
+					if (user) {
+						const one = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+						const partner = await Partner.findById(one['partner'], '-password -passSafetyCode -passProvided -verified');
+
+						if (one['double']) {
+							double = await Reservation.findOneAndUpdate({"doubleReference": one['doubleReference'], "deposit": {"$exists": false}}, {"$set" : {transactionId: transId, transactionCard: card, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, confirmed: confirm, active: confirm, transactionErrMsg: error } }, { new: true });
+						}
+						if (one['trilino']) {
+							trilinoCat = await Catering.findOneAndUpdate({"reservation": one['_id']}, {"$set" : {active: confirm, status: confirm ? 'confirmed' : 'declined'} }, { new: true });
+						}
+
+						let flag = false;
+
+						if (one) {
+							if (one['trilino']) {
+								if (trilinoCat) {
+									if (one['double']) {
+										if (double) {
+											flag = true;
+										}
+									}else{
+										flag = true;
+									}
 								}
 							}else{
-								flag = true;
+								if (one['double']) {
+									if (double) {
+										flag = true;
+									}
+								}else{
+									flag = true;
+								}
 							}
+						}
+						
+						
+						if (flag) {
+							const userParams = getConfirmationUserParams({language, reservation: one, partner, double});
+							await sendEmailReservationConfirmationUser(user, userParams);
+							if (confirm) {
+								await sendEmailReservationConfirmationPartner({language, reservation: one, partner, double});
+							}
+
+							return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: userParams });
+						}else{
+							return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 2, error: 'selection error', message: 'invalid data sent, API can not confirm reservation' });
 						}
 					}else{
-						if (one['double']) {
-							if (double) {
-								flag = true;
-							}
-						}else{
-							flag = true;
-						}
+						return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 3, error: 'auth error', message: 'invalid token sent, API can not find user' });
 					}
-				}
-				
-				
-				if (flag) {
-					const allDate = `${one['date'].substring(0, 10).split('-')[2]}.${one['date'].substring(0, 10).split('-')[1]}.${one['date'].substring(0, 10).split('-')[0]}`;
-					const myCriptor = new MyCriptor();
-					const roomObj = getArrayObjectByFieldValue(partner['general']['rooms'], 'regId', one['room']);
-					const sender = {name:'Trilino', email:'no.reply@trilino.com'};
-
-					const userTo = [{name: `${myCriptor.decrypt(user.firstName, true)} ${myCriptor.decrypt(user.lastName, true)}`, email: myCriptor.decrypt(user.contactEmail, false) }];
-
-					const bcc = null;
-					const userTemplateId = 6;
-					const userParams = { 
-						title: confirm ? dictionary['paymentUserEmailTitleTrue'] : dictionary['paymentUserEmailTitleFalse'], 
-						reservationTitle: dictionary['paymentUserEmailResSub'], 
-						partnerName: `${dictionary['paymentUserEmailPartnerName']} ${partner['name']}`, 
-						address: `${dictionary['paymentUserEmailAddress']} ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`, 
-						date: `${dictionary['paymentUserEmailDate']} ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
-						room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
-						fullPrice: confirm ? `${dictionary['paymentUserEmailFullPriceTrue']} ${(one['price'] - one['deposit'] - one['trilinoPrice']).toFixed(2)}` : `${dictionary['paymentUserEmailFullPriceFalse']} ${one['price'].toFixed(2)}`, 
-						deposit: confirm ? `${dictionary['paymentUserEmailDepositTrue']} ${one['deposit'].toFixed(2)}` : `${dictionary['paymentUserEmailDepositFalse']}`, 
-						transactionTitle: dictionary['paymentUserEmailTransSub'], 
-						orderId: `${dictionary['paymentUserEmailOrderId']} ${one['_id']}`, 
-						authCode: `${dictionary['paymentUserEmailAuthCode']} ${one['transactionAuthCode']}`, 
-						paymentStatus: `${dictionary['paymentUserEmailPaymentStatus']} ${confirm ? dictionary['paymentUserEmailPaymentStatusTrue'] : dictionary['paymentUserEmailPaymentStatusFalse']}`, 
-						transactionId: `${dictionary['paymentUserEmailTransactionId']} ${one['transactionId']}`, 
-						transactionDate: `${dictionary['paymentUserEmailTransactionDate']} ${one['transactionDate']}`, 
-						mdStatus: `${dictionary['paymentUserEmailMdStatus']} ${one['transactionMdStatus']}`, 
-						finish: confirm ? dictionary['paymentUserEmailFinishTrue'] : dictionary['paymentUserEmailFinishFalse']
-					};
-	  			const userEmail = { sender, to: userTo, bcc, templateId: userTemplateId, params: userParams };
-					const emailSeUser =	await sendEmail(userEmail);
-					if (confirm) {
-						const partnerTo = [{name: partner['name'], email: partner['contactEmail'] }];
-						const partnerTemplateId = 7;
-
-						let cateringMsg = setCateringString(one, partner);
-
-						let decorationMsg = setDecorationString(one, partner);
-
-						let addonMsg = setAddonString(one, partner);
-
-						const partnerParams = { 
-							title: dictionary['paymentPartnerEmailTitle'], 
-							sub: dictionary['paymentPartnerEmailSub'], 
-							date: `${dictionary['paymentUserEmailDate']} ${allDate}, ${one['from']} - ${one['double'] ? double['to'] : one['to']}`, 
-							room: `${dictionary['paymentUserEmailRoom']} ${roomObj['name']}`, 
-							guest: `${dictionary['paymentPartnerEmailCelebrant']} ${one['guest']}`, 
-							catering: `${dictionary['paymentPartnerEmailCatering']} ${cateringMsg}`, 
-							decoration: `${dictionary['paymentPartnerEmailDecoration']} ${decorationMsg}`, 
-							addons: `${dictionary['paymentPartnerEmailAddon']} ${addonMsg}`, 
-							onsitePrice: `${dictionary['paymentPartnerEmailPrice']} ${(one['price'] - one['deposit']).toFixed(2)}`,
-							finish: dictionary['paymentPartnerEmailFinish']
-						};
-		  			const partnerEmail = { sender, to: partnerTo, bcc, templateId: partnerTemplateId, params: partnerParams };
-						const emailSePartner = await sendEmail(partnerEmail);
-					}
-
-					return res.status(200).json({ endpoint: 'reservations', operation: 'confirm', success: true, code: 1, reservation: userParams });
 				}else{
-					return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerUpdateVeriCode2'] });
+					return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 4, error: 'auth error', message: 'no token sent' });
 				}
 			}catch(err){
-				return res.status(500).send({ endpoint: 'reservations', operation: 'confirm', success: false, code: 3, error: 'db error', message: err  });
+				return res.status(500).send({ endpoint: 'reservations', operation: 'confirm', success: false, code: 5, error: 'db error', message: err  });
 			}
 		}
 	}
+
+
+
+	//////////////////////////////////////   CONFIRM CATERING  ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'confirmCatering') {
+		if (!isReservationConfirmDataValid(req.body)) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'confirm', success: false, code: 6, error: 'basic validation error' });
+		}else{
+			try{
+				const { id, transId, card, transDate, transAuth, transProc, transMd, language } = req.body;
+				const dictionary = getLanguage(language);
+				const token = req.headers.authorization;
+
+				if (!isEmpty(token)) {
+					const decoded = verifyToken(token);
+					const identifierId = encodeId(decoded['sub']);
+					await connectToDb(req.headers.host);
+
+					const userObj = await User.findById(identifierId, '-password');
+
+					if (userObj) {
+						const cateringCheck = await Catering.findById(id);
+						const reservation = await Reservation.findById(cateringCheck['reservation']);
+						const partner = await Partner.findById(reservation['partner'], '-password -photos');
+
+						if (cateringCheck && reservation && partner && userObj) {
+							const catering = await Catering.findOneAndUpdate({"_id": id}, {"$set": { transactionId: transId, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, transactionResult: 'Accepted', status: 'paid' }}, { new: true});
+							const cateringParams = getCateringConfirmationParams({language, catering, reservation, partner })
+							await senEmailCateringConfirmationUser(userObj, cateringParams);
+							return res.status(200).json({ endpoint: 'reservations', operation: 'confirmCatering', success: true, code: 1, catering: cateringParams });
+						}else{
+							return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 2, error: 'selection error', message: 'invalid data sent, API can not confirm catering' });
+						}
+					}else{
+						return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 3, error: 'auth error', message: 'invalid token sent, API can not find user' });
+					}
+				}else{
+					return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 4, error: 'auth error', message: 'no token sent' });
+				}
+			}catch(err){
+				return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 5, error: 'db error', message: err });
+			}
+		}
+	}
+
 
 	process.on('unhandledRejection', function(err) {
 	    console.log(err);

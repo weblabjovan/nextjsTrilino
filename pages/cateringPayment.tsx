@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
-import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
 import { getUserToken } from '../lib/helpers/specificUserFunctions';
-import Head from '../components/head';
-import PaymentFailureView from '../views/PaymentFailureView';
+import { getSingleCatering , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
 import parse from 'urlencoded-body-parser';
+import Head from '../components/head';
+import CateringPaymentView from '../views/CateringPaymentView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
@@ -19,58 +19,56 @@ interface Props {
 }
 
 
-const PaymentFailure : NextPage<Props> = ({ userAgent, link, paymentInfo }) => {
+const CateringPayment : NextPage<Props> = ({ userAgent, link, paymentInfo }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   const dictionary = getLanguage(lang);
+  const success = router.query['result'] === 'success' ? true : false;
 
   return (
     <div>
       <Head title={dictionary['headTitleUserProfile']} description={dictionary['headDescriptionUserProfile']} />
-      <PaymentFailureView 
+      <CateringPaymentView 
         userAgent={userAgent} 
         path={router.pathname} 
         fullPath={ router.asPath } 
         lang={ lang }
         link={ link }
+        success={ success }
         paymentInfo={ paymentInfo }
       />
     </div>
   )
 }
 
-PaymentFailure.getInitialProps = async (ctx: any) => {
+CateringPayment.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-  const paymentInfo = { card: '-', transId: '-', transDate: '-', transAuth: '-', transProc: '-', transMd: '-', error: '-', payment: '-'};
-
+  const paymentInfo = { card: '', transId: '', transDate: '', transAuth: '', transProc: '', transMd: '', error: '', payment: ''};
   try{
-
-    const resOne = await getSingleReservation(ctx);
+    
+    const resOne = await getSingleCatering(ctx);
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
-      if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req, 'reservation')) {
+      
+      if (!isPaymentResponseValid(nestPayData, link['queryObject']['catering'], req, 'catering')) {
         ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
         ctx.res.end();
       }else{
-        if (Object.keys(nestPayData).length) {
-          paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
-          paymentInfo['transId'] = nestPayData['TransId'];
-          paymentInfo['transAuth'] = nestPayData['AuthCode'];
-          paymentInfo['transDate'] = nestPayData['EXTRA.TRXDATE'];
-          paymentInfo['transProc'] = nestPayData['ProcReturnCode'];
-          paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '33';
-          paymentInfo['error'] = nestPayData['ErrMsg'];
-          paymentInfo['payment'] = nestPayData['Response'];
-        }
+        paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
+        paymentInfo['transId'] = nestPayData['TransId'];
+        paymentInfo['transAuth'] = nestPayData['AuthCode'] ? nestPayData['AuthCode'] : '-';
+        paymentInfo['transDate'] = nestPayData['EXTRA.TRXDATE'];
+        paymentInfo['transProc'] = nestPayData['ProcReturnCode'];
+        paymentInfo['transMd'] = nestPayData['mdStatus'] ? nestPayData['mdStatus'] : '-';
+        paymentInfo['payment'] = nestPayData['Response'];
       }
     }else{
       ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}`});
       ctx.res.end();
     }
-
   }catch(err){
     console.log(err)
   }
@@ -78,4 +76,4 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
   return { userAgent, link, paymentInfo }
 }
 
-export default withRedux(PaymentFailure)
+export default withRedux(CateringPayment)

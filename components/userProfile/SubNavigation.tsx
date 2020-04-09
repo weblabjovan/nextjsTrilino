@@ -90,21 +90,21 @@ export default class UserSubNavigation extends React.Component <MyProps, MyState
 	        							<Col xs="6" sm="4" lg="3">
 	        								<div className="mobileOption" onClick={ () => this.chooseMobileOption('reservation')}>
 	        									<label className="reservation-option"></label>
-	        									<p>rezervacije</p>
+	        									<p>{this.state.dictionary['userProfileSubNavReservation']}</p>
 	        								</div>
 	        							</Col>
 
 	        							<Col xs="6" sm="4" lg="3">
 	        								<div className="mobileOption" onClick={ () => this.chooseMobileOption('message')}>
 	        									<label className="message-option"></label>
-	        									<p>poruke</p>
+	        									<p>{this.state.dictionary['userProfileSubNavMessage']}</p>
 	        								</div>
 	        							</Col>
 
 	        							<Col xs="6" sm="4" lg="3">
 	        								<div className="mobileOption" onClick={ () => this.chooseMobileOption('logout')}>
 	        									<label className="logout-option"></label>
-	        									<p>odjava</p>
+	        									<p>{this.state.dictionary['userProfileSubNavLogout']}</p>
 	        								</div>
 	        							</Col>
 	        						</Row>
@@ -118,13 +118,13 @@ export default class UserSubNavigation extends React.Component <MyProps, MyState
       		(
       			<Row className="desktopSubNav">
       				<div className={`${this.props.screen === 'reservation' ? "active" : ''} item`} onClick={() => this.props.changeScreen('reservation')} >
-      					<p>Rezervacije</p>
+      					<p>{this.state.dictionary['userProfileSubNavReservation']}</p>
       				</div>
       				<div className={`${this.props.screen === 'message' ? "active" : ''} item`} onClick={() => this.props.changeScreen('message')}>
-      					<p>Poruke</p>
+      					<p>{this.state.dictionary['userProfileSubNavMessage']}</p>
       				</div>
       				<div className={`${this.props.screen === 'logout' ? "active" : ''} item`} onClick={() => this.props.changeScreen('logout')}>
-      					<p>Odjava</p>
+      					<p>{this.state.dictionary['userProfileSubNavLogout']}</p>
       				</div>
       			</Row>
       		)

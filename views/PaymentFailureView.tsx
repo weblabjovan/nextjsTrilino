@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { confirmReservationAfterPay } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, unsetCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, unsetCookie, setUpLinkBasic, getCookie } from '../lib/helpers/generalFunctions';
 import PlainInput from '../components/form/input';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -27,8 +27,6 @@ interface MyProps {
   fullPath: string;
   lang: string;
   link?: object;
-  token?: string | undefined;
-  passChange: boolean;
   paymentInfo: object;
 };
 interface MyState {
@@ -38,10 +36,9 @@ interface MyState {
   logString: string;
   alertOpen: boolean;
   loader: boolean;
-  passwordChange: boolean;
 };
 
-class UserProfileView extends React.Component <MyProps, MyState>{
+class PaymentFailureView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
@@ -50,7 +47,6 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     logString: '',
     alertOpen: false,
     loader: false,
-    passwordChange: this.props.passChange,
   };
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
@@ -61,7 +57,8 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-    this.props.confirmReservationAfterPay(this.props.link, {id: this.props.link['queryObject']['reservation'], transId: this.props.paymentInfo['transId'], card: this.props.paymentInfo['card'], transDate: this.props.paymentInfo['transDate'], transAuth: this.props.paymentInfo['transAuth'], transProc: this.props.paymentInfo['transProc'], transMd: this.props.paymentInfo['transMd'], payment: this.props.paymentInfo['payment'], error: this.props.paymentInfo['error'], confirm: false, language: this.props.lang }, this.props.token);
+    const token = getCookie('trilino-user-token');
+    this.props.confirmReservationAfterPay(this.props.link, {id: this.props.link['queryObject']['reservation'], transId: this.props.paymentInfo['transId'], card: this.props.paymentInfo['card'], transDate: this.props.paymentInfo['transDate'], transAuth: this.props.paymentInfo['transAuth'], transProc: this.props.paymentInfo['transProc'], transMd: this.props.paymentInfo['transMd'], payment: this.props.paymentInfo['payment'], error: this.props.paymentInfo['error'], confirm: false, language: this.props.lang }, token);
 	}
 	
   render() {
@@ -176,4 +173,4 @@ const matchDispatchToProps = (dispatch) => {
   dispatch);
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(UserProfileView)
+export default connect(mapStateToProps, matchDispatchToProps)(PaymentFailureView)

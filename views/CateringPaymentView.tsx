@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
-import { confirmReservationAfterPay } from '../actions/reservation-actions';
+import { confirmCateringAfterPay } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, unsetCookie, setUpLinkBasic, getCookie } from '../lib/helpers/generalFunctions';
 import PlainInput from '../components/form/input';
@@ -16,10 +16,10 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
-  confirmReservationStart: boolean;
-  confirmReservationError: object | boolean;
-  confirmReservationSuccess: null | object;
-  confirmReservationAfterPay(link: object, data: object, auth: string): void;
+  confirmCateringStart: boolean;
+  confirmCateringError: object | boolean;
+  confirmCateringSuccess: null | object;
+  confirmCateringAfterPay(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
@@ -27,6 +27,7 @@ interface MyProps {
   fullPath: string;
   lang: string;
   link?: object;
+  success: boolean;
   paymentInfo: object;
 };
 interface MyState {
@@ -38,7 +39,7 @@ interface MyState {
   loader: boolean;
 };
 
-class PaymentSuccessView extends React.Component <MyProps, MyState>{
+class CateringPaymentView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
@@ -50,15 +51,20 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
   };
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-    if (!this.props.confirmReservationStart && !prevProps.confirmReservationSuccess && this.props.confirmReservationSuccess) {
+    if (!this.props.confirmCateringStart && !prevProps.confirmCateringSuccess && this.props.confirmCateringSuccess) {
       this.setState({loader: false});
     }
   }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-    const token = getCookie('trilino-user-token');
-    this.props.confirmReservationAfterPay(this.props.link, {id: this.props.link['queryObject']['reservation'], transId: this.props.paymentInfo['transId'], card: this.props.paymentInfo['card'], transDate: this.props.paymentInfo['transDate'], transAuth: this.props.paymentInfo['transAuth'], transProc: this.props.paymentInfo['transProc'], transMd: this.props.paymentInfo['transMd'], payment: this.props.paymentInfo['payment'], error: this.props.paymentInfo['error'], confirm: true, language: this.props.lang }, token);
+		if (this.props.success) {
+			const token = getCookie('trilino-user-token');
+			this.props.confirmCateringAfterPay(this.props.link, {id: this.props.link['queryObject']['catering'], confirm: true, transId: this.props.paymentInfo['transId'], transDate: this.props.paymentInfo['transDate'], transAuth: this.props.paymentInfo['transAuth'], transProc: this.props.paymentInfo['transProc'], transMd: this.props.paymentInfo['transMd'], payment: this.props.paymentInfo['payment'], language: this.props.lang }, token);
+		}else{
+			this.setState({loader: false});
+		}
+    
 	}
 	
   render() {
@@ -79,17 +85,35 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
     		/>
     		<div className="registrationWrapper">
           <Container>
-              <Row>
-                
-                <Col xs='12'>
-                  <div className="middle">
-                    <h2>{this.state.dictionary['paymentPageTitleTrue']}</h2>
-                  </div>
-                </Col>
-              </Row>
+          	{
+          		this.props.success
+          		?
+          		(
+          			<Row>
+	                <Col xs='12'>
+	                  <div className="middle">
+	                    <h2>{this.state.dictionary['paymentPageTitleTrue']}</h2>
+	                  </div>
+	                </Col>
+	              </Row>
+          		)
+          		:
+          		(
+          			<Row>
+	                <Col xs='12'>
+	                  <div className="middle">
+	                    <h2>{this.state.dictionary['paymentPageTitleFalse']}</h2>
+	                  </div>
+	                </Col>
+	              </Row>
+          		)
+          	}
+              
 
               {
-                this.props.confirmReservationSuccess
+              	this.props.success
+              	?
+                this.props.confirmCateringSuccess
                 ?
                 (
                   <Row className="paymentEnd">
@@ -97,23 +121,21 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
                       <h3>{this.state.dictionary['paymentPageSub']}</h3>
                     </Col>
                     <Col xs="12" sm="6">
-                      <h4>{this.props.confirmReservationSuccess['reservationTitle']}</h4>
-                      <p>{this.props.confirmReservationSuccess['partnerName']}</p>
-                      <p>{this.props.confirmReservationSuccess['address']}</p>
-                      <p>{this.props.confirmReservationSuccess['date']}</p>
-                      <p>{this.props.confirmReservationSuccess['room']}</p>
-                      <p>{this.props.confirmReservationSuccess['fullPrice']}</p>
-                      <p>{this.props.confirmReservationSuccess['deposit']}</p>
-                      <p>{this.props.confirmReservationSuccess['forTrilino']}</p>
+                      <h4>{this.state.dictionary['paymentCateringSubCatering']}</h4>
+                      <p>{this.props.confirmCateringSuccess['deliveryPartner']}</p>
+                      <p>{this.props.confirmCateringSuccess['deliveryAddress']}</p>
+                      <p>{this.props.confirmCateringSuccess['deliveryTime']}</p>
+                      <p>{this.props.confirmCateringSuccess['deal']}</p>
+                      <p>{this.props.confirmCateringSuccess['price']}</p>
                     </Col>
                     <Col xs="12" sm="6">
-                      <h4>{this.props.confirmReservationSuccess['transactionTitle']}</h4>
-                      <p>{this.props.confirmReservationSuccess['orderId']}</p>
-                      <p>{this.props.confirmReservationSuccess['authCode']}</p>
-                      <p>{this.props.confirmReservationSuccess['paymentStatus']}</p>
-                      <p>{this.props.confirmReservationSuccess['transactionId']}</p>
-                      <p>{this.props.confirmReservationSuccess['transactionDate']}</p>
-                      <p>{this.props.confirmReservationSuccess['mdStatus']}</p>
+                      <h4>{this.state.dictionary['paymentCateringSubTransaction']}</h4>
+                      <p>{this.props.confirmCateringSuccess['orderId']}</p>
+                      <p>{this.props.confirmCateringSuccess['authCode']}</p>
+                      <p>{this.props.confirmCateringSuccess['paymentStatus']}</p>
+                      <p>{this.props.confirmCateringSuccess['transactionId']}</p>
+                      <p>{this.props.confirmCateringSuccess['transactionDate']}</p>
+                      <p>{this.props.confirmCateringSuccess['mdStatus']}</p>
                     </Col>
                     <Col xs="12">
                       <p className="remarkVAT">{this.state.dictionary['uniVAT']}</p>
@@ -122,13 +144,21 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
                 )
                 :
                 null
+                :
+                (
+                	<Row className="paymentEnd">
+                    <Col xs="12">
+                      <h3>{this.state.dictionary['paymentCateringTextFail']}</h3>
+                    </Col>
+                  </Row>
+                )
               }
 
               <Row>
                 
                 <Col xs='12'>
                   <div className="middle">
-                    <p>{this.state.dictionary['paymentPageFinishTrue']}</p>
+                    <p>{this.state.dictionary['paymentPageFinishUniversal']}</p>
                     <a href={`/userProfile?languege=${this.props.lang}`}>{this.state.dictionary['paymentPageLink']}</a>
                   </div>
                 </Col>
@@ -160,18 +190,19 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
 
-  confirmReservationStart: state.ReservationReducer.confirmReservationStart,
-  confirmReservationError: state.ReservationReducer.confirmReservationError,
-  confirmReservationSuccess: state.ReservationReducer.confirmReservationSuccess,
+  confirmCateringStart: state.ReservationReducer.confirmCateringStart,
+  confirmCateringError: state.ReservationReducer.confirmCateringError,
+  confirmCateringSuccess: state.ReservationReducer.confirmCateringSuccess,
+
 });
 
 
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setUserLanguage,
-    confirmReservationAfterPay,
+    confirmCateringAfterPay,
   },
   dispatch);
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(PaymentSuccessView)
+export default connect(mapStateToProps, matchDispatchToProps)(CateringPaymentView)
