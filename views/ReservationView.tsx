@@ -7,7 +7,7 @@ import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, chan
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import DateHandler from '../lib/classes/DateHandler';
-import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering, currencyFormat } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { prepareObjForUserReservation } from '../lib/helpers/specificUserFunctions';
 import { isDateDifferenceValid, isTrilinoCateringOrdered } from '../lib/helpers/specificReservationFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
@@ -31,6 +31,7 @@ interface MyProps {
   reservationCatering: object;
   reservationGeneral: IreservationGeneral;
   userLanguage: string;
+  globalError: boolean;
   userLoginStart: boolean;
   userLoginError: boolean | object;
   userLoginSuccess: null | object;
@@ -139,8 +140,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     const timeDiff = isTrilinoCateringOrdered(objCopy) ? 24*8 : 24*2;
     errorsCopy['fields'] = {};
     errorsCopy['flag'] = false;
-
-    console.log(objCopy);
+    
     if (isDateDifferenceValid((timeDiff), this.props.router['query']['date'], this.props.router['query']['from'])) {
       Object.keys(objCopy).map(key => {
         if (!isEmpty(objCopy[key]['num'])) {
@@ -720,6 +720,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
     }
 
+    errorExecute(window, this.props.globalError);
+
     if (!this.props.userSaveReservationStart && this.props.userSaveReservationSuccess && !prevProps.userSaveReservationSuccess) {
       this.setState({ loader: false });
       const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
@@ -1145,6 +1147,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   reservationGeneral: state.ReservationReducer.reservationGeneral,
   reservationAdditional: state.ReservationReducer.reservationAdditional,

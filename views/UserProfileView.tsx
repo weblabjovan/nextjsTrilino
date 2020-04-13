@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getReservationsForUser, cancelReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, unsetCookie, setUpLinkBasic, currencyFormat } from '../lib/helpers/generalFunctions';
+import { isMobile, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { setNestPayHash } from '../server/helpers/general';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
@@ -22,6 +22,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   getUserReservationStart: boolean;
   getUserReservationError: object | boolean;
   getUserReservationSuccess: null | number;
@@ -171,6 +172,8 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+
     if (!this.props.cancelReservationStart && prevProps.cancelReservationStart && !this.props.cancelReservationError && this.props.cancelReservationSuccess && !prevProps.cancelReservationSuccess) {
       this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
     }
@@ -390,6 +393,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   getUserReservationStart: state.ReservationReducer.getUserReservationStart,
   getUserReservationError: state.ReservationReducer.getUserReservationError,

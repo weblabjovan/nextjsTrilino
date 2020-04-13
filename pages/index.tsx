@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { defineLanguage } from '../lib/helpers/generalFunctions';
+import { defineLanguage, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import { getLanguage } from '../lib/language';
 import { useRouter } from 'next/router';
@@ -42,6 +42,7 @@ const Home : NextPage<Props> = ({ userAgent, userIsLogged }) => {
 Home.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
    let userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
    let userIsLogged = false;
   if (userAgent === undefined) {
     userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36';
@@ -61,7 +62,9 @@ Home.getInitialProps = async (ctx: any) => {
       userIsLogged = true;
     }
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=home`});
+    ctx.res.end();
   }
   
   return { userAgent, userIsLogged }

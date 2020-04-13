@@ -33,6 +33,16 @@ export default interface LanguageInterface {
 	headDescriptionTerms: string;
 	headTitleUserProfile: string;
 	headDescriptionUserProfile: string;
+	headTitlePaymentSuccess: string;
+	headDescriptionPaymentSuccess: string;
+	headTitlePaymentFailure: string;
+	headDescriptionPaymentFailure: string;
+	headTitleCateringPayment: string;
+	headDescriptionCateringPayment: string;
+	headTitleOnlinePayments: string;
+	headDescriptionOnlinePayments: string;
+	headTitleErrorPage: string;
+	headDescriptionErrorPage: string;
 
 
 	navigationLogin: string;
@@ -75,6 +85,10 @@ export default interface LanguageInterface {
 	uniNotWorkingDay: string;
 	uniMap: string;
 	uniVAT: string;
+	uniErrorMessage1: string;
+	uniErrorMessage2: string;
+	uniErrorGoBack: string;
+	uniErrorHome: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;

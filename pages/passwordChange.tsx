@@ -91,6 +91,8 @@ PasswordChange.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+    ctx.res.end();
   }
 
   return { userAgent, error, verifyObject }

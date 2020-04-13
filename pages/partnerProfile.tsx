@@ -41,7 +41,7 @@ const PartnerProfile : NextPage<Props> = ({userAgent, link, token}) => {
 PartnerProfile.getInitialProps = async (ctx: any) => {
 	const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  let link = { };
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let token = '';
 
   try{
@@ -54,8 +54,7 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
     }
 
     const partnerLog = await isPartnerLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-
+    
     if (!partnerLog) {
       ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
       ctx.res.end();
@@ -65,6 +64,8 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=partnerProfile`});
+    ctx.res.end();
   }
 
 

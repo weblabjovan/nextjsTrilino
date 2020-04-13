@@ -9,7 +9,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
@@ -22,6 +22,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
@@ -63,6 +64,10 @@ class HomeView extends React.Component <MyProps, MyState>{
       loader: false,
 
     };
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+  }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
@@ -472,6 +477,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
 });
 

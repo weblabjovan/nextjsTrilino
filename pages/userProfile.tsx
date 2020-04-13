@@ -66,7 +66,9 @@ UserProfile.getInitialProps = async (ctx: any) => {
     token = getUserToken(ctx);
 
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=userProfile`});
+    ctx.res.end();
   }
 
   

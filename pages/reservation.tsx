@@ -65,21 +65,21 @@ Reservation.getInitialProps = async (ctx) => {
     if (partnerRes['status'] === 200) {
       result = await partnerRes.json();
       if (!result['partner']) {
-        ctx.res.writeHead(302, {Location: `/?language=sr`});
+        ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
         ctx.res.end();
       }else{
         if (!result['partner']['reservation']) {
-          ctx.res.writeHead(302, {Location: `/?language=sr`});
+          ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
           ctx.res.end();
         }else{
           if (!result['partner']['reservation']['id']) {
-            ctx.res.writeHead(302, {Location: `/?language=sr`});
+            ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
             ctx.res.end();
           }
         }
       }
     }else{
-      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
       ctx.res.end();
     }
 
@@ -93,6 +93,8 @@ Reservation.getInitialProps = async (ctx) => {
 
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+    ctx.res.end();
   }
   
   

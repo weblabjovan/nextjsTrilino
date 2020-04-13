@@ -48,6 +48,7 @@ const Search : NextPage<Props> = ({ userAgent, query, partners, userIsLogged }) 
 Search.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let partners = [];
   let userIsLogged = false;
 
@@ -64,7 +65,7 @@ Search.getInitialProps = async (ctx: any) => {
       const re = await response.json();
       partners = re['partners']
     }else{
-      ctx.res.writeHead(302, {Location: `/?language=sr`});
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=search`});
       ctx.res.end();
     }
 
@@ -75,7 +76,9 @@ Search.getInitialProps = async (ctx: any) => {
     }
 
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=search`});
+    ctx.res.end();
   }
 
   return { userAgent, query: ctx['query'], partners, userIsLogged }

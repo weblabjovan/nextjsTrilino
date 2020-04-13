@@ -9,7 +9,7 @@ import { adminBasicDevLogin } from '../actions/admin-actions';
 import { getReservationsOnDate } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import { datePickerLang } from '../lib/language/dateLanguage';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, currencyFormat } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, createDisplayPhotoListObject, dateForSearch, addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import { preparePartnerForLocation } from '../lib/helpers/specificReservationFunctions'
 import generalOptions from '../lib/constants/generalOptions';
@@ -26,6 +26,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   setUserLanguage(language: string): string;
   getReservationsOnDate(link: object, data: object): void;
   getReservationsStart: boolean;
@@ -146,6 +147,7 @@ class LocationView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+  	errorExecute(window, this.props.globalError);
 
   	if (!this.props.getReservationsStart && prevProps.getReservationsStart && this.props.getReservationsSuccess) {
   		this.props.partner['reservations'] = this.props.reservations;
@@ -850,6 +852,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   getReservationsStart: state.ReservationReducer.getReservationsStart,
   getReservationsError: state.ReservationReducer.getReservationsError,

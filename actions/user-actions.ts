@@ -52,6 +52,10 @@ export function changeSingleUserField(field: string, value: any) {
   };
 }
 
+export const errorHandlerActions = {
+  ERROR: 'ERROR_HANDLER'
+};
+
 export const registrateUserActionTypes = {
   START: 'USER_REGISTRATE_START',
   ERROR: 'USER_REGISTRATE_ERROR',

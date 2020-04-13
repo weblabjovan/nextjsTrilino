@@ -281,3 +281,11 @@ export const currencyFormat = (num: number): string => {
   const ra = new Number(num);
   return ra.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
+
+export const errorExecute = (window: any, error: boolean): void => {
+  if (error) {
+    const link = setUpLinkBasic(window.location.href);
+    const lang = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+    window.location.href = `${link['protocol']}${link['host']}/errorPage?language=${lang}&error=1`;
+  }
+}

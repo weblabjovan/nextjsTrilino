@@ -1,7 +1,7 @@
 import LanguageInterface from './baseLanguageInterface';
 
 const english: LanguageInterface = {
-	headTitleIndex: "Trilino",
+	headTitleIndex: "Trilino - Homepage",
 	headDescriptionIndex: "Trilino - online kids birthday organization",
 	headTitleAdminLogin: "Trilino - Admin Login",
 	headDescriptionAdminLogin: "Trilino - Login od Trlino administrators",
@@ -35,6 +35,16 @@ const english: LanguageInterface = {
 	headDescriptionTerms: "Trilino - Terms and Conditions of Trilino service",
 	headTitleUserProfile: "Trilino - User profile",
 	headDescriptionUserProfile: "Trilino - User profile for tracking down reservations for kids birthdays",
+	headTitlePaymentSuccess: "Trilino - Successful payment",
+	headDescriptionPaymentSuccess: "Trilino - Your reservation payment has been successful",
+	headTitlePaymentFailure: "Trilino - unsuccessful payment",
+	headDescriptionPaymentFailure: "Trilino - Your reservation payment has been unsuccessful",
+	headTitleCateringPayment: "Trilino - Catering payment successful",
+	headDescriptionCateringPayment: "Trilino - You payment for Trilino Catering has been successful",
+	headTitleOnlinePayments: "Trilino - Online payments",
+	headDescriptionOnlinePayments: "Trilino - General instructions for online payment of Trilino services",
+	headTitleErrorPage: "Trilino - Error",
+	headDescriptionErrorPage: "Trilino - We found an unhandled error",
 
 
 	navigationLogin: "Login",
@@ -76,6 +86,10 @@ const english: LanguageInterface = {
 	uniNotWorkingDay: 'Non-working day',
 	uniMap: 'Map',
 	uniVAT: '*All prices on this page are in dinars (rsd) and with VAT included with no additional or hidden costs.',
+	uniErrorMessage1: 'An unexpected error occured. Your last action was not executed successfuly. Please, try again later.',
+	uniErrorMessage2: 'Action that you are trying to execute is forbiden. Please do not repeat it in the future.',
+	uniErrorGoBack: 'Go back to ',
+	uniErrorHome: 'homepage',
 
 	emailPartnerRegisterTitle: ', welcome to Trilino',
 	emailPartnerRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. From now on you will be connected to thousands of people that are interested in your space and/or your services. All you have to do is to create your profile that will fairly present your business to visitors of our web site. Before that you should verify your registration and create your password. Click on the button bellow and follow the instractions. Good luck.',

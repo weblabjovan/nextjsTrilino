@@ -8,7 +8,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
@@ -34,6 +34,7 @@ interface MyProps {
   searchResults: Array<object>;
   partners: Array<object>;
   userLanguage: string;
+  globalError: boolean;
   userAgent: string;
   path: string;
   date: null | string;
@@ -177,6 +178,8 @@ class SearchView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+    
   	if (!this.props.getPartnersMultipleStart && prevProps.getPartnersMultipleStart && !this.props.getPartnersMultipleError && this.props.getPartnersMultipleSuccess) {
     	this.setState({loader: false });
     }
@@ -565,6 +568,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   searchResults: state.PartnerReducer.searchResults,
   getPartnersMultipleStart: state.PartnerReducer.getPartnersMultipleStart,

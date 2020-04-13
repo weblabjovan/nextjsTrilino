@@ -59,6 +59,8 @@ EmailVerification.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=emailVerification`});
+    ctx.res.end();
   }
 
   
@@ -84,7 +86,8 @@ EmailVerification.getInitialProps = async (ctx: any) => {
       }
     }catch(err){
       console.log(err);
-      resolution = 4; //error no provided id
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=emailVerification`});
+      ctx.res.end();
     }
     
   }

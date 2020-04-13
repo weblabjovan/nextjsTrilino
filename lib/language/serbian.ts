@@ -1,7 +1,7 @@
 import LanguageInterface from './baseLanguageInterface';
 
 const serbian: LanguageInterface = {
-	headTitleIndex: "Trilino",
+	headTitleIndex: "Trilino - Naslovna stranica",
 	headDescriptionIndex: "Trilino - online organizacija dečijih rođendana",
 	headTitleAdminLogin: "Trilino - Admin Prijava",
 	headDescriptionAdminLogin: "Trilino - Prijava Trilino administratora",
@@ -35,6 +35,16 @@ const serbian: LanguageInterface = {
 	headDescriptionTerms: "Trilino - Uslovi korišćenja za partnere i korisnike",
 	headTitleUserProfile: "Trilino - Korisnički profil",
 	headDescriptionUserProfile: "Trilino - Korisnički profil za praćenje rezervacija za dečije rođendane",
+	headTitlePaymentSuccess: "Trilino - Uspešna uplata",
+	headDescriptionPaymentSuccess: "Trilino - Uspešno izvršena uplata za rezervaciju dečijeg rodjendana",
+	headTitlePaymentFailure: "Trilino - Neuspešna uplata",
+	headDescriptionPaymentFailure: "Trilino - Vaša uplata za rezervaciju dečijeg rodjendana nije uspešna",
+	headTitleCateringPayment: "Trilino - Uspešno plaćen ketering",
+	headDescriptionCateringPayment: "Trilino - Uspešno ste platili Trilino Ketering paket",
+	headTitleOnlinePayments: "Trilino - Plaćanje platnim karticama",
+	headDescriptionOnlinePayments: "Trilino - Instrukcije kako plaćati platnim karticama putem inteneta",
+	headTitleErrorPage: "Trilino - Greška",
+	headDescriptionErrorPage: "Trilino - Došlo je do neočekivane greške",
 
 	navigationLogin: "Prijava",
 	navigationSearch: "Pretraga",
@@ -75,6 +85,10 @@ const serbian: LanguageInterface = {
 	uniNotWorkingDay: 'Neradan dan',
 	uniMap: 'Mapa',
 	uniVAT: '*Sve cene na ovoj stranici izražene su u dinarima (rsd) i sa uračunatim PDV-om i nema dodatnih ili skrivenih troškova.',
+	uniErrorMessage1: 'Nažalost desila se neočekivana greška. Vaša poslednja akcija nije uspešno izvršena. Molimo vas pokušajte kasnije.',
+	uniErrorMessage2: 'Akcija koju pokušavate nije dozvoljena. Molimo vas nemojte više ponavljati poslednju akciju.',
+	uniErrorGoBack: 'Vratite se na ',
+	uniErrorHome: 'naslovnu stranicu',
 
 	emailPartnerRegisterTitle: ', dobrodošli u Trilino',
 	emailPartnerRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa hiljadama ljudi koji su zainteresovani za vaš prostor i vaše usluge. Sve što treba da uradite je da kreirate vaš profil koji će adekvatno predstaviti ono što možete da ponudite posetiocima našeg sajta. Ali pre toga je potrebno je da verifikujete vašu registraciju i kreirate vašu lozinku. Kliknite na dugme u nastavku i ispratite sledeća uputstva. Srećno.',

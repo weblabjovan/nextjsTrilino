@@ -40,23 +40,33 @@ const PartnerHelp : NextPage<Props> = ({userAgent, token}) => {
 PartnerHelp.getInitialProps = async (ctx: any) => {
 	const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-
-  const devLog = await isDevEnvLogged(ctx);
-
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
-
-  const partnerLog = await isPartnerLogged(ctx);
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+  let token = '';
 
-  if (!partnerLog) {
-    ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
+  try{
+    const devLog = await isDevEnvLogged(ctx);
+
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const partnerLog = await isPartnerLogged(ctx);
+
+    if (!partnerLog) {
+      ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
+      ctx.res.end();
+    }
+
+    token = getPartnerToken(ctx);
+
+  }catch(err){
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=partnerHelp`});
     ctx.res.end();
   }
 
-	const token = getPartnerToken(ctx);
+  
 
   return { userAgent, token }
 }

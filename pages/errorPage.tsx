@@ -3,46 +3,42 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import { getLanguage } from '../lib/language';
 import Head from '../components/head';
-import UserLoginView from '../views/UserLoginView';
+import ErrorPageView from '../views/ErrorPageView';
 import pages from '../lib/constants/pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
-  link?: object;
 }
 
 
-const Login : NextPage<Props> = ({ userAgent, link }) => {
+const Error : NextPage<Props> = ({ userAgent }) => {
 
   const router = useRouter();
   let lang = defineLanguage(router.query['language']);
   const dictionary = getLanguage(lang);
-  const page = router.query['page'] ? router.query['page'] : 'login';
+  const error = router.query['error'] ? router.query['error'].toString() : '1';
 
   return (
     <div>
-      <Head title={dictionary['headTitleLogin']} description={dictionary['headDescriptionLogin']}  />
-      <UserLoginView 
+      <Head title={dictionary['headTitleErrorPage']} description={dictionary['headDescriptionErrorPage']}  />
+      <ErrorPageView 
         userAgent={userAgent} 
         path={router.pathname} 
         fullPath={ router.asPath } 
-        page={ page }
+        error={ error }
         lang={ lang }
-        link={ link }
       />
     </div>
   )
 }
 
-Login.getInitialProps = async (ctx: any) => {
+Error.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -52,20 +48,12 @@ Login.getInitialProps = async (ctx: any) => {
       ctx.res.end();
     }
 
-    const userLog = await isUserLogged(ctx);
-
-    if (userLog) {
-      ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
-      ctx.res.end();
-    }
   }catch(err){
-    console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=login`});
-    ctx.res.end();
+    console.log(err)
   }
 
   
-  return { userAgent, link }
+  return { userAgent }
 }
 
-export default withRedux(Login)
+export default withRedux(Error)

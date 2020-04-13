@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
-import { defineLanguage } from '../lib/helpers/generalFunctions';
+import { defineLanguage, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { getLanguage } from '../lib/language';
 import Head from '../components/head';
 import PartnershipView from '../views/PartnershipView'
@@ -34,6 +34,7 @@ const Partnership : NextPage<Props> = ({ userAgent, userIsLogged }) => {
 Partnership.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let userIsLogged = false;
 
   try{
@@ -52,6 +53,8 @@ Partnership.getInitialProps = async (ctx: any) => {
 
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=partnership`});
+    ctx.res.end();
   }
 
  
