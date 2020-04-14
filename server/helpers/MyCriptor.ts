@@ -2,14 +2,16 @@ import Keys from '../keys';
 
 export default class MyCriptor {
 	private table: Array<string>;
+	private second: Array<string>;
 	
 	constructor() {
 		this.table = Keys.CRYPTO_PASSWORD.split('');
+		this.second = ['J', 'Q', 'n', 'K', 'x', 'O', 'E', 't', 'z', 'F', 'X', 'Y', 's'];
 	}
 
 	public encrypt = (text: string, withPrefix: boolean): string => {
 		if (withPrefix) {
-			const rnd = Math.ceil(Math.random() * this.table.length);
+			const rnd = Math.floor(Math.random() * this.table.length);
 			this.reorderTable(rnd);
 		}else{
 			this.table = Keys.CRYPTO_PASSWORD.split('');
@@ -44,7 +46,7 @@ export default class MyCriptor {
 				num = num + preNum;
 			}else{
 				let s = preNum.toString();
-				let nS = '00000'.slice(0,(5-s.length));
+				let nS = '?????'.slice(0,(5-s.length));
 				const nSa = nS + s;
 				num = num + nSa;
 			}
@@ -56,12 +58,19 @@ export default class MyCriptor {
 	private changeNumToEnc = (num: string): string => {
 		let enc = '';
 		for (var i = 0; i < num.length; ++i) {
-			const add = this.table[parseInt(num[i])];
-			enc = enc + add;
+			if (num[i] === '?') {
+				const fAdd = this.second[Math.floor(Math.random() * this.second.length)];
+				enc = enc + fAdd;
+			}else{
+				const sAdd = this.table[parseInt(num[i])];
+				enc = enc + sAdd;
+			}
 		}
 
 		return enc;
 	}
+
+
 
 	private finalizeEnc = (enc: string, prefix: boolean): string => {
 		let str = '';
@@ -105,7 +114,12 @@ export default class MyCriptor {
 			let str = '';
 			const sp = arr[i].split('');
 			sp.map(char => {
-				str = str + this.table.indexOf(char);
+				if (this.table.indexOf(char) !== -1) {
+					str = str + this.table.indexOf(char);
+				}else{
+					str = str + 0;
+				}
+				
 			});
 			nums.push(parseInt(str));
 		}

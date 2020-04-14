@@ -8,6 +8,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import HomeView from '../views/HomeView';
 import pages from '../lib/constants/pages';
+// import MyCriptor from '../server/helpers/MyCriptor';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
@@ -44,6 +45,10 @@ Home.getInitialProps = async (ctx: any) => {
    let userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
    let userIsLogged = false;
+
+   // const myCriptor = new MyCriptor();
+
+
   if (userAgent === undefined) {
     userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36';
   }
