@@ -6,7 +6,7 @@ export default class MyCriptor {
 	
 	constructor() {
 		this.table = Keys.CRYPTO_PASSWORD.split('');
-		this.second = ['J', 'Q', 'n', 'K', 'x', 'O', 'E', 't', 'z', 'F', 'X', 'Y', 's'];
+		this.second = Keys.CRYPTO_SECOND.split('');;
 	}
 
 	public encrypt = (text: string, withPrefix: boolean): string => {
