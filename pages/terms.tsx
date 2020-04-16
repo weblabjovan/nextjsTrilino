@@ -25,4 +25,4 @@ const Terms : NextPage<{}> = () => {
   )
 }
 
-export default withRedux(Terms)
+export default Terms;
