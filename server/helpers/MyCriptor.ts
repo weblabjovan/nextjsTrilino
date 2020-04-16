@@ -17,7 +17,7 @@ export default class MyCriptor {
 			this.table = Keys.CRYPTO_PASSWORD.split('');
 		}
 		const num = this.changeTextToNum(text);
-		const enc = this.changeNumToEnc(num);
+		const enc = this.changeNumToEnc(num, withPrefix);
 		return this.finalizeEnc(enc, withPrefix);
 	}
 
@@ -55,11 +55,11 @@ export default class MyCriptor {
 		return num;
 	}
 
-	private changeNumToEnc = (num: string): string => {
+	private changeNumToEnc = (num: string, withPrefix: boolean): string => {
 		let enc = '';
 		for (var i = 0; i < num.length; ++i) {
 			if (num[i] === '?') {
-				const fAdd = this.second[Math.floor(Math.random() * this.second.length)];
+				const fAdd = withPrefix ? this.second[Math.floor(Math.random() * this.second.length)] : this.second[8] ;
 				enc = enc + fAdd;
 			}else{
 				const sAdd = this.table[parseInt(num[i])];

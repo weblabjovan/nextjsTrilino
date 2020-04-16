@@ -10,6 +10,8 @@ import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partne
 import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
 import CheckBox from '../components/form/checkbox';
@@ -32,18 +34,13 @@ interface MyProps {
   getPartnersMultipleError: object | boolean;
   getPartnersMultipleSuccess: null | number;
   searchResults: Array<object>;
-  partners: Array<object>;
   userLanguage: string;
   globalError: boolean;
-  userAgent: string;
   path: string;
-  date: null | string;
-  city: null | string;
-  district: null | string;
   fullPath: string;
   lang: string;
-  userIsLogged: boolean;
 };
+
 interface MyState {
 	language: string;
 	dictionary: object;
@@ -69,6 +66,7 @@ interface MyState {
   priceTo: null | object;
   name: string;
   sort: null | object;
+  userIsLogged: boolean;
 
 };
 
@@ -92,11 +90,11 @@ class SearchView extends React.Component <MyProps, MyState>{
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
     loader: true,
-    city: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 ? getArrayObjectByFieldValue(genOptions['cities'], 'value', this.props.city) : null,
-    district: getArrayIndexByFieldValue(genOptions['cities'], 'value', this.props.city) !== -1 && getArrayIndexByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) !== -1 ? getArrayObjectByFieldValue(genOptions['quarter'][this.props.city], 'value', this.props.district) : null,
-    date: this.props.date ? dateForSearch(this.props.date)  : new Date(),
+    city: null,
+    district: null,
+    date: new Date(),
     kidsNum: 1,
     adultsNum: 1,
     additional: false,
@@ -114,6 +112,7 @@ class SearchView extends React.Component <MyProps, MyState>{
   	priceTo: null,
   	name: '',
   	sort: null,
+    userIsLogged: false,
   };
 
   handleInputChange(field, value){
@@ -185,11 +184,27 @@ class SearchView extends React.Component <MyProps, MyState>{
     }
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
-		this.props.changeSinglePartnerField('searchResults', this.props.partners);
-    this.setState({loader: false });
-	}
+  async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const userIsLogged = await isUserLogged(window.location.href);
+      const link = setUpLinkBasic(window.location.href);
+      this.setState({
+        isMobile: isMobile(navigator.userAgent),
+        userIsLogged,
+        city: getArrayIndexByFieldValue(genOptions['cities'], 'value', link['queryObject']['city']) !== -1 ? getArrayObjectByFieldValue(genOptions['cities'], 'value', link['queryObject']['city']) : null,
+        district: getArrayIndexByFieldValue(genOptions['cities'], 'value', link['queryObject']['city']) !== -1 && getArrayIndexByFieldValue(genOptions['quarter'][link['queryObject']['city']], 'value', link['queryObject']['district']) !== -1 ? getArrayObjectByFieldValue(genOptions['quarter'][link['queryObject']['city']], 'value', link['queryObject']['district']) : null,
+        date: link['queryObject']['date'] ? dateForSearch(link['queryObject']['date'])  : new Date(),
+      }, () => {
+        const data = setSearchData({...this.state});
+        this.props.getPartnersMultiple(data, link);
+        this.props.setUserLanguage(this.props.lang);
+      });
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
+  }
 	
   render() {
     const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth()+1}-${this.state.date.getFullYear()}`;
@@ -208,7 +223,7 @@ class SearchView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
-          user={ this.props.userIsLogged }
+          user={ this.state.userIsLogged }
           userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="searchWrapper">

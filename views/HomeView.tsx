@@ -11,6 +11,8 @@ import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -25,13 +27,9 @@ interface MyProps {
   globalError: boolean;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
-  userAgent: string;
   lang: string;
   fullPath: string;
   path: string;
-  error: boolean;
-  router: any;
-  userIsLogged: boolean;
 };
 
 interface MyState {
@@ -42,6 +40,7 @@ interface MyState {
   city: null | object;
   district: null | object;
   loader: boolean;
+  userIsLogged: boolean;
 };
 
 class HomeView extends React.Component <MyProps, MyState>{
@@ -55,22 +54,30 @@ class HomeView extends React.Component <MyProps, MyState>{
   }
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-      date: new Date(),
-      city: null,
-      district: null,
-      loader: false,
-
-    };
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    date: new Date(),
+    city: null,
+    district: null,
+    loader: false,
+    userIsLogged: false,
+  };
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     errorExecute(window, this.props.globalError);
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
+	async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const userIsLogged = await isUserLogged(window.location.href);
+      this.setState({isMobile: isMobile(navigator.userAgent), userIsLogged });
+      this.props.setUserLanguage(this.props.lang);
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
 	}
 
   formatDate(date, format, locale) {
@@ -129,7 +136,7 @@ class HomeView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
-          user={ this.props.userIsLogged }
+          user={ this.state.userIsLogged }
           userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
         <div className="homescreen colorWhite">

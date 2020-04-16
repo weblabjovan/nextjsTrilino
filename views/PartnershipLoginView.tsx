@@ -9,7 +9,9 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, errorExecute, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isPartnerLoggedNew } from '../lib/helpers/specificPartnerFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import Keys from '../server/keys';
@@ -22,18 +24,15 @@ interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
   globalError: boolean;
-  router: any;
   setUserLanguage(language: string): string;
   registratePartner(data: object, link: object): any;
   loginPartner(data: object, link: object): any;
   changeSinglePartnerField(field: string, value: any): any;
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
   page: string;
   error: boolean;
-  link: object;
   partnerRegStart: boolean;
   partnerRegError: object;
   partnerRegSuccess: any;
@@ -59,6 +58,7 @@ interface MyState {
   errorMessages: object;
   regBtnDisabled: boolean;
   logTry: number;
+  link: object;
 };
 
 class PartnershipLoginView extends React.Component <MyProps, MyState>{
@@ -79,73 +79,24 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-      baseErrorMessage: '',
-      name: '',
-      taxNum: null,
-      city: '',
-      contactPerson: '',
-      contactEmail: '',
-      contactPhone: '',
-      logTax: null,
-      logPass: '',
-      logTry: 0,
-      terms: false,
-      errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false, terms: false }},
-      regBtnDisabled: false,
-    };
-
-  shouldComponentUpdate(nextProps: MyProps, nextState:  MyState){
-    return true;
-  }
-
-  getSnapshotBeforeUpdate(prevProps: MyProps, prevState:  MyState){
-    return null;
-  }
-
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){
-    errorExecute(window, this.props.globalError);
-
-      if (this.state.logTry > 9) {
-        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
-      }
-
-      if (this.props.partnerLoginError && !prevProps.partnerLoginError && !this.props.partnerLoginStart) {
-        const logTry = this.state.logTry + 1;
-        const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
-        errorCopy['show'] = true;
-        errorCopy['fields']['baseError'] = true;
-
-        this.setState({regBtnDisabled: false, logTry, errorMessages: errorCopy, baseErrorMessage: this.props.partnerLoginError['message'] });
-      }
-
-      if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
-        setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
-        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnerProfile?language=${this.props.lang}`;
-      }
-
-      if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
-        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm?language=${this.props.lang}&page=partner_registration`;
-      }
-      if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {
-        this.setState({ regBtnDisabled: false });
-      }
-      if (this.props.partnerRegError['code'] === 2 && prevProps.partnerRegError['code'] !== 2) {
-        const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
-        errorCopy['show'] = true;
-        errorCopy['fields']['regDuplicate'] = true;
-        this.setState({ errorMessages: errorCopy });
-      }
-  }
-
-	componentDidMount(){
-    if (this.props.error) {
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnershipLogin?language=${this.props.lang}&page=error`;
-    }
-		this.props.setUserLanguage(this.props.lang);
-	}
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    baseErrorMessage: '',
+    name: '',
+    taxNum: null,
+    city: '',
+    contactPerson: '',
+    contactEmail: '',
+    contactPhone: '',
+    logTax: null,
+    logPass: '',
+    logTry: 0,
+    terms: false,
+    errorMessages: { show: false, fields: {name: false, taxNum: false, city: false, contactPerson: false, contactEmail: false, contactPhone: false, logTax: false,  logPass: false, regDuplicate: false, baseError: false, terms: false }},
+    regBtnDisabled: false,
+    link: {},
+  };
 
   validateFormData(callback){
     const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages))
@@ -226,7 +177,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           password: this.state.logPass,
           language: this.props.lang
         }
-        this.props.loginPartner(data, this.props.link);
+        this.props.loginPartner(data, this.state.link);
       })
      }
    }
@@ -248,7 +199,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           language: this.props.lang,
 
         }
-        this.props.registratePartner(data, this.props.link);
+        this.props.registratePartner(data, this.state.link);
       })
      }
    }
@@ -298,6 +249,64 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
     errorCopy['show'] = false;
     this.setState({errorMessages: errorCopy});
+  }
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    errorExecute(window, this.props.globalError);
+
+      if (this.state.logTry > 9) {
+        window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}?language=${this.props.lang}`;
+      }
+
+      if (this.props.partnerLoginError && !prevProps.partnerLoginError && !this.props.partnerLoginStart) {
+        const logTry = this.state.logTry + 1;
+        const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
+        errorCopy['show'] = true;
+        errorCopy['fields']['baseError'] = true;
+
+        this.setState({regBtnDisabled: false, logTry, errorMessages: errorCopy, baseErrorMessage: this.props.partnerLoginError['message'] });
+      }
+
+      if (this.props.partnerLoginSuccess && !prevProps.partnerLoginSuccess && !this.props.partnerLoginStart) {
+        setCookie(this.props.partnerLoginSuccess['token'],'trilino-partner-token', 10);
+        window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}/partnerProfile?language=${this.props.lang}`;
+      }
+
+      if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
+        window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}/confirm?language=${this.props.lang}&page=partner_registration`;
+      }
+      if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {
+        this.setState({ regBtnDisabled: false });
+      }
+      if (this.props.partnerRegError['code'] === 2 && prevProps.partnerRegError['code'] !== 2) {
+        const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
+        errorCopy['show'] = true;
+        errorCopy['fields']['regDuplicate'] = true;
+        this.setState({ errorMessages: errorCopy });
+      }
+  }
+
+  async componentDidMount(){
+    if (this.props.error) {
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = `${link["protocol"]}${link["host"]}/errorPage?language=${this.props.lang}&error=1`;
+    }else{
+      const devIsLogged = await isDevEnvLogged(window.location.href);
+      if (devIsLogged) {
+        const partnerIsLogged = await isPartnerLoggedNew(window.location.href);
+        if (!partnerIsLogged) {
+          const link = setUpLinkBasic(window.location.href);
+          this.setState({isMobile: isMobile(navigator.userAgent), link });
+          this.props.setUserLanguage(this.props.lang);
+        }else{
+          const link = setUpLinkBasic(window.location.href);
+          window.location.href = `${link["protocol"]}${link["host"]}/partnerProfile?language=${this.props.lang}`;
+        }
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href = `${link["protocol"]}${link["host"]}/devLogin`;
+      }
+    }
   }
 	
   render() {

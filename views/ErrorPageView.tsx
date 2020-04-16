@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,7 +10,6 @@ import '../style/style.scss';
 
 
 type MyProps = {
-	userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
@@ -28,8 +28,18 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
   };
+
+  async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      this.setState({isMobile: isMobile(navigator.userAgent) });
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
+  }
 
 	render(){
     const message = this.props.error === '1' ? this.state.dictionary['uniErrorMessage1'] : this.state.dictionary['uniErrorMessage2'] ;

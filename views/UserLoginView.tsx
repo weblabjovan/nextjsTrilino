@@ -6,6 +6,8 @@ import { setUserLanguage, changeSingleUserField, registrateUser, loginUser } fro
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import LoginScreen from '../components/user/LoginScreen';
 import RegistrationScreen from '../components/user/RegistrationScreen';
 import NavigationBar from '../components/navigation/navbar';
@@ -28,12 +30,11 @@ interface MyProps {
   setUserLanguage(language: string): string;
   registrateUser(data: object, link: object): void;
   loginUser(data: object, link: object): void;
-  userAgent: string;
   path: string;
   page: string;
   fullPath: string;
   lang: string;
-  link: object;
+  
 };
 interface MyState {
 	language: string;
@@ -46,6 +47,7 @@ interface MyState {
   registrationConfirm: boolean;
   baseErrorMessage: string;
   logTry: number;
+  link: object;
 };
 
 class UserLoginView extends React.Component <MyProps, MyState>{
@@ -67,7 +69,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
     logString: '',
     loader: false,
     loginTry: 0,
@@ -75,6 +77,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
     registrationConfirm: false,
     baseErrorMessage: '',
     logTry: 0,
+    link: {},
   };
 
   validateRegistrationData(data: object){
@@ -135,7 +138,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
         this.setState({ loader: true }, () => {
          data['language'] = this.props.lang;
          data['origin'] = 'regpage';
-        this.props.registrateUser(data, this.props.link);
+        this.props.registrateUser(data, this.state.link);
       })
      }
   }
@@ -173,7 +176,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
   	if (!this.state.errorMessages['show']) {
        this.setState({ loader: true }, () => {
          data['language'] = this.props.lang;
-        this.props.loginUser(data, this.props.link);
+        this.props.loginUser(data, this.state.link);
       })
     }
   }
@@ -198,7 +201,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
     errorExecute(window, this.props.globalError);
     
   	if (this.state.logTry > 9) {
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+      window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}?language=${this.props.lang}`;
     }
 
   	if (this.props.userRegistrateError['code'] === 2 && prevProps.userRegistrateError['code'] !== 2) {
@@ -219,7 +222,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 
     if (this.props.userLoginSuccess && !prevProps.userLoginSuccess && !this.props.userLoginStart) {
       setCookie(this.props.userLoginSuccess['token'],'trilino-user-token', 10);
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/userProfile?language=${this.props.lang}`;
+      window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}/userProfile?language=${this.props.lang}`;
     }
 
     if (!this.props.userRegistrateStart && this.props.userRegistrateSuccess && !prevProps.userRegistrateSuccess) {
@@ -228,8 +231,22 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
+	async componentDidMount(){
+		const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const userIsLogged = await isUserLogged(window.location.href);
+      if (!userIsLogged) {
+        const link = setUpLinkBasic(window.location.href);
+        this.setState({isMobile: isMobile(navigator.userAgent), link });
+        this.props.setUserLanguage(this.props.lang);
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href = `${link["protocol"]}${link["host"]}/userProfile?language=${this.props.lang}`;
+      }
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = `${link["protocol"]}${link["host"]}/devLogin`;
+    }
 	}
 	
   render() {

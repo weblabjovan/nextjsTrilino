@@ -7,6 +7,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import PlainInput from '../components/form/input';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -24,11 +25,9 @@ interface MyProps {
   adminBasicDevLogin(link: object, data: object):void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  link: null | object
 };
 interface MyState {
 	language: string;
@@ -38,19 +37,21 @@ interface MyState {
   alertOpen: boolean;
   loader: boolean;
   loginTry: number;
+  link: object;
 };
 
 class LoginView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-      logString: '',
-      alertOpen: false,
-      loader: false,
-      loginTry: 0,
-    };
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    logString: '',
+    alertOpen: false,
+    loader: false,
+    loginTry: 0,
+    link: {},
+  };
 
   handlelogPassChange(val){
     this.setState({ logString: val});
@@ -71,7 +72,7 @@ class LoginView extends React.Component <MyProps, MyState>{
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     if (this.state.loginTry > 9) {
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
+      window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}?language=${this.props.lang}`;
     }
 
     errorExecute(window, this.props.globalError);
@@ -92,9 +93,16 @@ class LoginView extends React.Component <MyProps, MyState>{
     }
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
-	}
+	async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = `${link["protocol"]}${link["host"]}/?language=${this.props.lang}`;
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      this.setState({isMobile: isMobile(navigator.userAgent), link });
+    }
+  }
 	
   render() {
     return(

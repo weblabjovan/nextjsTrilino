@@ -1,7 +1,9 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isPartnerLoggedNew } from '../lib/helpers/specificPartnerFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import PartnerHelpersr from '../components/help/partnerHelpsr';
 import PartnerHelperen from '../components/help/partnerHelpen';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,11 +11,9 @@ import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  token?: string | undefined;
   section?: string | undefined | string[]; 
 };
 interface MyState {
@@ -27,15 +27,28 @@ export default class PartnerHelpView extends React.Component <MyProps, MyState>{
 	state: MyState = {
     language: this.props.lang,
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
   };
 
-  componentDidMount(){
-    setTimeout(() => {
-      const term = !this.props.section || this.props.section === 'undefined' ? 'generalSec' : `${this.props.section}Sec`;
-      const res = document.getElementById(term);
-      res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
-    }, 1200);
+  async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const partnerIsLogged = await isPartnerLoggedNew(window.location.href);
+      if (partnerIsLogged) {
+        setTimeout(() => {
+          const term = !this.props.section || this.props.section === 'undefined' ? 'generalSec' : `${this.props.section}Sec`;
+          const res = document.getElementById(term);
+          res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+        }, 1200);
+        this.setState({isMobile: isMobile(navigator.userAgent)});
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href = `${link["protocol"]}${link["host"]}/partnershipLogin?language=${this.props.lang}&page=login`;
+      }
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = `${link["protocol"]}${link["host"]}/devLogin`;
+    }
   }
 	
   render() {

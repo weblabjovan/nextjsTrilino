@@ -1,18 +1,15 @@
 import genOptions from '../constants/generalOptions';
 import { isEmpty } from './validations';
-import { setUpLinkBasic } from './generalFunctions';
+import { setUpLinkBasic, getCookie } from './generalFunctions';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
 import Crypto from 'crypto';
 
 
 
-
-
-export const isUserLogged = async (context: any): Promise<boolean> => {
-	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
-	const allCookies = nextCookie(context);
-  const token = allCookies['trilino-user-token'];
+export const isUserLogged = async (href: any): Promise<boolean> => {
+	const link = setUpLinkBasic(href);
+  const token = getCookie('trilino-user-token');
 
   if (token) {
   	try{

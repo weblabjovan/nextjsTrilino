@@ -5,7 +5,9 @@ import queryString  from 'query-string';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,32 +15,40 @@ import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
-  userLanguage: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
 	dictionary: object;
 	isMobile: boolean;
+  userIsLogged: boolean;
 };
 
 class ContactView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-    };
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    userIsLogged: false,
+  };
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
-	}
+	async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const userIsLogged = await isUserLogged(window.location.href);
+      this.setState({isMobile: isMobile(navigator.userAgent), userIsLogged });
+      this.props.setUserLanguage(this.props.lang);
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
+  }
 	
   render() {
     return(
@@ -54,7 +64,7 @@ class ContactView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
-          user={ this.props.userIsLogged }
+          user={ this.state.userIsLogged }
           userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
 

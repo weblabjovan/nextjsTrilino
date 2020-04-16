@@ -5,7 +5,8 @@ import Loader from '../components/loader';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, getCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isDevEnvLogged, isAdminLogged } from '../lib/helpers/specificAdminFunctions';
 import AdminPanelScreen from '../components/adminPanel/adminPanelScreen';
 import AdminNavigationBar from '../components/navigation/adminNavbar';
 import Footer from '../components/navigation/partnerFooter';
@@ -17,12 +18,9 @@ interface MyProps {
   userLanguage: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
-  userAgent: string;
   path: string;
-  link: object;
   fullPath: string;
   lang: string;
-  token: string | undefined;
 };
 interface MyState {
 	language: string;
@@ -30,6 +28,8 @@ interface MyState {
 	isMobile: boolean;
   activeScreen: string;
   loader: boolean;
+  token: string;
+  link: object;
 };
 
 class AdminPanelView extends React.Component <MyProps, MyState>{
@@ -50,14 +50,16 @@ class AdminPanelView extends React.Component <MyProps, MyState>{
   }
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-      activeScreen: 'partners',
-      loader: false,
-    };
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    activeScreen: 'partners',
+    loader: false,
+    token: '',
+    link: {},
+  };
 
-    changeScreen(event){
+  changeScreen(event){
     this.setState({ activeScreen: event.target.id}, () => {
       window.scrollTo(0,0);
     });
@@ -71,9 +73,24 @@ class AdminPanelView extends React.Component <MyProps, MyState>{
     this.setState({ loader: false});
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
-	}
+	async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const adminIsLogged = await isAdminLogged(window.location.href);
+      if (adminIsLogged) {
+        const token = getCookie('trilino-admin-token');
+        const link = setUpLinkBasic(window.location.href);
+        this.setState({isMobile: isMobile(navigator.userAgent), token, link });
+        this.props.setUserLanguage(this.props.lang);
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href =  `${link['protocol']}${link['host']}/adminLogin?language=${link['queryObject']['language']}`;
+      }
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
+  }
 	
   render() {
     return(
@@ -85,13 +102,13 @@ class AdminPanelView extends React.Component <MyProps, MyState>{
           fullPath={ this.props.fullPath }
           changeScreen={ this.changeScreen }
     			activeScreen={ this.state.activeScreen }
-          link={ this.props.link }
+          link={ this.state.link }
     		/>
     		<AdminPanelScreen
           lang={ this.props.lang } 
-          link={ this.props.link }
+          link={ this.state.link }
           screen={ this.state.activeScreen }
-          token={ this.props.token }
+          token={ this.state.token }
           openLoader={ this.openLoader }
           closeLoader={ this.closeLoader }
           loader={ this.state.loader }

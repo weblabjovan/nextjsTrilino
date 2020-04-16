@@ -6,8 +6,10 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getReservationsForUser, cancelReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute, getCookie } from '../lib/helpers/generalFunctions';
 import { setNestPayHash } from '../server/helpers/general';
+import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
 import UserBill from '../components/userProfile/UserBill';
@@ -34,12 +36,9 @@ interface MyProps {
   getReservationsForUser(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  link?: object;
-  token?: string | undefined;
   passChange: boolean;
 };
 interface MyState {
@@ -54,6 +53,8 @@ interface MyState {
   userBillShow: boolean;
   modal: boolean;
   paymentModal: boolean;
+  token: string;
+  link: object;
 };
 
 class UserProfileView extends React.Component <MyProps, MyState>{
@@ -75,7 +76,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
     loader: true,
     passwordChange: this.props.passChange,
     activeScreen: 'reservation',
@@ -84,11 +85,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     userBillShow: false,
     modal: false,
     paymentModal: false,
+    token: '',
+    link: {},
   };
 
   logout() {
     unsetCookie('trilino-user-token');
-    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?language=${this.props.lang}`;
+    window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}/login?language=${this.props.lang}`;
   }
 
   changeScreen(screen: string){
@@ -127,7 +130,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   activateCancelReservation(){
     this.setState({loader: true}, () => {
-      this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, this.props.token);
+      this.props.cancelReservation(this.state.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, this.state.token);
     })
   }
 
@@ -138,7 +141,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           const id = this.state.reservationBillObject['cateringObj'][0]['_id'];
           const price = this.state.reservationBillObject['cateringObj'][0]['price'];
 
-          const plainText = `${Keys.NEST_PAY_CLIENT_ID}|cat-${id}|${price.toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+          const plainText = `${Keys.NEST_PAY_CLIENT_ID}|cat-${id}|${price.toFixed(2)}|${this.state.link['protocol']}${this.state.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success|${this.state.link['protocol']}${this.state.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
           const hash = setNestPayHash(plainText);
 
           const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
@@ -149,13 +152,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           <input type="hidden" name="amount" value="${price.toFixed(2)}" /> 
           <input type="hidden" name="currency" value="941" /> 
           <input type="hidden" name="oid" value="cat-${id}" /> 
-          <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success"/> 
-          <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" /> 
+          <input type="hidden" name="okUrl" value="${this.state.link['protocol']}${this.state.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success"/> 
+          <input type="hidden" name="failUrl" value="${this.state.link['protocol']}${this.state.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" /> 
           <input type="hidden" name="lang" value="${this.props.lang}" /> 
           <input type="hidden" name="hashAlgorithm" value="ver2" /> 
           <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
           <input type="hidden" name="encoding" value="utf-8" />
-          <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" />
+          <input type='hidden' name='shopurl' value="${this.state.link['protocol']}${this.state.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" />
           <input type="submit" style="visibility: hidden" /> </form>`;
           
           const form =document.getElementById('reviseCombi');
@@ -171,11 +174,12 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     }
   }
 
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     errorExecute(window, this.props.globalError);
 
     if (!this.props.cancelReservationStart && prevProps.cancelReservationStart && !this.props.cancelReservationError && this.props.cancelReservationSuccess && !prevProps.cancelReservationSuccess) {
-      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+      this.props.getReservationsForUser(this.state.link, {language: this.props.lang, type: 'user'}, this.state.token);
     }
 
     if (!this.props.getUserReservationStart && prevProps.getUserReservationStart && !this.props.getUserReservationError && this.props.getUserReservationSuccess && !prevProps.getUserReservationSuccess) {
@@ -184,10 +188,25 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   }
 
-	componentDidMount(){
-		this.props.setUserLanguage(this.props.lang);
-    this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
-	}
+  async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const userIsLogged = await isUserLogged(window.location.href);
+      if (userIsLogged) {
+        const token = getCookie('trilino-user-token');
+        const link = setUpLinkBasic(window.location.href);
+        this.setState({isMobile: isMobile(navigator.userAgent), token, link });
+        this.props.setUserLanguage(this.props.lang);
+        this.props.getReservationsForUser(link, {language: this.props.lang, type: 'user'}, token);
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href =  `${link['protocol']}${link['host']}/login?language=${link['queryObject']['language']}&page=login`;
+      }
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
+    }
+  }
 	
   render() {
     return(

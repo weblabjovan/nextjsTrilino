@@ -6,8 +6,9 @@ import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getPartnerProfile, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, getCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isPartnerLoggedNew } from '../lib/helpers/specificPartnerFunctions';
+import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import PartnerNavigationBar from '../components/navigation/partnerNavbar';
 import PartnerProfileScreen from '../components/partnerProfile/partnerProfileScreen';
 import Footer from '../components/navigation/partnerFooter';
@@ -21,13 +22,10 @@ interface MyProps {
   setUserLanguage(language: string): string;
   changeSinglePartnerField(field: string, value: any): any;
   getPartnerProfile(link: object, auth: string): object;
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  link: object;
   partnerObject: object;
-  token?: string | undefined;
 };
 interface MyState {
 	language: string;
@@ -35,6 +33,8 @@ interface MyState {
 	isMobile: boolean;
   activeScreen: string;
   loader: boolean;
+  link: object;
+  token: string;
 };
 
 class PartnerProfileView extends React.Component <MyProps, MyState>{
@@ -55,12 +55,14 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
   }
 
 	state: MyState = {
-      language: this.props.lang,
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-      activeScreen: 'calendar',
-      loader: true,
-    };
+    language: this.props.lang,
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+    activeScreen: 'calendar',
+    loader: true,
+    link: {},
+    token: '',
+  };
 
   changeScreen(event){
     this.setState({ activeScreen: event.target.id}, () => {
@@ -89,11 +91,26 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     this.setState({ loader: false});
   }
 
-	componentDidMount(){
-    const link = setUpLinkBasic(window.location.href);
-    this.props.getPartnerProfile(link, this.props.token)
-		this.props.setUserLanguage(this.props.lang);
-	}
+  async componentDidMount(){
+    const devIsLogged = await isDevEnvLogged(window.location.href);
+    if (devIsLogged) {
+      const partnerIsLogged = await isPartnerLoggedNew(window.location.href);
+      if (partnerIsLogged) {
+        const link = setUpLinkBasic(window.location.href);
+        const token = getCookie('trilino-partner-token');
+        this.setState({isMobile: isMobile(navigator.userAgent), link, token }, () => {
+          this.props.getPartnerProfile(link, token);
+        });
+        this.props.setUserLanguage(this.props.lang);
+      }else{
+        const link = setUpLinkBasic(window.location.href);
+        window.location.href = `${link["protocol"]}${link["host"]}/partnershipLogin?language=${this.props.lang}&page=login`;
+      }
+    }else{
+      const link = setUpLinkBasic(window.location.href);
+      window.location.href = `${link["protocol"]}${link["host"]}/devLogin`;
+    }
+  }
 	
   render() {
     return(
@@ -103,7 +120,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
           fullPath={ this.props.fullPath }
-    			link={ this.props.link }
+    			link={ this.state.link }
           changeScreen={ this.changeScreen }
           activeScreen={ this.state.activeScreen }
           changeLanguage={ this.changeLanguage }
@@ -111,11 +128,11 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     		/>
     		<PartnerProfileScreen
           lang={ this.state.language } 
-          link={ this.props.link }
+          link={ this.state.link }
           screen={ this.state.activeScreen }
           openLoader={ this.openLoader }
           closeLoader={ this.closeLoader }
-          token={ this.props.token }
+          token={ this.state.token }
           loader={ this.state.loader }
         />
 
