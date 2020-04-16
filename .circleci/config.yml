@@ -40,11 +40,11 @@ jobs:
                 name: Deploy & Alias
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --prod
+                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --confirm --prod
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --prod
+                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --confirm --prod
                     else
-                        now --token ${ZEIT_TOKET} --name new-feature --prod
+                        now --token ${ZEIT_TOKET} --name new-feature --confirm --prod
                     fi
 workflows:
     version: 2
