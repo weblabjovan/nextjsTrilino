@@ -28,7 +28,24 @@ jobs:
             - persist_to_workspace:
                 root: .
                 paths: .
-    
+    deploy:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+                at: ~/tmp/circlci-now
+            - run:
+                name: Install Now CLI
+                command: sudo npm install --global --unsafe-perm now@18.0.1-canary.2
+            - deploy:
+                name: Deploy & Alias
+                command: |
+                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        now --name trilino-production --scope trilino --confirm --prod
+                    elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
+                        now --name trilino-test --scope trilino --confirm --prod
+                    else
+                        now --name trilino-dev --scope trilino --confirm --prod
+                    fi
 workflows:
     version: 2
     test-deploy-purge:
