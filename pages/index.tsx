@@ -75,4 +75,4 @@ Home.getInitialProps = async (ctx: any) => {
   return { userAgent, userIsLogged }
 }
 
-export default withRedux(Home);
+export default withRedux(Home)
