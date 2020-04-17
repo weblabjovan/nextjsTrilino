@@ -5,8 +5,7 @@ import queryString  from 'query-string';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, errorExecute, setUpLinkBasic } from '../lib/helpers/generalFunctions';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { isMobile, errorExecute } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,10 +18,12 @@ interface MyProps {
   page: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
+  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
   error: boolean;
+  router: any;
 };
 interface MyState {
 	language: string;
@@ -35,19 +36,15 @@ class ConfirmView extends React.Component <MyProps, MyState>{
 	state: MyState = {
       language: this.props.lang.toUpperCase(),
       dictionary: getLanguage(this.props.lang),
-      isMobile: false,
+      isMobile: isMobile(this.props.userAgent),
     };
 
-	async componentDidMount(){
-    const devIsLogged = await isDevEnvLogged(window.location.href);
-    if (devIsLogged) {
-      this.setState({isMobile: isMobile(navigator.userAgent) });
-      this.props.setUserLanguage(this.props.lang);
-    }else{
-      const link = setUpLinkBasic(window.location.href);
-      window.location.href =  `${link['protocol']}${link['host']}/devLogin`;
-    }
-  }
+	componentDidMount(){
+		if (this.props.error) {
+			// this.props.router.push(`/confirm?language=${this.props.lang}&page=error`);
+		}
+		this.props.setUserLanguage(this.props.lang);
+	}
 	
   render() {
     return(

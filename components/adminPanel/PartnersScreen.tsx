@@ -58,7 +58,6 @@ interface MyProps {
   closeLoader(): void;
   lang: string;
   token: string;
-  link: object;
 };
 interface MyState {
 	dictionary: object;
@@ -77,7 +76,6 @@ interface MyState {
   selectionPhotoError: boolean;
   confirmationModalOpen: boolean;
   photoForDelete: string;
-  firstLoad: boolean;
 };
 
 class PartnerScreen extends React.Component <MyProps, MyState>{
@@ -114,7 +112,6 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     selectionPhotoError: false,
     confirmationModalOpen: false,
     photoForDelete: '',
-    firstLoad: false,
   };
 
   handleInputChange(field, value){
@@ -284,9 +281,6 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
-    if (!this.props.adminGetPartnersStart && !this.props.adminGetPartnersSuccess && !prevProps.adminGetPartnersStart && !this.state.firstLoad && !prevState.firstLoad && this.props.token) {
-      this.props.adminGetPartners(this.props.link, {field:this.state.field, term: this.state.term}, this.props.token);
-    }
     if (this.props.adminGetPartnersStart) {
       this.props.openLoader();
     }
@@ -320,10 +314,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     }
 
     if (!this.props.adminGetPartnersStart && prevProps.adminGetPartnersStart && this.props.adminGetPartnersSuccess) {
-      this.setState({ firstLoad: true}, () => {
-        this.props.closeLoader();
-      })
-      
+      this.props.closeLoader();
     }
 
     if (!this.props.adminActivatePartnerStart && prevProps.adminActivatePartnerStart && this.props.adminActivatePartnerSuccess) {
@@ -333,6 +324,8 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
     this.props.openLoader();
+		const link = setUpLinkBasic(window.location.href);
+		this.props.adminGetPartners(link, {field:this.state.field, term: this.state.term}, this.props.token);
 	}
 	
   render() {

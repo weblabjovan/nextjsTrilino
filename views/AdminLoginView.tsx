@@ -7,7 +7,6 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminLogin } from '../actions/admin-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic, setCookie } from '../lib/helpers/generalFunctions';
-import { isDevEnvLogged, isAdminLogged } from '../lib/helpers/specificAdminFunctions';
 import { isEmpty } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -23,6 +22,8 @@ interface MyProps {
   adminLogin(link: object, data: object): void;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
+  link: object;
+  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
@@ -35,7 +36,6 @@ interface MyState {
 	pass: string;
 	errorMessages: object;
   loginTry: number;
-  link: object;
 };
 
 class AdminLoginView extends React.Component <MyProps, MyState>{
@@ -58,12 +58,11 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: false,
+    isMobile: isMobile(this.props.userAgent),
     user: '',
     pass: '',
     errorMessages: { show: false, fields: {user: false, pass: false }},
     loginTry: 0,
-    link: {},
   };
 
   handleInputChange(field, value){
@@ -122,7 +121,7 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
 
     if (this.state.loginTry > 9) {
-      window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}?language=${this.props.lang}`;
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
     }
 
     if (this.props.adminLoginError && !prevProps.adminLoginError && !this.props.adminLoginStart) {
@@ -131,28 +130,13 @@ class AdminLoginView extends React.Component <MyProps, MyState>{
     }
   	if (this.props.adminLoginSuccess && !this.props.adminLoginStart && prevProps.adminLoginStart) {
   		setCookie(this.props.adminLoginSuccess['token'],'trilino-admin-token', 7);
-      window.location.href = `${this.state.link["protocol"]}${this.state.link["host"]}/adminPanel?language=${this.props.lang}`;
+      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/adminPanel?language=${this.props.lang}`;
   	}
   }
 
-	async componentDidMount(){
-    const devIsLogged = await isDevEnvLogged(window.location.href);
-    if (devIsLogged) {
-      const adminIsLogged = await isAdminLogged(window.location.href);
-      if (!adminIsLogged) {
-        const link = setUpLinkBasic(window.location.href);
-        this.setState({isMobile: isMobile(navigator.userAgent), link });
-        this.props.setUserLanguage(this.props.lang);
-      }else{
-        const link = setUpLinkBasic(window.location.href);
-        window.location.href = `${link["protocol"]}${link["host"]}/adminPanel?language=${link['queryObject']['language']}`;
-      }
-    }else{
-      const link = setUpLinkBasic(window.location.href);
-      window.location.href = `${link["protocol"]}${link["host"]}/devLogin`;
-    }
-  }
-  
+	componentDidMount(){
+		this.props.setUserLanguage(this.props.lang);
+	}
 	
   render() {
     return(

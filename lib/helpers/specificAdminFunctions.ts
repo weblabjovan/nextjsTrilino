@@ -1,5 +1,5 @@
 import { calculateActivationProcess } from './specificPartnerFunctions';
-import { setUpLinkBasic, getCookie } from './generalFunctions';
+import { setUpLinkBasic } from './generalFunctions';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
 
@@ -116,11 +116,12 @@ export const setPhotosForDelete = (photos: Array<object>, photo: string): Array<
 	return list;
 }
 
-export const isDevEnvLogged = async (href: any): Promise<boolean> => {
-	const link = setUpLinkBasic(href);
-
+export const isDevEnvLogged = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	// console.log(link);
 	if (link['host'] === 'dev.trilino.com' || link['host'] === 'test.trilino.com') {
-		const devAuth = getCookie('trilino-dev-auth');
+		const allCookies = nextCookie(context);
+    	const devAuth = allCookies['trilino-dev-auth'];
 	    if (devAuth) {
 	      try{
 	        const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/`;
@@ -148,9 +149,10 @@ export const isDevEnvLogged = async (href: any): Promise<boolean> => {
 	}
 }
 
-export const isAdminLogged = async (href: any): Promise<boolean> => {
-	const link = setUpLinkBasic(href);
-	const token = getCookie('trilino-admin-token');
+export const isAdminLogged = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const allCookies = nextCookie(context);
+  const token = allCookies['trilino-admin-token'];
 
   if (token) {
   	try{
@@ -173,4 +175,10 @@ export const isAdminLogged = async (href: any): Promise<boolean> => {
   }else{
   	return false;
   }
+}
+
+export const getAdminToken = (context: any): string => {
+	const allCookies = nextCookie(context);
+	const token = allCookies['trilino-admin-token'] ? allCookies['trilino-admin-token'] : '';
+	return token;
 }

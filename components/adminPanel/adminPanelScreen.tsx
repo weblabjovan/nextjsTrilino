@@ -42,7 +42,6 @@ class AdminScreenView extends React.Component <MyProps, MyState>{
             (
               <PartnersScreen 
                 lang={this.props.lang}
-                link={ this.props.link }
                 token={ this.props.token }
                 closeLoader={ this.props.closeLoader }
                 openLoader={ this.props.openLoader }
