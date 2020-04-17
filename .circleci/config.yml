@@ -40,11 +40,11 @@ jobs:
                 name: Deploy & Alias
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --name trilino-production --scope trilino --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-production --scope trilino --confirm --prod
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --name trilino-test --scope trilino --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-test --scope trilino --confirm --prod
                     else
-                        now --name trilino-dev --scope trilino --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-dev --scope trilino --confirm --prod
                     fi
 workflows:
     version: 2
