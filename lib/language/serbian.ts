@@ -1,7 +1,7 @@
 import LanguageInterface from './baseLanguageInterface';
 
 const serbian: LanguageInterface = {
-	headTitleIndex: "Trilino - Naslovna stranicaa",
+	headTitleIndex: "Trilino - Naslovna stranica",
 	headDescriptionIndex: "Trilino - online organizacija dečijih rođendana",
 	headTitleAdminLogin: "Trilino - Admin Prijava",
 	headDescriptionAdminLogin: "Trilino - Prijava Trilino administratora",
