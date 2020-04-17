@@ -40,11 +40,11 @@ jobs:
                 name: Deploy & Alias
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-production --scope trilino --confirm --prod
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-test --scope trilino --confirm --prod
                     else
-                        now --token ${ZEIT_TOKET} --name new-feature --confirm --prod
+                        now --token ${ZEIT_TOKET} --name trilino-dev --scope trilino --confirm --prod
                     fi
 workflows:
     version: 2

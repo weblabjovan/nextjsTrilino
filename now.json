@@ -1,4 +1,4 @@
-{
+{	
 	"env": {
 		"MONGO_URI":"@mongo-uri",
 		"EMAIL_API_KEY":"@email-api-key",
