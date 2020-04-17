@@ -43,6 +43,8 @@ const serbian: LanguageInterface = {
 	headDescriptionCateringPayment: "Trilino - Uspešno ste platili Trilino Ketering paket",
 	headTitleOnlinePayments: "Trilino - Plaćanje platnim karticama",
 	headDescriptionOnlinePayments: "Trilino - Instrukcije kako plaćati platnim karticama putem inteneta",
+	headTitleContact: "Trilino - Kontakt",
+	headDescriptionContact: "Trilino - Kontakt podaci za korinsike Trilino-a",
 	headTitleErrorPage: "Trilino - Greška",
 	headDescriptionErrorPage: "Trilino - Došlo je do neočekivane greške",
 

@@ -41,6 +41,8 @@ export default interface LanguageInterface {
 	headDescriptionCateringPayment: string;
 	headTitleOnlinePayments: string;
 	headDescriptionOnlinePayments: string;
+	headTitleContact: string;
+	headDescriptionContact: string;
 	headTitleErrorPage: string;
 	headDescriptionErrorPage: string;
 

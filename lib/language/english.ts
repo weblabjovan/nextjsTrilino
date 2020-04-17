@@ -43,6 +43,8 @@ const english: LanguageInterface = {
 	headDescriptionCateringPayment: "Trilino - You payment for Trilino Catering has been successful",
 	headTitleOnlinePayments: "Trilino - Online payments",
 	headDescriptionOnlinePayments: "Trilino - General instructions for online payment of Trilino services",
+	headTitleContact: "Trilino - Contact",
+	headDescriptionContact: "Trilino - Contact data for Trilino users",
 	headTitleErrorPage: "Trilino - Error",
 	headDescriptionErrorPage: "Trilino - We found an unhandled error",
 

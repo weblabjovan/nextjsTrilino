@@ -13,7 +13,8 @@ type MyProps = {
   path: string;
   fullPath: string;
   lang: string;
-  error: string;
+  error?: string;
+  userIsLogged?: boolean;
 
   // using `interface` is also ok
 };
@@ -32,7 +33,8 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
   };
 
 	render(){
-    const message = this.props.error === '1' ? this.state.dictionary['uniErrorMessage1'] : this.state.dictionary['uniErrorMessage2'] ;
+    const err = this.props.error ? this.props.error.toString() : '1';
+    const message = err === '1' ? this.state.dictionary['uniErrorMessage1'] : this.state.dictionary['uniErrorMessage2'] ;
 		return(
 			<div className="totalWrapper">
 				<NavigationBar 
@@ -46,7 +48,7 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
-    			user={ false }
+    			user={ this.props.userIsLogged }
     			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
 				<Container>

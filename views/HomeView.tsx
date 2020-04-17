@@ -29,8 +29,6 @@ interface MyProps {
   lang: string;
   fullPath: string;
   path: string;
-  error: boolean;
-  router: any;
   userIsLogged: boolean;
 };
 

@@ -289,3 +289,33 @@ export const errorExecute = (window: any, error: boolean): void => {
     window.location.href = `${link['protocol']}${link['host']}/errorPage?language=${lang}&error=1`;
   }
 }
+
+export const getOrgPageName = (orgRoot: string, pageName: string): string => {
+  return pageName ? pageName : orgRoot;
+}
+
+export const getOrgHead = (orgRoot: string, pageName: string): object => {
+  if (orgRoot === 'home') {
+    const page = pageName ? pageName : orgRoot;
+    if (page === 'home') {
+      return{ title: 'headTitleIndex', description: 'headDescriptionIndex'};
+    }
+    if (page === 'contact') {
+      return{ title: 'headTitleContact', description: 'headDescriptionContact'};
+    }
+    if (page === 'terms') {
+      return{ title: 'headTitleTerms', description: 'headDescriptionTerms'};
+    }
+    if (page === 'partnership') {
+      return{ title: 'headTitlePartnership', description: 'headDescriptionPartnership'};
+    }
+    if (page === 'payments') {
+      return{ title: 'headTitleOnlinePayments', description: 'headDescriptionOnlinePayments'};
+    }
+    if (page === 'error') {
+      return{ title: 'headTitleErrorPage', description: 'headDescriptionErrorPage'};
+    }
+  }
+
+  return{ title: '', description: ''};
+}
