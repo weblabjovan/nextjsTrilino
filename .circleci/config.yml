@@ -28,24 +28,7 @@ jobs:
             - persist_to_workspace:
                 root: .
                 paths: .
-    deploy:
-        <<: *defaults
-        steps:
-            - attach_workspace:
-                at: ~/tmp/circlci-now
-            - run:
-                name: Install Now CLI
-                command: sudo npm install --global --unsafe-perm now@18.0.1-canary.2
-            - deploy:
-                name: Deploy & Alias
-                command: |
-                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --confirm --prod
-                    elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --confirm --prod
-                    else
-                        now --token ${ZEIT_TOKET} --name new-feature --confirm --prod
-                    fi
+    
 workflows:
     version: 2
     test-deploy-purge:
