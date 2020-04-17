@@ -31,9 +31,6 @@ const Terms : NextPage<Props> = ({ userAgent, userIsLogged }) => {
   )
 }
 
-<<<<<<< HEAD
-export default Terms;
-=======
 Terms.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
@@ -62,4 +59,3 @@ Terms.getInitialProps = async (ctx: any) => {
 }
 
 export default withRedux(Terms)
->>>>>>> parent of fda7ea9... serverless changes to fit free limit

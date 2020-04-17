@@ -4,8 +4,7 @@ import { defineLanguage, setUpLinkBasic } from '../lib/helpers/generalFunctions'
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import { getLanguage } from '../lib/language';
 import { useRouter } from 'next/router';
-import { withReduxNoInit } from '../lib/reduxWithoutInit';
-// import { withRedux } from '../lib/redux';
+import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import HomeView from '../views/HomeView';
 import pages from '../lib/constants/pages';
@@ -41,9 +40,6 @@ const Home : NextPage<Props> = ({ userAgent, userIsLogged }) => {
   )
 }
 
-<<<<<<< HEAD
-export default withReduxNoInit(Home)
-=======
 Home.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
    let userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
@@ -79,5 +75,4 @@ Home.getInitialProps = async (ctx: any) => {
   return { userAgent, userIsLogged }
 }
 
-export default withRedux(Home)
->>>>>>> parent of fda7ea9... serverless changes to fit free limit
+export default withRedux(Home);
