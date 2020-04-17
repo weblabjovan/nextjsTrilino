@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import queryString  from 'query-string';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';

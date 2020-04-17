@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { confirmReservationAfterPay } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, unsetCookie, setUpLinkBasic, getCookie } from '../lib/helpers/generalFunctions';
+import { isMobile, getCookie, errorExecute } from '../lib/helpers/generalFunctions';
 import PlainInput from '../components/form/input';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -16,6 +16,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   confirmReservationStart: boolean;
   confirmReservationError: object | boolean;
   confirmReservationSuccess: null | object;
@@ -50,6 +51,8 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
   };
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+
     if (!this.props.confirmReservationStart && !prevProps.confirmReservationSuccess && this.props.confirmReservationSuccess) {
       this.setState({loader: false});
     }
@@ -159,6 +162,7 @@ class PaymentSuccessView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   confirmReservationStart: state.ReservationReducer.confirmReservationStart,
   confirmReservationError: state.ReservationReducer.confirmReservationError,

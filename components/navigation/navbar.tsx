@@ -62,16 +62,16 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     <NavLink href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href={`/terms?language=${this.props.language.toLowerCase()}`}>{this.props.terms}</NavLink>
+                    <NavLink href={`/?page=terms&language=${this.props.language.toLowerCase()}`}>{this.props.terms}</NavLink>
                   </NavItem>
                   {/*<NavItem>
                     <NavLink href="/">{this.props.faq}</NavLink>
                   </NavItem>*/}
                   <NavItem>
-                    <NavLink href={`/partnership?language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</NavLink>
+                    <NavLink href={`/?page=partnership&language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href={`/contact?language=${this.props.language.toLowerCase()}`}>{this.props.contact}</NavLink>
+                    <NavLink href={`/?page=contact&language=${this.props.language.toLowerCase()}`}>{this.props.contact}</NavLink>
                   </NavItem>
                   {
                     this.props.user

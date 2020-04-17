@@ -5,7 +5,7 @@ import queryString  from 'query-string';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, errorExecute } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +14,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   page: string;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
@@ -113,6 +114,7 @@ class ConfirmView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 });
 
 

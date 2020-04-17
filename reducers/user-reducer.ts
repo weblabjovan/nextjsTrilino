@@ -1,10 +1,11 @@
 import {
-  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes, saveReservationUserActionTypes
+  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes, saveReservationUserActionTypes, errorHandlerActions
 } from '../actions/user-actions';
 
 interface initialState {
 	isMobile: boolean;
 	language: string;
+  globalError: boolean;
 
   userRegistrateStart: boolean;
   userRegistrateError: boolean | object;
@@ -32,6 +33,7 @@ interface initialState {
 const initialState: initialState  = {
   isMobile: false,
   language: 'sr',
+  globalError: false,
 
   userRegistrateStart: false,
   userRegistrateError: false,
@@ -79,6 +81,13 @@ const actionsMap = {
     return {
       ...state,
       language: action.payload,
+    };
+  },
+
+  [errorHandlerActions.ERROR]: (state, action) => {
+    return {
+      ...state,
+      globalError: action.payload,
     };
   },
 

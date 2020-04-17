@@ -35,16 +35,16 @@ jobs:
                 at: ~/tmp/circlci-now
             - run:
                 name: Install Now CLI
-                command: sudo npm install --global --unsafe-perm now@16.7.3-canary.0
+                command: sudo npm install --global --unsafe-perm now@18.0.1-canary.2
             - deploy:
                 name: Deploy & Alias
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --prod
+                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-production --confirm --prod
                     elif [ "${CIRCLE_BRANCH}" == "stage" ]; then
-                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --prod
+                        now --token ${ZEIT_TOKET} --name circleci-with-zeith-now-staging --confirm --prod
                     else
-                        now --token ${ZEIT_TOKET} --name new-feature --prod
+                        now --token ${ZEIT_TOKET} --name new-feature --confirm --prod
                     fi
 workflows:
     version: 2

@@ -34,7 +34,7 @@ const AdminLogin : NextPage<Props> = ({ userAgent, link, token }) => {
 AdminLogin.getInitialProps = async (ctx: any ) => {
 	const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  let link = {};
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -45,14 +45,16 @@ AdminLogin.getInitialProps = async (ctx: any ) => {
     }
 
     const adminLog = await isAdminLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
+    
 
     if (adminLog) {
       ctx.res.writeHead(302, {Location: `/adminPanel?language=${link['queryObject']['language']}`});
       ctx.res.end();
     }
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=adminLogin`});
+    ctx.res.end();
   }
 
   

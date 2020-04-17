@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage, changeSingleUserField, registrateUser, loginUser } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import LoginScreen from '../components/user/LoginScreen';
 import RegistrationScreen from '../components/user/RegistrationScreen';
@@ -17,6 +17,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   userRegistrateStart: boolean;
   userRegistrateError: boolean | object;
   userRegistrateSuccess: null | object;
@@ -194,6 +195,8 @@ class UserLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+    
   	if (this.state.logTry > 9) {
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
     }
@@ -340,6 +343,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   userRegistrateStart: state.UserReducer.userRegistrateStart,
   userRegistrateError: state.UserReducer.userRegistrateError,

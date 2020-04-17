@@ -35,7 +35,7 @@ Login.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let token = '';
-  let link = {};
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -46,8 +46,7 @@ Login.getInitialProps = async (ctx: any) => {
     }
 
     const adminLog = await isAdminLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
-
+    
     if (!adminLog) {
       ctx.res.writeHead(302, {Location: `/adminLogin?language=${link['queryObject']['language']}`});
       ctx.res.end();
@@ -55,7 +54,9 @@ Login.getInitialProps = async (ctx: any) => {
 
     token = getAdminToken(ctx);
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=adminPanel`});
+    ctx.res.end();
   }
 
   return { userAgent, link, token }

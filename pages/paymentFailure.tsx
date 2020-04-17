@@ -27,7 +27,7 @@ const PaymentFailure : NextPage<Props> = ({ userAgent, link, paymentInfo }) => {
 
   return (
     <div>
-      <Head title={dictionary['headTitleUserProfile']} description={dictionary['headDescriptionUserProfile']} />
+      <Head title={dictionary['headTitlePaymentFailure']} description={dictionary['headDescriptionPaymentFailure']} />
       <PaymentFailureView 
         userAgent={userAgent} 
         path={router.pathname} 
@@ -52,8 +52,8 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
       if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req, 'reservation')) {
-        ctx.res.writeHead(302, {Location: `/userProfile?language=${link['queryObject']['language']}`});
-        ctx.res.end();
+        ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+    ctx.res.end();
       }else{
         if (Object.keys(nestPayData).length) {
           paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
@@ -67,12 +67,14 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
         }
       }
     }else{
-      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}`});
-      ctx.res.end();
+      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+    ctx.res.end();
     }
 
   }catch(err){
-    console.log(err)
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+    ctx.res.end();
   }
   
   return { userAgent, link, paymentInfo }

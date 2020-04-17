@@ -7,7 +7,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage, changePasswordRequestUser, changeSingleUserField } from '../actions/user-actions';
 import { changePasswordRequestPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { isEmpty, isPib, isEmail } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -17,6 +17,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   page: string;
   changeSingleUserField(field: string, value: any): void;
   changeSinglePartnerField(field: string, value: any): void;
@@ -189,6 +190,8 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    errorExecute(window, this.props.globalError);
+
     if (this.props.partnerPassChangeRequestSuccess && !prevProps.partnerPassChangeRequestSuccess && !this.props.partnerPassChangeRequestStart) {
     	this.setState({loader: false, update: true });
     }
@@ -398,6 +401,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   partnerPassChangeRequestStart: state.PartnerReducer.partnerPassChangeRequestStart,
   partnerPassChangeRequestError: state.PartnerReducer.partnerPassChangeRequestError,

@@ -9,7 +9,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, errorExecute } from '../lib/helpers/generalFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import Keys from '../server/keys';
@@ -21,6 +21,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   router: any;
   setUserLanguage(language: string): string;
   registratePartner(data: object, link: object): any;
@@ -105,6 +106,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    errorExecute(window, this.props.globalError);
+
       if (this.state.logTry > 9) {
         window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
       }
@@ -493,6 +496,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   partnerRegStart: state.PartnerReducer.partnerRegStart,
   partnerRegError: state.PartnerReducer.partnerRegError,
