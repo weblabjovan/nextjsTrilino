@@ -1,5 +1,5 @@
 import { calculateActivationProcess } from './specificPartnerFunctions';
-import { setUpLinkBasic } from './generalFunctions';
+import { setUpLinkBasic, getServerHost } from './generalFunctions';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
 
@@ -118,8 +118,9 @@ export const setPhotosForDelete = (photos: Array<object>, photo: string): Array<
 
 export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
-	// console.log(link);
-	if (link['host'] === 'dev.trilino.com' || link['host'] === 'test.trilino.com') {
+	const host = getServerHost(link['host']);
+	
+	if (host === 'dev' || host === 'test') {
 		const allCookies = nextCookie(context);
     	const devAuth = allCookies['trilino-dev-auth'];
 	    if (devAuth) {
