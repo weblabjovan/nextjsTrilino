@@ -139,7 +139,7 @@
 			font-family: 'Material Icons';
 	        font-size: 50px;
 	        line-height: 50px;
-	        color: #fff;
+	        color: $darkGreyCol;
 		}
 
 		.iconHolder{
@@ -148,14 +148,15 @@
 		    padding-bottom: 5px;
 		    box-sizing: border-box;
 		    margin-top: 15px;
-		    background-image: linear-gradient(to right top, #5b92f8, #5082dd, #4672c3, #3c62a9, #325390);
-    		border-radius: 10px;
+		    background: transparent;
+		    border: solid 1px $darkGreyCol;
+    		border-radius: 5px;
 
 			p{
 				font-size: 16px;
 				line-height: 20px;
 				font-weight: 400;
-    			color: #fff;
+    			color: $darkGreyCol;
     			margin-top: 10px;
     			margin-bottom: 0px;
     			font-style: initial;
@@ -307,14 +308,18 @@
 
 			.item{
 
-				padding: 5px;
-				border-bottom: solid 1px #ccc;
+				padding: 5px 10px;
+				display: inline-block;
+				border: solid 1px $purple;
+				margin-left: 10px;
+				margin-bottom: 10px;
+				border-radius: 25px;
 
 				.icon{
 					display: inline-block;
 					text-align: center;
 					font-family: 'Material Icons';
-			        font-size: 30px;
+			        font-size: 20px;
 			        font-weight: 600;
 			        line-height: 30px;
 			        color: $purple;
@@ -327,22 +332,22 @@
 				p{
 					display: inline-block;
 					vertical-align: super;
-					font-size: 16px;
+					font-size: 14px;
 					text-transform: uppercase;
 					margin-left: 5px;
 					@media only screen and (max-width: 577px) {
-				      font-size: 14px;
+				      font-size: 12px;
 				    }
 				}
 
 				.payRemark{
 					display: block;
-					font-size: 14px;
+					font-size: 12px;
 					font-style: italic;
 					font-weight: 300;
 					text-transform: lowercase;
 					@media only screen and (max-width: 577px) {
-				      font-size: 12px;
+				      font-size: 10px;
 				    }
 				}
 			}

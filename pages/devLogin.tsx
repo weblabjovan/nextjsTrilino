@@ -33,11 +33,10 @@ const DevLogin : NextPage<Props> = ({ userAgent, link }) => {
 DevLogin.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  let link = {};
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     const devLog = await isDevEnvLogged(ctx);
-    link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
     if (devLog) {
       ctx.res.writeHead(302, {Location: `/?language=sr`});
@@ -45,6 +44,8 @@ DevLogin.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=devLogin`});
+    ctx.res.end();
   }
 
   

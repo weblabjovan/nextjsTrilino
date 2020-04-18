@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import PlainInput from '../components/form/input';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
@@ -16,6 +16,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   adminBasicDevLoginStart: boolean;
   adminBasicDevLoginError: object | boolean;
   adminBasicDevLoginSuccess: null | number;
@@ -72,6 +73,8 @@ class LoginView extends React.Component <MyProps, MyState>{
     if (this.state.loginTry > 9) {
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
     }
+
+    errorExecute(window, this.props.globalError);
 
     if (this.props.adminBasicDevLoginError && !prevProps.adminBasicDevLoginError && !this.props.adminBasicDevLoginStart) {
       const loginTry = this.state.loginTry + 1;
@@ -158,6 +161,7 @@ class LoginView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   adminBasicDevLoginStart: state.AdminReducer.adminBasicDevLoginStart,
   adminBasicDevLoginError: state.AdminReducer.adminBasicDevLoginError,

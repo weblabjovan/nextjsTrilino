@@ -9,7 +9,7 @@ import { adminBasicDevLogin } from '../actions/admin-actions';
 import { getReservationsOnDate } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import { datePickerLang } from '../lib/language/dateLanguage';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, createDisplayPhotoListObject, dateForSearch, addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import { preparePartnerForLocation } from '../lib/helpers/specificReservationFunctions'
 import generalOptions from '../lib/constants/generalOptions';
@@ -26,6 +26,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   setUserLanguage(language: string): string;
   getReservationsOnDate(link: object, data: object): void;
   getReservationsStart: boolean;
@@ -38,6 +39,7 @@ interface MyProps {
   lang: string;
   partner: object;
   date: string;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -145,7 +147,7 @@ class LocationView extends React.Component <MyProps, MyState>{
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-  	console.log(this.state.selectedRoom)
+  	errorExecute(window, this.props.globalError);
 
   	if (!this.props.getReservationsStart && prevProps.getReservationsStart && this.props.getReservationsSuccess) {
   		this.props.partner['reservations'] = this.props.reservations;
@@ -178,6 +180,8 @@ class LocationView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
+    			user={ this.props.userIsLogged }
+    			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="location">
 	    		<GalleryModal 
@@ -241,7 +245,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	              <div className="icon-section">
 	              	<p>{this.props.partner['general']['description']}</p>
 
-		          		<Row>
+		          		<Row className="justify-content-sm-center">
 				            {
 				              isFieldInObject(this.props.partner, 'parking', 'general')
 				              ?
@@ -499,7 +503,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          </Row>
 
 	          <Row className="offer">
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleFree']}</h3>
 	          			{
@@ -517,7 +521,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		
 	          	</Col>
 
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleAddon']}</h3>
 	          			{
@@ -527,7 +531,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	                    return(
 	                    	<div className="item" key={`addonKey_${index}`}>
 				          				<span className="icon check"></span>
-				          				<p>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${addon['price']} rsd`}</p>
+				          				<p>{`${addon['name']} / ${this.state.dictionary['partnerProfileOfferAddonPrice']} ${currencyFormat(parseInt(addon['price']))}`}</p>
 				          				<p className="payRemark">{addon['comment'] ? `*${addon['comment']}` : ''}</p>
 				          			</div>
 	                     )
@@ -538,7 +542,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          		</div>
 	          	</Col>
 
-	          	<Col xs="12" sm="6" lg="4">
+	          	<Col xs="12">
 
 	          		<div className="section">
 	          			<h3>{this.state.dictionary['locationOfferTitleDecor']}</h3>
@@ -552,7 +556,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              return(
 				              	<div className="item" key={`decorKey_${index}`}>
 				          				<span className="icon check"></span>
-				          				<p>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? (decor['price'] + 'rsd') : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</p>
+				          				<p>{`${generalOptions['decorType'][decor['value']]['name_'+this.props.lang]} / ${decor['price'] ? currencyFormat(parseInt(decor['price'])) : this.state.dictionary['partnerProfilePreviewDecorationFree']}`}</p>
 				          			</div>
 				              )
 				            })
@@ -618,7 +622,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          		?
 										          		term['terms'].map( (item, itemIndex) => {
 										          			return(
-										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${item['price']}rsd`}</span></Button>
+										          				<Button color="primary" key={`termButtonKey_${index}_${itemIndex}`} onClick={() => this.selectRoom(`${index}_${itemIndex}`)} active={this.state.selectedRoom === `${index}_${itemIndex}`}>{`${item['from']} - ${item['to']}`} <span>{`${currencyFormat(item['price'])}`}</span></Button>
 										          			)
 										          		})
 										          		:
@@ -637,7 +641,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          				<p>{this.state.dictionary['locationChooseTermAfter']}</p>
 											          			<p>{this.state.term['room']}</p>
 											          			<p>{`${this.state.term['from']} - ${this.state.term['to']}`}</p>
-											          			<p>{`${this.state.term['price']} rsd`}</p>
+											          			<p>{`${currencyFormat(this.state.term['price'])}`}</p>
 											          			<Button color="success" onClick={ this.makeReservation } className="hidden-xs">{this.state.dictionary['locationButtonReserve']}</Button>
 										          			</div>
 										          			
@@ -682,7 +686,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 
 	          <Row className="mapScreen">
-	          	<Col xs="12"><h4>Mapa</h4></Col>
+	          	<Col xs="12"><h4>{this.state.dictionary['uniMap']}</h4></Col>
 	          	<Col>
 	          		<SimpleMap
 	          			lat={this.props.partner['map'] ? this.props.partner['map']['lat'] : 0}
@@ -713,7 +717,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '1').map( (drink, index) => {
 			                        return(
-			                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`non_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :
@@ -731,7 +735,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '2').map( (drink, index) => {
 			                        return(
-			                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`alco_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :
@@ -749,7 +753,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 			                      ?
 			                      isolateByArrayFieldValue(this.props.partner['catering']['drinkCard'], 'type', '3').map( (drink, index) => {
 			                        return(
-			                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${drink['price']} rsd`}</p>
+			                          <p key={`hot_${index}`}>{`${drink['name']}, ${drink['quantity']} ${getGeneralOptionLabelByValue(generalOptions['drinkScale'], drink['scale'].toString())} - ${currencyFormat(parseInt(drink['price']))}`}</p>
 			                         )
 			                      })
 			                      :
@@ -818,7 +822,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          	</Col>
 	          </Row>
 
-	          
+	          <Row>
+	          	<Col xs="12">
+	          		<p className="remarkVAT">{this.state.dictionary['uniVAT']}</p>
+	          	</Col>
+	          </Row>
 	          
 	          
 	        </Container>    
@@ -844,6 +852,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   getReservationsStart: state.ReservationReducer.getReservationsStart,
   getReservationsError: state.ReservationReducer.getReservationsError,

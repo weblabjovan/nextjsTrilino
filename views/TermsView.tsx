@@ -13,6 +13,7 @@ type MyProps = {
   path: string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
   // using `interface` is also ok
 };
 interface MyState {
@@ -21,7 +22,7 @@ interface MyState {
 	isMobile: boolean;
 };
 
-export default class PartnerHelpen extends React.Component <MyProps, MyState> {
+export default class TermsView extends React.Component <MyProps, MyState> {
 
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
@@ -43,6 +44,8 @@ export default class PartnerHelpen extends React.Component <MyProps, MyState> {
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
+    			user={ this.props.userIsLogged }
+    			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
 				<Container>
 					<Row>

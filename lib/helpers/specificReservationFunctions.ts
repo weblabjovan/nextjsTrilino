@@ -1,4 +1,5 @@
 import DateHandler from '../classes/DateHandler';
+import { setUpLinkBasic } from './generalFunctions';
 
 const dayForSearch = (date: Date): string => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -59,4 +60,55 @@ export const isDateDifferenceValid = (difference: number, date: string, time: st
   }
 
   return false;
+}
+
+export const getSingleCatering = async (context: any): Promise<any> => {
+  const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+  const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/getCatering/?language=${link['queryObject']['language']}&id=${link['queryObject']['catering']}`;
+  const response = await fetch(apiUrl);
+
+  return response;
+}
+
+export const getSingleReservation = async (context: any): Promise<any> => {
+  const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+  const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/getOne/?language=${link['queryObject']['language']}&id=${link['queryObject']['reservation']}`;
+  const response = await fetch(apiUrl);
+
+  return response;
+}
+
+export const isPaymentResponseValid = (response: object, id: string, req: object, type: string): boolean => {
+  if (Object.keys(response).length) {
+    const outcome = response['Response'];
+    const resId = type === 'catering' ? `cat-${id}` : id;
+    
+    if (response['ReturnOid'] === resId && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting' && req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'POST') {
+      const split = response['HASHPARAMSVAL'].split('|');
+      if (split[1] === resId && split[4] === outcome) {
+        return true;
+      }
+    }
+    return false;
+  }else{
+    if (req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'GET') {
+      return true;
+    }
+    
+  }
+
+  return false;
+}
+
+export const isTrilinoCateringOrdered = (cateringObj: object): boolean => {
+  const trilino = ['0000000000001', '0000000000002'];
+  let res = false;
+
+  Object.keys(cateringObj).map(key => {
+    if (trilino.indexOf(cateringObj[key]['regId']) !== -1) {
+      res = true;
+    }
+  });
+
+  return res;
 }

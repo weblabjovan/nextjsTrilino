@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { verifyPartner } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,6 +15,7 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   page: string;
   verifyPartner(param: string, data: object, link: object): any;
   setUserLanguage(language: string): string;
@@ -51,6 +52,8 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
     };
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    errorExecute(window, this.props.globalError);
+
     if (!this.props.partnerVerificationStart && this.props.partnerVerificationSuccess && this.props.partnerVerificationSuccess !== prevProps.partnerVerificationSuccess && this.state.loader) {
       if (this.props.partnerVerificationSuccess['success']) {
         this.setState({ loader: false, update: true });
@@ -200,6 +203,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   partnerVerificationStart: state.PartnerReducer.partnerVerificationStart,
   partnerVerificationError: state.PartnerReducer.partnerVerificationError,

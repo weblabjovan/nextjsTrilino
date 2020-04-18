@@ -600,6 +600,7 @@ export const prepareReservationObjectForSave = (obj: object): object => {
 	partnerReservation['date']  = setDateToDayStart(partnerReservation['date']);
 	partnerReservation['animation'] = returnOnlyTrueForObjects(partnerReservation['animation']);
 	partnerReservation['decoration'] = returnOnlyTrueForObjects(partnerReservation['decoration']);
+	partnerReservation['room'] = partnerReservation['room']['value'];
 
 	return partnerReservation;
 }
@@ -628,11 +629,12 @@ const returnOnlyTrueForObjects = (obj: object, field: string | null = null): obj
 }
 
 export const dateForSearch = (date: string): Date => {
+	
 	const strings = date.split('-')
 	const d = new Date();
+	let month = parseInt(strings[1]) - 1;
 	d.setFullYear(parseInt(strings[2]));
-	d.setMonth(parseInt(strings[1])-1);
-	d.setDate(parseInt(strings[0]));
+	d.setMonth(month ,parseInt(strings[0]));
 
 	return d;
 }
@@ -643,7 +645,7 @@ export const formatReservations = (reservations: Array<object>): Array<object> =
 		const dateString = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 		reservations[i]['start'] = new Date(`${dateString} ${reservations[i]['from']}`);
 		reservations[i]['end'] = new Date(`${dateString} ${reservations[i]['to']}`);
-		reservations[i]['title'] = reservations[i]['guest'];
+		reservations[i]['title'] = reservations[i]['double'] ? `${reservations[i]['guest']} double - ${reservations[i]['doubleNumber']}` : reservations[i]['guest'];
 	}
 
 	return reservations;

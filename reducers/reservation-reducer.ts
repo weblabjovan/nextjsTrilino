@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -11,6 +11,22 @@ interface initialState {
   getReservationsStart: boolean;
   getReservationsError: object | boolean;
   getReservationsSuccess: null | number;
+
+  confirmReservationStart: boolean;
+  confirmReservationError: object | boolean;
+  confirmReservationSuccess: null | object;
+
+  getUserReservationStart: boolean;
+  getUserReservationError: object | boolean;
+  getUserReservationSuccess: null | number;
+
+  cancelReservationStart: boolean;
+  cancelReservationError: object | boolean;
+  cancelReservationSuccess: null | object;
+
+  confirmCateringStart: boolean;
+  confirmCateringError: object | boolean;
+  confirmCateringSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -27,6 +43,22 @@ const initialState: initialState  = {
   getReservationsStart: false,
   getReservationsError: false,
   getReservationsSuccess: null,
+
+  confirmReservationStart: false,
+  confirmReservationError: false,
+  confirmReservationSuccess: null,
+
+  getUserReservationStart: false,
+  getUserReservationError: false,
+  getUserReservationSuccess: null,
+
+  cancelReservationStart: false,
+  cancelReservationError: false,
+  cancelReservationSuccess: null,
+
+  confirmCateringStart: false,
+  confirmCateringError: false,
+  confirmCateringSuccess: null,
 
   reservations: [],
 
@@ -99,6 +131,95 @@ const actionsMap = {
       getReservationsStart: false,
       getReservationsSuccess: action.payload.code,
       reservations: action.payload.reservations,
+    };
+  },
+
+  [confirmReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      confirmReservationStart: true,
+      confirmReservationSuccess: null,
+    };
+  },
+  [confirmReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      confirmReservationStart: false,
+      confirmReservationError: action.payload.response.body,
+    };
+  },
+  [confirmReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      confirmReservationStart: false,
+      confirmReservationSuccess: action.payload.reservation,
+    };
+  },
+
+  [getReservationsForUserActionType.START]: (state) => {
+    return {
+      ...state,
+      getUserReservationStart: true,
+      getUserReservationSuccess: null,
+    };
+  },
+  [getReservationsForUserActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getUserReservationStart: false,
+      getUserReservationError: action.payload.response.body,
+    };
+  },
+  [getReservationsForUserActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getUserReservationStart: false,
+      getUserReservationSuccess: action.payload.code,
+      reservations: action.payload.reservations,
+    };
+  },
+
+  [cancelReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      cancelReservationStart: true,
+      cancelReservationSuccess: null,
+    };
+  },
+  [cancelReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      cancelReservationStart: false,
+      cancelReservationError: action.payload.response.body,
+    };
+  },
+  [cancelReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      cancelReservationStart: false,
+      cancelReservationSuccess: action.payload.result,
+    };
+  },
+
+  [confirmCateringActionType.START]: (state) => {
+    return {
+      ...state,
+      confirmCateringStart: true,
+      confirmCateringSuccess: null,
+    };
+  },
+  [confirmCateringActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      confirmCateringStart: false,
+      confirmCateringError: action.payload.response.body,
+    };
+  },
+  [confirmCateringActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      confirmCateringStart: false,
+      confirmCateringSuccess: action.payload.catering,
     };
   },
   

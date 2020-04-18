@@ -174,6 +174,11 @@ export const unsetCookie = (name: string): void => {
   cookie.remove(name);
 }
 
+export const getCookie = (cookieName: string): string => {
+  const name = cookie.get(cookieName);
+  return name;
+}
+
 export const setUpLinkBasic = (url: string | object): object => {
   const linkClass = new LinkClass();
 
@@ -270,4 +275,64 @@ export const isTrilinoCatering = (regId: string): boolean => {
   }
 
   return true;
+}
+
+export const currencyFormat = (num: number): string => {
+  const ra = new Number(num);
+  return ra.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+export const errorExecute = (window: any, error: boolean): void => {
+  if (error) {
+    const link = setUpLinkBasic(window.location.href);
+    const lang = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
+    window.location.href = `${link['protocol']}${link['host']}/errorPage?language=${lang}&error=1`;
+  }
+}
+
+export const getOrgPageName = (orgRoot: string, pageName: string): string => {
+  return pageName ? pageName : orgRoot;
+}
+
+export const getOrgHead = (orgRoot: string, pageName: string): object => {
+  if (orgRoot === 'home') {
+    const page = pageName ? pageName : orgRoot;
+    if (page === 'home') {
+      return{ title: 'headTitleIndex', description: 'headDescriptionIndex'};
+    }
+    if (page === 'contact') {
+      return{ title: 'headTitleContact', description: 'headDescriptionContact'};
+    }
+    if (page === 'terms') {
+      return{ title: 'headTitleTerms', description: 'headDescriptionTerms'};
+    }
+    if (page === 'partnership') {
+      return{ title: 'headTitlePartnership', description: 'headDescriptionPartnership'};
+    }
+    if (page === 'payments') {
+      return{ title: 'headTitleOnlinePayments', description: 'headDescriptionOnlinePayments'};
+    }
+    if (page === 'error') {
+      return{ title: 'headTitleErrorPage', description: 'headDescriptionErrorPage'};
+    }
+  }
+
+  return{ title: '', description: ''};
+}
+
+export const getServerHost = (host: string): string => {
+
+  if (host === 'dev.trilino.com' || host.indexOf('trilino-dev') !== -1 || host === 'www.dev.trilino.com') {
+   return 'dev';
+  }
+
+  if (host === 'test.trilino.com' || host.indexOf('trilino-test') !== -1 || host === 'www.test.trilino.com') {
+    return 'test';
+  }
+
+  if (host === 'trilino.com' || host.indexOf('trilino-prod') !== -1 || host === 'www.trilino.com') {
+    return 'prod';
+  }
+
+  return 'local';
 }

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import Partner from '../../../server/models/partner';
 import Reservation from '../../../server/models/reservation';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, setDateForServer, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage, getNextTerm }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage, getNextTerm }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid, isReservationAlreadyMade } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -104,7 +104,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	                }
 	             }
 	          },
-	          { $match: { "date": queryDate }}
+	          { $match: { "date": queryDate }},
+	          { $match: { "active": true }},
 	        ],
 	        as: "reservations"
 				};
@@ -231,7 +232,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				             }
 				          },
 				          { $match: { "date": queryDate }},
-				          { $match: { "active": false }},
+				          { $match: { "active": true }},
 				        ],
 				        as: "reservations"
 							};

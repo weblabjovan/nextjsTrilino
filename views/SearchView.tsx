@@ -8,7 +8,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
@@ -34,6 +34,7 @@ interface MyProps {
   searchResults: Array<object>;
   partners: Array<object>;
   userLanguage: string;
+  globalError: boolean;
   userAgent: string;
   path: string;
   date: null | string;
@@ -41,6 +42,7 @@ interface MyProps {
   district: null | string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
 };
 interface MyState {
 	language: string;
@@ -77,7 +79,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'formatDate', 'toggleAdditional', 'checkTheBox', 'checkOfferBox', 'handleSearch'];
+    const bindingFunctions = ['handleInputChange', 'formatDate', 'toggleAdditional', 'checkTheBox', 'checkOfferBox', 'handleSearch', 'goToLocation'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -169,7 +171,15 @@ class SearchView extends React.Component <MyProps, MyState>{
   	
   }
 
+  goToLocation(link: string){
+    this.setState({ loader: true }, () => {
+      window.location.href = link;
+    })
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+    
   	if (!this.props.getPartnersMultipleStart && prevProps.getPartnersMultipleStart && !this.props.getPartnersMultipleError && this.props.getPartnersMultipleSuccess) {
     	this.setState({loader: false });
     }
@@ -182,8 +192,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 	}
 	
   render() {
-
-    const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth() + 1}-${this.state.date.getFullYear()}`;
+    const dateString = `${this.state.date.getDate()}-${this.state.date.getMonth()+1}-${this.state.date.getFullYear()}`;
 
     return(
     	<div className="totalWrapper">
@@ -199,6 +208,8 @@ class SearchView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          user={ this.props.userIsLogged }
+          userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
     		<div className="searchWrapper">
     			<div className="filter">
@@ -495,8 +506,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                       const photoList = createDisplayPhotoListObject(item);
                       return(
                         <Col xs="12" sm="6" lg="4" xl="3" key={`resultKey_${index}`}>
-                          <a href={`/locations/${setUrlString(item['name'])}/?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`}>
-                          <div className="searchItem">
+                          <div className="searchItem" onClick={ () => this.goToLocation(`/locations/${setUrlString(item['name'])}/?partner=${item['link']}&language=${this.props.lang}&date=${dateString}`)}>
                             <div className="photo" style={{'background': 'url('+Keys.AWS_PARTNER_PHOTO_LINK+photoList['main']+') center / cover no-repeat'}}></div>
                             <div className="info">
                               <h5>{getGeneralOptionLabelByValue(genOptions['spaceType_' + this.props.lang], item['general']['spaceType']) + ' ' + item['name']}</h5>
@@ -506,7 +516,6 @@ class SearchView extends React.Component <MyProps, MyState>{
                               <h6> <span className="icon star"></span>4.5</h6>
                             </div>
                           </div>
-                          </a>
                         </Col>
                       )
                     })
@@ -559,6 +568,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
   searchResults: state.PartnerReducer.searchResults,
   getPartnersMultipleStart: state.PartnerReducer.getPartnersMultipleStart,

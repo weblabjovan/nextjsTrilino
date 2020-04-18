@@ -29,6 +29,37 @@
 	}
 }
 
+.contactHead{
+	background-image: linear-gradient(to bottom, rgba(99, 99, 99, 0.52), rgba(36, 36, 36, 0.75)), url("/static/contact.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	padding: 60px 0px;
+	text-align: center;
+
+	@media only screen and (max-width: 992px) {
+    	padding: 40px 0px;
+	}
+
+	h1{
+		color: #fff;
+	    font-size: 50px;
+	    margin-bottom: 50px;
+	    margin-top: 180px;
+	    text-shadow: 2px 2px 2px #1E0D08;
+
+	    @media only screen and (max-width: 992px) {
+	    	font-size: 34px;
+	    	margin-bottom: 30px;
+	    	margin-top: 140px;
+		}
+
+		@media only screen and (max-width: 557px) {
+	    	margin-top: 100px;
+		}
+	}
+}
+
 .partnershipRegularWhite{
 
 	padding: 60px 0px;
@@ -76,6 +107,62 @@
 	    	font-size: 18px;
 			line-height: 32px;
 			margin-bottom: 20px;
+		}
+	}
+
+	.colorLink{
+		color: $lightBlue;
+		margin-left: 5px;
+		font-style: italic;
+	}
+}
+
+.contactRegularWhite{
+	padding: 50px 0px;
+
+	@media only screen and (max-width: 557px) {
+    	padding: 40px 0px;
+	}
+
+	h3{
+		font-size: 44px;
+		font-weight: 600;
+		text-align: center;
+		width: 60%;
+		margin: auto;
+		margin-bottom: 50px;
+
+		@media only screen and (max-width: 992px) {
+	    	width: 80%;
+	    	font-size: 38px;
+		}
+
+		@media only screen and (max-width: 557px) {
+	    	width: 100%;
+	    	font-size: 30px;
+	    	margin-bottom: 40px;
+		}
+	}
+
+	p{
+		font-size: 18px;
+	    line-height: 30px;
+	    text-align: justify;
+	    font-weight: 300;
+	    width: 70%;
+	    margin: auto;
+	    margin-bottom: 10px;
+	    color: #000;
+
+		@media only screen and (max-width: 992px) {
+	    	width: 80%;
+		}
+
+		@media only screen and (max-width: 557px) {
+	    	width: 100%;
+	    	font-size: 16px;
+			line-height: 22px;
+			margin-bottom: 8px;
 		}
 	}
 

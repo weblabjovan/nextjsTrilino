@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { withRedux } from '../lib/redux'
 import Head from '../components/head';
 import { getLanguage } from '../lib/language';
-import { defineLanguage } from '../lib/helpers/generalFunctions';
+import { defineLanguage, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import ConfirmView from '../views/ConfirmView';
 import pages from '../lib/constants/pages';
@@ -48,6 +48,7 @@ const Confirm : NextPage<Props> = ({ userAgent }) => {
 Confirm.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     const devLog = await isDevEnvLogged(ctx);
@@ -58,6 +59,8 @@ Confirm.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=confirm`});
+    ctx.res.end();
   }
 
   return { userAgent}

@@ -9,7 +9,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { datePickerLang } from '../lib/language/dateLanguage';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
@@ -22,14 +22,14 @@ import '../style/style.scss';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  globalError: boolean;
   setUserDevice(userAgent: string): boolean;
   setUserLanguage(language: string): string;
   userAgent: string;
   lang: string;
   fullPath: string;
   path: string;
-  error: boolean;
-  router: any;
+  userIsLogged: boolean;
 };
 
 interface MyState {
@@ -62,6 +62,10 @@ class HomeView extends React.Component <MyProps, MyState>{
       loader: false,
 
     };
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    errorExecute(window, this.props.globalError);
+  }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
@@ -123,6 +127,8 @@ class HomeView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          user={ this.props.userIsLogged }
+          userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
         <div className="homescreen colorWhite">
           <Container>
@@ -249,16 +255,16 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/watch.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy1'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/watch.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy1'] }</p></Col>
                   <hr></hr>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/toys.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy2'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/toys.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy2'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -266,15 +272,15 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/gift.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy3'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/gift.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy3'] }</p></Col>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/simple.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy4'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/simple.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy4'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -282,15 +288,15 @@ class HomeView extends React.Component <MyProps, MyState>{
             <Row>
               <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/paper.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy5'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/paper.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy5'] }</p></Col>
                 </Row>
               </Col>
 
                <Col xs="12" sm="6">
                 <Row className="homeWhatNewLine">
-                  <Col xs="12" sm="3"><div className="photo" style={{'background': 'url(static/smile.png) center / cover no-repeat'}}></div></Col>
-                  <Col xs="12" sm="9"><p>{ this.state.dictionary['homeWhy6'] }</p></Col>
+                  <Col xs="12" lg="3"><div className="photo" style={{'background': 'url(static/smile.png) center / cover no-repeat'}}></div></Col>
+                  <Col xs="12" lg="9"><p>{ this.state.dictionary['homeWhy6'] }</p></Col>
                 </Row>
               </Col>
             </Row>
@@ -380,11 +386,11 @@ class HomeView extends React.Component <MyProps, MyState>{
 
          <div className=" bigPadDown">
           <Container>
-            <Row>
+            <Row className="justify-content-sm-center">
                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
@@ -400,7 +406,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_2.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
@@ -416,7 +422,7 @@ class HomeView extends React.Component <MyProps, MyState>{
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
-                      <Col xs="12" className="homeWhatItem colorGrey">
+                      <Col xs="12" className="homeWhatItem">
                         <div className="face">
                           <img src="/static/testemonial_photo_3.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
@@ -469,6 +475,7 @@ class HomeView extends React.Component <MyProps, MyState>{
 
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
+  globalError: state.UserReducer.globalError,
 
 });
 

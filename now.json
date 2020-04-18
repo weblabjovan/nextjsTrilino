@@ -1,4 +1,4 @@
-{
+{	
 	"env": {
 		"MONGO_URI":"@mongo-uri",
 		"EMAIL_API_KEY":"@email-api-key",
@@ -11,7 +11,12 @@
 		"ADMIN_BASIC_DEV_STRING":"@admin-basic-dev-string",
 		"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
 		"MONGO_URI_PROD":"@mongo-uri-prod",
-		"GOOGLE_API_KEY":"@google-api-key"
+		"GOOGLE_API_KEY":"@google-api-key",
+		"CRYPTO_PASSWORD":"@crypto-password",
+		"CRYPTO_SECOND":"@crypto-second",
+		"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
+		"NEST_PAY_RANDOM":"@nest-pay-random",
+		"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	},
 	"build": {
 	    "env": {
@@ -26,7 +31,12 @@
 			"ADMIN_BASIC_DEV_STRING":"@admin-basic-dev-string",
 			"ADMIN_BASIC_DEV_KEY":"@admin-basic-dev-key",
 			"MONGO_URI_PROD":"@mongo-uri-prod",
-			"GOOGLE_API_KEY":"@google-api-key"
+			"GOOGLE_API_KEY":"@google-api-key",
+			"CRYPTO_PASSWORD":"@crypto-password",
+			"CRYPTO_SECOND":"@crypto-second",
+			"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
+			"NEST_PAY_RANDOM":"@nest-pay-random",
+			"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	    }
 	}
 }

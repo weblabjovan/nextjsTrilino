@@ -49,21 +49,31 @@ const PartnershipLogin : NextPage<Props> = ({ userAgent, link }) => {
 PartnershipLogin.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-
-  const devLog = await isDevEnvLogged(ctx);
-
-  if (!devLog) {
-    ctx.res.writeHead(302, {Location: `/devLogin`});
-    ctx.res.end();
-  }
-
-  const partnerLog = await isPartnerLogged(ctx);
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
-  if (partnerLog) {
-    ctx.res.writeHead(302, {Location: `/partnerProfile?language=${link['queryObject']['language']}`});
+  try{
+
+    const devLog = await isDevEnvLogged(ctx);
+
+    if (!devLog) {
+      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.end();
+    }
+
+    const partnerLog = await isPartnerLogged(ctx);
+
+    if (partnerLog) {
+      ctx.res.writeHead(302, {Location: `/partnerProfile?language=${link['queryObject']['language']}`});
+      ctx.res.end();
+    }
+
+  }catch(err){
+    console.log(err);
+    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=partnershipLogin`});
     ctx.res.end();
   }
+
+  
 
   return { userAgent, link}
 }

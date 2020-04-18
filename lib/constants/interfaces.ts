@@ -158,3 +158,16 @@ export interface IreservationGeneral{
 	kidsNum: string | number;
 	double: boolean;
 }
+
+
+export interface IemailGeneral{
+	language?: string; 
+	result?: object; 
+	partner?: object;
+	user?: object;
+	policy?: object;
+	reservation?: object;
+	userParams?: object;
+	double?: any;
+	catering?: object;
+}

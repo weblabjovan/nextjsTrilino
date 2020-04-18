@@ -11,6 +11,35 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
+	public getDateString = (date: Date): string =>{
+		return this.formatDate(date, 'text');
+	}
+
+	public getNewDateFor = (date: Date, relation: string, days: number, format: string): any => {
+		if (relation === 'before') {
+			const a = new Date(date.setDate(date.getDate() - days));
+			return format === 'text' ? this.formatDate(a, format) : a;
+		}else{
+			const b = new Date(date.setDate(date.getDate() - days));
+			return format === 'text' ? this.formatDate(b, format) : b;
+		}
+		
+		return '1.1.1970';
+
+	}
+
+	public setNewDateString = (datestring: string): void => {
+		this.date = new Date();
+		this.dateString = datestring as string;
+	}
+
+	public getDateWithTimeForServer = (time: string): Date => {
+		this.setDateForServer('code');
+		this.setDayOnSpecificTime(time);
+
+		return this.date;
+	}
+
 	public isUrlDateValidDateString = (): boolean => {
 		if (!this.dateString) {
 			return false;
@@ -38,7 +67,26 @@ export default class DateHandler {
 		return true;
 	}
 
+	public getDateDifference = (later: Date, scale?: string, earlier?: Date): number => {
+		const devider = this.setDevider(scale);
+
+		const lateTime = later.getTime();
+		const earlyTime = earlier ? earlier.getTime() : this.now.getTime();
+		const timeDiff =  (earlyTime - lateTime) / devider;
+
+		return Math.floor(timeDiff);
+	}
+
 	public getDateDifferenceFromNow = (scale: null | string = null): number => {
+		const devider = this.setDevider(scale);
+
+		const begining = this.setDayOnBegining(this.now);
+		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
+
+		return timeDiff;
+	}
+
+	private setDevider = (scale?: null | string): number => {
 		let devider = (1000 * 60 * 60);
 		if (scale === 'minute') {
 			devider = (1000 * 60);
@@ -47,8 +95,17 @@ export default class DateHandler {
 			devider = (1000 * 60 * 60 * 24);
 		}
 
-		const begining = this.setDayOnBegining(this.now);
-		const timeDiff = (this.date.getTime() - begining.getTime()) / devider;
+		return devider;
+	}
+
+	public getDifferenceBetweenTwoTimes = (earlyTime: string, laterTime: string): number => {
+		const devider = (1000 * 60);
+		const e = new Date();
+		const er = this.setSpecificTime(earlyTime, e);
+		const l = new Date();
+		const la = this.setSpecificTime(laterTime, l);
+
+		const timeDiff = (la.getTime() - er.getTime()) / devider;
 
 		return timeDiff;
 	}
@@ -107,14 +164,20 @@ export default class DateHandler {
 		this.date = res;
 	}
 
-	private setDateForServer = (): void => {
-	  const strings = this.dateString.split('-')
-	  const d = new Date();
-	  d.setFullYear(parseInt(strings[2]));
-	  d.setMonth(parseInt(strings[1])-1);
-	  d.setDate(parseInt(strings[0]));
+	private setDateForServer = (origin?: string): void => {
+		let strings = this.dateString.split('-')
+		if (origin === 'code') {
+			const first = this.dateString.split('T');
+			const sec = first[0].split('-');
+			strings = [sec[2], sec[1], sec[0]]
+		}
 
-	  this.date = this.setDayOnBegining(d);
+		const d = new Date();
+		const month = parseInt(strings[1]) - 1;
+		d.setFullYear(parseInt(strings[2]));
+		d.setMonth(month, parseInt(strings[0]));
+
+	  	this.date = this.setDayOnBegining(d);
 	}
 
 	private resetDate = (): void => {
@@ -132,12 +195,33 @@ export default class DateHandler {
 	}
 
 	private setDayOnSpecificTime = (time: string): void => {
+		this.date = this.setSpecificTime(time, this.date);
+	}
+
+	private formatDate = (date: Date, type: string): string => {
+		const d = date.toISOString();
+		const base = d.split('T');
+		if (type === 'text') {
+			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		if (type === 'url') {
+			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		return '1.1.1970';
+	}
+
+
+	private setSpecificTime = (time: string, date: Date): Date => {
 		const split = time.split(':');
 
-		this.date.setUTCHours(parseInt(split[0]))
-		this.date.setMinutes(parseInt(split[1]))
-		this.date.setSeconds(0);
-	  	this.date.setMilliseconds(0);
+		date.setUTCHours(parseInt(split[0]))
+		date.setMinutes(parseInt(split[1]))
+		date.setSeconds(0);
+	  	date.setMilliseconds(0);
+
+	  	return date;
 	}
 
 	private getServerDateString = () => {

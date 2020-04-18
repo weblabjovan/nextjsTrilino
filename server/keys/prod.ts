@@ -12,6 +12,11 @@ type keyType = {
 	ADMIN_BASIC_DEV_KEY: string;
 	MONGO_URI_PROD: string;
 	GOOGLE_API_KEY: string;
+	CRYPTO_PASSWORD: string;
+	CRYPTO_SECOND: string;
+	NEST_PAY_CLIENT_ID: string;
+	NEST_PAY_RANDOM: string;
+	NEST_PAY_STORE_KEY: string;
 }
 
 const keys: keyType = {
@@ -26,7 +31,12 @@ const keys: keyType = {
 	ADMIN_BASIC_DEV_STRING: process.env.ADMIN_BASIC_DEV_STRING,
 	ADMIN_BASIC_DEV_KEY: process.env.ADMIN_BASIC_DEV_KEY,
 	MONGO_URI_PROD: process.env.MONGO_URI_PROD,
-	GOOGLE_API_KEY: process.env.GOOGLE_API_KEY
+	GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+	CRYPTO_PASSWORD: process.env.CRYPTO_PASSWORD,
+	CRYPTO_SECOND: process.env.CRYPTO_SECOND,
+	NEST_PAY_CLIENT_ID: process.env.NEST_PAY_CLIENT_ID,
+	NEST_PAY_RANDOM: process.env.NEST_PAY_RANDOM,
+	NEST_PAY_STORE_KEY: process.env.NEST_PAY_STORE_KEY
 }
 
 export default keys;

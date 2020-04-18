@@ -27,6 +27,7 @@ interface IGenOptions {
   depositType_en: Array<object>;
   decorType: object;
   quarter: object;
+  phoneCodes: Array<object>;
   partnerGeneralStructure: object;
 }
 
@@ -170,7 +171,7 @@ const generalOptions: IGenOptions = {
       { value: '5', label: '5' },
     ],
     contentOfferForSearch:[
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 18, 22, 23, 26, 30, 31, 33, 34, 37
+      1, 4, 5, 6, 7, 12, 13, 16, 23, 24, 25, 37, 48, 42, 33, 34, 15
     ],
     contentOffer_sr: [
       {value: '1', label: 'Lavirint'},
@@ -344,6 +345,16 @@ const generalOptions: IGenOptions = {
         {value: '17', label: 'Surčin'},
       ],
     },
+    phoneCodes: [
+      {value: '381', label: 'RS +381'},
+      {value: '382', label: 'CG +382'},
+      {value: '387', label: 'BH +387'},
+      {value: '389', label: 'MK +389'},
+      {value: '385', label: 'HR +385'},
+      {value: '386', label: 'SI +386'},
+      {value: '43', label: 'AT +43'},
+      {value: '49', label: 'DE +49'},
+    ],
     partnerGeneralStructure: {
     size: null,
     playSize: null,

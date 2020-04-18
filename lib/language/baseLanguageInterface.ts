@@ -31,6 +31,20 @@ export default interface LanguageInterface {
 	headDescriptionSearch: string;
 	headTitleTerms: string;
 	headDescriptionTerms: string;
+	headTitleUserProfile: string;
+	headDescriptionUserProfile: string;
+	headTitlePaymentSuccess: string;
+	headDescriptionPaymentSuccess: string;
+	headTitlePaymentFailure: string;
+	headDescriptionPaymentFailure: string;
+	headTitleCateringPayment: string;
+	headDescriptionCateringPayment: string;
+	headTitleOnlinePayments: string;
+	headDescriptionOnlinePayments: string;
+	headTitleContact: string;
+	headDescriptionContact: string;
+	headTitleErrorPage: string;
+	headDescriptionErrorPage: string;
 
 
 	navigationLogin: string;
@@ -38,6 +52,8 @@ export default interface LanguageInterface {
 	navigationFaq: string;
 	navigationPartnership: string;
 	navigationContact: string;
+	navigationTerms: string;
+	navigationProfile: string;
 
 	navigationPartnerGeneral: string;
 	navigationPartnerCatering: string;
@@ -46,7 +62,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
-	navigationTerms: string;
+	
 	
 	uniCity: string;
 	uniDistrict: string;
@@ -69,6 +85,12 @@ export default interface LanguageInterface {
 	uniPartnerProgressLink: string;
 	uniDeposit: string;
 	uniNotWorkingDay: string;
+	uniMap: string;
+	uniVAT: string;
+	uniErrorMessage1: string;
+	uniErrorMessage2: string;
+	uniErrorGoBack: string;
+	uniErrorHome: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -78,6 +100,16 @@ export default interface LanguageInterface {
 	emailPartnerForgotPassText: string;
 	emailPartnerForgotPassCode: string;
 	emailPartnerForgotPassButton: string;
+	emailUserRegisterTitle: string;
+	emailUserRegisterText: string;
+
+	emailCateringConfirmationTitle: string;
+	emailCateringConfirmationText: string;
+	emailCateringConfirmationSub: string;
+	emailCateringConfirmationTime: string;
+	emailCateringConfirmationDeal: string;
+	emailCateringConfirmationPrice: string;
+	emailCateringConfirmationFinish: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -171,6 +203,7 @@ export default interface LanguageInterface {
 	emailVerificationPartnerLogButton: string;
 	emailVerificationPartnerErrorTitle: string;
 	emailValidationPartnerErrorArticle: string;
+	emailValidationUserErrorArticle: string;
 	emailVerificationPartnerErrorButton: string;
 
 	confirmPartnerRegTitle: string;
@@ -180,12 +213,14 @@ export default interface LanguageInterface {
 	passwordExplanation: string;
 	passwordUpdateTitle: string;
 	passwordUpdateExplanation: string;
+	passwordUpdateUserExplanation: string;
 	passwordAlertPass: string;
 	passwordAlertCode: string;
 	passwordAlertConfirm: string;
 
 	passwordRequestTitle: string;
 	passwordRequestExplanation: string;
+	passwordRequestUserExplanation: string;
 	passwordUpdateRequestTitle: string;
 	passwordUpdateRequestExplanation: string;
 	passwordUpdateRequestError: string;
@@ -561,7 +596,9 @@ export default interface LanguageInterface {
 	reservationAlertGeneralKidsSize: string;
 	reservationAlertCatering: string;
 	reservationAlertCateringTime: string;
-
+	reservationPaymentLoginTitle: string;
+	reservationPaymentRegistrationTitle: string;
+	reservationPaymentPasswordTitle: string;
 
 	
 	loginTitle: string;
@@ -701,6 +738,154 @@ export default interface LanguageInterface {
 	termsDisputeTitle: string;
 	termsDisputeText_1: string;
 
+	userLoginRegTitle: string;
+	userLoginRegDescription: string;
+	userLoginRegFirstLabel: string;
+	userLoginRegFirstPlaceholder: string;
+	userLoginRegLastLabel: string;
+	userLoginRegLastPlaceholder: string;
+	userLoginRegEmailLabel: string;
+	userLoginRegEmailPlaceholder: string;
+	userLoginRegPhoneLabel: string;
+	userLoginRegPhonePlaceholder: string;
+	userLoginRegPhonecodePlaceholder: string;
+	userLoginLogTitle: string;
+	userLoginLogDescription: string;
+	userLoginLogPasswordLabel: string;
+	userLoginLogPasswordPlaceholder: string;
+	userLoginAlertFirst: string;
+	userLoginAlertLast: string;
+	userLoginAlertEmail: string;
+	userLoginAlertPhonecode: string;
+	userLoginAlertPhone: string;
+	userLoginAlertTerms: string;
+	userLoginAlertLogEmail: string;
+	userLoginAlertPassword: string;
+	userLoginAlertDouble: string;
+	userLoginRegConfirmTitle: string;
+	userLoginRegConfirmDescription: string;
+	userLoginRegConfirmEmail: string;
+	userLoginLinksReg_1: string;
+	userLoginLinksReg_2: string;
+	userLoginLinksLog_1: string;
+	userLoginLinksLog_2: string;
+
+
+	paymentUserEmailTitleTrue: string;
+	paymentUserEmailTitleFalse: string;
+	paymentUserEmailResSub: string;
+	paymentUserEmailPartnerName: string;
+	paymentUserEmailAddress: string;
+	paymentUserEmailDate: string;
+	paymentUserEmailRoom: string;
+	paymentUserEmailFullPriceTrue: string;
+	paymentUserEmailFullPriceFalse: string;
+	paymentUserEmailDepositTrue: string;
+	paymentUserEmailDepositFalse: string;
+	paymentUserEmailForTrilinoTrue: string;
+	paymentUserEmailForTrilinoFalse: string;
+	paymentUserEmailTransSub: string;
+	paymentUserEmailOrderId: string;
+	paymentUserEmailAuthCode: string;
+	paymentUserEmailPaymentStatus: string;
+	paymentUserEmailPaymentStatusTrue: string;
+	paymentUserEmailPaymentStatusFalse: string;
+	paymentUserEmailPaymentStatusCancel: string;
+	paymentUserEmailTransactionId: string;
+	paymentUserEmailTransactionDate: string;
+	paymentUserEmailMdStatus: string;
+	paymentUserEmailFinishTrue: string;
+	paymentUserEmailFinishFalse: string;
+	paymentPartnerEmailCateringDeal: string;
+	paymentPartnerEmailCateringPerson: string;
+	paymentPartnerEmailTitle: string;
+	paymentPartnerEmailSub: string;
+	paymentPartnerEmailCelebrant: string;
+	paymentPartnerEmailCatering: string;
+	paymentPartnerEmailDecoration: string;
+	paymentPartnerEmailAddon: string;
+	paymentPartnerEmailPrice: string;
+	paymentPartnerEmailFinish: string;
+	paymentPageTitleTrue: string;
+	paymentPageTitleFalse: string;
+	paymentPageSub: string;
+	paymentPageFinishTrue: string;
+	paymentPageFinishFalse: string;
+	paymentPageFinishUniversal: string;
+	paymentPageLink: string;
+	paymentStageAlert: string;
+	paymentStageVenue: string;
+	paymentStageAddress: string;
+	paymentStageDate: string;
+	paymentStageRoom: string;
+	paymentStageGuest: string;
+	paymentStagePrice: string;
+	paymentStageDeposit: string;
+	paymentStageMsgWeb: string;
+	paymentStageMsgOnsite: string;
+	paymentStageMsgTrilino: string;
+	paymentStageCheck: string;
+	paymentStageButton: string;
+	paymentCateringSubCatering: string;
+	paymentCateringSubTransaction: string;
+	paymentCateringTextFail: string;
+
+	contactHeadTitle: string;
+	contactGeneralSub: string;
+	contactGeneralPart: string;
+	contactGeneralAddress: string;
+	contactGeneralPhone: string;
+	contactGeneralWebsite: string;
+	contactGeneralCompanyNum: string;
+	contactGeneralTaxNum: string;
+	contactGeneralDirector: string;
+	contactContactSub: string;
+	contactContactGeneralEmail: string;
+	contactContactUserEmail: string;
+	contactContactPartnerEmail: string;
+
+	onlinePaymentTitle: string;
+	onlinePaymentSub1: string;
+	onlinePaymentText1: string;
+	onlinePaymentPhotoTitle1: string;
+	onlinePaymentSub2: string;
+	onlinePaymentText2: string;
+	onlinePaymentText3: string;
+	onlinePaymentPhotoTitle2: string;
+
+	userProfileSubNavReservation: string;
+	userProfileSubNavMessage: string;
+	userProfileSubNavLogout: string;
+	userProfileListAlert: string;
+	userProfileListTitle: string;
+	userProfileListButtonMore: string;
+	userProfileListButtonCancel: string;
+	userProfileListButtonCatering: string;
+	userProfileListButtonRate: string;
+	userProfileListNoList: string;
+	userProfileListModalTitle: string;
+	userProfileListModalButton: string;
+	userProfileListModalTextFree: string;
+	userProfileListModalTextPaid: string;
+	userProfileListCateringModalTitle: string;
+	userProfileListCateringModalButton: string;
+	userProfileListCateringModalText1: string;
+	userProfileListCateringModalText2: string;
+	userProfileListCateringModalText3: string;
+	userProfileListCateringModalText4: string;
+	userProfileBillTitle: string;
+	userProfileBillPhone: string;
+	userProfileBillTotalPrice: string;
+	userProfileBillTermPrice: string;
+	userProfileBillCateringPrice: string;
+	userProfileBillDecorationPrice: string;
+	userProfileBillAddonPrice: string;
+	userProfileBillDepositPrice: string;
+	userProfileBillOnsitePayment: string;
+	userProfileBillUserprofilPayment: string;
+	userProfileBillUserprofilDeadline: string;
+	userProfileBillUserprofilType: string;
+	userProfileBillPaid: string;
 
 
 	//////////////////////API
@@ -724,5 +909,18 @@ export default interface LanguageInterface {
 
 	apiPartnerAuthCode1: string;
 	apiPartnerAuthCode2: string;
+
+
+
+	apiUserSaveCode2: string;
+	apiUserSaveCode5: string;
+
+	apiUserUpdateVeriCode2: string;
+	apiUserUpdatePassCode3: string;
+	apiUserUpdateReqPassCode3: string;
+
+	apiUserLoginCode2: string;
+	apiUserLoginCode3: string;
+	apiUserLoginCode5: string;
 
 }
