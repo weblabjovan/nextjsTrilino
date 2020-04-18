@@ -319,3 +319,20 @@ export const getOrgHead = (orgRoot: string, pageName: string): object => {
 
   return{ title: '', description: ''};
 }
+
+export const getServerHost = (host: string): string => {
+
+  if (host === 'dev.trilino.com' || host.indexOf('trilino-dev') !== -1 || host === 'www.dev.trilino.com') {
+   return 'dev';
+  }
+
+  if (host === 'test.trilino.com' || host.indexOf('trilino-test') !== -1 || host === 'www.test.trilino.com') {
+    return 'test';
+  }
+
+  if (host === 'trilino.com' || host.indexOf('trilino-prod') !== -1 || host === 'www.trilino.com') {
+    return 'prod';
+  }
+
+  return 'local';
+}
