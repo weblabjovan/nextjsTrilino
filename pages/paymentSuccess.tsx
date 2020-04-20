@@ -4,7 +4,8 @@ import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { getUserToken } from '../lib/helpers/specificUserFunctions';
-import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
+import { getSingleReservation } from '../lib/helpers/specificReservationFunctions';
+import { isPaymentResponseValid } from '../server/helpers/validations';
 import parse from 'urlencoded-body-parser';
 import Head from '../components/head';
 import PaymentSuccessView from '../views/PaymentSuccessView';
@@ -51,7 +52,7 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
       if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req, 'reservation')) {
-        ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
+        ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
         ctx.res.end();
       }else{
         paymentInfo['card'] = nestPayData['EXTRA.CARDBRAND'];
@@ -63,12 +64,12 @@ PaymentSuccess.getInitialProps = async (ctx: any) => {
         paymentInfo['payment'] = nestPayData['Response'];
       }
     }else{
-      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
+      ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
       ctx.res.end();
     }
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentSuccess`});
     ctx.res.end();
   }
   

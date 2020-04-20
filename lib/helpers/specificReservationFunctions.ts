@@ -78,28 +78,6 @@ export const getSingleReservation = async (context: any): Promise<any> => {
   return response;
 }
 
-export const isPaymentResponseValid = (response: object, id: string, req: object, type: string): boolean => {
-  if (Object.keys(response).length) {
-    const outcome = response['Response'];
-    const resId = type === 'catering' ? `cat-${id}` : id;
-    
-    if (response['ReturnOid'] === resId && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting' && req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'POST') {
-      const split = response['HASHPARAMSVAL'].split('|');
-      if (split[1] === resId && split[4] === outcome) {
-        return true;
-      }
-    }
-    return false;
-  }else{
-    if (req['headers']['sec-fetch-site'] === 'cross-site' && req['method'] === 'GET') {
-      return true;
-    }
-    
-  }
-
-  return false;
-}
-
 export const isTrilinoCateringOrdered = (cateringObj: object): boolean => {
   const trilino = ['0000000000001', '0000000000002'];
   let res = false;

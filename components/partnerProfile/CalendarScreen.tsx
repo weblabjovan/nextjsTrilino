@@ -148,7 +148,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
       if (event['start']) {
         this.setState({ dates: {start: event['start'], end: event['end']}}, () => {
           const link = setUpLinkBasic(window.location.href);
-          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: this.state.activeRoom['value'], dates: this.state.dates });
         });
       }else{
         let dates = {};
