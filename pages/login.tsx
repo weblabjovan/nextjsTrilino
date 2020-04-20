@@ -60,7 +60,7 @@ Login.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=login`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=login`});
     ctx.res.end();
   }
 

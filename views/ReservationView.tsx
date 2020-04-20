@@ -355,23 +355,15 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1) {
-        return '225px';
+        return '180px';
       }
       if (step === 2) {
-        let items = 0;
         const rows = this.props.partner['catering']['deals'].length;
-        this.props.partner['catering']['deals'].map(deal => {
-          items = items + deal['items'].length;
-        })
-        const rowHeight = ((items/2) * 25);
-        const safty = rows > 1 ? (rows * 15) : 60;
-        const height = (125 * rows) + (55 * rows) + rowHeight + (rows * 35) + safty;
-        return `${height}px`;
+        return `${rows * 370 + 90 }px`;
       }
 
       if (step === 3) {
-        const rows = Object.keys(this.props.partner['decoration']).length  + this.props.partner['contentAddon'].length;
-        const height = 150 + (rows * 100);
+        const height = 300 * 2 + 90;
         return `${height}px`;
       }
 
@@ -380,24 +372,16 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1) {
-        return '350px';
+        return '300px';
       }
 
       if (step === 2) {
-        let items = 0;
         const rows = this.props.partner['catering']['deals'].length;
-        this.props.partner['catering']['deals'].map(deal => {
-          items = items + deal['items'].length;
-        })
-        const rowHeight = items * 25;
-        const safty = rows > 1 ? (rows * 15) : 50;
-        const height = (125 * rows) + (85 * rows) + rowHeight + (rows * 35) + safty;
-        return `${height}px`;
+        return `${rows * 480 + 90 }px`;
       }
 
       if (step === 3) {
-        const rows = Object.keys(this.props.partner['decoration']).length  + this.props.partner['contentAddon'].length;
-        const height = 150 + (rows * 95);
+        const height = 280 * 2 + 90;
         return `${height}px`;
       }
 
@@ -941,15 +925,20 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
+                              <p className="payNote">{deal['regId'].length < 13 ? '*Ketering se plaća na licu mesta, na dan proslave.' :'*Ketering se plaća preko korisničkog profila, najkasnije 7 dana pre početka proslave.' }</p>
                             </Col>
 
                             <Col xs="12" sm="7">
-                              <Row>
+                              <Row className="cateringMenu">
+                                <span className="scroll">{deal['items'].length > 7 ? 'Scroll' : ''}</span>
                                 <Col xs="12"><p className="strong">{this.state.dictionary['reservationFormCateringMenu']}</p></Col>
                                 {
                                   deal['items'].map( (item, itemIndex) => {
                                     return(
-                                      <Col xs="12" sm="6" key={`itemKey_${itemIndex}`}><p className="second">{item}</p></Col>
+                                      <div className="item" key={`offerKey_${index}`}>
+                                        <span className="icon check"></span>
+                                        <p>{item}</p>
+                                      </div>
                                     )
                                   })
                                 }
@@ -995,8 +984,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection hide" id="step_3">
                       <Row className="addonSection">
+                        <span className="scroll">{this.props.partner['contentAddon'].length > 4 ? 'Scroll' : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonFun']}</h4></Col>
-                        <Col xs="12">
+                        <Col xs="12" className="addonList">
                         {
                           this.props.partner['contentAddon'].map( (addon, index) => {
                             return(
@@ -1024,8 +1014,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       </Row>
 
                       <Row className="addonSection">
+                        <span className="scroll">{Object.keys(this.props.partner['decoration']).length > 4 ? 'Scroll' : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonDecoration']}</h4></Col>
-                        <Col xs="12">
+                        <Col xs="12" className="addonList">
                         {
                           Object.keys(this.props.partner['decoration']).map( (key, index) => {
                             const item = this.props.partner['decoration'][key];

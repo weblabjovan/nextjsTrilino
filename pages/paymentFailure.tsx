@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
-import { getSingleReservation , isPaymentResponseValid } from '../lib/helpers/specificReservationFunctions';
+import { getSingleReservation } from '../lib/helpers/specificReservationFunctions';
+import { isPaymentResponseValid } from '../server/helpers/validations';
 import { getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import PaymentFailureView from '../views/PaymentFailureView';
@@ -52,7 +53,7 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
     if (resOne['status'] === 200) {
       const nestPayData = await parse(req);
       if (!isPaymentResponseValid(nestPayData, link['queryObject']['reservation'], req, 'reservation')) {
-        ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+        ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
     ctx.res.end();
       }else{
         if (Object.keys(nestPayData).length) {
@@ -67,13 +68,13 @@ PaymentFailure.getInitialProps = async (ctx: any) => {
         }
       }
     }else{
-      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+      ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
     ctx.res.end();
     }
 
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=paymentFailure`});
     ctx.res.end();
   }
   

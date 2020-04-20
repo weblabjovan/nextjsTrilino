@@ -167,6 +167,12 @@ export const apiEndpoint = (
 }
 
 export const setCookie = (data: any, name: string, expires: number): void => {
+  if (name === 'trilino-user-token') {
+    unsetCookie('trilino-partner-token');
+  }
+  if (name === 'trilino-partner-token') {
+    unsetCookie('trilino-user-token');
+  }
   cookie.set(name, data, { expires });
 }
 
@@ -286,7 +292,7 @@ export const errorExecute = (window: any, error: boolean): void => {
   if (error) {
     const link = setUpLinkBasic(window.location.href);
     const lang = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
-    window.location.href = `${link['protocol']}${link['host']}/errorPage?language=${lang}&error=1`;
+    window.location.href = `${link['protocol']}${link['host']}/?page=error&language=${lang}&error=1`;
   }
 }
 

@@ -1,6 +1,7 @@
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../../lib/helpers/validations';
 import DateHandler from '../../lib/classes/DateHandler';
 import { addMinutesToString } from './general';
+import Keys from '../keys';
 
 type partnerReg = {
 	name: string;
@@ -413,4 +414,21 @@ export const isReservationConfirmDataValid = (data: object): boolean => {
 	}
 
 	return true;
+}
+
+export const isPaymentResponseValid = (response: object, id: string, req: object, type: string): boolean => {
+  if (Object.keys(response).length) {
+    const outcome = response['Response'];
+    const resId = type === 'catering' ? `cat-${id}` : id;
+    
+    if (response['ReturnOid'] === resId && response['hashAlgorithm'] === 'ver2' && response['storetype'] === '3d_pay_hosting' && req['method'] === 'POST') {
+      const split = response['HASHPARAMSVAL'].split('|');
+      if (split[0] === Keys['NEST_PAY_CLIENT_ID'] && split[1] === resId && split[4] === outcome) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  return false;
 }
