@@ -417,7 +417,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}else if (type === 'multiple') {
 				return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 6, error: 'db error', message: 'this'  });
 			}else{
-				return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 7, error: 'db error', message: err  });
+				return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 7, error: 'db error', message: 'this'  });
 			}
 		
 			
