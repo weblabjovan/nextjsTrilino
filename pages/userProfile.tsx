@@ -7,9 +7,6 @@ import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import UserProfileView from '../views/UserProfileView';
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -51,7 +48,7 @@ UserProfile.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 

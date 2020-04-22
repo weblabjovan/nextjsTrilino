@@ -8,10 +8,7 @@ import Head from '../components/head';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
-import PasswordChangeView from '../views/PasswordChangeView'
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
+import PasswordChangeView from '../views/PasswordChangeView';
 
 interface Props {
   userAgent?: string;
@@ -57,7 +54,7 @@ PasswordChange.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 

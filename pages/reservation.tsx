@@ -8,9 +8,6 @@ import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions'
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import ReservationView from '../views/ReservationView';
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -57,7 +54,7 @@ Reservation.getInitialProps = async (ctx) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
