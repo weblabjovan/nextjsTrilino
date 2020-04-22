@@ -355,15 +355,15 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1) {
-        return '180px';
+        return '210px';
       }
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
-        return `${rows * 370 + 90 }px`;
+        return `${rows * 370 + 140 }px`;
       }
 
       if (step === 3) {
-        const height = 300 * 2 + 90;
+        const height = 300 * 2 + 110;
         return `${height}px`;
       }
 
@@ -372,16 +372,16 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1) {
-        return '300px';
+        return '320px';
       }
 
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
-        return `${rows * 480 + 90 }px`;
+        return `${rows * 500 + 130 }px`;
       }
 
       if (step === 3) {
-        const height = 280 * 2 + 90;
+        const height = 290 * 2 + 130;
         return `${height}px`;
       }
 
@@ -708,7 +708,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     if (!this.props.userSaveReservationStart && this.props.userSaveReservationSuccess && !prevProps.userSaveReservationSuccess) {
       this.setState({ loader: false });
-      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
       const hash = setNestPayHash(plainText);
 
       const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
@@ -719,13 +719,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
       <input type="hidden" name="amount" value="${this.state.price['deposit'].toFixed(2)}" /> 
       <input type="hidden" name="currency" value="941" /> 
       <input type="hidden" name="oid" value="${this.props.userSaveReservationSuccess[0]['_id']}" /> 
-      <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 
-      <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" /> 
+      <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 
+      <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" /> 
       <input type="hidden" name="lang" value="${this.props.lang}" /> 
       <input type="hidden" name="hashAlgorithm" value="ver2" /> 
       <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
       <input type="hidden" name="encoding" value="utf-8" />
-      <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" />
+      <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=closed&&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&deactive=true&language=${this.props.lang}" />
       <input type="submit" style="visibility: hidden" /> </form>`;
       
       const form =document.getElementById('reviseCombi');
@@ -900,6 +900,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
                         <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickTrue']}</p>
                             <button className="next" onClick={() => this.validateSection(1)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
@@ -925,17 +926,17 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
-                              <p className="payNote">{deal['regId'].length < 13 ? '*Ketering se plaća na licu mesta, na dan proslave.' :'*Ketering se plaća preko korisničkog profila, najkasnije 7 dana pre početka proslave.' }</p>
+                              <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
                             </Col>
 
                             <Col xs="12" sm="7">
                               <Row className="cateringMenu">
-                                <span className="scroll">{deal['items'].length > 7 ? 'Scroll' : ''}</span>
+                                <span className="scroll">{deal['items'].length > 7 ? this.state.dictionary['uniScroll']  : ''}</span>
                                 <Col xs="12"><p className="strong">{this.state.dictionary['reservationFormCateringMenu']}</p></Col>
                                 {
                                   deal['items'].map( (item, itemIndex) => {
                                     return(
-                                      <div className="item" key={`offerKey_${index}`}>
+                                      <div className="item" key={`offerKey_${itemIndex}`}>
                                         <span className="icon check"></span>
                                         <p>{item}</p>
                                       </div>
@@ -964,6 +965,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                         <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickFalse']}</p>
                             <button className="next" onClick={() => this.validateSection(2)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
@@ -984,7 +986,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection hide" id="step_3">
                       <Row className="addonSection">
-                        <span className="scroll">{this.props.partner['contentAddon'].length > 4 ? 'Scroll' : ''}</span>
+                        <span className="scroll">{this.props.partner['contentAddon'].length > 4 ? this.state.dictionary['uniScroll'] : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonFun']}</h4></Col>
                         <Col xs="12" className="addonList">
                         {
@@ -1014,7 +1016,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       </Row>
 
                       <Row className="addonSection">
-                        <span className="scroll">{Object.keys(this.props.partner['decoration']).length > 4 ? 'Scroll' : ''}</span>
+                        <span className="scroll">{Object.keys(this.props.partner['decoration']).length > 4 ? this.state.dictionary['uniScroll'] : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonDecoration']}</h4></Col>
                         <Col xs="12" className="addonList">
                         {
@@ -1044,6 +1046,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                          <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickFalse']}</p>
                             <button className="next" onClick={() => this.validateSection(3)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>

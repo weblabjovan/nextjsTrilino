@@ -28,16 +28,16 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		        <Row>
 			        <Col xs='12' sm="7" lg="6" className="menuOptions">
 		          	<ul>
-		          		<li><a href={`/login?language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
+		          		<li><a href={`/login?page=user&stage=login&language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
 		          		<li><a href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</a></li>
 		          		<li><a href={`/?page=partnership&language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</a></li>
 		          		<li><a href={`/?page=contact&language=${this.props.language.toLowerCase()}`}>{this.props.contact}</a></li>
 		          	</ul>
 		          	<ul>
 		          		<li><a href={`/?page=terms&language=${this.props.language.toLowerCase()}`}>{this.props.terms}</a></li>
-		          		<li><a href={`/`}>{this.props.faq}</a></li>
+		          		<li><a href={`/?page=faq&language=${this.props.language.toLowerCase()}`}>{this.props.faq}</a></li>
 		          		<li><a href={`/?page=payments&language=${this.props.language.toLowerCase()}`}>Online plaćanje</a></li>
-		          		<li><a href={`/`}>Izjava privatnosti</a></li>
+		          		<li><a href={`/?page=privacy&language=${this.props.language.toLowerCase()}`}>Izjava privatnosti</a></li>
 		          	</ul>
 			        </Col>
 			        <Col xs='12' sm="5" lg="6">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../lib/language';
-import { isMobile } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import PartnerHelpersr from '../components/help/partnerHelpsr';
 import PartnerHelperen from '../components/help/partnerHelpen';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,12 +9,9 @@ import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  token?: string | undefined;
-  section?: string | undefined | string[]; 
 };
 interface MyState {
 	language: string;
@@ -25,17 +22,25 @@ interface MyState {
 export default class PartnerHelpView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
-    language: this.props.lang,
+    language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: isMobile(this.props.userAgent),
+    isMobile: false,
   };
 
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (prevProps.lang !== this.props.lang) {
+      this.setState({dictionary: getLanguage(this.props.lang), language: this.props.lang.toUpperCase() })
+    }
+  }
+
   componentDidMount(){
+    const link = setUpLinkBasic(window.location.href);
+    this.setState({ isMobile: isMobile(navigator.userAgent)});
     setTimeout(() => {
-      const term = !this.props.section || this.props.section === 'undefined' ? 'generalSec' : `${this.props.section}Sec`;
+      const term = !link['queryObject']['section'] || link['queryObject']['section'] === 'undefined' ? 'generalSec' : `${link['queryObject']['section']}Sec`;
       const res = document.getElementById(term);
       res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
-    }, 1200);
+    }, 800);
   }
 	
   render() {

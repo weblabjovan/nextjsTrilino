@@ -1,19 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
+import { isMobile } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style/style.scss';
 
-interface MyProps {
-  // using `interface` is also ok
+
+type MyProps = {
+	userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
+  userIsLogged: boolean;
+  // using `interface` is also ok
 };
 interface MyState {
 	language: string;
@@ -21,28 +22,18 @@ interface MyState {
 	isMobile: boolean;
 };
 
-export default class ConfirmView extends React.Component <MyProps, MyState>{
+export default class FaqView extends React.Component <MyProps, MyState> {
 
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
     dictionary: getLanguage(this.props.lang),
-    isMobile: false,
+    isMobile: isMobile(this.props.userAgent),
   };
 
-  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
-    if (prevProps.lang !== this.props.lang) {
-      this.setState({dictionary: getLanguage(this.props.lang), language: this.props.lang.toUpperCase() })
-    }
-  }
-
-  componentDidMount(){
-    this.setState({ isMobile: isMobile(navigator.userAgent)});
-  }
-	
-  render() {
-    return(
-    	<div className="totalWrapper">
-    		<NavigationBar 
+	render(){
+		return(
+			<div className="totalWrapper">
+				<NavigationBar 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
           fullPath={ this.props.fullPath }
@@ -52,22 +43,35 @@ export default class ConfirmView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
-          terms={ this.state.dictionary['navigationTerms'] }
-          languagePrevent={ true }
+    			terms={ this.state.dictionary['navigationTerms'] }
+    			user={ this.props.userIsLogged }
+    			userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
-    		<Container>
-    			<div className="confirmRegistration">
-            <Row>
-              <Col xs='12'>
-                <h2 className="middle">{ this.state.dictionary['confirmPartnerRegTitle'] }</h2>
-                <p>{ this.state.dictionary['confirmPartnerRegContent'] }<br/><br/><br/><br/></p>
-                <p className="middle">{ this.state.dictionary['uniCheckEmail'] }</p>
-              </Col>
-            </Row>
-          </div>
-		    </Container>
+				<Container>
+					<Row>
+		    		<Col xs="12">
+		    			<div className="helpPage terms">
+		    				<h2>{this.state.dictionary['faqTitle']}</h2>
+		    				<div className="section" >
+		    					<h4>{this.state.dictionary['faqQuestion1']}</h4>
+		    					<p>{this.state.dictionary['faqAnswer1']}</p>
+		    				</div>
 
-		    <Footer 
+		    				<div className="section" >
+		    					<h4>{this.state.dictionary['faqQuestion2']}</h4>
+		    					<p>{this.state.dictionary['faqAnswer2']}</p>
+		    				</div>
+
+		    				<div className="section" >
+		    					<h4>{this.state.dictionary['faqQuestion3']}</h4>
+		    					<p>{this.state.dictionary['faqAnswer3']}</p>
+		    				</div>
+
+		    			</div>
+		    		</Col>
+		    	</Row>
+				</Container>
+				<Footer 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
     			page={ this.props.path ? this.props.path : '' }
@@ -76,11 +80,9 @@ export default class ConfirmView extends React.Component <MyProps, MyState>{
     			search={ this.state.dictionary['navigationSearch'] }
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
-          terms={ this.state.dictionary['navigationTerms'] }
+    			terms={ this.state.dictionary['navigationTerms'] }
     		/>
-
-    	</div>
-    	
-    ) 
-  }
+			</div>
+		)
+	}
 }

@@ -45,6 +45,10 @@ export default interface LanguageInterface {
 	headDescriptionContact: string;
 	headTitleErrorPage: string;
 	headDescriptionErrorPage: string;
+	headTitleFaqPage: string;
+	headDescriptionFaqPage: string;
+	headTitlePrivacyPage: string;
+	headDescriptionPrivacyPage: string;
 
 
 	navigationLogin: string;
@@ -54,6 +58,8 @@ export default interface LanguageInterface {
 	navigationContact: string;
 	navigationTerms: string;
 	navigationProfile: string;
+	navigationPrivacy: string;
+	navigationOnline: string;
 
 	navigationPartnerGeneral: string;
 	navigationPartnerCatering: string;
@@ -91,6 +97,7 @@ export default interface LanguageInterface {
 	uniErrorMessage2: string;
 	uniErrorGoBack: string;
 	uniErrorHome: string;
+	uniScroll: string;
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
@@ -546,6 +553,9 @@ export default interface LanguageInterface {
 	locationAvailabilityTableColumnTwo: string;
 	locationAvailabilityTableColumnThree: string;
 	locationAvailabilityTableColumnFour: string;
+	locationAvailabilityKids: string;
+	locationAvailabilityAdults: string;
+	locationAvailabilityNoTerm: string;
 	locationChooseTermBefore: string;
 	locationChooseTermAfter: string;
 	locationButtonReserve: string;
@@ -599,6 +609,10 @@ export default interface LanguageInterface {
 	reservationPaymentLoginTitle: string;
 	reservationPaymentRegistrationTitle: string;
 	reservationPaymentPasswordTitle: string;
+	reservationCateringPayNoteTrilino: string;
+	reservationCateringPayNotePartner: string;
+	reservationSectionInfoClickTrue: string;
+	reservationSectionInfoClickFalse: string;
 
 	
 	loginTitle: string;
@@ -829,6 +843,8 @@ export default interface LanguageInterface {
 	paymentCateringSubCatering: string;
 	paymentCateringSubTransaction: string;
 	paymentCateringTextFail: string;
+	paymentDeactivateTitle: string;
+	paymentDeactivateText: string;
 
 	contactHeadTitle: string;
 	contactGeneralSub: string;
@@ -886,6 +902,31 @@ export default interface LanguageInterface {
 	userProfileBillUserprofilDeadline: string;
 	userProfileBillUserprofilType: string;
 	userProfileBillPaid: string;
+
+
+	privacyStatementTitle: string;
+	privacyStatementText1: string;
+	privacyStatementText2: string;
+	privacyStatementText3: string;
+	privacyStatementText4: string;
+	privacyStatementText5: string;
+	privacyStatementText6: string;
+	privacyStatementText7: string;
+	privacyStatementText8: string;
+	privacyStatementText9: string;
+	privacyStatementText10: string;
+	privacyStatementText11: string;
+	privacyStatementText12: string;
+	privacyStatementText13: string;
+
+	faqTitle: string;
+	faqQuestion1: string;
+	faqAnswer1: string;
+	faqQuestion2: string;
+	faqAnswer2: string;
+	faqQuestion3: string;
+	faqAnswer3: string;
+
 
 
 	//////////////////////API

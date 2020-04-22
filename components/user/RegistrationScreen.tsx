@@ -132,7 +132,7 @@ export default class RegistrationScreen extends React.Component <MyProps, MyStat
 	      />
 
 				<div className="middle marginSmall">
-					<a href={`/terms?language=${this.props.lang}`} target="_blank">{this.state.dictionary['uniTerms']}</a>
+					<a href={`/?page=terms&language=${this.props.lang}`} target="_blank">{this.state.dictionary['uniTerms']}</a>
 				</div>
 
         <div className="middle">

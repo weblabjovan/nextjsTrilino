@@ -615,7 +615,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 						      					<tr key={`term${index}`}>
 										          <th scope="row">{term['name']}</th>
 										          <td>{`${term['size']}m2`}</td>
-										          <td>{`${term['capKids']} dece i ${term['capAdults']} odraslih`}</td>
+										          <td>{`${term['capKids']} ${this.state.dictionary['locationAvailabilityKids']} ${term['capAdults']} ${this.state.dictionary['locationAvailabilityAdults']}`}</td>
 										          <td className="activeButtons">
 										          	{
 										          		term['terms'].length
@@ -626,7 +626,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 										          			)
 										          		})
 										          		:
-										          		<p>Nema dostupnih termina</p>
+										          		<p>{this.state.dictionary['locationAvailabilityNoTerm']}</p>
 										          	}
 
 										          </td>

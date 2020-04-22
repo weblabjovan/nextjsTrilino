@@ -90,7 +90,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                 <Col xs="12">
                   <div className="partnershipStripe">
                     <h2>{ this.state.dictionary['partnershipStripe_1'] }</h2>
-                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=register`}>{this.state.dictionary['uniRegister']}</Button>
+                    <Button color="success" href={`/login?page=partner&stage=register&language=${this.props.lang}`}>{this.state.dictionary['uniRegister']}</Button>
                   </div>
                   
                 </Col>
@@ -256,7 +256,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                 <Col xs="12">
                   <div className="partnershipStripe">
                     <h2 className="white">{this.state.dictionary['partnershipStripe_3']}</h2>
-                    <a href={`/partnershipLogin?language=${this.props.lang}&page=register`} className="white link">{this.state.dictionary['uniRegister']}</a>
+                    <a href={`/login?page=partner&stage=register&language=${this.props.lang}`} className="white link">{this.state.dictionary['uniRegister']}</a>
                   </div>
                   
                 </Col>
@@ -286,7 +286,7 @@ class PartnershipView extends React.Component <MyProps, MyState>{
                 <Col xs="12">
                   <div className="partnershipStripe">
                     <h2>{this.state.dictionary['partnershipPartner']}</h2>
-                    <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>{this.state.dictionary['uniLogin']}</Button>
+                    <Button color="success" href={`/login?page=partner&stage=login&language=${this.props.lang}`}>{this.state.dictionary['uniLogin']}</Button>
                   </div>
                   
                 </Col>

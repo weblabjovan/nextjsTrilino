@@ -157,3 +157,26 @@ export function cancelReservation(link: object, data: object, auth: string) {
     );
   };
 }
+
+export const deactivateReservationActionType = {
+  START: 'DEACTIVATE_RESERVATION_START',
+  ERROR: 'DEACTIVATE_RESERVATION_ERROR',
+  SUCCESS: 'DEACTIVATE_RESERVATION_SUCCESS',
+};
+
+export function deactivateReservation(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_DEACTIVATE);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      deactivateReservationActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
