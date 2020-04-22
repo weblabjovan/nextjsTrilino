@@ -321,6 +321,46 @@ export const getOrgHead = (orgRoot: string, pageName: string): object => {
     if (page === 'error') {
       return{ title: 'headTitleErrorPage', description: 'headDescriptionErrorPage'};
     }
+    if (page === 'faq') {
+      return{ title: 'headTitleFaqPage', description: 'headDescriptionFaqPage'};
+    }
+    if (page === 'privacy') {
+      return{ title: 'headTitlePrivacyPage', description: 'headDescriptionPrivacyPage'};
+    }
+  }
+
+  if (orgRoot === 'login') {
+    const page = pageName ? pageName : 'user';
+    if (page === 'user') {
+      return{ title: 'headTitleLogin', description: 'headDescriptionLogin'};
+    }
+
+    if (page === 'partner') {
+      return{ title: 'headTitlePartnershipLogin', description: 'headDescriptionPartnershipLogin'};
+    }
+
+    if (page === 'dev') {
+      return{ title: 'headTitleDevLogin', description: 'headDescriptionDevLogin'};
+    }
+
+    if (page === 'admin') {
+      return{ title: 'headTitleAdminLogin', description: 'headDescriptionAdminLogin'};
+    }
+  }
+
+  if (orgRoot === 'payment') {
+    const page = pageName ? pageName : '';
+    if (page === 'reservationSuccess') {
+      return{ title: 'headTitlePaymentSuccess', description: 'headDescriptionPaymentSuccess'};
+    }
+
+    if (page === 'reservationFailure') {
+      return{ title: 'headTitlePaymentFailure', description: 'headDescriptionPaymentFailure'};
+    }
+
+    if (page === 'cateringSuccess') {
+      return{ title: 'headTitleCateringPayment', description: 'headDescriptionCateringPayment'};
+    }
   }
 
   return{ title: '', description: ''};

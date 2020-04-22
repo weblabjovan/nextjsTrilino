@@ -707,7 +707,7 @@ const isReservationWithTrilinoCatering = (reservation: object): boolean => {
           if (reservation['cateringObj'].length) {
             const dateHandler = new DateHandler();
             const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
-            if (dateDiff < -6 && reservation['cateringObj'][0]['status'] !== 'paid' && !reservation['cateringObj'][0].hasOwnProperty('transactionId')) {
+            if (dateDiff < -7 && reservation['cateringObj'][0]['status'] !== 'paid' && !reservation['cateringObj'][0].hasOwnProperty('transactionId')) {
               return true;
             }
           }

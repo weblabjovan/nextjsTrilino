@@ -1,14 +1,12 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
 import HomeView from '../views/HomeView';
 import ContactView from '../views/ContactView';
 import TermsView from '../views/TermsView';
 import OnlinePaymentsView from '../views/OnlinePaymentsView';
 import PartnershipView from '../views/PartnershipView';
+import FaqView from '../views/FaqView';
+import PrivacyView from '../views/PrivacyView';
 import ErrorPageView from '../views/ErrorPageView';
-import { getLanguage } from '../lib/language';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
@@ -33,73 +31,97 @@ export default class HomeOrganization extends React.Component <MyProps, MyState>
             ?
             (
               <HomeView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
             )
             :
             this.props.page === 'contact'
             ?
             (
               <ContactView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
             )
             :
             this.props.page === 'terms'
             ?
             (
               <TermsView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
             )
             :
             this.props.page === 'partnership'
             ?
             (
               <PartnershipView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
             )
             :
             this.props.page === 'payments'
             ?
             (
               <OnlinePaymentsView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
             )
             :
             this.props.page === 'error'
             ?
             (
               <ErrorPageView 
-		        userAgent={this.props.userAgent} 
-		        path={this.props.path} 
-		        fullPath={ this.props.fullPath } 
-		        lang={ this.props.lang } 
-		        error={ this.props.error } 
-		        userIsLogged={ this.props.userIsLogged } 
-		      />
+    		        userAgent={this.props.userAgent} 
+    		        path={this.props.path} 
+    		        fullPath={ this.props.fullPath } 
+    		        lang={ this.props.lang } 
+    		        error={ this.props.error } 
+    		        userIsLogged={ this.props.userIsLogged } 
+    		      />
+            )
+            :
+            this.props.page === 'faq'
+            ?
+            (
+              <FaqView 
+                userAgent={this.props.userAgent} 
+                path={this.props.path} 
+                fullPath={ this.props.fullPath } 
+                lang={ this.props.lang } 
+                userIsLogged={ this.props.userIsLogged } 
+              />
+            )
+            :
+            this.props.page === 'privacy'
+            ?
+            (
+              <PrivacyView 
+                userAgent={this.props.userAgent} 
+                path={this.props.path} 
+                fullPath={ this.props.fullPath } 
+                lang={ this.props.lang } 
+                userIsLogged={ this.props.userIsLogged } 
+              />
             )
             :
             null

@@ -362,7 +362,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					};
 
 					await connectToDb(req.headers.host);
-					const reservationsDb = await Reservation.aggregate([{ $match: {"user": userId} }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupCatering} ]);
+					const reservationsDb = await Reservation.aggregate([{ $match: {"user": userId, "transactionDate": { "$exists": true}} }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupCatering} ]).sort({fromDate: -1});
 					const reservations = prepareReservationsForUserList(reservationsDb);
 
 					if (reservations) {
@@ -374,6 +374,53 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).send({ endpoint: 'reservations', operation: 'getForUser', success: false, code: 3, error: 'db error', message: err  });
 				}
 			}
+		}
+	}
+
+
+	//////////////////////////////////////   DEACTIVATE   ///////////////////////////////////////////////
+
+	if (req.query.operation === 'deactivate') {
+		if (!dataHasValidProperty(req.body, ['type', 'language'])) {
+			return res.status(401).json({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 10, error: 'basic validation error' });
+		}else{
+			const { type } = req.body;
+			if (type === 'single') {
+				try{
+					if (!dataHasValidProperty(req.body, ['type', 'language', 'id'])) {
+						return res.status(401).json({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 9, error: 'basic validation error' });
+					}else{
+						const token = req.headers.authorization;
+						if (token) {
+							const { language, id } = req.body;
+							const dictionary = getLanguage(language);
+
+							const decoded = verifyToken(token);
+							const userId = encodeId(decoded['sub']);
+
+							const one = await Reservation.findOne({"_id": id, 'user': userId}, { new: true });
+							if (one) {
+								const upadate = await Reservation.findOneAndUpdate({"_id": id}, {"$set" : { active: false} }, { new: true });
+								return res.status(200).json({ endpoint: 'reservations', operation: 'deactivate', success: true, code: 1, result: upadate });
+							}else{
+								return res.status(401).json({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 7, error: 'unauthenticated user' });
+							}
+						}else{
+							return res.status(401).json({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 8, error: 'token auth error' });
+						}
+					}
+
+				}catch(err){
+					return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 3, error: 'db error', message: err  });
+				}
+				
+			}else if (type === 'multiple') {
+				return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 3, error: 'db error', message: err  });
+			}else{
+				return res.status(500).send({ endpoint: 'reservations', operation: 'deactivate', success: false, code: 3, error: 'db error', message: err  });
+			}
+		
+			
 		}
 	}
 

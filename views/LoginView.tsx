@@ -28,7 +28,7 @@ interface MyProps {
   path: string;
   fullPath: string;
   lang: string;
-  link: null | object
+  link: null | object;
 };
 interface MyState {
 	language: string;

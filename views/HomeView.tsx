@@ -321,30 +321,33 @@ class HomeView extends React.Component <MyProps, MyState>{
           <Container>
             <Row className="processWrapper">
                 <Col xs="12">
+                  <div className="iconHolder">
+                    <span className="icon choose"></span>
+                  </div>
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_1']}</h4>
                     <p>{this.state.dictionary['homeProcessText_1']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon reserve"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_2']}</h4>
                     <p>{this.state.dictionary['homeProcessText_2']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon cake"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_3']}</h4>
                     <p>{this.state.dictionary['homeProcessText_3']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon rate"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_4']}</h4>
                     <p>{this.state.dictionary['homeProcessText_4']}</p>
@@ -446,7 +449,7 @@ class HomeView extends React.Component <MyProps, MyState>{
               <Col xs="12">
                 <h4>{ this.state.dictionary['homeHeader_4'] }</h4>
                 <p>{ this.state.dictionary['homePartner'] }</p>
-                <Button color="success" href={`/partnership?language=${this.props.lang}`} >{ this.state.dictionary['uniMore'] }</Button>
+                <Button color="success" href={`/?page=partnership&language=${this.props.lang}`} >{ this.state.dictionary['uniMore'] }</Button>
               </Col>
                 
             </Row>
