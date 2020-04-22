@@ -51,16 +51,18 @@ Login.getInitialProps = async (ctx: any) => {
   try{
     const devLog = await isDevEnvLogged(ctx);
 
-    if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
-      ctx.res.end();
-    }
+    
 
     
 
     if (link['queryObject']['page'] === 'dev') {
       if (devLog) {
         ctx.res.writeHead(302, {Location: `/?language=${link['queryObject']['language']}`});
+        ctx.res.end();
+      }
+    }else{
+      if (!devLog) {
+        ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
         ctx.res.end();
       }
     }
