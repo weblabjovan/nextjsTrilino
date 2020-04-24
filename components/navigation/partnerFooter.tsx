@@ -4,13 +4,6 @@ import { Container, Row, Col, Button } from 'reactstrap';
 
 type MyProps = {
 	isMobile: boolean;
-  language: string;
-  page: string;
-  login: string;
-  search: string;
-  faq: string;
-  partnership: string;
-  contact: string; 
   // using `interface` is also ok
 };
 type MyState = {
