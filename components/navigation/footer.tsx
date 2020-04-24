@@ -58,18 +58,19 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		        </Row>
 
 		        <Row className="cardBrands">
-		        	<Col xs="12" sm="4" className="cards">
-	        			<img src="/static/visa.png" alt="visa" title="visa"></img>
+		        	<Col xs="12" sm="6" lg="4" className="cards">
+		        		<img src="/static/dinacard.png" alt="dinacard" title="dinacard" className="dina"></img>
+	        			<img src="/static/visa.png" alt="visa" title="visa" className="visa"></img>
 	        			<img src="/static/mastercard.svg" alt="mastercard" title="mastercard"></img>
 	        			<img src="/static/maestro.svg" alt="maestro" title="maestro"></img>
-	        			<img src="/static/amex.svg" alt="american express" title="american express"></img>
+	        			<img src="/static/amex.svg" alt="american express" title="american express" className="amex"></img>
 	        		</Col>
-	        		<Col xs="12" sm="4" className="banks">
+	        		<Col xs="12" sm="3" lg="4" className="banks">
 	        			<a href="https://www.bancaintesa.rs/pocetna.1.html" target="_blank">
 	        				<img src="/static/banca-intesa.svg" alt="banka intesa" title="banka intesa"></img>
 	        			</a>
 	        		</Col>
-	        		<Col xs="12" sm="4" className="security">
+	        		<Col xs="12" sm="3" lg="4" className="security">
 	        			<a href="https://www.mastercard.rs/sr-rs/consumers/find-card-products/credit-cards.html" target="_blank">
 	        				<img src="/static/mastercardsec.svg" alt="mastercard security" title="mastercard security"></img>
 	        			</a>
