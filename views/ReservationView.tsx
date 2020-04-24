@@ -355,7 +355,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1) {
-        return '210px';
+        return '240px';
       }
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
@@ -372,7 +372,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1) {
-        return '320px';
+        return '390px';
       }
 
       if (step === 2) {
