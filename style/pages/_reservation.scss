@@ -258,12 +258,12 @@
 		.formSection{
 			overflow:hidden;
 			transition:all 800ms ease-in-out;
-			height: 200px;
+			height: 240px;
 			width: 100%;
 			margin: 0px !important;
 
 			@media only screen and (max-width: 577px) {
-				height: 350px;
+				height: 390px;
 			}
 
 			h4{

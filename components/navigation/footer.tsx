@@ -3,15 +3,17 @@ import { Container, Row, Col, Button } from 'reactstrap';
 
 
 type MyProps = {
-	isMobile: boolean;
-  language: string;
-  page: string;
-  login: string;
-  search: string;
-  faq: string;
-  partnership: string;
-  contact: string; 
-  terms: string;
+	isMobile?: boolean;
+  language?: string;
+  page?: string;
+  login?: string;
+  search?: string;
+  faq?: string;
+  partnership?: string;
+  contact?: string; 
+  terms?: string;
+  payment?: string;
+  privacy?: string;
   // using `interface` is also ok
 };
 type MyState = {
@@ -36,8 +38,8 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		          	<ul>
 		          		<li><a href={`/?page=terms&language=${this.props.language.toLowerCase()}`}>{this.props.terms}</a></li>
 		          		<li><a href={`/?page=faq&language=${this.props.language.toLowerCase()}`}>{this.props.faq}</a></li>
-		          		<li><a href={`/?page=payments&language=${this.props.language.toLowerCase()}`}>Online plaćanje</a></li>
-		          		<li><a href={`/?page=privacy&language=${this.props.language.toLowerCase()}`}>Izjava privatnosti</a></li>
+		          		<li><a href={`/?page=payments&language=${this.props.language.toLowerCase()}`}>{this.props.payment}</a></li>
+		          		<li><a href={`/?page=privacy&language=${this.props.language.toLowerCase()}`}>{this.props.privacy}</a></li>
 		          	</ul>
 			        </Col>
 			        <Col xs='12' sm="5" lg="6">
