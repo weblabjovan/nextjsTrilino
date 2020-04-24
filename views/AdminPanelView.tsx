@@ -99,15 +99,6 @@ class AdminPanelView extends React.Component <MyProps, MyState>{
 
 		    <Footer 
     			isMobile={ this.state.isMobile } 
-    			language={ this.state.language } 
-    			page={ this.props.path ? this.props.path : '' }
-    			contact={ this.state.dictionary['navigationContact'] }
-    			login={ this.state.dictionary['navigationLogin'] }
-    			search={ this.state.dictionary['navigationSearch'] }
-    			partnership={ this.state.dictionary['navigationPartnership'] }
-    			faq={ this.state.dictionary['navigationFaq'] }
-          payment={ this.state.dictionary['navigationOnline'] }
-          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>
