@@ -51,7 +51,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
   }
 
   calculateAdditionalElementHeight(){
-    const elem = this.props.mobile ? document.getElementById(`additional_1`) : document.getElementById(`additional_2`);
+    const elem = this.props.mobile ? document.getElementById(`additional_2`) : document.getElementById(`additional_2`);
     const base = this.props.mobile && elem.offsetWidth < 500 ? 300 : 340;
     const line = this.props.mobile ? 30 : 35;
     const add = (this.props.catering.length + this.props.addon.length) * line;
@@ -68,7 +68,7 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
   render() {
 
     return (
-        <Row className="reservationFix">
+        <Row className={`reservationFix ${!this.props.open ? 'fixMobile' : ''}`} id={`infoFixed_${this.props.num}`}>
           <Col xs="12" className="title">
             <p className="little">{this.state.dictionary['reservationInfoTitle']}</p>
           </Col>

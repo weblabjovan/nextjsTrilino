@@ -80,6 +80,7 @@ export default interface LanguageInterface {
 	uniRegister: string;
 	uniForgotPass: string;
 	uniTerms: string;
+	uniSalesTerms: string;
 	uniCheckEmail: string;
 	uniConfirmPass: string;
 	uniSave: string;
@@ -297,6 +298,8 @@ export default interface LanguageInterface {
 	partnerProfileGeneralItemSmokingPlaceholder: string;
 	partnerProfileGeneralItemDuration: string;
 	partnerProfileGeneralItemDurationPlaceholder: string;
+	partnerProfileGeneralItemDurationAlternative: string;
+	partnerProfileGeneralItemDurationAlternativePlaceholder: string;
 	partnerProfileGeneralItemCancelation: string;
 	partnerProfileGeneralItemCancelationPlaceholder: string;
 	partnerProfileGeneralItemRooms: string;
@@ -332,6 +335,7 @@ export default interface LanguageInterface {
 	partnerProfileGeneralSaveButton: string;
 	partnerProfileGeneralDeposit: string;
 	partnerProfileGeneralDepositPlaceholder: string;
+	partnerProfileGeneralDepositMinimal: string;
 	partnerProfileGeneralDepositReference: string;
 	partnerProfileGeneralDepositReferencePlaceholder: string;
 	partnerProfileGeneralDouble: string;

@@ -390,6 +390,23 @@ class HomeView extends React.Component <MyProps, MyState>{
          <div className=" bigPadDown">
           <Container>
             <Row className="justify-content-sm-center">
+                 <Col xs="12" sm="6" lg="4">
+                  <Container>
+                    <Row>
+                      <Col xs="12" className="homeWhatItem">
+                        <div className="face">
+                          <img src="/static/comment_2.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                        </div>
+                        <p>{ this.state.dictionary['homeComment_2'] }</p>
+                        <div className="signature">
+                          <p>{ this.state.dictionary['homeCommentName_2'] }</p>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Col>
+
+                
                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
@@ -406,28 +423,14 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="6" lg="4">
-                  <Container>
-                    <Row>
-                      <Col xs="12" className="homeWhatItem">
-                        <div className="face">
-                          <img src="/static/testemonial_photo_2.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
-                        </div>
-                        <p>{ this.state.dictionary['homeComment_2'] }</p>
-                        <div className="signature">
-                          <p>{ this.state.dictionary['homeCommentName_2'] }</p>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
+                
 
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem">
                         <div className="face">
-                          <img src="/static/testemonial_photo_3.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <img src="/static/comment_3.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
                         <p>{ this.state.dictionary['homeComment_3'] }</p>
                         <div className="signature">
