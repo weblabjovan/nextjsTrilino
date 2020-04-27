@@ -55,7 +55,7 @@ Home.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
@@ -66,7 +66,7 @@ Home.getInitialProps = async (ctx: any) => {
     }
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=home`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=home`});
     ctx.res.end();
   }
   

@@ -139,7 +139,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
                       <h2 className="middle">{this.state.dictionary['emailVerificationPartnerLogTitle']}</h2>
                       <p className="middle">{this.state.dictionary['emailValidationPartnerLogArticle']}</p>
                       <div className="middle">
-                        <Button color="success" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
+                        <Button color="success" href={`/?page=partner&stage=login&language=${this.props.lang}`}>{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
                       </div>
                     </Col>
                   </Row>
@@ -193,6 +193,8 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

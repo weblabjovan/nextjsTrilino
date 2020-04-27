@@ -13,9 +13,7 @@ type MyProps = {
   path: string;
   fullPath: string;
   lang: string;
-  error?: string;
-  userIsLogged?: boolean;
-
+  userIsLogged: boolean;
   // using `interface` is also ok
 };
 interface MyState {
@@ -24,7 +22,7 @@ interface MyState {
 	isMobile: boolean;
 };
 
-export default class ErrorPageView extends React.Component <MyProps, MyState> {
+export default class PrivacyView extends React.Component <MyProps, MyState> {
 
 	state: MyState = {
     language: this.props.lang.toUpperCase(),
@@ -33,8 +31,6 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
   };
 
 	render(){
-    const err = this.props.error ? this.props.error.toString() : '1';
-    const message = err === '1' ? this.state.dictionary['uniErrorMessage1'] : this.state.dictionary['uniErrorMessage2'] ;
 		return(
 			<div className="totalWrapper">
 				<NavigationBar 
@@ -55,13 +51,22 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
 					<Row>
 		    		<Col xs="12">
 		    			<div className="helpPage terms">
-		    				<div className="section" style={{'textAlign': 'center'}}>
-		    					<img src="/static/error_gif.gif" alt="error" style={{'maxWidth': '300px !important'}}></img>
+		    				<h2>{this.state.dictionary['privacyStatementTitle']}</h2>
+		    				<div className="section" >
+		    					<p>{this.state.dictionary['privacyStatementText1']}</p>
+									<p>{this.state.dictionary['privacyStatementText2']}</p>
+									<p>{this.state.dictionary['privacyStatementText3']}</p>
+									<p>{this.state.dictionary['privacyStatementText4']}</p>
+									<p>{this.state.dictionary['privacyStatementText5']}</p>
+									<p>{this.state.dictionary['privacyStatementText6']}</p>
+									<p>{this.state.dictionary['privacyStatementText7']}</p>
+									<p>{this.state.dictionary['privacyStatementText8']}</p>
+									<p>{this.state.dictionary['privacyStatementText9']}</p>
+									<p>{this.state.dictionary['privacyStatementText10']}</p>
+									<p>{this.state.dictionary['privacyStatementText11']}</p>
+									<p>{this.state.dictionary['privacyStatementText12']}</p>
+		    					<p>{this.state.dictionary['privacyStatementText13']}</p>
 		    				</div>
-		    				<h2>{message}</h2>
-                <div className="section" style={{'textAlign': 'center'}}>
-                  <h4>{this.state.dictionary['uniErrorGoBack']} <a href={`/?language=${this.props.lang}`}>{this.state.dictionary['uniErrorHome']}</a></h4>
-                </div>
 
 		    			</div>
 		    		</Col>
@@ -77,8 +82,8 @@ export default class ErrorPageView extends React.Component <MyProps, MyState> {
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
-          payment={ this.state.dictionary['navigationOnline'] }
-          privacy={ this.state.dictionary['navigationPrivacy'] }
+    			payment={ this.state.dictionary['navigationOnline'] }
+          		privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 			</div>
 		)

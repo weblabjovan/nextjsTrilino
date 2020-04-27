@@ -22,7 +22,7 @@ interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
   globalError: boolean;
-  router: any;
+  changeStage(stage: string):void;
   setUserLanguage(language: string): string;
   registratePartner(data: object, link: object): any;
   loginPartner(data: object, link: object): any;
@@ -31,8 +31,7 @@ interface MyProps {
   path: string;
   fullPath: string;
   lang: string;
-  page: string;
-  error: boolean;
+  stage: string;
   link: object;
   partnerRegStart: boolean;
   partnerRegError: object;
@@ -127,7 +126,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
-        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm?language=${this.props.lang}&page=partner_registration`;
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm/${this.props.lang}/`;
       }
       if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {
         this.setState({ regBtnDisabled: false });
@@ -141,15 +140,12 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
   }
 
 	componentDidMount(){
-    if (this.props.error) {
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnershipLogin?language=${this.props.lang}&page=error`;
-    }
 		this.props.setUserLanguage(this.props.lang);
 	}
 
   validateFormData(callback){
     const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages))
-    if (this.props.page === 'register') {
+    if (this.props.stage === 'register') {
       if (isEmpty(this.state.name) || isInputValueMalicious(this.state.name)) {
         errorCopy['fields']['name'] = true;
       }else{
@@ -189,7 +185,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       errorCopy['fields']['regDuplicate'] = false;
     }
 
-    if (this.props.page === 'login') {
+    if (this.props.stage === 'login') {
       this.props.changeSinglePartnerField('partnerLoginError', false);
       if (isEmpty(this.state.logPass)) {
         errorCopy['fields']['logPass'] = true;
@@ -318,7 +314,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
           terms={ this.state.dictionary['navigationTerms'] }
     		/>
     		
-    			{this.props.page === 'register'
+    			{this.props.stage === 'register'
     			?
     			<div className="registrationWrapper">
     				<Container>
@@ -388,7 +384,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
                         />
 
     							<div className="middle marginSmall">
-    								<a href={`/terms?language=${this.props.lang}`} target="_blank">{this.state.dictionary['uniTerms']}</a>
+    								<a href={`/?page=terms&language=${this.props.lang}`} target="_blank">{this.state.dictionary['uniTerms']}</a>
     							</div>
 
     							<div className="middle">
@@ -398,7 +394,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     							
 			              	</div>
 			              	<div className="middle">
-			              		<p>{this.state.dictionary['partnerRegFinalWarning']} <a id="loginRedirection" href={`/partnershipLogin?language=${this.props.lang}&page=login`}>{this.state.dictionary['uniLogin']}</a>{this.state.dictionary['partnerLogThank']}</p>
+			              		<p>{this.state.dictionary['partnerRegFinalWarning']} <a id="loginRedirection"onClick={() => this.props.changeStage('login')}>{this.state.dictionary['uniLogin']}</a>{this.state.dictionary['partnerLogThank']}</p>
 			              		
 			              	</div>
 			              </Col>
@@ -409,7 +405,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     			: null
     			}
 
-    			{this.props.page === 'login'
+    			{this.props.stage === 'login'
     			?
     			<div className="registrationWrapper">
     				<Container>
@@ -449,7 +445,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     							
 			              	</div>
 			              	<div className="middle">
-			              		<p>{this.state.dictionary['partnerLogFinalWarning']}<a id="registrationRedirection" href={`/partnershipLogin?language=${this.props.lang}&page=register`}>{this.state.dictionary['uniRegister']}</a>{this.state.dictionary['partnerLogThank']}</p>
+			              		<p>{this.state.dictionary['partnerLogFinalWarning']}<a id="registrationRedirection" onClick={() => this.props.changeStage('register')}>{this.state.dictionary['uniRegister']}</a>{this.state.dictionary['partnerLogThank']}</p>
 			              		
 			              	</div>
 			              	
@@ -461,21 +457,6 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     			: null
     			}
 
-          {
-            this.props.page === 'error' 
-            ? 
-            (
-              <div className="confirmRegistration">
-                <Row>
-                  <Col xs='12'>
-                    <h2 className="middle">Error</h2>
-                    <p className="middle">You are trying to reach page that does not exist. Please go back or go to Home page.</p>
-                  </Col>
-                </Row>
-              </div>
-            ) : null
-          }
-
 		    <Footer 
     			isMobile={ this.state.isMobile } 
     			language={ this.state.language } 
@@ -486,6 +467,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

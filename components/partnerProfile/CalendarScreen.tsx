@@ -148,7 +148,7 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
       if (event['start']) {
         this.setState({ dates: {start: event['start'], end: event['end']}}, () => {
           const link = setUpLinkBasic(window.location.href);
-          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: getRoomsSelector(this.props.partnerRooms)[0]['value'], dates: this.state.dates });
+          this.props.getPartnerReservations(link, {type: 'partner', language: this.props.lang, partner: this.props.partnerObject['_id'], room: this.state.activeRoom['value'], dates: this.state.dates });
         });
       }else{
         let dates = {};
@@ -271,14 +271,14 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
             <Col xs="12">
               <div className="pageHeader">
                 <h2>{this.state.dictionary['partnerProfileCalendarTitle']}</h2>
-                <p>{this.state.dictionary['partnerProfileCalendarDescription']} <a href={`/partnerHelp?language=${this.props.lang}&section=calendar`} target="_blank">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
+                <p>{this.state.dictionary['partnerProfileCalendarDescription']} <a href={`/partnerHelp/${this.props.lang}/?section=calendar`} target="_blank">{this.state.dictionary['uniPartnerProfileHelp']}</a></p>
               </div>
             </Col>
 
             <Col xs='12'>
               <Alert color="success" isOpen={ this.props.activationAlert } toggle={this.closeActivationAlert} >
                 <h3>{`${this.props.activationProcessPercent}${this.state.dictionary['uniPartnerProgressTitle']}`}</h3>
-                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href={`/partnerHelp?language=${this.props.lang}&section=activation`} target="_blank"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
+                <p>{this.state.dictionary['uniPartnerProgressDescription']} <a href={`/partnerHelp/${this.props.lang}/?section=activation`} target="_blank"> {this.state.dictionary['uniPartnerProgressLink']}</a> </p>
               </Alert>
             </Col>
             

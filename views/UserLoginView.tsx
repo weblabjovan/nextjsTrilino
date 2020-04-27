@@ -24,13 +24,14 @@ interface MyProps {
   userLoginStart: boolean;
   userLoginError: boolean | object;
   userLoginSuccess: null | object;
+  changeStage(stage: string):void;
   changeSingleUserField(field: string, value: any):void;
   setUserLanguage(language: string): string;
   registrateUser(data: object, link: object): void;
   loginUser(data: object, link: object): void;
   userAgent: string;
   path: string;
-  page: string;
+  stage: string;
   fullPath: string;
   lang: string;
   link: object;
@@ -269,7 +270,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
             <Row>
             	<Col xs="12">
             			{
-            				this.props.page === 'registration' && !this.state.registrationConfirm
+            				this.props.stage === 'registration' && !this.state.registrationConfirm
             				?
             				<div className="box">
 	            				<RegistrationScreen
@@ -279,7 +280,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 			            		/>
 			            	</div>
 		            		:
-		            		this.props.page === 'registration' && this.state.registrationConfirm
+		            		this.props.stage === 'registration' && this.state.registrationConfirm
 		            		?
 		            		<div className="regConfirmation">
 		            			<div className="middle">
@@ -305,13 +306,13 @@ class UserLoginView extends React.Component <MyProps, MyState>{
             	<Col xs="12">
             		<div className="middle logLinks">
             			{
-            				this.props.page === 'registration' && !this.state.registrationConfirm
+            				this.props.stage === 'registration' && !this.state.registrationConfirm
             				?
-            				<p >{ this.state.dictionary['userLoginLinksReg_1'] }<a id="regRedirection" href={`/login?language=${this.props.lang}&page=login`}>{ this.state.dictionary['userLoginLinksReg_2'] }</a>{this.state.dictionary['partnerLogThank']}</p>
+            				<p >{ this.state.dictionary['userLoginLinksReg_1'] }<a id="regRedirection" onClick={() => this.props.changeStage('login')}>{ this.state.dictionary['userLoginLinksReg_2'] }</a>{this.state.dictionary['partnerLogThank']}</p>
 		            		:
-		            		this.props.page === 'login'
+		            		this.props.stage === 'login'
 		            		?
-		            		<p>{ this.state.dictionary['userLoginLinksLog_1'] }<a id="loginRedirection" href={`/login?language=${this.props.lang}&page=registration`}>{ this.state.dictionary['userLoginLinksLog_2'] }</a>{this.state.dictionary['partnerLogThank']}</p>
+		            		<p>{ this.state.dictionary['userLoginLinksLog_1'] }<a id="loginRedirection" onClick={() => this.props.changeStage('registration')}>{ this.state.dictionary['userLoginLinksLog_2'] }</a>{this.state.dictionary['partnerLogThank']}</p>
 		            		:
 		            		null
             			}
@@ -333,6 +334,8 @@ class UserLoginView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

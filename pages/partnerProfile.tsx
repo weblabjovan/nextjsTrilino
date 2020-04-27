@@ -7,9 +7,6 @@ import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnerProfileView from '../views/PartnerProfileView';
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -49,7 +46,7 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
@@ -64,7 +61,7 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=partnerProfile`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=partnerProfile`});
     ctx.res.end();
   }
 

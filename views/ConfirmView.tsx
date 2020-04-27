@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import queryString  from 'query-string';
 import { Container, Row, Col } from 'reactstrap';
-import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,17 +11,9 @@ import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
-  userLanguage: string;
-  globalError: boolean;
-  page: string;
-  setUserDevice(userAgent: string): boolean;
-  setUserLanguage(language: string): string;
-  userAgent: string;
   path: string;
   fullPath: string;
   lang: string;
-  error: boolean;
-  router: any;
 };
 interface MyState {
 	language: string;
@@ -31,20 +21,23 @@ interface MyState {
 	isMobile: boolean;
 };
 
-class ConfirmView extends React.Component <MyProps, MyState>{
+export default class ConfirmView extends React.Component <MyProps, MyState>{
 
 	state: MyState = {
-      language: this.props.lang.toUpperCase(),
-      dictionary: getLanguage(this.props.lang),
-      isMobile: isMobile(this.props.userAgent),
-    };
+    language: this.props.lang.toUpperCase(),
+    dictionary: getLanguage(this.props.lang),
+    isMobile: false,
+  };
 
-	componentDidMount(){
-		if (this.props.error) {
-			// this.props.router.push(`/confirm?language=${this.props.lang}&page=error`);
-		}
-		this.props.setUserLanguage(this.props.lang);
-	}
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
+    if (prevProps.lang !== this.props.lang) {
+      this.setState({dictionary: getLanguage(this.props.lang), language: this.props.lang.toUpperCase() })
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isMobile: isMobile(navigator.userAgent)});
+  }
 	
   render() {
     return(
@@ -60,38 +53,18 @@ class ConfirmView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          languagePrevent={ true }
     		/>
     		<Container>
-    			{
-    				this.props.page === 'partner_registration' 
-    				? 
-    				(
-    					<div className="confirmRegistration">
-	    					<Row>
-		              <Col xs='12'>
-		                <h2 className="middle">{ this.state.dictionary['confirmPartnerRegTitle'] }</h2>
-		                <p>{ this.state.dictionary['confirmPartnerRegContent'] }<br/><br/><br/><br/></p>
-		                <p className="middle">{ this.state.dictionary['uniCheckEmail'] }</p>
-		              </Col>
-		            </Row>
-	            </div>
-    				) : null
-    			}
-            
-          {
-    				this.props.page === 'error' 
-    				? 
-    				(
-    					<div className="confirmRegistration">
-	    					<Row>
-		              <Col xs='12'>
-		                <h2 className="middle">Error</h2>
-		                <p className="middle">You are trying to reach page that does not exist. Please go back or go to Home page.</p>
-		              </Col>
-		            </Row>
-	            </div>
-    				) : null
-    			}
+    			<div className="confirmRegistration">
+            <Row>
+              <Col xs='12'>
+                <h2 className="middle">{ this.state.dictionary['confirmPartnerRegTitle'] }</h2>
+                <p>{ this.state.dictionary['confirmPartnerRegContent'] }<br/><br/><br/><br/></p>
+                <p className="middle">{ this.state.dictionary['uniCheckEmail'] }</p>
+              </Col>
+            </Row>
+          </div>
 		    </Container>
 
 		    <Footer 
@@ -104,6 +77,8 @@ class ConfirmView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>
@@ -111,18 +86,3 @@ class ConfirmView extends React.Component <MyProps, MyState>{
     ) 
   }
 }
-
-const mapStateToProps = (state) => ({
-  userLanguage: state.UserReducer.language,
-  globalError: state.UserReducer.globalError,
-});
-
-
-const matchDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-    setUserLanguage,
-  },
-  dispatch);
-};
-
-export default connect(mapStateToProps, matchDispatchToProps)(ConfirmView)

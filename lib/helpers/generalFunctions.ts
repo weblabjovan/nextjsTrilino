@@ -167,6 +167,12 @@ export const apiEndpoint = (
 }
 
 export const setCookie = (data: any, name: string, expires: number): void => {
+  if (name === 'trilino-user-token') {
+    unsetCookie('trilino-partner-token');
+  }
+  if (name === 'trilino-partner-token') {
+    unsetCookie('trilino-user-token');
+  }
   cookie.set(name, data, { expires });
 }
 
@@ -286,7 +292,7 @@ export const errorExecute = (window: any, error: boolean): void => {
   if (error) {
     const link = setUpLinkBasic(window.location.href);
     const lang = link['queryObject']['language'] ? link['queryObject']['language'] : 'sr';
-    window.location.href = `${link['protocol']}${link['host']}/errorPage?language=${lang}&error=1`;
+    window.location.href = `${link['protocol']}${link['host']}/?page=error&language=${lang}&error=1`;
   }
 }
 
@@ -314,6 +320,46 @@ export const getOrgHead = (orgRoot: string, pageName: string): object => {
     }
     if (page === 'error') {
       return{ title: 'headTitleErrorPage', description: 'headDescriptionErrorPage'};
+    }
+    if (page === 'faq') {
+      return{ title: 'headTitleFaqPage', description: 'headDescriptionFaqPage'};
+    }
+    if (page === 'privacy') {
+      return{ title: 'headTitlePrivacyPage', description: 'headDescriptionPrivacyPage'};
+    }
+  }
+
+  if (orgRoot === 'login') {
+    const page = pageName ? pageName : 'user';
+    if (page === 'user') {
+      return{ title: 'headTitleLogin', description: 'headDescriptionLogin'};
+    }
+
+    if (page === 'partner') {
+      return{ title: 'headTitlePartnershipLogin', description: 'headDescriptionPartnershipLogin'};
+    }
+
+    if (page === 'dev') {
+      return{ title: 'headTitleDevLogin', description: 'headDescriptionDevLogin'};
+    }
+
+    if (page === 'admin') {
+      return{ title: 'headTitleAdminLogin', description: 'headDescriptionAdminLogin'};
+    }
+  }
+
+  if (orgRoot === 'payment') {
+    const page = pageName ? pageName : '';
+    if (page === 'reservationSuccess') {
+      return{ title: 'headTitlePaymentSuccess', description: 'headDescriptionPaymentSuccess'};
+    }
+
+    if (page === 'reservationFailure') {
+      return{ title: 'headTitlePaymentFailure', description: 'headDescriptionPaymentFailure'};
+    }
+
+    if (page === 'cateringSuccess') {
+      return{ title: 'headTitleCateringPayment', description: 'headDescriptionCateringPayment'};
     }
   }
 

@@ -367,6 +367,12 @@
 	    margin: auto;
 	    margin-top: 20px;
 	    margin-bottom: 20px;
+
+	    img{
+	    	border-radius: 50%;
+	    	width: 100px;
+	    	height: 100px;
+	    }
 	}
 
 	.signature{
@@ -389,7 +395,7 @@
 
 	.item{
 		width: 600px;
-		padding: 10px;
+		padding-bottom: 10px;
 		color: #fff;
 		margin: auto;
 		border-bottom: solid 1px #ccc;
@@ -418,7 +424,7 @@
 		width: 100%;
 		text-align: center;
 		margin-top: 15px;
-		margin-bottom: 15px;
+		margin-bottom: 5px;
 		@media only screen and (max-width: 577px) {
 	    	margin-top: 10px;
 			margin-bottom: 10px;
@@ -430,16 +436,26 @@
 			width: 100%;
 			font-family: 'Material Icons';
 	        font-size: 50px;
-	        line-height: 45px;
-	        color: #fff;
+	        font-weight: 800;
+		    line-height: 45px;
+		    color: #ffa52f;
 	        @media only screen and (max-width: 577px) {
 		    	font-size: 40px;
 	        	line-height: 35px;
 			}
 		}
 
-		.down:before{
-			content: 'expand_more';
+		.choose:before{
+			content: 'touch_app';
+		}
+		.reserve:before{
+			content: 'how_to_reg';
+		}
+		.cake:before{
+			content: 'cake';
+		}
+		.rate:before{
+			content: 'check_circle_outline';
 		}
 	}
 }

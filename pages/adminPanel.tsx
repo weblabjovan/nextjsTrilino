@@ -6,9 +6,6 @@ import { isDevEnvLogged, isAdminLogged, getAdminToken } from '../lib/helpers/spe
 import Head from '../components/head';
 import AdminPanelView from '../views/AdminPanelView';
 import { getLanguage } from '../lib/language';
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -41,21 +38,21 @@ Login.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
     const adminLog = await isAdminLogged(ctx);
     
     if (!adminLog) {
-      ctx.res.writeHead(302, {Location: `/adminLogin?language=${link['queryObject']['language']}`});
+      ctx.res.writeHead(302, {Location: `/login?page=admin&stage=loginlanguage=${link['queryObject']['language']}`});
       ctx.res.end();
     }
 
     token = getAdminToken(ctx);
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=adminPanel`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=adminPanel`});
     ctx.res.end();
   }
 

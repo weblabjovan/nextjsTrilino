@@ -86,7 +86,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady', 'fixOnScroll'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -355,23 +355,15 @@ class ReservationView extends React.Component <MyProps, MyState>{
   calculateStepHeight(step: number){
     if (!this.state.isMobile) {
       if (step === 1) {
-        return '225px';
+        return '240px';
       }
       if (step === 2) {
-        let items = 0;
         const rows = this.props.partner['catering']['deals'].length;
-        this.props.partner['catering']['deals'].map(deal => {
-          items = items + deal['items'].length;
-        })
-        const rowHeight = ((items/2) * 25);
-        const safty = rows > 1 ? (rows * 15) : 60;
-        const height = (125 * rows) + (55 * rows) + rowHeight + (rows * 35) + safty;
-        return `${height}px`;
+        return `${rows * 370 + 140 }px`;
       }
 
       if (step === 3) {
-        const rows = Object.keys(this.props.partner['decoration']).length  + this.props.partner['contentAddon'].length;
-        const height = 150 + (rows * 100);
+        const height = 300 * 2 + 110;
         return `${height}px`;
       }
 
@@ -380,24 +372,16 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
     }else{
       if (step === 1) {
-        return '350px';
+        return '390px';
       }
 
       if (step === 2) {
-        let items = 0;
         const rows = this.props.partner['catering']['deals'].length;
-        this.props.partner['catering']['deals'].map(deal => {
-          items = items + deal['items'].length;
-        })
-        const rowHeight = items * 25;
-        const safty = rows > 1 ? (rows * 15) : 50;
-        const height = (125 * rows) + (85 * rows) + rowHeight + (rows * 35) + safty;
-        return `${height}px`;
+        return `${rows * 500 + 130 }px`;
       }
 
       if (step === 3) {
-        const rows = Object.keys(this.props.partner['decoration']).length  + this.props.partner['contentAddon'].length;
-        const height = 150 + (rows * 95);
+        const height = 290 * 2 + 130;
         return `${height}px`;
       }
 
@@ -715,6 +699,51 @@ class ReservationView extends React.Component <MyProps, MyState>{
     }
   }
 
+  fixOnScroll() {
+    const header = document.getElementById("infoFixed_2");
+    const footer = document.getElementById("footerElem");
+
+    if (this.state.isMobile) {
+      if ((window.innerHeight + window.pageYOffset) > footer.offsetTop ) {
+        if (header.classList.contains("fixMobile")) {
+          header.classList.add("absoluteMobile");
+          header.classList.remove("fixMobile");
+        }
+        
+      }else{
+        if (header.classList.contains("absoluteMobile")) {
+          header.classList.add("fixMobile");
+          header.classList.remove("absoluteMobile");
+        }
+        
+      }
+    }else{
+      if (window.pageYOffset > 60) {
+        if ((header.offsetHeight + window.pageYOffset + 80) > footer.offsetTop ) {
+          if (header.classList.contains("fix")) {
+            header.classList.remove("fix");
+          }
+          if (!header.classList.contains("absoluteBottom")) {
+            header.classList.add("absoluteBottom");
+          }
+        }else{
+          if (!header.classList.contains("fix")) {
+            header.classList.add("fix");
+          }
+          if (header.classList.contains("absoluteBottom")) {
+            header.classList.remove("absoluteBottom");
+          }
+        }
+      } else {
+        if (header.classList.contains("fix")) {
+          header.classList.remove("fix");
+        }
+      }
+    }
+
+    
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     if (this.state.logTry > 9) {
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
@@ -724,7 +753,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     if (!this.props.userSaveReservationStart && this.props.userSaveReservationSuccess && !prevProps.userSaveReservationSuccess) {
       this.setState({ loader: false });
-      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
       const hash = setNestPayHash(plainText);
 
       const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
@@ -735,13 +764,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
       <input type="hidden" name="amount" value="${this.state.price['deposit'].toFixed(2)}" /> 
       <input type="hidden" name="currency" value="941" /> 
       <input type="hidden" name="oid" value="${this.props.userSaveReservationSuccess[0]['_id']}" /> 
-      <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentSuccess?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 
-      <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" /> 
+      <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 
+      <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" /> 
       <input type="hidden" name="lang" value="${this.props.lang}" /> 
       <input type="hidden" name="hashAlgorithm" value="ver2" /> 
       <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
       <input type="hidden" name="encoding" value="utf-8" />
-      <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/paymentFailure?reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}" />
+      <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=closed&&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&deactive=true&language=${this.props.lang}" />
       <input type="submit" style="visibility: hidden" /> </form>`;
       
       const form =document.getElementById('reviseCombi');
@@ -797,9 +826,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+    window.addEventListener('scroll', this.fixOnScroll);
 	}
 	
   render() {
+      
 
     return(
     	<div className="totalWrapper">
@@ -818,10 +849,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
           user={ this.props.userIsLogged }
           userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
-    		<div className="reservationWrapper">
+    		<div className="reservationWrapper" id="pageReservation">
           <Container>
               <Row>
-                <Col xs='12' lg="5" className="hidden-sm-up">
+                {/*<Col xs='12' lg="5" className="hidden-sm-up">
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
@@ -836,7 +867,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     open={ false }
                     num="1"
                   />
-                </Col>
+                </Col>*/}
                 <Col xs='12' lg="7">
                   <Alert color="danger" isOpen={ this.state.errors["flag"] } toggle={this.closeAlert} >
                     <p hidden={ !this.state.errors['fields']['generalName']} >{this.state.dictionary['reservationAlertGeneralName']}</p>
@@ -916,6 +947,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
                         <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickTrue']}</p>
                             <button className="next" onClick={() => this.validateSection(1)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
@@ -941,15 +973,20 @@ class ReservationView extends React.Component <MyProps, MyState>{
                               <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
                               <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
+                              <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
                             </Col>
 
                             <Col xs="12" sm="7">
-                              <Row>
+                              <Row className="cateringMenu">
+                                <span className="scroll">{deal['items'].length > 7 ? this.state.dictionary['uniScroll']  : ''}</span>
                                 <Col xs="12"><p className="strong">{this.state.dictionary['reservationFormCateringMenu']}</p></Col>
                                 {
                                   deal['items'].map( (item, itemIndex) => {
                                     return(
-                                      <Col xs="12" sm="6" key={`itemKey_${itemIndex}`}><p className="second">{item}</p></Col>
+                                      <div className="item" key={`offerKey_${itemIndex}`}>
+                                        <span className="icon check"></span>
+                                        <p>{item}</p>
+                                      </div>
                                     )
                                   })
                                 }
@@ -975,6 +1012,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                         <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickFalse']}</p>
                             <button className="next" onClick={() => this.validateSection(2)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
@@ -995,8 +1033,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   <Row className="step">
                     <Col xs="12" className="formSection hide" id="step_3">
                       <Row className="addonSection">
+                        <span className="scroll">{this.props.partner['contentAddon'].length > 4 ? this.state.dictionary['uniScroll'] : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonFun']}</h4></Col>
-                        <Col xs="12">
+                        <Col xs="12" className="addonList">
                         {
                           this.props.partner['contentAddon'].map( (addon, index) => {
                             return(
@@ -1024,8 +1063,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       </Row>
 
                       <Row className="addonSection">
+                        <span className="scroll">{Object.keys(this.props.partner['decoration']).length > 4 ? this.state.dictionary['uniScroll'] : ''}</span>
                         <Col xs="12"><h4>{this.state.dictionary['reservationFormAddonDecoration']}</h4></Col>
-                        <Col xs="12">
+                        <Col xs="12" className="addonList">
                         {
                           Object.keys(this.props.partner['decoration']).map( (key, index) => {
                             const item = this.props.partner['decoration'][key];
@@ -1053,6 +1093,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                          <Col xs="12">
                           <div className="middle">
+                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickFalse']}</p>
                             <button className="next" onClick={() => this.validateSection(3)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>
@@ -1100,7 +1141,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   </Row>
                 </Col>
                 
-                <Col xs='12' lg="5" className="hidden-sm">
+                <Col xs='12' lg="5">
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
@@ -1113,7 +1154,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
-                    open={ true }
+                    open={ !this.state.isMobile }
                   />
                 </Col>
               </Row>
@@ -1137,6 +1178,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

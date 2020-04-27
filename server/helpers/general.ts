@@ -346,7 +346,6 @@ export const getFreeTermPartners = (partners: Array<object>, date: string): Arra
   const dateHandler = new DateHandler(date);
   const day = dateHandler.getDayFromDate();
   const result = [];
-
   for (var i = 0; i < partners.length; ++i) {
     if (!partners[i]['reservations'].length) {
       partners[i]['link'] = decodeId(generateString, partners[i]['_id']);
@@ -363,12 +362,15 @@ export const getFreeTermPartners = (partners: Array<object>, date: string): Arra
 }
 
 const oneOfTheRoomsIsAvailable = (rooms: Array<object>, day: string, reservationCount: number): boolean => {
+  let termNum = 0;
   for (var i = 0; i < rooms.length; ++i) {
     if (rooms[i]['terms'][day][0]['from']) {
-      if (rooms[i]['terms'][day].length > reservationCount) {
-        return true;
-      }
+      termNum = termNum + rooms[i]['terms'][day].length;
     }
+  }
+
+  if (termNum > reservationCount) {
+    return true;
   }
 
   return false;
@@ -707,7 +709,7 @@ const isReservationWithTrilinoCatering = (reservation: object): boolean => {
           if (reservation['cateringObj'].length) {
             const dateHandler = new DateHandler();
             const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
-            if (dateDiff < -6 && reservation['cateringObj'][0]['status'] !== 'paid' && !reservation['cateringObj'][0].hasOwnProperty('transactionId')) {
+            if (dateDiff < -7 && reservation['cateringObj'][0]['status'] !== 'paid' && !reservation['cateringObj'][0].hasOwnProperty('transactionId')) {
               return true;
             }
           }

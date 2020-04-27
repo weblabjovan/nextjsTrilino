@@ -150,7 +150,17 @@
 				font-size: 18px;
 				width: 100%;
 	    }
+		}
 
+		a{
+			cursor: pointer;
+			color: $lightBlue;
+			text-decoration: underline;
+
+			&:hover{
+				color: #0059ff;
+				text-decoration: underline;
+			}
 		}
 	}
 

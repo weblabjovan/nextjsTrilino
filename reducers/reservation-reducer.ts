@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -27,6 +27,10 @@ interface initialState {
   confirmCateringStart: boolean;
   confirmCateringError: object | boolean;
   confirmCateringSuccess: null | object;
+
+  deactivateReservationStart: boolean;
+  deactivateReservationError: object | boolean;
+  deactivateReservationSuccess: null | object;
 
   reservations: Array<object>;
 
@@ -59,6 +63,10 @@ const initialState: initialState  = {
   confirmCateringStart: false,
   confirmCateringError: false,
   confirmCateringSuccess: null,
+
+  deactivateReservationStart: false,
+  deactivateReservationError: false,
+  deactivateReservationSuccess: null,
 
   reservations: [],
 
@@ -220,6 +228,28 @@ const actionsMap = {
       ...state,
       confirmCateringStart: false,
       confirmCateringSuccess: action.payload.catering,
+    };
+  },
+
+  [deactivateReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      deactivateReservationStart: true,
+      deactivateReservationSuccess: null,
+    };
+  },
+  [deactivateReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      deactivateReservationStart: false,
+      deactivateReservationError: action.payload.response.body,
+    };
+  },
+  [deactivateReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      deactivateReservationStart: false,
+      deactivateReservationSuccess: action.payload.result,
     };
   },
   

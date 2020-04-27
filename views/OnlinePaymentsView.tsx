@@ -78,6 +78,8 @@ export default class OnlinePaymentsView extends React.Component <MyProps, MyStat
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
     			terms={ this.state.dictionary['navigationTerms'] }
+    			payment={ this.state.dictionary['navigationOnline'] }
+          		privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 			</div>
 		)

@@ -3,15 +3,17 @@ import { Container, Row, Col, Button } from 'reactstrap';
 
 
 type MyProps = {
-	isMobile: boolean;
-  language: string;
-  page: string;
-  login: string;
-  search: string;
-  faq: string;
-  partnership: string;
-  contact: string; 
-  terms: string;
+	isMobile?: boolean;
+  language?: string;
+  page?: string;
+  login?: string;
+  search?: string;
+  faq?: string;
+  partnership?: string;
+  contact?: string; 
+  terms?: string;
+  payment?: string;
+  privacy?: string;
   // using `interface` is also ok
 };
 type MyState = {
@@ -23,21 +25,21 @@ export default class Footer extends React.Component <MyProps, MyState> {
 	render(){
 		const date = new Date();
 		return(
-			<div className="footerWrapper">
+			<div className="footerWrapper" id="footerElem">
 				<Container fluid>
 		        <Row>
 			        <Col xs='12' sm="7" lg="6" className="menuOptions">
 		          	<ul>
-		          		<li><a href={`/login?language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
+		          		<li><a href={`/login?page=user&stage=login&language=${this.props.language.toLowerCase()}`}>{this.props.login}</a></li>
 		          		<li><a href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</a></li>
 		          		<li><a href={`/?page=partnership&language=${this.props.language.toLowerCase()}`}>{this.props.partnership}</a></li>
 		          		<li><a href={`/?page=contact&language=${this.props.language.toLowerCase()}`}>{this.props.contact}</a></li>
 		          	</ul>
 		          	<ul>
 		          		<li><a href={`/?page=terms&language=${this.props.language.toLowerCase()}`}>{this.props.terms}</a></li>
-		          		<li><a href={`/`}>{this.props.faq}</a></li>
-		          		<li><a href={`/?page=payments&language=${this.props.language.toLowerCase()}`}>Online plaćanje</a></li>
-		          		<li><a href={`/`}>Izjava privatnosti</a></li>
+		          		<li><a href={`/?page=faq&language=${this.props.language.toLowerCase()}`}>{this.props.faq}</a></li>
+		          		<li><a href={`/?page=payments&language=${this.props.language.toLowerCase()}`}>{this.props.payment}</a></li>
+		          		<li><a href={`/?page=privacy&language=${this.props.language.toLowerCase()}`}>{this.props.privacy}</a></li>
 		          	</ul>
 			        </Col>
 			        <Col xs='12' sm="5" lg="6">
@@ -56,18 +58,19 @@ export default class Footer extends React.Component <MyProps, MyState> {
 		        </Row>
 
 		        <Row className="cardBrands">
-		        	<Col xs="12" sm="4" className="cards">
-	        			<img src="/static/visa.png" alt="visa" title="visa"></img>
+		        	<Col xs="12" sm="6" lg="4" className="cards">
+		        		<img src="/static/dinacard.png" alt="dinacard" title="dinacard" className="dina"></img>
+	        			<img src="/static/visa.png" alt="visa" title="visa" className="visa"></img>
 	        			<img src="/static/mastercard.svg" alt="mastercard" title="mastercard"></img>
 	        			<img src="/static/maestro.svg" alt="maestro" title="maestro"></img>
-	        			<img src="/static/amex.svg" alt="american express" title="american express"></img>
+	        			<img src="/static/amex.svg" alt="american express" title="american express" className="amex"></img>
 	        		</Col>
-	        		<Col xs="12" sm="4" className="banks">
+	        		<Col xs="12" sm="3" lg="4" className="banks">
 	        			<a href="https://www.bancaintesa.rs/pocetna.1.html" target="_blank">
 	        				<img src="/static/banca-intesa.svg" alt="banka intesa" title="banka intesa"></img>
 	        			</a>
 	        		</Col>
-	        		<Col xs="12" sm="4" className="security">
+	        		<Col xs="12" sm="3" lg="4" className="security">
 	        			<a href="https://www.mastercard.rs/sr-rs/consumers/find-card-products/credit-cards.html" target="_blank">
 	        				<img src="/static/mastercardsec.svg" alt="mastercard security" title="mastercard security"></img>
 	        			</a>

@@ -8,8 +8,6 @@ import { isUserLogged } from '../../lib/helpers/specificUserFunctions';
 import LocationView from '../../views/LocationView';
 import Head from '../../components/head';
 import pages from '../../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -61,7 +59,7 @@ Location.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 

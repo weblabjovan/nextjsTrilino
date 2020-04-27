@@ -4,12 +4,9 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import EmailVerificationView from '../views/EmailVerificationView';
-import pages from '../lib/constants/pages';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { getLanguage } from '../lib/language';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 
 
@@ -54,12 +51,12 @@ EmailVerification.getInitialProps = async (ctx: any) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=emailVerification`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=emailVerification`});
     ctx.res.end();
   }
 
@@ -86,7 +83,7 @@ EmailVerification.getInitialProps = async (ctx: any) => {
       }
     }catch(err){
       console.log(err);
-      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=emailVerification`});
+      ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=emailVerification`});
       ctx.res.end();
     }
     

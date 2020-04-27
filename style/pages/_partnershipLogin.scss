@@ -14,10 +14,15 @@
 	    }
 
     	a{
-    		color: $lightBlue;
-    		text-decoration: underline;
+			cursor: pointer;
+			color: $lightBlue;
+			text-decoration: underline;
 
-    	}
+			&:hover{
+				color: #0059ff;
+				text-decoration: underline;
+			}
+		}
 	}
 
 	.white{
@@ -147,6 +152,21 @@
 			font-style: italic;
 			line-height: 22px;
 			margin-bottom: 10px;
+		}
+	}
+
+	.deactiveBox{
+		padding-top: 50px;
+		padding-bottom: 60px;
+
+		h2{
+			font-size: 40px;
+			margin-bottom: 40px;
+		}
+
+		p{
+			font-size: 20px;
+			font-weight: 400;
 		}
 	}
 

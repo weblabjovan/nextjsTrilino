@@ -47,6 +47,10 @@ const serbian: LanguageInterface = {
 	headDescriptionContact: "Trilino - Kontakt podaci za korinsike Trilino-a",
 	headTitleErrorPage: "Trilino - Greška",
 	headDescriptionErrorPage: "Trilino - Došlo je do neočekivane greške",
+	headTitleFaqPage: "Trilino - Najčešća pitanja",
+	headDescriptionFaqPage: "Trilino - Najčešće postavljana pitanja u vezi sa korišćenjem Trilino usluge",
+	headTitlePrivacyPage: "Trilino - Izjava poverljivosti",
+	headDescriptionPrivacyPage: "Trilino - Izjava poverljivosti za korisnike",
 
 	navigationLogin: "Prijava",
 	navigationSearch: "Pretraga",
@@ -55,6 +59,8 @@ const serbian: LanguageInterface = {
 	navigationContact: "Kontakt",
 	navigationTerms: 'Uslovi korišćenja',
 	navigationProfile: 'Korisnički profil',
+	navigationPrivacy: "Izjava poverljivosti",
+	navigationOnline: "Online plaćanje",
 
 	navigationPartnerGeneral: 'Osnovno',
 	navigationPartnerCatering: 'Hrana i piće',
@@ -74,6 +80,7 @@ const serbian: LanguageInterface = {
 	uniRegister: 'registrujte se',
 	uniForgotPass: 'zaboravili ste lozinku?',
 	uniTerms: 'Pogledajte uslove korišćenja',
+	uniSalesTerms: 'uslovi kupovine',
 	uniCheckEmail: 'Proverite vaš email.',
 	uniConfirmPass: 'Potvrdite lozinku',
 	uniSave: 'Sačuvajte',
@@ -91,6 +98,7 @@ const serbian: LanguageInterface = {
 	uniErrorMessage2: 'Akcija koju pokušavate nije dozvoljena. Molimo vas nemojte više ponavljati poslednju akciju.',
 	uniErrorGoBack: 'Vratite se na ',
 	uniErrorHome: 'naslovnu stranicu',
+	uniScroll: 'Skrolujte',
 
 	emailPartnerRegisterTitle: ', dobrodošli u Trilino',
 	emailPartnerRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa hiljadama ljudi koji su zainteresovani za vaš prostor i vaše usluge. Sve što treba da uradite je da kreirate vaš profil koji će adekvatno predstaviti ono što možete da ponudite posetiocima našeg sajta. Ali pre toga je potrebno je da verifikujete vašu registraciju i kreirate vašu lozinku. Kliknite na dugme u nastavku i ispratite sledeća uputstva. Srećno.',
@@ -125,7 +133,7 @@ const serbian: LanguageInterface = {
 	homeWhatBenTitle: 'Napravite online rezervaciju',
 	homeWhatBen: 'Izaberite igraonicu po želji i dostupnosti i kreirajte online rezervaciju. Uz pomoć računara ili mobilnog telefona rezervišite prostor, hranu, piće, zabavne sadržaje za samo nekoliko minuta. Organizujte sve što vam je potrebno uz jasan pregled troškova i dokumentovanu potvrdu.',
 	homeWhatBenMini: 'Izaberite igraonicu po želji i dostupnosti i kreirajte online rezervaciju.',
-	homeComment_1: "Vrlo brzo sam pronašao igraonicu koja je imala slobodan termin, pristojnu cenu i sjajnu ponudu. Velika ušteda vremena.",
+	homeComment_1: "Supruga i ja smo vrlo brzo pronašli igraonicu koja je imala slobodan termin, pristojnu cenu i sjajnu ponudu.",
 	homeComment_2: "Mogla sam tačno da vidim koje igraonice u blizini su slobodne za rođendan mog sina, šta nude i po kojoj ceni.",
 	homeComment_3: "Deca su uživala na rođendanu, a ja nisam morala da zovem i proveravam šta se nudi, šta je slobodno i koliko košta.",
 	homeCommentName_1: 'Petar',
@@ -293,6 +301,8 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralItemSmokingPlaceholder: 'pušenje',
 	partnerProfileGeneralItemDuration: 'Trajanje termina:',
 	partnerProfileGeneralItemDurationPlaceholder: 'trajanje termina',
+	partnerProfileGeneralItemDurationAlternative: 'Pomoćno trajanje:',
+	partnerProfileGeneralItemDurationAlternativePlaceholder: 'trajanje termina',
 	partnerProfileGeneralItemCancelation: 'Rok otkazivanja:',
 	partnerProfileGeneralItemCancelationPlaceholder: 'otkazivanje',
 	partnerProfileGeneralItemRooms: 'Broj sala:',
@@ -329,6 +339,7 @@ const serbian: LanguageInterface = {
 	partnerProfileGeneralDeposit: 'Procenat za depozit:',
 	partnerProfileGeneralDepositPlaceholder: 'depozit',
 	partnerProfileGeneralDepositReference: 'Osnovica za obračun depozita:',
+	partnerProfileGeneralDepositMinimal: 'Minimalni iznos depozita',
 	partnerProfileGeneralDepositReferencePlaceholder: 'osnovica',
 	partnerProfileGeneralDouble: 'Popust za dupli termin:',
 	partnerProfileGeneralDoublePlaceholder: 'popust',
@@ -551,13 +562,15 @@ const serbian: LanguageInterface = {
 	locationAvailabilityTableColumnTwo: 'Veličina',
 	locationAvailabilityTableColumnThree: 'Kapacitet',
 	locationAvailabilityTableColumnFour: 'Termini',
+	locationAvailabilityKids: 'dece i ',
+	locationAvailabilityAdults: 'odraslih',
+	locationAvailabilityNoTerm: 'Nema slobodnih termina',
 	locationChooseTermBefore: 'Izaberite termin',
 	locationChooseTermAfter: 'Izabrali ste termin:',
 	locationButtonReserve: 'Rezervišite',
 	locationCancelationNone: 'Besplatno otkazivanje rezervacije nije dostupno na ovoj lokaciji.',
 	locationCancelationFirst: 'Rezervacije proslava na ovoj lokaciji moguće je otkazati besplatno najkasnije ',
 	locationCancelationSecond: ' dana pre zakazanog početka.',
-
 
 
 	reservationInfoTitle: 'Podaci o rezervaciji',
@@ -605,6 +618,10 @@ const serbian: LanguageInterface = {
 	reservationPaymentLoginTitle: 'Pre nego što nastavite na plaćanje potrebno je da se prijavite.',
 	reservationPaymentRegistrationTitle: 'Ukoliko niste Trilino korisnik, prvo se registrujte a potom možete nastaviti na plaćanje.',
 	reservationPaymentPasswordTitle: 'Još samo ovaj korak i možete nastaviti na plaćanje. Da biste završili registraciju potrebno je da kreirate lozinku, na email vam je poslat sigurnosni kod koji je potrebno upisati u polje u nastavku. Molimo vas proverite vaš email.',
+	reservationCateringPayNoteTrilino: '*Ketering se plaća preko korisničkog profila, najkasnije 7 dana pre početka proslave.',
+	reservationCateringPayNotePartner: '*Ketering se plaća na licu mesta, na dan proslave.',
+	reservationSectionInfoClickTrue: '*Ovaj deo je obavezan, potrebno je popuniti polja pre klika na dugme ispod.',
+	reservationSectionInfoClickFalse: '*Ovaj deo nije obavezan, na dugme ispod možete kliknuti ukoliko ne označite ništa.',
 
 
 
@@ -620,7 +637,7 @@ const serbian: LanguageInterface = {
 	termsIntroText_3: 'Trilino usluge su složenog karkatera, a sastoje se od prezentovanja različitog sadržaja putem interneta, omogućavanja kreiranja rezervacija i kaparisanja usluga/prozvoda koje nude pravni subjekti sa kojima Trilino ima potpisane ugovore o saradnji.',
 	termsIntroText_4: 'Svako dalje korišćenje ove internet stranice na web adresi trilino.com, nakon upoznavanja sa UK, Uslovima prodaje kao i sa Izjavom o poverljivosti podataka, podrazumeva da je Korisnik saglasan sa tim uslovima i njihovim pravilima i da pristaje na korišćenje internet stranice trilino.com  usluga u skladu sa ovim UK.',
 	termsIntroText_5: 'U smislu ovih UK, Korisnik je svako fizičko ili pravno lice koje koristi internet stranicu ili koje na bilo koji način, kako neposredno, tako i posredno, koristi, ili je koristilo usluge ove internet stranice.',
-	termsIntroText_6: 'U smislu ovih UK, Trilino Partner je svako pravno lice sa kojima Trilino ima važeći potpisan ugovor o poslovnoj saradnji koje učestvuje u realizaciji neke usluge koju Korsnik može videti na trilino.com internet stranici i za koju može kreirati rezervaciju.',
+	termsIntroText_6: 'U smislu ovih UK, Trilino Partner je svako pravno lice sa kojima Trilino ima važeći potpisan ugovor o poslovnoj saradnji koje učestvuje u realizaciji neke usluge koju Korisnik može videti na trilino.com internet stranici i za koju može kreirati rezervaciju.',
 	termsIntroText_7: 'Korišćenjem internet stranice trilino.com od strane Korisnika, smatra se da je Korisnik saglasan da sva komunikacija i interakcija koja se odvija putem trilino.com internet stranice mora biti u skladu sa ovim UK.',
 	termsRegTitle: 'Registracija Korisnika Trilina-a',
 	termsRegText_1: 'Registracijom, odnosno otvaranjem korisničkog naloga na trilino.com internet stranici smatra se da je korisnik ove UK u celosti pročitao i prihvatio.',
@@ -654,7 +671,7 @@ const serbian: LanguageInterface = {
 	termsContentText_6: 'Trilino usluga je usluga rezervisanja ili prodaje usluga/proizvoda koje pružaju treća lica (Trilino Partneri), i koja se pruža prema unapred objavljenim uslovima na trilino.com internet stranici.',
 	termsContentText_7: 'Trilino, kao skup interaktivnih usluga, obuhvata sledeće sadržaje i aktivnosti: prezentaciju prostora za organizaciju dečijih rođendana, rezervisanje termina za održavanje dečijih rođendana u prostorima specijalizovanim za tu namenu, prezentaciju i/ili rezervisanje i/ili kaparisanje usluga keteringa (dostave hrane, pića i/ili torte),  prezentaciju i/ili rezervisanje i/ili kaparisanje usluga  dečijih animatora, prezentaciju i/ili rezervisanje i/ili kaparisanje ostalih usluga koje mogu upotpuniti i/ili poboljšati održavanje dečijeg rođendana.',
 	termsContentText_8: 'Sve usluge koje su u ponudi na trilino.com internet stranici, Trilino je dužan da pruži u skladu sa ovim UK i Uslovima prodaje, koji važe na dan kada Korisnik prihvata ponudu za konkretnu uslugu koju je odabrao na sajtu trilino.com. Radi dostupnosti Trilino usluga Korisniku, Korisnik mora koristiti trilino.com internet stranicu preko računarske opreme za koju je Korisnik isključivo odgovoran, bilo za nabavku, bilo za održavanje hardvera i softvera koji koristi, ili za odabir hardvera ili softvera preko koga pristupa trilino.com internet stranici, ukoliko ne koristi svoju opremu i softver. Korisnik je odgovoran i za bilo koju opremu potrebnu za pristup i korišćenje internet stranice trilino.com i samostalno snosi i sve troškove vezane za korišćenje i održavanje pristupnog hardvera i softvera.',
-	termsContentText_9: 'Cene Trilino usluga predstavljene su na trilino.com internet stranici. Svaka predstavljena cena uključuje PDV i/ili neki drugi porez koji je zakonom predviđen za određenu vrstu usluge. Trilino zadržava pravo da promeni cene jedne, ili više Trilino usluge u svakom trenutku bez prethodnog obaveštenja.',
+	termsContentText_9: 'Cene predstavljene na trilino.com internet stranici. Svaka predstavljena cena uključuje PDV i/ili neki drugi porez koji je zakonom predviđen za određenu vrstu usluge. Trilino zadržava pravo da promeni cene jedne, ili više Trilino usluge u svakom trenutku bez prethodnog obaveštenja.',
 	termsContentText_10: 'Korisnik je upoznat sa činjenicom da Trilino nije vlasnik, niti u svom vlasništvu ima proizvode/usluge koje promotivno nudi putem  trilino.com internet stranice, već da su svi proizvodi/usluge u isključivom vlasništvu Trilino Partnera, te za sve probleme i nedostatke koji mogu nastati prilikom samog faktičkog korišćenja usluga, uključujući isporuku ili manjkavosti proizvoda/usluga, isključivu odgovornost snose Trilino Partneri čiji se proizvodi/usluge nude putem Trilino usluge na internet sajtu trilino.com.',
 	termsContentText_11: 'Neophodan uslov za korišćenje Trilino usluge je otvaranje korisničkog naloga na trilino.com internet stranici.',
 	termsContentText_12: 'Otvaranje korisničkog naloga na trilino.com internet stranici vrši se popunjavanjem postojeće forme za otvaranje korisničkog naloga (Registracije), tako što se u formu unose svi traženi podaci o Korisniku (ime i prezime, kontakt telefon i email).',
@@ -840,6 +857,8 @@ const serbian: LanguageInterface = {
 	paymentCateringSubCatering: 'Podaci o keteringu:',
 	paymentCateringSubTransaction: 'Podaci o transakciji:',
 	paymentCateringTextFail: 'Iz nekog razloga prethodna transakcija nije bila uspešna. Molimo vas proverite sredstva na vašoj platnoj kartici i prokušajte ponovo ponovo.',
+	paymentDeactivateTitle: 'Odustali ste od plaćanja',
+	paymentDeactivateText: 'Zbog odustajanja od plaćanja nije moguće realizovati prethodno kreiranu rezervaciju',
 
 
 	contactHeadTitle: 'Ukoliko imate pitanja, kontaktirajte nas.',
@@ -900,6 +919,29 @@ const serbian: LanguageInterface = {
 	userProfileBillUserprofilDeadline: 'Rok za uplatu preko korisničkog profila:',
 	userProfileBillUserprofilType: 'Tip uplate preko korisničkog profila:',
 	userProfileBillPaid: ' - Plaćeno',
+
+	privacyStatementTitle: 'Saglasnost za prikupljanje, obradu i čuvanje ličnih podataka',
+	privacyStatementText1: 'Posetilac sajta www.trilino.com (u daljem tekstu: sajt) popunjavanjem ovog registracionog formulara unosi svoje lične podatke (ime i prezime, kontakt telefon i email adresu).',
+	privacyStatementText2: 'Posetilac sajta se obaveštava da davanjem navedenih ličnih podataka (ime i prezime, kontakt telefon i email adresu), privredno društvo ADALGO GROUP CONSULT DOO Beograd-Stari grad sa sedištem u Beogradu, Ul. Džordža Vašingtona br. 40, matični broj 21131121, postaje obrađivač ličnih podataka o Klijentu.',
+	privacyStatementText3: 'Unošenjem svojih ličnih podataka u registracionom formularu Posetilac ovog sajta dozvoljava korišćenje i obradu istih, prema kojima će se Privredno društvo ADALGO GROUP CONSULT DOO Beograd-Stari grad, odnositi u skladu sa odredbama Zakona o zaštiti podataka o ličnosti i neće od Klijenta prikupljati naročito osetljive podatke, određene 16 Zakona o zaštiti podataka o ličnosti.',
+	privacyStatementText4: 'Posetilac sajta popunjavanjem registracionog formulara odgovara za tačnost unetih podataka.',
+	privacyStatementText5: 'Posetilac sajta www.trilino.com je izričito saglasan da privredno društvo ADALGO GROUP CONSULT DOO Beograd-Stari grad, date podatke koristi u svrhu sprovođenja projekta promocije, radi poboljšanja usluge i u statističke svrhe. Privredno društvo ADALGO GROUP CONSULT DOO Beograd-Stari grad se obavezuje da koristi prikupljene lične podatke Posetioca sajta www.trilino.com isključivo i samo kako bi ponudio što bolje proizvode/usluge, unapredio ponudu, osigurao proveru administrativnih zadataka, osigurao uspostavljanje kontakta sa Posetiocem sajta i poboljšao svoju ponudu proizvoda/usluga na tržištu.',
+	privacyStatementText6: 'Čuvanje ličnih podataka Posetioca sajta www.trilino.com se vrši na posebnim mestima koja su dostupna samo ovlašćenom zaposlenom licu koje je u  privrednom društvu ADALGO GROUP CONSULT DOO Beograd-Stari grad određeno kao rukovalac podacima u skladu sa Zakonom o zaštiti podataka o ličnosti.',
+	privacyStatementText7: 'Zaposleno lice imenovano od strane ADALGO GROUP CONSULT DOO Beograd-Stari grad za rukovaoca podacima je jedino ovlašćeno za prikupljanje, pristup, obradu i čuvanje ličnih podataka Klijenta.',
+	privacyStatementText8: 'Posetilac sajta www.trilino.com će od privrednog društva ADALGO GROUP CONSULT DOO Beograd-Stari grad dobijati email poruke, i to Administrativne email poruke.',
+	privacyStatementText9: 'Posetilac sajta www.trilino.com će primati isključivo poruke koje su u vezi sa njegovim, prethodno izvršenim, korisničkim aktivnostima (registracija, kupovina, otkazivanje, podsetnik za rezervaciju)',
+	privacyStatementText10: 'Posetilac sajta www.trilino.com u skladu sa odredbama Zakona o zaštiti podataka o ličnosti, ima pravo da u svakom momentu uskrati korišćenje njegovih ličnih podataka.',
+	privacyStatementText11: 'Posetilac sajta www.trilino.com koji popuni registracioni formular ima pravo da od rukovaoca zahteva ispravku, dopunu, ažuriranje, brisanje podataka, kao i prekid i privremenu obustavu obrade. ',
+	privacyStatementText12: 'Posetilac sajta ima pravo da zahteva brisanje podataka u slučaju da je način obrade podataka suprotan od navedenog u ovom obaveštenju.',
+	privacyStatementText13: 'Posetilac sajta koji popunjava registracioni formular svojim prihvatanjem potvrđuje da je tekst ove saglasnosti u celosti pročitao, razumeo i prihvatio, i potpisao.',
+
+	faqTitle: 'Najčešće postavljana pitanja',
+	faqQuestion1: 'Koliko košta Trilino usluga?',
+	faqAnswer1: 'Trilino usluga rezervisanja je u potpunosti besplatna. Nikakva posrednička nadoknada se ne obračunava, cenu koju vidite na rezervaciji plaćate bez skrivenih troškova. Takodje, korišćenje našeg sajta je u potpunosti besplatno.',
+	faqQuestion2: 'Da li su cene usluga povoljnije ukoliko se direktno obratimo igraonicama?',
+	faqAnswer2: 'Ne, cene rezervacija, termina i svih ostalih usluga su u potpunosti jednake bez obzira da li vašu rezervaciju previte putem telefona, uživo ili putem Trilino internet stranice. Međutim, rezervacije koje pravite putem Trilino internet stranice imaju svoje prednosti.',
+	faqQuestion3: 'Koje su prednosti rezervisanja putem Trilino internet stranice?',
+	faqAnswer3: 'Ukratko, prednosti su brzina, komfor, sigurnost novca i veća preglednost. Rezervaciju napravljenu preko naše stranice plaćate online putem platne kartice sa bilo kog mesta na kome imate internet konekciju. Nije potrebno da dolazite na adresu prostora koji želite da rezervišete. Rezervacija i sve što ide uz nju je dokumentovana tako da je možete pogledati kad god želite. Rezervaciju možete otkazati preko naše stranice samo jednim klikom, s obziro da rezervisani prostor dobija novac tek nakon realizacije rezervacije, sigurnost vašeg novca je garantovana.',
 
 
 	//////////////////////API

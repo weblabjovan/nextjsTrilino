@@ -45,11 +45,13 @@ const generalOptions: IGenOptions = {
     { value: '4', label: 'Sort by ranking' },
   ],
 	itemDuration_sr: [
+      { value: '1.5', label: '1,5 sat' },
       { value: '2', label: '2 sata' },
       { value: '2.5', label: '2,5 sata' },
       { value: '3', label: '3 sata' }
     ],
     itemDuration_en: [
+      { value: '1.5', label: '1,5 hours' },
       { value: '2', label: '2 hours' },
       { value: '2.5', label: '2,5 hours' },
       { value: '3', label: '3 hours' }

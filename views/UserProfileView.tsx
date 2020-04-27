@@ -88,7 +88,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   logout() {
     unsetCookie('trilino-user-token');
-    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?language=${this.props.lang}`;
+    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?page=user&stage=login&language=${this.props.lang}`;
   }
 
   changeScreen(screen: string){
@@ -138,7 +138,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           const id = this.state.reservationBillObject['cateringObj'][0]['_id'];
           const price = this.state.reservationBillObject['cateringObj'][0]['price'];
 
-          const plainText = `${Keys.NEST_PAY_CLIENT_ID}|cat-${id}|${price.toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success|${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+          const plainText = `${Keys.NEST_PAY_CLIENT_ID}|cat-${id}|${price.toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=cateringSuccess&catering=${id}&language=${this.props.lang}&result=success|${this.props.link['protocol']}${this.props.link['host']}/payment?page=cateringSuccess&catering=${id}&language=${this.props.lang}&result=fail|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
           const hash = setNestPayHash(plainText);
 
           const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
@@ -149,13 +149,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
           <input type="hidden" name="amount" value="${price.toFixed(2)}" /> 
           <input type="hidden" name="currency" value="941" /> 
           <input type="hidden" name="oid" value="cat-${id}" /> 
-          <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=success"/> 
-          <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" /> 
+          <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=cateringSuccess&catering=${id}&language=${this.props.lang}&result=success"/> 
+          <input type="hidden" name="failUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=cateringSuccess&catering=${id}&language=${this.props.lang}&result=fail" /> 
           <input type="hidden" name="lang" value="${this.props.lang}" /> 
           <input type="hidden" name="hashAlgorithm" value="ver2" /> 
           <input type="hidden" name="rnd" value="${Keys.NEST_PAY_RANDOM}" /> 
           <input type="hidden" name="encoding" value="utf-8" />
-          <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/cateringPayment?catering=${id}&language=${this.props.lang}&result=fail" />
+          <input type='hidden' name='shopurl' value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=closed&deactive=false&language=${this.props.lang}" />
           <input type="submit" style="visibility: hidden" /> </form>`;
           
           const form =document.getElementById('reviseCombi');
@@ -383,6 +383,8 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

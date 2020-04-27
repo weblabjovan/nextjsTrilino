@@ -39,7 +39,7 @@ export default class AdminNavigationBar extends React.Component <MyProps, MyStat
 
   logout() {
     unsetCookie('trilino-admin-token');
-    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/adminLogin?language=${this.props.language}`;
+    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?page=admin&stage=login&language=${this.props.language}`;
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){

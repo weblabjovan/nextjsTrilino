@@ -321,30 +321,33 @@ class HomeView extends React.Component <MyProps, MyState>{
           <Container>
             <Row className="processWrapper">
                 <Col xs="12">
+                  <div className="iconHolder">
+                    <span className="icon choose"></span>
+                  </div>
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_1']}</h4>
                     <p>{this.state.dictionary['homeProcessText_1']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon reserve"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_2']}</h4>
                     <p>{this.state.dictionary['homeProcessText_2']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon cake"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_3']}</h4>
                     <p>{this.state.dictionary['homeProcessText_3']}</p>
                   </div>
+                  
                   <div className="iconHolder">
-                    <span className="icon down"></span>
+                    <span className="icon rate"></span>
                   </div>
-
                   <div className="item">
                     <h4>{this.state.dictionary['homeProcessTitle_4']}</h4>
                     <p>{this.state.dictionary['homeProcessText_4']}</p>
@@ -387,6 +390,23 @@ class HomeView extends React.Component <MyProps, MyState>{
          <div className=" bigPadDown">
           <Container>
             <Row className="justify-content-sm-center">
+                 <Col xs="12" sm="6" lg="4">
+                  <Container>
+                    <Row>
+                      <Col xs="12" className="homeWhatItem">
+                        <div className="face">
+                          <img src="/static/comment_2.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                        </div>
+                        <p>{ this.state.dictionary['homeComment_2'] }</p>
+                        <div className="signature">
+                          <p>{ this.state.dictionary['homeCommentName_2'] }</p>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Col>
+
+                
                 <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
@@ -403,28 +423,14 @@ class HomeView extends React.Component <MyProps, MyState>{
                   </Container>
                 </Col>
 
-                 <Col xs="12" sm="6" lg="4">
-                  <Container>
-                    <Row>
-                      <Col xs="12" className="homeWhatItem">
-                        <div className="face">
-                          <img src="/static/testemonial_photo_2.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
-                        </div>
-                        <p>{ this.state.dictionary['homeComment_2'] }</p>
-                        <div className="signature">
-                          <p>{ this.state.dictionary['homeCommentName_2'] }</p>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
+                
 
                  <Col xs="12" sm="6" lg="4">
                   <Container>
                     <Row>
                       <Col xs="12" className="homeWhatItem">
                         <div className="face">
-                          <img src="/static/testemonial_photo_3.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          <img src="/static/comment_3.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
                         </div>
                         <p>{ this.state.dictionary['homeComment_3'] }</p>
                         <div className="signature">
@@ -446,7 +452,7 @@ class HomeView extends React.Component <MyProps, MyState>{
               <Col xs="12">
                 <h4>{ this.state.dictionary['homeHeader_4'] }</h4>
                 <p>{ this.state.dictionary['homePartner'] }</p>
-                <Button color="success" href={`/partnership?language=${this.props.lang}`} >{ this.state.dictionary['uniMore'] }</Button>
+                <Button color="success" href={`/?page=partnership&language=${this.props.lang}`} >{ this.state.dictionary['uniMore'] }</Button>
               </Col>
                 
             </Row>
@@ -465,6 +471,8 @@ class HomeView extends React.Component <MyProps, MyState>{
     			partnership={ this.state.dictionary['navigationPartnership'] }
     			faq={ this.state.dictionary['navigationFaq'] }
           terms={ this.state.dictionary['navigationTerms'] }
+          payment={ this.state.dictionary['navigationOnline'] }
+          privacy={ this.state.dictionary['navigationPrivacy'] }
     		/>
 
     	</div>

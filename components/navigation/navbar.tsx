@@ -15,6 +15,7 @@ type MyProps = {
   terms: string;
   user?: boolean;
   userProfile?: string;
+  languagePrevent?: boolean;
   // using `interface` is also ok
 };
 type MyState = {
@@ -56,7 +57,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
 		          <Collapse isOpen={!this.state.collapsed} navbar>
 		            <Nav navbar>
 		              <NavItem>
-		                <NavLink href={`/login?language=${this.props.language.toLowerCase()}`}>{this.props.login}</NavLink>
+		                <NavLink href={`/login?page=user&stage=login&language=${this.props.language.toLowerCase()}`}>{this.props.login}</NavLink>
 		              </NavItem>
 		              <NavItem>
                     <NavLink href={`/search?language=${this.props.language.toLowerCase()}&date=${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}&city=null&district=null`}>{this.props.search}</NavLink>
@@ -84,13 +85,23 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   }
 
                   <hr/>
-
-                  <NavItem>
-                    <NavLink href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</NavLink>
-                  </NavItem>
+                  {
+                    !this.props.languagePrevent
+                    ?
+                    (
+                      <div>
+                        <NavItem>
+                          <NavLink href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</NavLink>
+                        </NavItem>
+                      </div>
+                    )
+                    :
+                    null
+                  }
+                  
 
 		            </Nav>
 		          </Collapse>
@@ -120,10 +131,19 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   <DropdownToggle caret>
                     { this.props.language }
                   </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem ><a href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</a></DropdownItem>
-                    <DropdownItem ><a href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</a></DropdownItem>
-                  </DropdownMenu>
+                  {
+                    !this.props.languagePrevent
+                    ?
+                    (
+                      <DropdownMenu>
+                        <DropdownItem ><a href={ changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'sr') } >SR</a></DropdownItem>
+                        <DropdownItem ><a href={changeLanguagePath(this.props.fullPath, this.props.language.toLowerCase(), 'en')} >EN</a></DropdownItem>
+                      </DropdownMenu>
+                    )
+                    :
+                    null
+                  }
+                  
                 </UncontrolledButtonDropdown>
 		          </Navbar>
 		          )

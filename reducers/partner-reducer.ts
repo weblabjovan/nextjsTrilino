@@ -189,6 +189,7 @@ const initialState: initialState  = {
     smoking: '',
     selfAnimator: '',
     duration: '',
+    durationAlternative: '',
     cancelation: '',
     roomNumber: '',
     depositPercent: '',

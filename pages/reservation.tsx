@@ -8,9 +8,6 @@ import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions'
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import ReservationView from '../views/ReservationView';
-import pages from '../lib/constants/pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface Props {
   userAgent?: string;
@@ -57,7 +54,7 @@ Reservation.getInitialProps = async (ctx) => {
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
-      ctx.res.writeHead(302, {Location: `/devLogin`});
+      ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
@@ -65,21 +62,21 @@ Reservation.getInitialProps = async (ctx) => {
     if (partnerRes['status'] === 200) {
       result = await partnerRes.json();
       if (!result['partner']) {
-        ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+        ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=reservation`});
         ctx.res.end();
       }else{
         if (!result['partner']['reservation']) {
-          ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+          ctx.res.writeHead(302, {Location: `/?page=errorlanguage=${link['queryObject']['language']}&error=1&root=reservation`});
           ctx.res.end();
         }else{
           if (!result['partner']['reservation']['id']) {
-            ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+            ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=reservation`});
             ctx.res.end();
           }
         }
       }
     }else{
-      ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+      ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=reservation`});
       ctx.res.end();
     }
 
@@ -93,7 +90,7 @@ Reservation.getInitialProps = async (ctx) => {
 
   }catch(err){
     console.log(err);
-    ctx.res.writeHead(302, {Location: `/errorPage?language=${link['queryObject']['language']}&error=1&root=reservation`});
+    ctx.res.writeHead(302, {Location: `/?page=error&language=${link['queryObject']['language']}&error=1&root=reservation`});
     ctx.res.end();
   }
   

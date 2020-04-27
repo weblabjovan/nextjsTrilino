@@ -88,7 +88,7 @@ const assembleRoomTerms = (room: object): object => {
 	
 }
 
-export const validateTerms = (rooms: Array<object>, duration: string | object, ends: object): object => {
+export const validateTerms = (rooms: Array<object>, duration: string | object, alternative: string | object, ends: object): object => {
 
 	if (!duration) {
 		return {day: 'all', result: {success: false, message: 'error_no_5'}};
@@ -97,7 +97,8 @@ export const validateTerms = (rooms: Array<object>, duration: string | object, e
 	for (var i = 0; i < rooms.length; ++i) {
 		const room = rooms[i];
 		for(let key in room['terms']){
-			const res = isDaysTermValid(room['terms'][key], duration['value']);
+			const alter = alternative ? alternative['value'] : null;
+			const res = isDaysTermValid(room['terms'][key], duration['value'], alter);
 			if (!res['success']) {
 				return {day: key, result: res};
 			}
@@ -155,7 +156,7 @@ const isLastTermAfterClose = (dayLast: string | object, dayTerms: Array<object>)
 	return {success: true, message: 'Last term validated.'};
 }
 
-const isDaysTermValid = (day: Array<object>, duration: string): object => {
+const isDaysTermValid = (day: Array<object>, duration: string, alternative: string | null): object => {
 	const res = true;
 
 	for (var i = 0; i < day.length; ++i) {
@@ -167,9 +168,17 @@ const isDaysTermValid = (day: Array<object>, duration: string): object => {
 			const from = moment(`2020-02-08 ${day[i]['from']['value']}`, "YYYY-MM-DD HH:mm");
 			const diff =  moment.duration(to.diff(from)).asHours();
 
-			if (diff !== parseFloat(duration)) {
-				return {success: false, message: 'error_no_2'};
+			if (alternative) {
+				if (diff !== parseFloat(duration) && diff !== parseFloat(alternative)) {
+					return {success: false, message: 'error_no_2'};
+				}
+			}else{
+				if (diff !== parseFloat(duration)) {
+					return {success: false, message: 'error_no_2'};
+				}
 			}
+
+			
 
 			if (i !== 0) {
 
@@ -267,7 +276,7 @@ const getProfileGeneralStructure = (general: object): object => {
 }
 
 const assembleForSelect = (key: string, value: number | string, language: string): object => {
-	const forItemDuration = ['duration'];
+	const forItemDuration = ['duration', 'durationAlternative'];
 	const forAges = ['ageFrom', 'ageTo'];
 	const forTimes = ['mondayFrom', 'mondayTo', 'tuesdayFrom', 'tuesdayTo', 'wednesdayFrom', 'wednesdayTo', 'thursdayFrom', 'thursdayTo', 'fridayFrom', 'fridayTo', 'saturdayFrom', 'saturdayTo', 'sundayFrom', 'sundayTo' ];
 	const forDual = ['parking', 'yard', 'balcon', 'pool', 'wifi', 'animator', 'food', 'drink', 'cake', 'selfFood', 'selfDrink', 'selfCake', 'smoking', 'selfAnimator', 'movie', 'gaming' ];

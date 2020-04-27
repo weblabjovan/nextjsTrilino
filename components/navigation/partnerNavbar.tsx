@@ -41,7 +41,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
 
   logout() {
     unsetCookie('trilino-partner-token');
-    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/partnerProfile?language=${this.props.language}`;
+    window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/login?page=partner&stage=login&language=${this.props.language}`;
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){

@@ -76,6 +76,7 @@ export interface IpartnerGeneral {
 	selfFood: string | object;
 	selfDrink: string | object;
 	duration: string | object;
+	durationAlternative: string | object;
 	cancelation: string | object;
 	smoking: string | object;
 	selfAnimator: string | object;
