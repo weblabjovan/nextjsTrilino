@@ -169,6 +169,10 @@ export default class PaymentRoute extends React.Component <MyProps, MyState> {
                 <p>{`${ this.state.dictionary['paymentStageMsgOnsite'] } ${currencyFormat(this.props.price - (this.props.deposit + this.props.trilino))}`}</p>
                 <p>{this.props.trilino ? `${ this.state.dictionary['paymentStageMsgTrilino'] } ${currencyFormat(this.props.trilino)}` : ''}</p>
 
+                <div className="middle marginSmall">
+                  <a href={`/?page=terms&language=${this.props.lang}`} target="_blank">{`${this.state.dictionary['uniTerms']}/${this.state.dictionary['uniSalesTerms']}`}</a>
+                </div>
+
                 <CheckBox
                   disabled={ false }
                   checked={ this.props.readyToPay }

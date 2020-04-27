@@ -17,7 +17,35 @@
 	}
 
 	.fix{
+		position: fixed;
+		width: 40%;
+		max-width: 583px;
+		top: 40px;
+	}
+
+	.absoluteBottom{
+		position: absolute;
 		width: 100%;
+		max-width: 583px;
+		bottom: 0px;
+	}
+
+	.fixMobile{
+		position: fixed;
+		width: 100%;
+		bottom: 0px;
+		left: 0px;
+		margin: 0px !important;
+		background: #fff;
+		z-index: 999;
+	}
+
+	.absoluteMobile{
+		position: relative;
+		margin: 0px !important;
+		width: 100%;
+		background: #fff;
+		z-index: 999;
 	}
 
 	.reservationFix{
@@ -648,6 +676,16 @@
 			    margin-bottom: 5px;
 			}
 
+			.marginSmall{
+				margin-top: 30px;
+
+				a{
+					font-size: 16px;
+					text-decoration: underline;
+					font-style: italic;
+				}
+			}
+
 			.btn-success{
 				margin-top: 25px;
 				margin-bottom: 20px;
@@ -680,5 +718,9 @@
 			}
 		}
 	}
+}
+
+.fix + .reservationWrapper {
+  padding-top: 103px;
 }
 

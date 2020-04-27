@@ -164,7 +164,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
 
   validateSave(){
   	const ends = { monday: this.props.partnerGeneral['mondayTo'], tuesday: this.props.partnerGeneral['tuesdayTo'], wednesday: this.props.partnerGeneral['wednesdayTo'], thursday: this.props.partnerGeneral['thursdayTo'], friday: this.props.partnerGeneral['fridayTo'], saturday: this.props.partnerGeneral['saturdayTo'], sunday: this.props.partnerGeneral['sundayTo'] };
-  	const validation = validateTerms(this.props.partnerRooms, this.props.partnerGeneral['duration'], ends);
+  	const validation = validateTerms(this.props.partnerRooms, this.props.partnerGeneral['duration'], this.props.partnerGeneral['durationAlternative'], ends);
 
   	if (validation['result']['success']) {
   		this.saveGeneral();
@@ -606,6 +606,17 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 placeholder={this.state.dictionary['partnerProfileGeneralItemDurationPlaceholder']}/>
             </Col>
 
+             <Col xs='6' sm='4'>
+              <label>{this.state.dictionary['partnerProfileGeneralItemDurationAlternative']}</label>
+              <Select 
+                options={genOptions[`itemDuration_${this.props.lang}`]} 
+                value={ this.props.partnerGeneral['durationAlternative'] } 
+                onChange={(val) => this.uniInputHandler(val, 'durationAlternative')} 
+                instanceId="durationAlternativeInput" 
+                className="logInput" 
+                placeholder={this.state.dictionary['partnerProfileGeneralItemDurationAlternativePlaceholder']}/>
+            </Col>
+
             <Col xs='6' sm='4'>
             	<label>{this.state.dictionary['partnerProfileGeneralItemCancelation']}</label>
             	<Select 
@@ -650,7 +661,7 @@ class GeneralScreen extends React.Component <MyProps, MyState>{
                 placeholder={this.state.dictionary['partnerProfileGeneralDepositReferencePlaceholder']}/>
             </Col>
             <Col xs='6' sm='4'>
-              <label>Iznos minimalnog depozita</label>
+              <label>{this.state.dictionary['partnerProfileGeneralDepositMinimal']}</label>
               <PlainInput
                 placeholder={this.state.dictionary['partnerProfileGeneralItemPricePlaceholder']} 
                 onChange={(event) => this.uniInputHandler(event.target.value, 'minimalDeposit')} 

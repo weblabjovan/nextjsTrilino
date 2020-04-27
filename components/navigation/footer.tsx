@@ -25,7 +25,7 @@ export default class Footer extends React.Component <MyProps, MyState> {
 	render(){
 		const date = new Date();
 		return(
-			<div className="footerWrapper">
+			<div className="footerWrapper" id="footerElem">
 				<Container fluid>
 		        <Row>
 			        <Col xs='12' sm="7" lg="6" className="menuOptions">

@@ -76,8 +76,9 @@ class ContactView extends React.Component <MyProps, MyState>{
                 <h3>{this.state.dictionary['contactGeneralSub']}</h3>
                 <p><strong>{this.state.dictionary['contactGeneralPart']}</strong></p>
                 <p><strong>{this.state.dictionary['contactGeneralAddress']}</strong> Džordža Vašingtona 40, 11000 Beograd </p>
-                <p><strong>{this.state.dictionary['contactGeneralPhone']}</strong> 06512345678</p>
-                <p><strong>{this.state.dictionary['contactGeneralWebsite']}</strong> https://www.adalgogroup.com/ </p>
+                <p><strong>{this.state.dictionary['contactGeneralPhone']}</strong> 011 2761751</p>
+                <p><strong>{this.state.dictionary['contactGeneralPhone']}</strong> 065 5555 135</p>
+                <p><strong>{this.state.dictionary['contactGeneralWebsite']}</strong> https://www.adalgogroup.com/</p>
                 <p><strong>{this.state.dictionary['contactGeneralCompanyNum']}</strong> 21131121</p>
                 <p><strong>{this.state.dictionary['contactGeneralTaxNum']}</strong> 109137875</p>
                 <p><strong>{this.state.dictionary['contactGeneralDirector']}</strong> Dragan Djokić</p>

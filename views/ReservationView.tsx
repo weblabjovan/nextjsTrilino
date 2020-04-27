@@ -86,7 +86,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady', 'fixOnScroll'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -699,6 +699,51 @@ class ReservationView extends React.Component <MyProps, MyState>{
     }
   }
 
+  fixOnScroll() {
+    const header = document.getElementById("infoFixed_2");
+    const footer = document.getElementById("footerElem");
+
+    if (this.state.isMobile) {
+      if ((window.innerHeight + window.pageYOffset) > footer.offsetTop ) {
+        if (header.classList.contains("fixMobile")) {
+          header.classList.add("absoluteMobile");
+          header.classList.remove("fixMobile");
+        }
+        
+      }else{
+        if (header.classList.contains("absoluteMobile")) {
+          header.classList.add("fixMobile");
+          header.classList.remove("absoluteMobile");
+        }
+        
+      }
+    }else{
+      if (window.pageYOffset > 60) {
+        if ((header.offsetHeight + window.pageYOffset + 80) > footer.offsetTop ) {
+          if (header.classList.contains("fix")) {
+            header.classList.remove("fix");
+          }
+          if (!header.classList.contains("absoluteBottom")) {
+            header.classList.add("absoluteBottom");
+          }
+        }else{
+          if (!header.classList.contains("fix")) {
+            header.classList.add("fix");
+          }
+          if (header.classList.contains("absoluteBottom")) {
+            header.classList.remove("absoluteBottom");
+          }
+        }
+      } else {
+        if (header.classList.contains("fix")) {
+          header.classList.remove("fix");
+        }
+      }
+    }
+
+    
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     if (this.state.logTry > 9) {
       window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}?language=${this.props.lang}`;
@@ -781,9 +826,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+    window.addEventListener('scroll', this.fixOnScroll);
 	}
 	
   render() {
+      
 
     return(
     	<div className="totalWrapper">
@@ -802,10 +849,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
           user={ this.props.userIsLogged }
           userProfile={ this.state.dictionary['navigationProfile'] }
     		/>
-    		<div className="reservationWrapper">
+    		<div className="reservationWrapper" id="pageReservation">
           <Container>
               <Row>
-                <Col xs='12' lg="5" className="hidden-sm-up">
+                {/*<Col xs='12' lg="5" className="hidden-sm-up">
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
@@ -820,7 +867,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     open={ false }
                     num="1"
                   />
-                </Col>
+                </Col>*/}
                 <Col xs='12' lg="7">
                   <Alert color="danger" isOpen={ this.state.errors["flag"] } toggle={this.closeAlert} >
                     <p hidden={ !this.state.errors['fields']['generalName']} >{this.state.dictionary['reservationAlertGeneralName']}</p>
@@ -1094,7 +1141,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   </Row>
                 </Col>
                 
-                <Col xs='12' lg="5" className="hidden-sm">
+                <Col xs='12' lg="5">
                   <InfoFix
                     partner={this.props.partner['name']}
                     date={this.props.router['query']['date']}
@@ -1107,7 +1154,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
-                    open={ true }
+                    open={ !this.state.isMobile }
                   />
                 </Col>
               </Row>
