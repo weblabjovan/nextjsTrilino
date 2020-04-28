@@ -148,7 +148,7 @@ const initialState: initialState  = {
   getPartnersMultipleSuccess: null,
 
   forActivation: false,
-  activationAlert: true,
+  activationAlert: false,
   activationProcessPercent: 20,
 
   partnerGeneral: {
