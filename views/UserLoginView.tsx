@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage, changeSingleUserField, registrateUser, loginUser } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, unsetCookie, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import LoginScreen from '../components/user/LoginScreen';
 import RegistrationScreen from '../components/user/RegistrationScreen';
@@ -224,6 +224,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
     }
 
     if (!this.props.userRegistrateStart && this.props.userRegistrateSuccess && !prevProps.userRegistrateSuccess) {
+      unsetCookie('trilino-partner-token');
     	this.setState({registrationConfirm: true, loader: false});
     }
 

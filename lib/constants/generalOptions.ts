@@ -321,10 +321,20 @@ const generalOptions: IGenOptions = {
       {value: '2', label: 'Term price'},
     ],
     decorType: {
-      '1': {name_sr: 'baloni', name_en: 'balloons'},
+      '1': {name_sr: 'obični baloni', name_en: 'plain baloons'},
       '2': {name_sr: 'konfete', name_en: 'confetti'},
       '3': {name_sr: 'prskalice', name_en: 'spargers'},
-      '4': {name_sr: 'trake', name_en: 'bands'},
+      '4': {name_sr: 'papirne trake', name_en: 'paper bands'},
+      '5': {name_sr: 'slatki sto', name_en: 'sweet table'},
+      '6': {name_sr: 'papirne kape', name_en: 'paper caps'},
+      '7': {name_sr: 'papirne duvalice', name_en: 'paper blowers'},
+      '8': {name_sr: 'baloni u obliku imena/rodjendana', name_en: 'nameshaped and birthday shaped baloons'},
+      '9': {name_sr: 'svečane svećice', name_en: 'party candles'},
+      '10': {name_sr: 'stiropor u boji u obliku imena/rodjendana', name_en: 'nameshaped and birthdayshaped styrofoam'},
+      '11': {name_sr: 'šaljivi rekviziti za slikanje', name_en: 'funny photo props'},
+      '12': {name_sr: 'kartonski tanjirići', name_en: 'cardborad mini plates'},
+      '13': {name_sr: 'papirne medalje', name_en: 'paper medals'},
+      '14': {name_sr: 'pozivnice', name_en: 'invitation letters'},
     },
     quarter: {
       '1':[

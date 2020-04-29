@@ -53,7 +53,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
   				const page = decodeId(generateString, par._id);
   				const link = `${req.headers.origin}/emailVerification?language=${language}&page=${page}&type=partner`;
 
-  				const params = { title: `${name} ${dictionary['emailPartnerRegisterTitle']}`, text: `${dictionary['emailPartnerRegisterText']}`, code: `${dictionary['emailPartnerRegisterCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerRegisterButton']}`};
+  				const params = { title: `${dictionary['emailPartnerRegisterTitle']}`, text: `${dictionary['emailPartnerRegisterText']} ${name} ${dictionary['emailPartnerRegisterText1']}`, text1: `${dictionary['emailPartnerRegisterText2']}`, code: `${dictionary['emailPartnerRegisterCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerRegisterButton']}`, hello: `${dictionary['emailPartnerRegisterHello']}`, team: `${dictionary['emailPartnerRegisterTeam']}`};
   				const email = { sender, to, bcc, templateId, params };
 
 				const emailSe =	await sendEmail(email);
@@ -335,7 +335,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		  				const page = decodeId(generateString, partner._id);
 		  				const link = `${req.headers.origin}/password?language=${data['language']}&page=${page}&type=partner`;
 
-		  				const params = { title: `${partner['name']} ${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`};
+		  				const params = { title: `${dictionary['emailPartnerForgotPassTitle']}`, text: `${dictionary['emailPartnerForgotPassText']}`, text1: `${dictionary['emailPartnerForgotPassText1']}`, code: `${dictionary['emailPartnerForgotPassCode']} ${passSafetyCode}`, link: link, button: `${dictionary['emailPartnerForgotPassButton']}`, hello: `${dictionary['emailPartnerRegisterHello']}`, team: `${dictionary['emailPartnerRegisterTeam']}`};
 		  				const email = { sender, to, bcc, templateId, params };
 
 		  				const emailSe =	await sendEmail(email);
