@@ -386,7 +386,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
 
       if (step === 4) {
-        return '760px';
+        if (window.innerWidth < 370) {
+          return '860px';
+        }else{
+          return '800px';
+        }
+        
       }
     }
   }
