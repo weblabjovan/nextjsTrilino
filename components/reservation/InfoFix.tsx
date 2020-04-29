@@ -59,8 +59,12 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
     return `${total}px`;
   }
 
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    // console.log(this.props.open);
+    // console.log(this.props.mobile);
+  }
+
   componentDidMount(){
-    console.log(this.props.open);
     if (this.props.open) {
       this.toggleAdditional();
     }
@@ -75,18 +79,26 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
           </Col>
           <Col xs="12">
             <Row className="basic">
-              <Col xs="12" sm="5" className="smallColPadd">
+              <Col xs="12" sm="5" className="smallColPadd" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'none' : 'block'}`}}>
                 <h3>{`${this.props.partner}`}</h3>
               </Col>
-              <Col xs="8" sm="5" className="smallColPadd">
+              <Col xs="8" sm="5" className="smallColPadd" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'none' : 'block'}`}}>
                 <p>{`${this.props.date}, ${this.props.time}`}</p>
               </Col>
-               <Col xs="4" sm="2" className="smallColPadd">
+               <Col xs="4" sm="2" className="smallColPadd" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'none' : 'block'}`}}>
                 <span className="price">{`${currencyFormat(this.props.price)}`}</span>
               </Col>
-              <Col xs="12">
+              <Col xs="12" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'none' : 'block'}`}}>
                 <p className="deposit">{`${this.state.dictionary['uniDeposit']}: ${currencyFormat(this.props.deposit)} `}</p>
               </Col>
+
+              <Col xs="6" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'block' : 'none'}`}}>
+                <p className="basicFixText">{`${this.state.dictionary['reservationInfoAdditionalCateringPrice']}: ${currencyFormat(this.props.price)} `}</p>
+              </Col>
+              <Col xs="6" style={{"display": `${this.props.num === '2' && this.props.mobile ? 'block' : 'none'}`}}>
+                <p className="basicFixText">{`${this.state.dictionary['uniDeposit']}: ${currencyFormat(this.props.deposit)} `}</p>
+              </Col>
+              
             </Row>
 
             <Row className="basic"> 

@@ -451,7 +451,8 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					}
 
 					if (identification) {
-						const deleteFunc = await Reservation.deleteMany({ partner: identifier['_id'], double: identifier['double']  });
+						const reservation = await Reservation.findById(id);
+						const deleteFunc = await Reservation.deleteMany({ partner: identifier['_id'], doubleReference: reservation['doubleReference']  });
 						return res.status(200).json({ endpoint: 'reservations', operation: 'delete', success: true, code: 1, result: deleteFunc });
 					}else{
 						return res.status(401).json({ endpoint: 'reservations', operation: 'delete', success: false, code: 2, error: 'validation error', message: dictionary['apiPartnerLoginCode4'] });

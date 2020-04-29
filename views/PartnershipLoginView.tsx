@@ -9,7 +9,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
 import { registratePartner, loginPartner, changeSinglePartnerField } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setCookie, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, unsetCookie, errorExecute } from '../lib/helpers/generalFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMalicious } from '../lib/helpers/validations';
 import Keys from '../server/keys';
@@ -126,6 +126,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
       }
 
       if (this.props.partnerRegSuccess && !prevProps.partnerRegSuccess) {
+        unsetCookie('trilino-user-token');
         window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/confirm/${this.props.lang}/`;
       }
       if ((this.props.partnerRegError['code'] && !prevProps.partnerRegError['code']) ) {

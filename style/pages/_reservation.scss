@@ -40,12 +40,6 @@
 		z-index: 999;
 	}
 
-	#infoFixed_2{
-		@media only screen and (max-width: 768px) {
-			display: none !important;
-		}
-	}
-
 	#infoFixed_1{
 		visibility: hidden;
 		display: none;
@@ -121,6 +115,13 @@
 				@media only screen and (max-width: 1030px) {
 					font-size: 15px;
 				}
+			}
+
+			.basicFixText{
+				font-style: 12px;
+				font-weight: 600;
+				text-align: center;
+				line-height: 22px;
 			}
 
 			.linkDown{
