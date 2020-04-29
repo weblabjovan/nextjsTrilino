@@ -701,19 +701,20 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   fixOnScroll() {
     const header = document.getElementById("infoFixed_2");
+    const header1 = document.getElementById("infoFixed_1");
     const footer = document.getElementById("footerElem");
 
     if (this.state.isMobile) {
-      if ((window.innerHeight + window.pageYOffset) > footer.offsetTop ) {
-        if (header.classList.contains("fixMobile")) {
-          header.classList.add("absoluteMobile");
-          header.classList.remove("fixMobile");
+      if ((window.innerHeight + window.pageYOffset) > (footer.offsetTop - header1.offsetHeight) ) {
+        if (window.getComputedStyle(header1).visibility === 'hidden') {
+          header1.style.visibility = 'visible';
+          header.style.display = 'none';
         }
         
       }else{
-        if (header.classList.contains("absoluteMobile")) {
-          header.classList.add("fixMobile");
-          header.classList.remove("absoluteMobile");
+        if (window.getComputedStyle(header1).visibility === 'visible') {
+          header1.style.visibility = 'hidden';
+          header.style.display = 'block';
         }
         
       }
@@ -1154,6 +1155,21 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
+                    open={ !this.state.isMobile }
+                  />
+
+                  <InfoFix
+                    partner={this.props.partner['name']}
+                    date={this.props.router['query']['date']}
+                    time={!this.props.reservationGeneral['double'] ? `${this.props.router['query']['from']} - ${this.props.router['query']['to']}` : `${this.props.router['query']['from']} - ${this.props.partner['isReadyForDouble']['to']}`}
+                    price={ this.state.price['total'] }
+                    deposit={ this.state.price['deposit'] }
+                    lang={this.props.lang}
+                    catering={ this.state.info['catering'] }
+                    addon={ this.state.info['addon'] }
+                    general={ this.state.info['general'] }
+                    mobile={ this.state.isMobile }
+                    num="1"
                     open={ !this.state.isMobile }
                   />
                 </Col>
