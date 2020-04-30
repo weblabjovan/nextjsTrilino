@@ -141,7 +141,7 @@ const isLastTermAfterClose = (dayLast: string | object, dayTerms: Array<object>)
 	if (dayTerms.length > 0) {
 		if (typeof dayLast === 'object') {
 			if (dayTerms.length === 1) {
-				if (dayTerms[0]['price'] === null && dayTerms[0]['price'] === "" && dayTerms[0]['price'] === "") {
+				if (dayTerms[0]['price'] === null && dayTerms[0]['from'] === "" && dayTerms[0]['to'] === "") {
 					return {success: true, message: 'Last term validated.'};
 				}else{
 					for (var i = 0; i < dayTerms.length; ++i) {
@@ -158,6 +158,11 @@ const isLastTermAfterClose = (dayLast: string | object, dayTerms: Array<object>)
 				}
 			}
 		}else{
+			if (dayTerms.length === 1) {
+				if (dayTerms[0]['price'] === null && dayTerms[0]['from'] === "" && dayTerms[0]['to'] === "") {
+					return {success: true, message: 'Last term validated.'};
+				}
+			}
 			return {success: false, message: 'error_no_4'};
 		}
 	}
@@ -180,42 +185,51 @@ const isTermAfterClose = (term: object, close: object): boolean => {
 }
 
 const isDaysTermValid = (day: Array<object>, duration: string, alternative: string | null): object => {
-	const res = true;
 
-	for (var i = 0; i < day.length; ++i) {
-		if (getNumberOfEmpty(day[i]) !== 0 && getNumberOfEmpty(day[i]) !== 3) {
-			return {success: false, message: 'error_no_1'};
-		}
-		if (day[i]['to']['value']) {
-			const to = moment(`2020-02-08 ${day[i]['to']['value']}`, "YYYY-MM-DD HH:mm");
-			const from = moment(`2020-02-08 ${day[i]['from']['value']}`, "YYYY-MM-DD HH:mm");
-			const diff =  moment.duration(to.diff(from)).asHours();
+	const loop = () => {
+		for (var i = 0; i < day.length; ++i) {
+			console.log(getNumberOfEmpty(day[i]) > 0);
+			if (getNumberOfEmpty(day[i]) > 0) {
+				return {success: false, message: 'error_no_1'};
+			}
+			if (day[i]['to']['value']) {
+				const to = moment(`2020-02-08 ${day[i]['to']['value']}`, "YYYY-MM-DD HH:mm");
+				const from = moment(`2020-02-08 ${day[i]['from']['value']}`, "YYYY-MM-DD HH:mm");
+				const diff =  moment.duration(to.diff(from)).asHours();
 
-			if (alternative) {
-				if (diff !== parseFloat(duration) && diff !== parseFloat(alternative)) {
-					return {success: false, message: 'error_no_2'};
+				if (alternative) {
+					if (diff !== parseFloat(duration) && diff !== parseFloat(alternative)) {
+						return {success: false, message: 'error_no_2'};
+					}
+				}else{
+					if (diff !== parseFloat(duration)) {
+						return {success: false, message: 'error_no_2'};
+					}
 				}
-			}else{
-				if (diff !== parseFloat(duration)) {
-					return {success: false, message: 'error_no_2'};
+
+				
+
+				if (i !== 0) {
+
+					const lastTo = moment(`2020-02-08 ${day[i - 1]['to']['value']}`, "YYYY-MM-DD HH:mm");
+					const lastDiff =  moment.duration(from.diff(lastTo)).asHours();
+					if (lastDiff < 0.5) {
+						return {success: false, message: 'error_no_3'};
+					}
 				}
 			}
-
-			
-
-			if (i !== 0) {
-
-				const lastTo = moment(`2020-02-08 ${day[i - 1]['to']['value']}`, "YYYY-MM-DD HH:mm");
-				const lastDiff =  moment.duration(from.diff(lastTo)).asHours();
-				if (lastDiff < 0.5) {
-					return {success: false, message: 'error_no_3'};
-				}
-			}
 		}
-		
+
+		return {success: true, message: 'Term validated.'};
 	}
 
-	return {success: true, message: 'Term validated.'};
+	if (day.length === 1) {
+		if (day[0]['price'] === null && day[0]['from'] === "" && day[0]['to'] === "") {
+			return {success: true, message: 'Term validated.'};
+		}
+	}
+
+	return loop();
 }
 
 const getNumberOfEmpty = (term: object): number => {

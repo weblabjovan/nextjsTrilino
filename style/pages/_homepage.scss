@@ -368,6 +368,33 @@
 	    margin-top: 20px;
 	    margin-bottom: 20px;
 
+	    .icon{
+	    	display: block;
+			text-align: center;
+			width: 100%;
+			font-family: 'Material Icons';
+	        font-size: 80px;
+	        line-height: 80px;
+	    }
+
+	    .icon:before{
+	    	content: 'comment';
+	    }
+
+	    .blue{
+	    	color: $purple;
+	    }
+
+	    .yellow{
+	    	color: #fb9b1d;
+	    }
+
+	    .grey{
+	        color: #598ff3;
+	    }
+
+
+
 	    img{
 	    	border-radius: 50%;
 	    	width: 100px;

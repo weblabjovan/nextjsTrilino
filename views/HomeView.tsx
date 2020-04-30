@@ -395,7 +395,8 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="homeWhatItem">
                         <div className="face">
-                          <img src="/static/comment_2.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          {/*<img src="/static/comment_2.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>*/}
+                          <span className="icon blue"></span>
                         </div>
                         <p>{ this.state.dictionary['homeComment_2'] }</p>
                         <div className="signature">
@@ -412,7 +413,8 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="homeWhatItem">
                         <div className="face">
-                          <img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          {/*<img src="/static/testemonial_photo_1.png" alt={ this.state.dictionary['homeImg_2'] } ></img>*/}
+                          <span className="icon yellow"></span>
                         </div>
                         <p>{ this.state.dictionary['homeComment_1'] }</p>
                         <div className="signature">
@@ -430,7 +432,8 @@ class HomeView extends React.Component <MyProps, MyState>{
                     <Row>
                       <Col xs="12" className="homeWhatItem">
                         <div className="face">
-                          <img src="/static/comment_3.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>
+                          {/*<img src="/static/comment_3.jpg" alt={ this.state.dictionary['homeImg_2'] } ></img>*/}
+                          <span className="icon grey"></span>
                         </div>
                         <p>{ this.state.dictionary['homeComment_3'] }</p>
                         <div className="signature">
