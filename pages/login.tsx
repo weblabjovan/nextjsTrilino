@@ -79,6 +79,7 @@ Login.getInitialProps = async (ctx: any) => {
 
     if (link['queryObject']['page'] === 'partner') {
       const partnerLog = await isPartnerLogged(ctx);
+      console.log(partnerLog);
       if (partnerLog) {
         ctx.res.writeHead(302, {Location: `/partnerProfile?language=${link['queryObject']['language']}`});
         ctx.res.end();

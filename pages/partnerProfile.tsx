@@ -53,8 +53,8 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
     const partnerLog = await isPartnerLogged(ctx);
     
     if (!partnerLog) {
-      ctx.res.writeHead(302, {Location: `/partnershipLogin?language=${link['queryObject']['language']}&page=login`});
-      ctx.res.end();
+      // ctx.res.writeHead(302, {Location: `/login?page=partner&stage=loginlanguage=${link['queryObject']['language']}&page=login`});
+      // ctx.res.end();
     }
 
     token = getPartnerToken(ctx);
