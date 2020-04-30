@@ -291,7 +291,7 @@ class EmailVerificationView extends React.Component <MyProps, MyState>{
                       <h2 className="middle">{this.state.dictionary['passwordUpdateTitle']}</h2>
                       <p className="middle">{this.state.dictionary['passwordUpdateExplanation']}</p>
                       <div className="middle">
-                        <Button color="success" className="white" href={`/?page=partner&stage=login&language=${this.props.lang}`} >{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
+                        <Button color="success" href={`/login?page=partner&stage=login&language=${this.props.lang}`} >{this.state.dictionary['emailVerificationPartnerLogButton']}</Button>
                       </div>
                     </Col>
                   </Row>

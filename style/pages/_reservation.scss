@@ -26,7 +26,7 @@
 	.absoluteBottom{
 		position: absolute;
 		width: 100%;
-		max-width: 583px;
+		max-width: 558px;
 		bottom: 0px;
 	}
 
@@ -40,12 +40,21 @@
 		z-index: 999;
 	}
 
-	.absoluteMobile{
-		position: relative;
-		margin: 0px !important;
+	#infoFixed_1{
+		visibility: hidden;
+		display: none;
+		position: absolute;
 		width: 100%;
-		background: #fff;
-		z-index: 999;
+		bottom: 0px;
+
+		@media only screen and (max-width: 768px) {
+			position: relative;
+			display: block;
+			margin: 0px !important;
+			width: 100%;
+			background: #fff;
+			z-index: 999;
+		}
 	}
 
 	.reservationFix{
@@ -106,6 +115,13 @@
 				@media only screen and (max-width: 1030px) {
 					font-size: 15px;
 				}
+			}
+
+			.basicFixText{
+				font-style: 12px;
+				font-weight: 600;
+				text-align: center;
+				line-height: 22px;
 			}
 
 			.linkDown{

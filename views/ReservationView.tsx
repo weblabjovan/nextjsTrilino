@@ -7,7 +7,7 @@ import { setUserLanguage, changeSingleUserField, loginUser, registrateUser, chan
 import { changeSingleReservationField } from '../actions/reservation-actions';
 import { getLanguage } from '../lib/language';
 import DateHandler from '../lib/classes/DateHandler';
-import { isMobile, setUpLinkBasic, setCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, setCookie, unsetCookie, getArrayObjectByFieldValue, getObjectFieldByFieldValue, isTrilinoCatering, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { prepareObjForUserReservation } from '../lib/helpers/specificUserFunctions';
 import { isDateDifferenceValid, isTrilinoCateringOrdered } from '../lib/helpers/specificReservationFunctions';
 import { isEmail, isNumeric, isEmpty, isPhoneNumber, isInputValueMalicious, isMoreThan, isLessThan, isOfRightCharacter, isMatch } from '../lib/helpers/validations';
@@ -377,6 +377,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
+        console.log(this.props.partner['catering']['deals'].length);
         return `${rows * 500 + 130 }px`;
       }
 
@@ -386,7 +387,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
       }
 
       if (step === 4) {
-        return '760px';
+        if (window.innerWidth < 370) {
+          return '860px';
+        }else{
+          return '800px';
+        }
+        
       }
     }
   }
@@ -460,12 +466,15 @@ class ReservationView extends React.Component <MyProps, MyState>{
   }
 
   refreshInfoHeight(){
-    const elem = document.getElementById(`additional_2`);
-    const base = this.state.isMobile && elem.offsetWidth < 500 ? 300 : 340;
-    const line = this.state.isMobile ? 30 : 35;
-    const add = (this.state.info['catering'].length + this.state.info['addon'].length) * line;
+    if (!this.state.isMobile) {
+      const elem = document.getElementById(`additional_2`);
+      const base = this.state.isMobile && elem.offsetWidth < 500 ? 300 : 340;
+      const line = this.state.isMobile ? 30 : 35;
+      const add = (this.state.info['catering'].length + this.state.info['addon'].length) * line;
 
-    elem.style.height = `${base + add}px`;
+      elem.style.height = `${base + add}px`;
+    }
+    
   }
 
 
@@ -701,19 +710,20 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   fixOnScroll() {
     const header = document.getElementById("infoFixed_2");
+    const header1 = document.getElementById("infoFixed_1");
     const footer = document.getElementById("footerElem");
 
     if (this.state.isMobile) {
-      if ((window.innerHeight + window.pageYOffset) > footer.offsetTop ) {
-        if (header.classList.contains("fixMobile")) {
-          header.classList.add("absoluteMobile");
-          header.classList.remove("fixMobile");
+      if ((window.innerHeight + window.pageYOffset) > (footer.offsetTop - header1.offsetHeight) ) {
+        if (window.getComputedStyle(header1).visibility === 'hidden') {
+          header1.style.visibility = 'visible';
+          header.style.display = 'none';
         }
         
       }else{
-        if (header.classList.contains("absoluteMobile")) {
-          header.classList.add("fixMobile");
-          header.classList.remove("absoluteMobile");
+        if (window.getComputedStyle(header1).visibility === 'visible') {
+          header1.style.visibility = 'hidden';
+          header.style.display = 'block';
         }
         
       }
@@ -806,6 +816,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     }
 
     if (!this.props.userRegistrateStart && this.props.userRegistrateSuccess && !prevProps.userRegistrateSuccess) {
+      unsetCookie('trilino-partner-token');
       this.setState({loader: false, paymentRouteStage: 'password'});
     }
 
@@ -1154,6 +1165,21 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     general={ this.state.info['general'] }
                     mobile={ this.state.isMobile }
                     num="2"
+                    open={ !this.state.isMobile }
+                  />
+
+                  <InfoFix
+                    partner={this.props.partner['name']}
+                    date={this.props.router['query']['date']}
+                    time={!this.props.reservationGeneral['double'] ? `${this.props.router['query']['from']} - ${this.props.router['query']['to']}` : `${this.props.router['query']['from']} - ${this.props.partner['isReadyForDouble']['to']}`}
+                    price={ this.state.price['total'] }
+                    deposit={ this.state.price['deposit'] }
+                    lang={this.props.lang}
+                    catering={ this.state.info['catering'] }
+                    addon={ this.state.info['addon'] }
+                    general={ this.state.info['general'] }
+                    mobile={ this.state.isMobile }
+                    num="1"
                     open={ !this.state.isMobile }
                   />
                 </Col>

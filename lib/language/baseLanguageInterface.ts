@@ -102,10 +102,15 @@ export default interface LanguageInterface {
 
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
+	emailPartnerRegisterText1: string;
+	emailPartnerRegisterText2: string;
 	emailPartnerRegisterCode: string;
 	emailPartnerRegisterButton: string;
+	emailPartnerRegisterHello: string;
+	emailPartnerRegisterTeam: string;
 	emailPartnerForgotPassTitle: string;
 	emailPartnerForgotPassText: string;
+	emailPartnerForgotPassText1: string;
 	emailPartnerForgotPassCode: string;
 	emailPartnerForgotPassButton: string;
 	emailUserRegisterTitle: string;

@@ -41,11 +41,27 @@
 	.btn-success{
 		margin-top: 80px;
 		margin-bottom: 10px;
-
-		@media only screen and (max-width: 577px){
+	    border-radius: 30px;
+	    padding: 10px 30px;
+	    background: #f8f9fa;
+	    color: #216cf7;
+	    font-weight: 700;
+	    -webkit-box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		-moz-box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		box-shadow: 7px 7px 10px 0px rgba(61,61,61,1);
+		 transition: all 1s;
+		 @media only screen and (max-width: 577px){
 	    	margin-top: 50px;
 			margin-bottom: 0px;
 	    }
+
+		&:hover{
+			-webkit-box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
+			-moz-box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
+			box-shadow: 10px 10px 5px 0px rgba(61,61,61,1);
+		}
+
+
 	}
 
 	p.middle{
