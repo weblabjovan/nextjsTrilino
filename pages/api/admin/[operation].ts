@@ -296,13 +296,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const decoded = verifyToken(token);
 				const admin = encodeId(decoded['sub']); 
 				if ( admin === Keys.ADMIN_PASS) {
-
-					if (!isPartnerMapSaveDataValid(req.body)) {
+					if (!req.body.partnerId || !req.body.photos) {
 						return res.status(404).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 6, error: 'auth error', message: 'request data not valida' });
 					}else{
-						const {partnerId, map } = req.body;
+						const {partnerId, photos } = req.body;
 						await connectToDb(req.headers.host);
-						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { map } }, { new: true }).select('-password');
+						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { photos } }, { new: true }).select('-password');
 
 						if (partner) {
 							return res.status(200).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: true, code: 1, partner });
