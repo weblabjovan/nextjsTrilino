@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType, rateReservationActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -31,6 +31,10 @@ interface initialState {
   deactivateReservationStart: boolean;
   deactivateReservationError: object | boolean;
   deactivateReservationSuccess: null | object;
+
+  rateReservationStart: boolean;
+  rateReservationError: object | boolean;
+  rateReservationSuccess: null | number;
 
   reservations: Array<object>;
 
@@ -67,6 +71,10 @@ const initialState: initialState  = {
   deactivateReservationStart: false,
   deactivateReservationError: false,
   deactivateReservationSuccess: null,
+
+  rateReservationStart: false,
+  rateReservationError: false,
+  rateReservationSuccess: null,
 
   reservations: [],
 
@@ -250,6 +258,28 @@ const actionsMap = {
       ...state,
       deactivateReservationStart: false,
       deactivateReservationSuccess: action.payload.result,
+    };
+  },
+
+  [rateReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      rateReservationStart: true,
+      deactivateReservationSuccess: null,
+    };
+  },
+  [rateReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      rateReservationStart: false,
+      rateReservationError: action.payload.response.body,
+    };
+  },
+  [rateReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      rateReservationStart: false,
+      rateReservationSuccess: action.payload.code,
     };
   },
   

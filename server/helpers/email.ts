@@ -146,7 +146,7 @@ export const sendEmailReservationConfirmationPartner = async (data: IemailGenera
 	return sendEmail(email);
 }
 
-export const senEmailCateringConfirmationUser =  async (user: object, cateringParams: object): Promise<any> => {
+export const sendEmailCateringConfirmationUser =  async (user: object, cateringParams: object): Promise<any> => {
 	const myCriptor = new MyCriptor();
 
 	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
@@ -155,5 +155,21 @@ export const senEmailCateringConfirmationUser =  async (user: object, cateringPa
 	const templateId = 10;
 
 	const email = { sender, to, bcc, templateId, params: cateringParams };
+	return sendEmail(email);
+}
+
+export const sendRatingInvitationUser =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const link = `${host}/userProfile?page=rating&item=${reservation['_id']}&language=${user['userlanguage']}`;
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 12;
+	const params = { title: dictionary['ratingEmailTitle'], text1: dictionary['ratingEmailText1'], text2: dictionary['ratingEmailText2'], text3: dictionary['ratingEmailText3'], button: dictionary['ratingEmailButton'], hello: dictionary['ratingEmailHello'], link};
+
+	const email = { sender, to, bcc, templateId, params };
 	return sendEmail(email);
 }

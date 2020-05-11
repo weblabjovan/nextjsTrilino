@@ -950,6 +950,39 @@ const english: LanguageInterface = {
 	faqAnswer3: 'In short, the advantages are speed, comfort, money safety and greater transparency. You pay for the reservation made through our site online with a payment card from any place where you have internet connection. You do not need to come to the address of the space you want to reserve. The booking and everything that goes along with it is documented so you can view it whenever you want. You can cancel a reservation through our site with just one click, since the reserved space receives money only after the reservation is made, the security of your money is guaranteed.',
 
 
+	ratingHeadlineTitle: 'Tell us how you feel',
+	ratingHeadlineReference1: 'Survey bellow refers to celebration for ',
+	ratingHeadlineReference2: ', held ',
+	ratingHeadlineReference3: ' at: ',
+	ratingHeadlineInstruction: 'In the items bellow rate you satisfaction by clicking on the starts (1 star - not satisfied, 5 stars - very satisfied).',
+	ratingHeadlineLink: 'I will fill it out later',
+	ratingFormOverall: 'Overall satisfaction',
+	ratingFormOverallText: 'In what extent this celebration had fulfulled your expectations?',
+	ratingFormTrust: 'Accountability',
+	ratingFormTrustText: 'In what extent what you reserved was delivered?',
+	ratingFormSpace: 'Space',
+	ratingFormSpaceText: 'How satisfied are you satisfied with space where celebration was held?',
+	ratingFormHygiene: 'Hygiene',
+	ratingFormHygieneText: 'In what extent the space was clean and ready for the celebration?',
+	ratingFormContent: 'Content',
+	ratingFormContentText: 'How satisfied are you with fun content that was provided?',
+	ratingFormStaff: 'Staff',
+	ratingFormStaffText: 'In what extent the staff was kind and professional?',
+	ratingFormLocation: 'Location',
+	ratingFormLocationText: 'How satisfied are you with the location (accessibility, safety, parking etc)?',
+	ratingFormValue: 'Value',
+	ratingFormValueText: 'Do you feel you the price is corresponds to what you got at the end?',
+	ratingFormComment: 'Giv us your comment',
+	ratingFormCommentPlaceholder: 'Comment',
+	ratingAlert: 'Survey is not filled out. All the questions, except the comment, must be filled out. Please, rate your satisfaction for each question.',
+	ratingEmailTitle: 'Tell us about your celebration',
+	ratingEmailText1: 'We hope that yesterdays party was just what you wanted and that you, your kids and your guests are satisfied with provided service.',
+	ratingEmailText2: 'Because we want to ensure an amazing service, we kindly ask you to take just 2 minutes of your time and fill out a short survey.',
+	ratingEmailText3: 'Your answers will help other parents when they organize a birthday celebration for their kids.',
+	ratingEmailHello: 'Thank you in advance, Trilino team',
+	ratingEmailButton: 'Fill out the survey',
+
+
 
 	//////////////////////API
 

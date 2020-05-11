@@ -6,9 +6,6 @@ import nextCookie from 'next-cookies';
 import Crypto from 'crypto';
 
 
-
-
-
 export const isUserLogged = async (context: any): Promise<boolean> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 	const allCookies = nextCookie(context);
@@ -34,6 +31,19 @@ export const isUserLogged = async (context: any): Promise<boolean> => {
 	  }
   }else{
   	return false;
+  }
+}
+
+export const testForRes = async (context: any): Promise<any> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+
+  try{
+    const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/startRating/`;
+    const response = await fetch(apiUrl);
+
+    return response;
+  }catch(err){
+    return err;
   }
 }
 

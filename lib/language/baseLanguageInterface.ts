@@ -936,6 +936,39 @@ export default interface LanguageInterface {
 	faqQuestion3: string;
 	faqAnswer3: string;
 
+	ratingHeadlineTitle: string;
+	ratingHeadlineReference1: string;
+	ratingHeadlineReference2: string;
+	ratingHeadlineReference3: string;
+	ratingHeadlineInstruction: string;
+	ratingHeadlineLink: string;
+	ratingFormOverall: string;
+	ratingFormOverallText: string;
+	ratingFormTrust: string;
+	ratingFormTrustText: string;
+	ratingFormSpace: string;
+	ratingFormSpaceText: string;
+	ratingFormHygiene: string;
+	ratingFormHygieneText: string;
+	ratingFormContent: string;
+	ratingFormContentText: string;
+	ratingFormStaff: string;
+	ratingFormStaffText: string;
+	ratingFormLocation: string;
+	ratingFormLocationText: string;
+	ratingFormValue: string;
+	ratingFormValueText: string;
+	ratingFormComment: string;
+	ratingFormCommentPlaceholder: string;
+	ratingAlert: string;
+	ratingEmailTitle: string;
+	ratingEmailText1: string;
+	ratingEmailText2: string;
+	ratingEmailText3: string;
+	ratingEmailHello: string;
+	ratingEmailButton: string;
+
+
 
 
 	//////////////////////API

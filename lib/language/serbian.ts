@@ -949,6 +949,39 @@ const serbian: LanguageInterface = {
 	faqAnswer3: 'Ukratko, prednosti su brzina, komfor, sigurnost novca i veća preglednost. Rezervaciju napravljenu preko naše stranice plaćate online putem platne kartice sa bilo kog mesta na kome imate internet konekciju. Nije potrebno da dolazite na adresu prostora koji želite da rezervišete. Rezervacija i sve što ide uz nju je dokumentovana tako da je možete pogledati kad god želite. Rezervaciju možete otkazati preko naše stranice samo jednim klikom, s obziro da rezervisani prostor dobija novac tek nakon realizacije rezervacije, sigurnost vašeg novca je garantovana.',
 
 
+	ratingHeadlineTitle: 'Prenesite nam vaše utiske',
+	ratingHeadlineReference1: 'Anketa u nastavku odnosi se na rodjendansku proslavu na kojoj je slavljenik bio ',
+	ratingHeadlineReference2: ', održanu ',
+	ratingHeadlineReference3: 'u prostoru: ',
+	ratingHeadlineInstruction: 'Molimo vas da u nastavku ocenite vaše zadovoljstvo tako što ćete kliknuti na zvezdice (1 zvezdica - nisam zadovoljan/na, 5 zvezdica - veoma sam zadovoljan/na).',
+	ratingHeadlineLink: 'Popuniću formular neki drugi put',
+	ratingFormOverall: 'Ukupno zadovoljstvo',
+	ratingFormOverallText: 'U kojoj meri je održana proslava ispunila vaša očekivanja?',
+	ratingFormTrust: 'Pouzdanost',
+	ratingFormTrustText: 'U kojoj meri je isporučeno sve što je prethodno rezervisano?',
+	ratingFormSpace: 'Prostor',
+	ratingFormSpaceText: 'U kojoj meri ste zadovoljni ukupnim stanjem prostora?',
+	ratingFormHygiene: 'Higijena',
+	ratingFormHygieneText: 'U kojoj meri je prostor bio čist i pripremljen za proslavu?',
+	ratingFormContent: 'Sadržaj',
+	ratingFormContentText: 'U kojoj meri ste zadovoljni ponudjenim zabavnim sadržajem?',
+	ratingFormStaff: 'Osoblje',
+	ratingFormStaffText: 'U kojoj meri je osoblje bilo ljubazno i uslužno?',
+	ratingFormLocation: 'Lokacija',
+	ratingFormLocationText: 'U kojoj meri ste zadovoljni lokacijom (pristupačnost, bezbednost, parking itd)?',
+	ratingFormValue: 'Vrednost',
+	ratingFormValueText: 'U kojoj meri smatrate da cena odgovara onome što ste dobili?',
+	ratingFormComment: 'Upišite vaš komentar',
+	ratingFormCommentPlaceholder: 'Komentar',
+	ratingAlert: 'Anketa nije popunjena do kraja. Sva pitanja u anketi, osim polja komentar, moraju biti popunjena. Molimo vas označite vaše zadovoljstvo za svako postavljeno pitanje.',
+	ratingEmailTitle: 'Recite nam kako ste se proveli',
+	ratingEmailText1: 'Nadamo se da je jučerašnja proslava prošla baš onako kako ste želeli i da ste Vi, Vaše dete i Vaši gosti zadovoljni uslugom koju ste dobili.',
+	ratingEmailText2: 'U želji da Vam obezbedimo bolju uslugu, molimo Vas da izdvojite samo 2 minuta Vašeg vremena i popunite kratku anketu.',
+	ratingEmailText3: 'Vaši utisci pomoći će i drugim roditeljima u organizaciji dečijih rođendana.',
+	ratingEmailHello: 'Hvala unapred, Trilino tim',
+	ratingEmailButton: 'Popunite anketu',
+
+
 	//////////////////////API
 
 

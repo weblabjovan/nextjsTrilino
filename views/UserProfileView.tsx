@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
-import { getReservationsForUser, cancelReservation } from '../actions/reservation-actions';
+import { getReservationsForUser, cancelReservation, rateReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
@@ -11,6 +11,7 @@ import { setNestPayHash } from '../server/helpers/general';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
 import UserBill from '../components/userProfile/UserBill';
+import RatingScreen from '../components/userProfile/RatingScreen';
 import Modal from '../components/modals/ConfirmationModal';
 import PaymentModal from '../components/modals/PaymentModal';
 import NavigationBar from '../components/navigation/navbar';
@@ -30,6 +31,10 @@ interface MyProps {
   cancelReservationStart: boolean;
   cancelReservationError: object | boolean;
   cancelReservationSuccess: null | object;
+  rateReservationStart: boolean;
+  rateReservationError: object | boolean;
+  rateReservationSuccess: null | number;
+  rateReservation(link: object, data: object, auth: string)
   cancelReservation(link: object, data: object, auth: string): void;
   getReservationsForUser(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
@@ -40,7 +45,9 @@ interface MyProps {
   lang: string;
   link?: object;
   token?: string | undefined;
+  screen: string;
   passChange: boolean;
+  ratingShow: null | object;
 };
 interface MyState {
 	language: string;
@@ -62,7 +69,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation', 'togglePaymentModal','activatePayCatering'];
+    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation', 'togglePaymentModal','activatePayCatering', 'prepareRatingDataForSend', 'goBackFromRating', 'openRating'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -78,7 +85,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     isMobile: isMobile(this.props.userAgent),
     loader: true,
     passwordChange: this.props.passChange,
-    activeScreen: 'reservation',
+    activeScreen: this.props.screen,
     reservationBill: '',
     reservationBillObject: null,
     userBillShow: false,
@@ -94,6 +101,22 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   changeScreen(screen: string){
     if (screen !== this.state.activeScreen) {
       this.setState({ activeScreen: screen });
+    }
+  }
+
+  goBackFromRating(){
+    if (this.props.getUserReservationSuccess) {
+      this.setState({ activeScreen: 'reservation', reservationBillObject: null })
+    }else{
+      this.setState({ loader: true, activeScreen: 'reservation', reservationBillObject: null }, () => {
+        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+      })
+    }
+  }
+
+  openRating(index?: number){
+    if (typeof index === 'number') {
+      this.setState({ activeScreen: 'rating', reservationBillObject: this.props.reservations[index] });
     }
   }
 
@@ -171,6 +194,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     }
   }
 
+  prepareRatingDataForSend(ratingData: object){
+    this.setState({ loader: true }, () => {
+      const data = {rating: ratingData, reservation: this.state.reservationBillObject['_id'], language: this.props.lang };
+      this.props.rateReservation(this.props.link, data, this.props.token);
+    })
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     errorExecute(window, this.props.globalError);
 
@@ -182,11 +212,22 @@ class UserProfileView extends React.Component <MyProps, MyState>{
       this.setState({loader: false, modal: false, reservationBillObject: null });
     }
 
+    if (!this.props.rateReservationStart && prevProps.rateReservationStart && !this.props.rateReservationError && this.props.rateReservationSuccess && !prevProps.rateReservationSuccess) {
+      this.setState({ activeScreen: 'reservation', reservationBillObject: null }, () => {
+        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+      });
+    }
+
   }
 
-	componentDidMount(){
+	async componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
-    this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+    if (!this.props.ratingShow) {
+      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
+    }else{
+      this.setState({reservationBillObject: this.props.ratingShow, loader: false });
+    }
+    
 	}
 	
   render() {
@@ -224,7 +265,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
         <Modal
           isOpen={ this.state.modal }
           title={this.state.dictionary['userProfileListModalTitle']}
-          text={this.state.reservationBillObject ? this.state.reservationBillObject['cancelPolicy']['free'] ? this.state.dictionary['userProfileListModalTextFree'] : this.state.dictionary['userProfileListModalTextPaid'] : ''}
+          text={this.state.reservationBillObject ? this.state.reservationBillObject['cancelPolicy'] ? this.state.reservationBillObject['cancelPolicy']['free'] ? this.state.dictionary['userProfileListModalTextFree'] : this.state.dictionary['userProfileListModalTextPaid'] : '' : ''}
           buttonColor="danger"
           buttonText={this.state.dictionary['userProfileListModalButton']}
           toggle={ this.toggleModal }
@@ -287,9 +328,9 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                         <div className="actions">
                                           <button onClick={ () => this.openUserBill(index)}>{this.state.dictionary['userProfileListButtonMore']}</button>
                                           {
-                                            reser['isForRate']
+                                            reser['forRating']
                                             ?
-                                            <button>{this.state.dictionary['userProfileListButtonRate']}</button>
+                                            <button onClick={ () => this.openRating(index) }>{this.state.dictionary['userProfileListButtonRate']}</button>
                                             :
                                             null
                                           }
@@ -303,9 +344,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                                           }
                                           
                                           {
+                                            reser['cancelPolicy']
+                                            ?
                                             reser['cancelPolicy']['cancel']
                                             ?
                                             <button className="decline" onClick={ () => this.toggleModal(index) }>{this.state.dictionary['userProfileListButtonCancel']}</button>
+                                            :
+                                            null
                                             :
                                             null
                                           }
@@ -366,6 +411,22 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                   :
                   null
                 }
+
+                {
+                  this.state.activeScreen === 'rating'
+                  ?
+                  (
+                     <RatingScreen
+                      lang={ this.props.lang }
+                      isMobile={ this.state.isMobile }
+                      goBack={ this.goBackFromRating }
+                      sendRatingData={ this.prepareRatingDataForSend }
+                      reservation={ this.state.reservationBillObject }
+                    />
+                  )
+                  :
+                  null
+                }
                 <div id="myformcontainer" style={{"visibility":"hidden"}}></div>
                 
               </Row>
@@ -405,6 +466,10 @@ const mapStateToProps = (state) => ({
   cancelReservationError: state.ReservationReducer.cancelReservationError,
   cancelReservationSuccess: state.ReservationReducer.cancelReservationSuccess,
 
+  rateReservationStart: state.ReservationReducer.rateReservationStart,
+  rateReservationError: state.ReservationReducer.rateReservationError,
+  rateReservationSuccess: state.ReservationReducer.rateReservationSuccess,
+
   reservations: state.ReservationReducer.reservations,
 });
 
@@ -414,6 +479,7 @@ const matchDispatchToProps = (dispatch) => {
     setUserLanguage,
     getReservationsForUser,
     cancelReservation,
+    rateReservation,
   },
   dispatch);
 };

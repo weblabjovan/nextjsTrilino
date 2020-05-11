@@ -220,7 +220,12 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 
     if (this.props.userLoginSuccess && !prevProps.userLoginSuccess && !this.props.userLoginStart) {
       setCookie(this.props.userLoginSuccess['token'],'trilino-user-token', 10);
-      window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/userProfile?language=${this.props.lang}`;
+      if (this.props.link["queryObject"]['item']) {
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/userProfile?page=rating&item=${this.props.link["queryObject"]['item']}&language=${this.props.lang}`;
+      }else{
+        window.location.href = `${this.props.link["protocol"]}${this.props.link["host"]}/userProfile?language=${this.props.lang}`;
+      }
+      
     }
 
     if (!this.props.userRegistrateStart && this.props.userRegistrateSuccess && !prevProps.userRegistrateSuccess) {
