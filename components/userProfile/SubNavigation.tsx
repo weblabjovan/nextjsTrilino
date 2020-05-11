@@ -87,7 +87,7 @@ export default class UserSubNavigation extends React.Component <MyProps, MyState
 
 	        					<Col xs="12">
 	        						<Row>
-	        							<Col xs="6" sm="4" lg="3">
+	        							<Col xs="6" sm="4" lg="3" >
 	        								<div className="mobileOption" onClick={ () => this.chooseMobileOption('reservation')}>
 	        									<label className="reservation-option"></label>
 	        									<p>{this.state.dictionary['userProfileSubNavReservation']}</p>
@@ -116,7 +116,7 @@ export default class UserSubNavigation extends React.Component <MyProps, MyState
       		)
       		:
       		(
-      			<Row className="desktopSubNav">
+      			<Row className="desktopSubNav" hidden={ this.props.screen === 'rating' ? true : false }>
       				<div className={`${this.props.screen === 'reservation' ? "active" : ''} item`} onClick={() => this.props.changeScreen('reservation')} >
       					<p>{this.state.dictionary['userProfileSubNavReservation']}</p>
       				</div>

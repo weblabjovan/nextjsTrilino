@@ -15,13 +15,23 @@ export default class DateHandler {
 		return this.formatDate(date, 'text');
 	}
 
+	public getDateInThePast = (days: number, format: string, begin: boolean): any => {
+		const date = begin ? this.setDayOnBegining(this.now) : this.now;
+		return this.getNewDateFor(date, 'before', days, format);
+	}
+
+	public getDateInTheFuture = (days: number, format: string, begin: boolean): any => {
+		const date = begin ? this.setDayOnBegining(this.now) : this.now;
+		return this.getNewDateFor(date, 'after', days, format);
+	}
+
 	public getNewDateFor = (date: Date, relation: string, days: number, format: string): any => {
 		if (relation === 'before') {
 			const a = new Date(date.setDate(date.getDate() - days));
-			return format === 'text' ? this.formatDate(a, format) : a;
+			return format !== 'date' ? this.formatDate(a, format) : a;
 		}else{
-			const b = new Date(date.setDate(date.getDate() - days));
-			return format === 'text' ? this.formatDate(b, format) : b;
+			const b = new Date(date.setDate(date.getDate() + days));
+			return format !== 'date' ? this.formatDate(b, format) : b;
 		}
 		
 		return '1.1.1970';
@@ -207,6 +217,10 @@ export default class DateHandler {
 
 		if (type === 'url') {
 			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		if (type === 'code') {
+			return d.substring(0,19);
 		}
 
 		return '1.1.1970';

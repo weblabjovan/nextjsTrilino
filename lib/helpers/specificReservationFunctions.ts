@@ -1,5 +1,6 @@
 import DateHandler from '../classes/DateHandler';
 import { setUpLinkBasic } from './generalFunctions';
+import nextCookie from 'next-cookies';
 
 const dayForSearch = (date: Date): string => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -74,6 +75,21 @@ export const getSingleReservation = async (context: any): Promise<any> => {
   const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
   const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/getOne/?language=${link['queryObject']['language']}&id=${link['queryObject']['reservation']}`;
   const response = await fetch(apiUrl);
+
+  return response;
+}
+
+export const validateRating = async (context: any): Promise<any> => {
+  const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+  const allCookies = nextCookie(context);
+  const token = allCookies['trilino-user-token'];
+  const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/ratingValidation/?reservation=${link['queryObject']['item']}&language=${link['queryObject']['language']}`;
+  const response = await fetch(apiUrl, {
+    credentials: 'include',
+    headers: {
+      Authorization: `${token}`
+    }
+  });
 
   return response;
 }

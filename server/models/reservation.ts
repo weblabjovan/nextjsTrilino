@@ -43,6 +43,9 @@ const reservationSchema = new Schema({
 	cancelDate: Date,
 	returnPolicy: Boolean,
 	returnPrice: Number, 
+	forRating: Boolean,
+	rateLimitDate: Date,
+	rating: Object,
 }, {timestamps: true});
 
 reservationSchema.index({'date': 1});
