@@ -591,7 +591,7 @@ export const setLinksInApi = (host: string, page: string): string => {
 export const prepareReservationsForUserList = (reservations: Array<object>): Array<object> => {
   const newReservations = integrateDoubleReservations(reservations);
   newReservations.map( (reserve, index) => {
-    if (reserve['type'] === 'user' && reserve['doubleNumber'] === '1') {
+    if (reserve['type'] === 'user' && reserve['doubleNumber'] === 1) {
       reserve['status'] = setReservationStatus(reserve);
       reserve['dateTime'] = setReservationTimeString(reserve);
       reserve['isForRate'] = isReservationForRate(reserve);
