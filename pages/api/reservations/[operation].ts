@@ -790,7 +790,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const reservationObj = reser[0];
 					if (reservationObj['user'] === identifierId) {
 						const myCriptor = new MyCriptor();
-						const general = Object.values(rating['rating']).reduce((total, val) => {return total + val});
+						const general = Object.values(rating['rating']).reduce((total: number, val: number) => {return total + val});
 						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating });
 						rating['rating']['general'] = general / 8;
 						const numberOfRating = reservationObj['partnerObj'][0]['numberOfRating'] ? reservationObj['partnerObj'][0]['numberOfRating'] + 1 : 1;
