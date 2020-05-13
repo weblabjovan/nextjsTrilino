@@ -382,3 +382,14 @@ export const getServerHost = (host: string): string => {
 
   return 'local';
 }
+
+export const sumOfRatingMarks = (rating: object): number => {
+  let gen = 0;
+  for (let key in rating) {
+    if (key !== 'comment') {
+      gen = gen + rating[key];
+    }
+  }
+
+  return gen;
+}

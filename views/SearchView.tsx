@@ -8,7 +8,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute, sumOfRatingMarks } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
@@ -517,7 +517,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                                 item['rating']
                                 ?
                                 <div>
-                                  <h6> <span className="icon star"></span>{item['rating']['general'].toFixed(1)}</h6>
+                                  <h6> <span className="icon star"></span>{(sumOfRatingMarks(item['rating']) / 8 / item['numberOfRating']).toFixed(1)}</h6>
                                   <p className="rates">{`${item['numberOfRating']} ocena`}</p>
                                 </div>
                                 

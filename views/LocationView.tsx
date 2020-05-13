@@ -700,11 +700,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['overall'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['overall'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['overall'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['overall'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -720,11 +720,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['trust'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['trust']/ this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['trust'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['trust'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -740,11 +740,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['space'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['space'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['space'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['space'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -760,11 +760,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['hygiene'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['hygiene'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['hygiene'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['hygiene'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -780,11 +780,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['content'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['content'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['content'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['content'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -800,11 +800,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['staff'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['staff'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['staff'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['staff'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -820,11 +820,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['location'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['location'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['location'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['location'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
@@ -840,11 +840,11 @@ class LocationView extends React.Component <MyProps, MyState>{
 			          				<Col xs="6">
 			          					<Row>
 			          						<Col xs="4">
-			          							<h6 className="marks">{this.props.partner['rating']['value'].toFixed(1)}</h6>
+			          							<h6 className="marks">{(this.props.partner['rating']['value'] / this.props.partner['numberOfRating']).toFixed(1)}</h6>
 			          						</Col>
 			          						<Col xs="8">
 			          							<div className="line"></div>
-			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['value'] * 20).toFixed(0)}%`}}></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['value'] / this.props.partner['numberOfRating'] * 20).toFixed(0)}%`}}></div>
 			          						</Col>
 			          					</Row>
 			          				</Col>
