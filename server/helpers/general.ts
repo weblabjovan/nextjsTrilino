@@ -940,12 +940,19 @@ export const getServerHost = (host: string): string => {
   return 'local';
 }
 
+export const generalizeRating = (rating: object): object => {
+  const newObj = JSON.parse(JSON.stringify(rating['rating']));
+  const result = {rating: newObj, comment: rating['comment']};
+
+  return result;
+}
+
 export const mergeRating = (newRate: object, oldRate: object, user: string): object => {
   const result = {};
   const dateHandler = new DateHandler();
 
   for (let key in newRate['rating']) {
-    result[key] = (parseInt(newRate['rating'][key]) + oldRate[key]) / 2;
+    result[key] = parseInt(newRate['rating'][key]) + oldRate[key];
   }
 
   if (newRate['comment'].length > 3) {
@@ -977,7 +984,16 @@ export const setRating = (rating: object, user: string): object => {
     newObj['comment'] = [{text: rating['comment'], user, date: dateHandler.getDateString() }];
   }
 
- 
-
   return newObj;
+}
+
+export const sumOfRatingMarks = (rating: object): number => {
+  let gen = 0;
+  for (let key in rating) {
+    if (key !== 'comment') {
+      gen = gen + rating[key];
+    }
+  }
+
+  return gen;
 }

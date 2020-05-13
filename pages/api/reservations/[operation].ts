@@ -8,7 +8,7 @@ import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating, generalizeRating, sumOfRatingMarks }  from '../../../server/helpers/general';
 import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -790,13 +790,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const reservationObj = reser[0];
 					if (reservationObj['user'] === identifierId) {
 						const myCriptor = new MyCriptor();
-						const general = Object.values(rating['rating']).reduce((total: number, val: number) => {return total + val});
-						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating });
-						rating['rating']['general'] = parseInt(general) / 8;
+						const ratingObj = generalizeRating(rating);
+						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating: ratingObj });
 						const numberOfRating = parseInt(reservationObj['partnerObj'][0]['numberOfRating']) ? parseInt(reservationObj['partnerObj'][0]['numberOfRating']) + 1 : 1;
-						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(rating, reservationObj['partnerObj'][0]['rating'], myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true)) : setRating(rating, myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true));
+						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(ratingObj, reservationObj['partnerObj'][0]['rating'], myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true)) : setRating(ratingObj, myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true));
+						const ratingCalculation = parseInt(numberOfRating * sumOfRatingMarks(partnerRating)) / 100;
 
-						const ratingCalculation = parseInt(numberOfRating * partnerRating['general']) / 100;
 						await Partner.updateOne({"_id": reservationObj['partner']}, {numberOfRating, "rating": partnerRating, ratingCalculation });
 
 						return res.status(200).json({ endpoint: 'reservations', operation: 'rate', success: true, code: 1 });
