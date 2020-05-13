@@ -250,8 +250,9 @@ class ReservationView extends React.Component <MyProps, MyState>{
     priceCopy['addon'] = num;
     priceCopy['decoration'] = decorNum;
     priceCopy['addition'] = additioNum;
-    priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    
+    priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
     this.setState({ info: infoCopy, price: priceCopy }, () => {
       this.refreshInfoHeight();
@@ -280,10 +281,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
       infoCopy['catering'] = arr;
       priceCopy['catering'] = num;
       priceCopy['trilinoCatering'] = trilino;
-      priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
 
-      priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
-      priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
+      priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
       this.setState({ info: infoCopy, price: priceCopy},() => {
         this.refreshInfoHeight();
@@ -306,8 +307,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
       priceCopy['term'] = (this.props.partner['isReadyForDouble']['price'] + priceCopy['term']) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
     }
 
-    priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
     this.setState({ info: infoCopy, price: priceCopy});
@@ -377,7 +378,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
-        console.log(this.props.partner['catering']['deals'].length);
+        // console.log(this.props.partner['catering']['deals'].length);
         return `${rows * 500 + 130 }px`;
       }
 
