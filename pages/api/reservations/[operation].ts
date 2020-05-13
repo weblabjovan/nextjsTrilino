@@ -792,11 +792,11 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const myCriptor = new MyCriptor();
 						const general = Object.values(rating['rating']).reduce((total: number, val: number) => {return total + val});
 						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating });
-						rating['rating']['general'] = general / 8;
-						const numberOfRating = reservationObj['partnerObj'][0]['numberOfRating'] ? reservationObj['partnerObj'][0]['numberOfRating'] + 1 : 1;
+						rating['rating']['general'] = parseInt(general) / 8;
+						const numberOfRating = parseInt(reservationObj['partnerObj'][0]['numberOfRating']) ? parseInt(reservationObj['partnerObj'][0]['numberOfRating']) + 1 : 1;
 						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(rating, reservationObj['partnerObj'][0]['rating'], myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true)) : setRating(rating, myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true));
 
-						const ratingCalculation = (numberOfRating * partnerRating['general']) / 100;
+						const ratingCalculation = parseInt(numberOfRating * partnerRating['general']) / 100;
 						await Partner.updateOne({"_id": reservationObj['partner']}, {numberOfRating, "rating": partnerRating, ratingCalculation });
 
 						return res.status(200).json({ endpoint: 'reservations', operation: 'rate', success: true, code: 1 });
