@@ -11,8 +11,12 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
-	public getDateString = (date: Date): string =>{
-		return this.formatDate(date, 'text');
+	public getDateString = (date?: Date): string =>{
+		if (date) {
+			return this.formatDate(date, 'text');
+		}
+		const d = new Date()
+		return this.formatDate(d, 'text');
 	}
 
 	public getDateInThePast = (days: number, format: string, begin: boolean): any => {

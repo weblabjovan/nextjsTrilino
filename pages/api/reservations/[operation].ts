@@ -8,7 +8,7 @@ import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating }  from '../../../server/helpers/general';
 import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -716,6 +716,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		        ],
 		        as: "partnerObj"
 					};
+
 					const ObjectId = mongoose.Types.ObjectId;
 					const reser = await Reservation.aggregate([{ $match: {"_id": ObjectId(req.query['reservation']) } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}]);
 					const reservation = reser[0];
@@ -769,16 +770,32 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		        ],
 		        as: "partnerObj"
 					};
+
+					const lookupUser = { 
+						from: 'users', 
+						let: { user: '$user'}, //
+						pipeline: [
+							{ $addFields: { "user": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$user", "$user" ] }
+		             }
+		          }
+		        ],
+		        as: "userObj"
+					};
 					const ObjectId = mongoose.Types.ObjectId;
-					const reser = await Reservation.aggregate([{ $match: {"_id": ObjectId(reservation) } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}]);
+					const reser = await Reservation.aggregate([{ $match: {"_id": ObjectId(reservation) } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
 
 					const reservationObj = reser[0];
 					if (reservationObj['user'] === identifierId) {
+						const myCriptor = new MyCriptor();
 						const general = Object.values(rating['rating']).reduce((total, val) => {return total + val});
 						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating });
 						rating['rating']['general'] = general / 8;
 						const numberOfRating = reservationObj['partnerObj'][0]['numberOfRating'] ? reservationObj['partnerObj'][0]['numberOfRating'] + 1 : 1;
-						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(rating['rating'], reservationObj['partnerObj'][0]['rating']) : rating['rating'];
+						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(rating, reservationObj['partnerObj'][0]['rating'], myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true)) : setRating(rating, myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true));
+
 						const ratingCalculation = (numberOfRating * partnerRating['general']) / 100;
 						await Partner.updateOne({"_id": reservationObj['partner']}, {numberOfRating, "rating": partnerRating, ratingCalculation });
 

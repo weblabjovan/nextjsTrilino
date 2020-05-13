@@ -661,5 +661,118 @@
 		}
 	}
 
+	.review{
+		margin-top: 30px;
+		margin-bottom: 40px;
+
+		h4{
+			color: #212121;
+			font-size: 36px;
+		    font-weight: 600;
+		    line-height: 50px;
+		    margin-bottom: 20px;
+		    
+		    @media only screen and (max-width: 577px) {
+		      font-size: 30px;
+		      display: block;
+		      text-align: center;
+		      margin-right: 0px;
+		      margin-bottom: 15px;
+		    }
+		}
+
+		.grades{
+			.item{
+				position: relative;
+				margin-bottom: 15px;
+
+				h5{
+					font-size: 18px;
+				    line-height: 24px;
+				    margin-bottom: 2px;
+				    font-weight: 700;
+				}
+
+				p{
+					font-size: 12px;
+				    font-style: italic;
+				    line-height: 14px;
+				}
+
+				.marks{
+					font-size: 24px;
+					font-weight: 800;
+					line-height: 38px;
+					color: $darkGreyCol;
+					margin: 0px;
+				}
+				.line{
+					width: 100%;
+					border-top: solid 8px #ccc;
+					border-radius: 10px;
+					position: absolute;
+					top: 20px;
+					left: 0px;
+				}
+
+				.blue{
+					width: 90%;
+					border-top: solid 8px $purple;
+					z-index: 999;
+				}
+			}
+		}
+
+		.noGrades{
+			h3{
+				text-align: center;
+			    padding-top: 20px;
+			    font-size: 26px;
+			    color: #b3b3b3;
+			}
+
+			p{
+				text-align: center;
+			    font-size: 16px;
+			    font-weight: 300;
+			    font-style: inherit;
+			    color: #8e8e8e;
+			}
+		}
+
+		.comments{
+			h3{
+				text-align: center;
+				margin-top: -60px;
+				font-size: 40px;
+				margin-bottom: 30px;
+			}
+
+			.list{
+				height: 480px;
+				overflow-y: scroll;
+				.item{
+					padding: 15px 20px;
+					border-bottom: solid 1px #ccc;
+					margin-bottom: 10px;
+					p{
+						font-size: 16px;
+						line-height: 22px;
+						font-weight: 400;
+						font-style: italic;
+						margin-bottom: 15px;
+					}
+
+					span{
+						display: block;
+						text-align: right;
+						font-size: 18px;
+						font-weight: 600;
+					}
+				}
+			}
+		}
+	}
+
 	
 }

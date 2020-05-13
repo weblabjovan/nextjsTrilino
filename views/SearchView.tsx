@@ -513,7 +513,18 @@ class SearchView extends React.Component <MyProps, MyState>{
                               <p><span className="icon room"></span>{item['general']['address']}</p>
                               <p><span className="icon group"></span>{`${item['general']['capacity']['sumKids']} ${this.state.dictionary['searchResultsItemKids']} ${item['general']['capacity']['sumAdults']} ${this.state.dictionary['searchResultsItemAdults']}`}</p>
                               <p><span className="icon house"></span>{`${item['general']['size']}m2`}</p>
-                              <h6> <span className="icon star"></span>4.5</h6>
+                              {
+                                item['rating']
+                                ?
+                                <div>
+                                  <h6> <span className="icon star"></span>{item['rating']['general'].toFixed(1)}</h6>
+                                  <p className="rates">{`${item['numberOfRating']} ocena`}</p>
+                                </div>
+                                
+                                :
+                                <p className="rates">{'trenutno neocenjeno'}</p>
+                              }
+                              
                             </div>
                           </div>
                         </Col>
