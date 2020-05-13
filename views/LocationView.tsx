@@ -684,6 +684,223 @@ class LocationView extends React.Component <MyProps, MyState>{
 
 	          </Row>
 
+	          <Row className="review">
+	          	<Col xs="12"><h4>{this.state.dictionary['locationReviewTitle']}</h4></Col>
+	          	{
+	          		this.props.partner['rating']
+	          		?
+	          		(
+	          			<Col xs="12" sm="6" className="grades">
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormOverall']}</h5>
+			          					<p>{this.state.dictionary['ratingFormOverallText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['overall'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['overall'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormTrust']}</h5>
+			          					<p>{this.state.dictionary['ratingFormTrustText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['trust'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['trust'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormSpace']}</h5>
+			          					<p>{this.state.dictionary['ratingFormSpaceText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['space'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['space'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormHygiene']}</h5>
+			          					<p>{this.state.dictionary['ratingFormHygieneText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['hygiene'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['hygiene'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormContent']}</h5>
+			          					<p>{this.state.dictionary['ratingFormContentText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['content'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['content'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormStaff']}</h5>
+			          					<p>{this.state.dictionary['ratingFormLocationText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['staff'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['staff'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormLocation']}</h5>
+			          					<p>{this.state.dictionary['ratingFormLocationText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['location'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['location'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+
+			          		<div className="item">
+			          			<Row style={{"margin":"0px"}}>
+			          				<Col xs="6">
+			          					<h5>{this.state.dictionary['ratingFormValue']}</h5>
+			          					<p>{this.state.dictionary['ratingFormValueText']}</p>
+			          				</Col>
+			          				<Col xs="6">
+			          					<Row>
+			          						<Col xs="4">
+			          							<h6 className="marks">{this.props.partner['rating']['value'].toFixed(1)}</h6>
+			          						</Col>
+			          						<Col xs="8">
+			          							<div className="line"></div>
+			          							<div className="line blue" style={{"width":`${(this.props.partner['rating']['value'] * 20).toFixed(0)}%`}}></div>
+			          						</Col>
+			          					</Row>
+			          				</Col>
+			          			</Row>
+			          		</div>
+			          	</Col>
+	          		)
+								:
+								(
+								<Col xs="12" sm="6" className="grades">
+									<div className="noGrades">
+										<h3>{this.state.dictionary['locationReviewNoGradesTitle']}</h3>
+          					<p>{this.state.dictionary['locationReviewNoGradesText']}</p>
+									</div>
+          				
+          			</Col>
+								)
+	          	}
+	          	
+	          	<Col xs="12" sm="6" className="comments">
+	          		<h3>{this.state.dictionary['locationCommentTitle']}</h3>
+	          		<div className="list">
+	          			{
+	          				this.props.partner['rating']
+	          				?
+	          				this.props.partner['rating']['comment']
+	          				?
+	          				Array.isArray(this.props.partner['rating']['comment'])
+	          				?
+	          				this.props.partner['rating']['comment'].map((item, index) => {
+	          					return(
+	          						<div className="item" key={`comment_key_${index}`}>
+					          			<p>{item['text']}</p>
+					          			<span>{`${item['date']}, ${item['user']}`}</span>
+					          		</div>
+	          					)
+	          				})
+	          				:
+	          				<div className="noGrades">
+	          					<p>{this.state.dictionary['locationCommentNoGradesText']}</p>
+										</div>
+	          				:
+	          				<div className="noGrades">
+	          					<p>{this.state.dictionary['locationCommentNoGradesText']}</p>
+										</div>
+										:
+	          				<div className="noGrades">
+	          					<p>{this.state.dictionary['locationCommentNoGradesText']}</p>
+										</div>
+	          			}
+	          			
+	          		</div>
+	          		
+	          	</Col>
+	          </Row>
+
 
 	          <Row className="mapScreen">
 	          	<Col xs="12"><h4>{this.state.dictionary['uniMap']}</h4></Col>

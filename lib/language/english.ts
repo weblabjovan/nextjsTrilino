@@ -578,6 +578,11 @@ const english: LanguageInterface = {
 	locationCancelationNone: 'Free cancelation of your celebration is not available at this location.',
 	locationCancelationFirst: 'You can cancel your reservation for free ',
 	locationCancelationSecond: ' days before the celebration start at latest.',
+	locationReviewTitle: 'Reviews',
+	locationReviewNoGradesTitle: 'There are no reviews for this venue',
+	locationReviewNoGradesText: 'None of the users that reserved this venue had filled out our feedback survey and left us a comment about this venue.',
+	locationCommentTitle: 'Comments',
+	locationCommentNoGradesText: 'There are no comments fot this venue',
 
 
 	reservationInfoTitle: 'Reservation info',
@@ -972,7 +977,7 @@ const english: LanguageInterface = {
 	ratingFormLocationText: 'How satisfied are you with the location (accessibility, safety, parking etc)?',
 	ratingFormValue: 'Value',
 	ratingFormValueText: 'Do you feel you the price is corresponds to what you got at the end?',
-	ratingFormComment: 'Giv us your comment',
+	ratingFormComment: 'Give us your comment',
 	ratingFormCommentPlaceholder: 'Comment',
 	ratingAlert: 'Survey is not filled out. All the questions, except the comment, must be filled out. Please, rate your satisfaction for each question.',
 	ratingEmailTitle: 'Tell us about your celebration',
@@ -981,6 +986,9 @@ const english: LanguageInterface = {
 	ratingEmailText3: 'Your answers will help other parents when they organize a birthday celebration for their kids.',
 	ratingEmailHello: 'Thank you in advance, Trilino team',
 	ratingEmailButton: 'Fill out the survey',
+	ratingNoRateTitle: 'This survey has been filled out',
+	ratingNoRateText: 'You are using an old link that leads to a survey that is already filled out. Please go back to your user profile.',
+	ratingNoRateLink: 'Your user profile',
 
 
 

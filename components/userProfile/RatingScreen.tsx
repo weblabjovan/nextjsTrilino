@@ -291,11 +291,11 @@ export default class UserBill extends React.Component <MyProps, MyState>{
 
 			        <Row className="headline">
 			        	<Col xs="12">
-			        		<h2>Anketa više nije u funkciji</h2>
-			        		<p className="reference">Koristite stari link koji vodi ka anketi koja je prethodno popunjena. Molimo vas da se vratite na vaš korisnički profil.</p>
+			        		<h2>{this.state.dictionary['ratingNoRateTitle']}</h2>
+			        		<p className="reference">{this.state.dictionary['ratingNoRateText']}</p>
 			        		<p className="instruction"></p>
 			        		<div className="middle">
-			        			<a onClick={ () => this.props.goBack() }>Vaš korisnički profil</a>
+			        			<a onClick={ () => this.props.goBack() }>{this.state.dictionary['ratingNoRateLink']}</a>
 			        		</div>
 			        		
 			        	</Col>

@@ -571,6 +571,11 @@ export default interface LanguageInterface {
 	locationCancelationNone: string;
 	locationCancelationFirst: string;
 	locationCancelationSecond: string;
+	locationReviewTitle: string;
+	locationReviewNoGradesTitle: string;
+	locationReviewNoGradesText: string;
+	locationCommentTitle: string;
+	locationCommentNoGradesText: string;
 
 
 	reservationInfoTitle: string;
@@ -967,7 +972,9 @@ export default interface LanguageInterface {
 	ratingEmailText3: string;
 	ratingEmailHello: string;
 	ratingEmailButton: string;
-
+	ratingNoRateTitle: string;
+	ratingNoRateText: string;
+	ratingNoRateLink: string;
 
 
 

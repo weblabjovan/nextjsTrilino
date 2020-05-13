@@ -576,6 +576,11 @@ const serbian: LanguageInterface = {
 	locationCancelationNone: 'Besplatno otkazivanje rezervacije nije dostupno na ovoj lokaciji.',
 	locationCancelationFirst: 'Rezervacije proslava na ovoj lokaciji moguće je otkazati besplatno najkasnije ',
 	locationCancelationSecond: ' dana pre zakazanog početka.',
+	locationReviewTitle: 'Ocene',
+	locationReviewNoGradesTitle: 'Ovaj prostor je trenutno neocenjen',
+	locationReviewNoGradesText: 'Nijedan od korisnika koji je rezervisao termin u ovom prostoru nije popunio anketu zadovoljstva i upisao komentar',
+	locationCommentTitle: 'Komentari',
+	locationCommentNoGradesText: 'Za ovaj prostor trenutno nema komentara',
 
 
 	reservationInfoTitle: 'Podaci o rezervaciji',
@@ -980,6 +985,9 @@ const serbian: LanguageInterface = {
 	ratingEmailText3: 'Vaši utisci pomoći će i drugim roditeljima u organizaciji dečijih rođendana.',
 	ratingEmailHello: 'Hvala unapred, Trilino tim',
 	ratingEmailButton: 'Popunite anketu',
+	ratingNoRateTitle: 'Anketa više nije u funkciji',
+	ratingNoRateText: 'Koristite stari link koji vodi ka anketi koja je prethodno popunjena. Molimo vas da se vratite na vaš korisnički profil.',
+	ratingNoRateLink: 'Vaš korisnički profil',
 
 
 	//////////////////////API

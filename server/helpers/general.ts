@@ -940,11 +940,44 @@ export const getServerHost = (host: string): string => {
   return 'local';
 }
 
-export const mergeRating = (newRate: object, oldRate: object): object => {
+export const mergeRating = (newRate: object, oldRate: object, user: string): object => {
   const result = {};
-  for (let key in newRate) {
-    result[key] = (newRate[key] + oldRate[key]) / 2;
+  const dateHandler = new DateHandler();
+
+  for (let key in newRate['rating']) {
+    result[key] = (parseInt(newRate['rating'][key]) + oldRate[key]) / 2;
   }
 
+  if (newRate['comment'].length > 3) {
+    if (oldRate['comment']) {
+      oldRate['comment'].push({text: newRate['comment'], user, date: dateHandler.getDateString()  });
+    }else{
+      result['comment'] = [{text: newRate['comment'], user, date: dateHandler.getDateString()  }];
+    }
+  }
+
+  if (oldRate['comment']) {
+    result['comment'] = oldRate['comment'];
+  }
+  
+  
+
   return result;
+}
+
+export const setRating = (rating: object, user: string): object => {
+  const newObj = JSON.parse(JSON.stringify(rating['rating']));
+
+  for (let key in newObj) {
+    newObj[key] = parseInt(newObj[key]);
+  }
+
+  if (rating['comment'].length > 3) {
+    const dateHandler = new DateHandler();
+    newObj['comment'] = [{text: rating['comment'], user, date: dateHandler.getDateString() }];
+  }
+
+ 
+
+  return newObj;
 }
