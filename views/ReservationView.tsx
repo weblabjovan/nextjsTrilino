@@ -304,7 +304,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['general']['kidsNum'] = generalCopy['kidsNum'];
 
     if (generalCopy['double']) {
-      priceCopy['term'] = (this.props.partner['isReadyForDouble']['price'] + priceCopy['term']) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
+      priceCopy['term'] = (parseInt(this.props.partner['isReadyForDouble']['price']) + parseInt(priceCopy['term'])) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
     }
 
     priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);

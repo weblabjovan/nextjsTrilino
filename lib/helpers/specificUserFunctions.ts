@@ -38,7 +38,7 @@ export const testForRes = async (context: any): Promise<any> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 
   try{
-    const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/startRating/`;
+    const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/disableUnfinished/`;
     const response = await fetch(apiUrl);
 
     return response;

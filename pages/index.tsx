@@ -61,10 +61,11 @@ Home.getInitialProps = async (ctx: any) => {
 
     const userLog = await isUserLogged(ctx);
 
-    if (link['queryObject']['page'] === 'contact') {
-      // const test = await testForRes(ctx);
-      // const res = await test.json();
-    }
+    // if (link['queryObject']['page'] === 'contact') {
+    //   const test = await testForRes(ctx);
+    //   const res = await test.json();
+    //   console.log(res);
+    // }
 
 
     if (userLog) {
