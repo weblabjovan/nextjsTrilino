@@ -812,6 +812,24 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 
+	////////////////////////////////////////////   DISABLE UNFINISHED  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'disableUnfinished') {
+		try{
+			await connectToDb(req.headers.host);
+			const now = new Date();
+			const halfHourBack = new Date(now.getTime() - 30*60000);
+
+			const unfinished = await Reservation.updateMany({"active": true, "type": "user", "transactionDate": { "$exists": false}, "createdAt": { "$lte": halfHourBack} }, { active: false, confirmed: false });
+
+			return res.status(200).json({ endpoint: 'reservations', operation: 'disableUnfinished', success: true, code: 1, unfinished });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'disableUnfinished', success: false, code: 3, error: 'db error', message: err });
+		}
+	}
+
+
 	process.on('unhandledRejection', function(err) {
 	    console.log(err);
 	});
