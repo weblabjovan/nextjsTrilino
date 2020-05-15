@@ -101,6 +101,9 @@ const english: LanguageInterface = {
 	uniErrorHome: 'homepage',
 	uniScroll: 'Scroll',
 
+	currencyPrices: 'All prices are in: ',
+	currency_rs:'RSD',
+
 	emailPartnerRegisterTitle: 'WELCOME TO TRILINO',
 	emailPartnerRegisterText: 'Trilino is internet service that wants to make kids birthday celebration organization more simple and easy process. Now ',
 	emailPartnerRegisterText1: 'will be more visible to interested clients, and they will be able to reserve your services in just few clicks.',
@@ -116,7 +119,6 @@ const english: LanguageInterface = {
 	emailPartnerForgotPassButton: 'Change password here',
 	emailUserRegisterTitle: ', you have become new Trilino user',
 	emailUserRegisterText: 'Congratulation, you have become a part of the largest regional internet servis that enables parents to organize celebrations for their kids in a simple and reliable fashion. Now you are connected to the services that can help you organize a perfect birthday party for your kid. You are few clicks away from reserving playrooms, cetering, decoration and animation that your kids deserve. Before that you just need to verify your registration (using security code) and create your profile password. Click on the link bellow and do that. Good luck.',
-
 	emailCateringConfirmationTitle: 'Trilino Catering has been paid',
 	emailCateringConfirmationText: 'We would like to inform you that Trilino Catering has been successfuly paid and that the order will be delivered to your celebration:',
 	emailCateringConfirmationSub: 'Order information',
@@ -124,6 +126,16 @@ const english: LanguageInterface = {
 	emailCateringConfirmationDeal: 'Catering deal:',
 	emailCateringConfirmationPrice: 'Price:',
 	emailCateringConfirmationFinish: 'We would like to thank you for using Trilino Catering services and wish you a happy celebration.',
+	emailUserReminderTitle: 'Are you ready for the celebration tomorrow?',
+	emailUserReminderText1: 'We use this opportunity to remind you that you made a reservation using our web service.',
+	emailUserReminderText2: 'You can see all information about this reservation on your user profile.',
+	emailUserReminderText3: 'We whish you a happy celebration and we hope that ',
+	emailUserReminderText4: ', you and your guesets will have a great time.',
+	emailUserReminderWhen: 'When: tomorrow, ',
+	emailUserReminderWhere: 'Where: ',
+	emailUserReminderFocus: 'Celebrant:',
+	emailUserReminderButton: 'Your user profile',
+	emailUserReminderPayment: 'For on site payment you will need ',
 
 
 	homeTitle: 'Now you can organize the best party for your kid',
@@ -984,7 +996,7 @@ const english: LanguageInterface = {
 	ratingEmailText1: 'We hope that yesterdays party was just what you wanted and that you, your kids and your guests are satisfied with provided service.',
 	ratingEmailText2: 'Because we want to ensure an amazing service, we kindly ask you to take just 2 minutes of your time and fill out a short survey.',
 	ratingEmailText3: 'Your answers will help other parents when they organize a birthday celebration for their kids.',
-	ratingEmailHello: 'Thank you in advance, Trilino team',
+	ratingEmailHello: 'With regards, your Trilino team',
 	ratingEmailButton: 'Fill out the survey',
 	ratingNoRateTitle: 'This survey has been filled out',
 	ratingNoRateText: 'You are using an old link that leads to a survey that is already filled out. Please go back to your user profile.',

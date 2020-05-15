@@ -9,7 +9,7 @@ import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
 import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating, generalizeRating, sumOfRatingMarks }  from '../../../server/helpers/general';
-import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser }  from '../../../server/helpers/email';
+import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser, sendUserReminder }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../../../lib/helpers/generalFunctions';
@@ -808,6 +808,59 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}else{
 				return res.status(404).json({ endpoint: 'reservations', operation: 'rate', success: false, code: 4, error: 'auth error' });
 			}
+		}
+	}
+
+
+	////////////////////////////////////////////   DISABLE UNFINISHED  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'sendReminder') {
+		try{
+			await connectToDb(req.headers.host);
+			const dateHandler = new DateHandler();
+			const tmr = dateHandler.getDateInTheFuture(1, 'date', true);
+			const tomorrow = tmr.toISOString().substring(0,19);
+			console.log(tomorrow);
+
+			const lookup = { 
+				from: 'partners', 
+				let: { partner: '$partner'}, //
+				pipeline: [
+					{ $addFields: { "partner": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$partner", "$partner" ] }
+             }
+          }
+        ],
+        as: "partnerObj"
+			};
+
+			const lookupUser = { 
+				from: 'users', 
+				let: { user: '$user'}, //
+				pipeline: [
+					{ $addFields: { "user": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$user", "$user" ] }
+             }
+          }
+        ],
+        as: "userObj"
+			};
+			const ObjectId = mongoose.Types.ObjectId;
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
+
+			if (reservations.length) {
+				for (var i = 0; i < reservations.length; ++i) {
+					await sendUserReminder(reservations[i], req.headers.host);
+				}
+			}
+			return res.status(200).json({ endpoint: 'reservations', operation: 'sendReminder', success: true, code: 1 });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'sendReminder', success: false, code: 3, error: 'db error', message: err });
 		}
 	}
 

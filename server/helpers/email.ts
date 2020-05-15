@@ -173,3 +173,34 @@ export const sendRatingInvitationUser =  async (reservation: object, host: strin
 	const email = { sender, to, bcc, templateId, params };
 	return sendEmail(email);
 }
+
+export const sendUserReminder =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const partner = reservation['partnerObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const link = `${host}/userProfile?language=${user['userlanguage']}`;
+	const dateBase = reservation['date'].split('T');
+	const restPrice = reservation['price'] - reservation['deposit'] - reservation['trilinoPrice'];
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 13;
+	const params = { 
+		title: dictionary['emailUserReminderTitle'], 
+		text1: dictionary['emailUserReminderText1'], 
+		text2: dictionary['emailUserReminderText2'], 
+		text3: `${dictionary['emailUserReminderText3']}${myCriptor.decrypt(user['firstName'], true)} ${dictionary['emailUserReminderText4']}`, 
+		info1: `${dictionary['emailUserReminderWhen']} ${dateBase[0].split('-')[2]}.${dateBase[0].split('-')[1]}.${dateBase[0].split('-')[0]}.`,
+		info2: `${dictionary['emailUserReminderWhere']} ${partner['name']}, ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`,
+		info3: `${dictionary['emailUserReminderFocus']} ${myCriptor.decrypt(user['firstName'], true)}`,
+		info4: `${dictionary['emailUserReminderPayment']} ${currencyFormat(restPrice)} ${dictionary['currency_rs']}`,
+		button: dictionary['emailUserReminderButton'], 
+		hello: dictionary['ratingEmailHello'], 
+		link
+	};
+
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
