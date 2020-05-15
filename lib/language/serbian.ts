@@ -135,6 +135,11 @@ const serbian: LanguageInterface = {
 	emailUserReminderFocus: 'Ko slavi rođendan?',
 	emailUserReminderButton: 'Vaš korisnički profil',
 	emailUserReminderPayment: 'Za plaćanje na licu mesta potrebno je da pripremite:',
+	emailCateringReminderTitle: 'Plaćanje Trilino Keteringa',
+	emailCateringReminderText1: 'Koristimo ovu priliku da bismo Vas podsetili da je sutra poslednji dan kada možete izvršiti plaćanje rezervisanog Trilino Keteringa. ',
+	emailCateringReminderText2: 'Uplatu možete izvršiti isključivo online preko Vašeg korisničkog profila. Sve što je potrebno je da kliknete na dugme u nastavku, a zatim pronađete rezervaciju sa brojem narudžbine ',
+	emailCateringReminderText3: ' i kliknete na dugme Ketering koje će Vas odvesti na stranicu za plaćanje.',
+	emailCateringReminderText4: 'U slučaju neplaćanja Trilino Ketering biće automatski otkazan.',
 
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',

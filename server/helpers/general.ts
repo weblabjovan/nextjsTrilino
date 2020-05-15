@@ -679,11 +679,18 @@ const isReservationForRate = (reservation: object): boolean => {
 }
 
 export const getCancelPolicy = (reservation: object): object => {
+  const dateHandler = new DateHandler(reservation['date']);
+  dateHandler.setDateForServer('code');
+  
+  if (dateHandler.getDateDifferenceFromNow('day') < 1) {
+    return {cancel: false, free: false, days: 0};
+  }
+
   if (reservation['confirmed'] && !reservation['canceled']) {
     if (Array.isArray(reservation['partnerObj'])) {
       if (reservation['partnerObj'].length) {
         if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) > 0) {
-          const dateHandler = new DateHandler();
+          dateHandler.resetDate()
           const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
           if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) + dateDiff < 1 ) {
             return {cancel: true, free: true, days: reservation['partnerObj'][0]['general']['cancelation'] ? parseInt(reservation['partnerObj'][0]['general']['cancelation']) : 0};

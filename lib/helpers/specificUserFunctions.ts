@@ -38,7 +38,7 @@ export const testForRes = async (context: any): Promise<any> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 
   try{
-    const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/sendReminder/`;
+    const apiUrl = `${link["protocol"]}${link["host"]}/api/reservations/sendCateringReminder/`;
     const response = await fetch(apiUrl);
 
     return response;

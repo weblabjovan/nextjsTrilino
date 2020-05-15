@@ -178,7 +178,7 @@ export default class DateHandler {
 		this.date = res;
 	}
 
-	private setDateForServer = (origin?: string): void => {
+	public setDateForServer = (origin?: string): void => {
 		let strings = this.dateString.split('-')
 		if (origin === 'code') {
 			const first = this.dateString.split('T');
@@ -194,8 +194,9 @@ export default class DateHandler {
 	  	this.date = this.setDayOnBegining(d);
 	}
 
-	private resetDate = (): void => {
+	public resetDate = (): void => {
 		this.date = new Date();
+		this.now = new Date();
 	}
 
 	private setDayOnBegining = (date: Date): Date => {

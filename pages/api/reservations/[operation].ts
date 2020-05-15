@@ -9,7 +9,7 @@ import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
 import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating, generalizeRating, sumOfRatingMarks }  from '../../../server/helpers/general';
-import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser, sendUserReminder }  from '../../../server/helpers/email';
+import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser, sendUserReminder, sendCateringReminder }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../../../lib/helpers/generalFunctions';
@@ -812,7 +812,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 
-	////////////////////////////////////////////   DISABLE UNFINISHED  /////////////////////////////////////////////////
+	////////////////////////////////////////////   SEND REMINDER  /////////////////////////////////////////////////
 
 	if (req.query.operation === 'sendReminder') {
 		try{
@@ -820,7 +820,6 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			const dateHandler = new DateHandler();
 			const tmr = dateHandler.getDateInTheFuture(1, 'date', true);
 			const tomorrow = tmr.toISOString().substring(0,19);
-			console.log(tomorrow);
 
 			const lookup = { 
 				from: 'partners', 
@@ -861,6 +860,61 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 		}catch(err){
 			return res.status(500).json({ endpoint: 'reservations', operation: 'sendReminder', success: false, code: 3, error: 'db error', message: err });
+		}
+	}
+
+	////////////////////////////////////////////   SEND CATERING REMINDER  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'sendCateringReminder') {
+		try{
+			await connectToDb(req.headers.host);
+			const dateHandler = new DateHandler();
+			const trlDate = dateHandler.getDateInTheFuture(8, 'date', true);
+
+
+			const lookupCatering = { 
+				from: 'caterings', 
+				let: { reservationId: '$_id'}, //
+				pipeline: [
+					{ $addFields: { "reservationId": { "$toObjectId": "$reservation" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$reservationId", "$reservationId" ] }
+             }
+          }
+        ],
+        as: "cateringObj"
+			};
+
+			const lookupUser = { 
+				from: 'users', 
+				let: { user: '$user'}, //
+				pipeline: [
+					{ $addFields: { "user": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$user", "$user" ] }
+             }
+          }
+        ],
+        as: "userObj"
+			};
+			const ObjectId = mongoose.Types.ObjectId;
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "trilino": true, "date": trlDate.toISOString().substring(0,19), "trilinoPrice": {"$ne": 0} } }, {$lookup: lookupCatering}, {$project: {'transactionCard': 0}}, {$lookup: lookupUser}]);
+
+			if (reservations.length) {
+				for (var i = 0; i < reservations.length; ++i) {
+					if (reservations[i]['cateringObj'].length) {
+						if (reservations[i]['cateringObj'][0]['status'] !== 'paid') {
+							await sendCateringReminder(reservations[i], req.headers.host);
+						}
+					}
+				}
+			}
+			return res.status(200).json({ endpoint: 'reservations', operation: 'sendCateringReminder', success: true, code: 1 });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'sendCateringReminder', success: false, code: 3, error: 'db error', message: err });
 		}
 	}
 

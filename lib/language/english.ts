@@ -136,6 +136,11 @@ const english: LanguageInterface = {
 	emailUserReminderFocus: 'Celebrant:',
 	emailUserReminderButton: 'Your user profile',
 	emailUserReminderPayment: 'For on site payment you will need ',
+	emailCateringReminderTitle: 'Trilino Catering Payment',
+	emailCateringReminderText1: 'We use this opportunity to remind you that tomorrow is the last day when you can pay Trilino Catering that you have reserved. ',
+	emailCateringReminderText2: 'Payment can be made online through your user profile. All you need to do is to click on the button bellow, than find reservation with Order ID ',
+	emailCateringReminderText3: ' and click on the Catering button which will lead you to our bank payment page.',
+	emailCateringReminderText4: 'If the payment is not made tomorrow by the end of the day Trilino Catering will be automatically canceled.',
 
 
 	homeTitle: 'Now you can organize the best party for your kid',

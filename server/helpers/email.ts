@@ -204,3 +204,27 @@ export const sendUserReminder =  async (reservation: object, host: string): Prom
 	const email = { sender, to, bcc, templateId, params };
 	return sendEmail(email);
 }
+
+export const sendCateringReminder =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const link = `${host}/userProfile?language=${user['userlanguage']}`;
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 14;
+	const params = { 
+		title: dictionary['emailCateringReminderTitle'], 
+		text1: dictionary['emailCateringReminderText1'], 
+		text2: `${dictionary['emailCateringReminderText2']} ${reservation['_id']} ${dictionary['emailCateringReminderText3']}`, 
+		text3: dictionary['emailCateringReminderText4'],
+		button: dictionary['emailUserReminderButton'], 
+		hello: dictionary['ratingEmailHello'], 
+		link
+	};
+
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
