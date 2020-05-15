@@ -100,6 +100,9 @@ const serbian: LanguageInterface = {
 	uniErrorHome: 'naslovnu stranicu',
 	uniScroll: 'Skrolujte',
 
+	currencyPrices: 'Sve cene izražene su u: ',
+	currency_rs:'RSD',
+
 	emailPartnerRegisterTitle: 'DOBRODOŠLI U TRILINO',
 	emailPartnerRegisterText: 'Trilino je internet servis koji se trudi da organizaciju dečijih rodjendana učini jednostavnim i prijatnim procesom. Sada će',
 	emailPartnerRegisterText1: 'biti vidljiviji zainteresovanim klijentima, koji će vaše usluge moći da rezervišu uz svega nekoliko klikova.',
@@ -115,7 +118,6 @@ const serbian: LanguageInterface = {
 	emailPartnerForgotPassButton: 'Promenite lozinku ovde',
 	emailUserRegisterTitle: ', postali ste novi Trilino korisnik',
 	emailUserRegisterText: 'Čestitamo, postali ste deo najvećeg regionalnog internet servisa koji omogućava roditeljima da jednostavno i pouzdano organizuju rođendanske proslave za svoju decu. Od sada ćete biti spojeni sa uslugama koje vam pomažu da organizujete najlepšu proslavu za vaše dete. Rezervišite igraonicu, ketering, dekoraciju i animaciju kakvu vaše dete zaslužuje. Ali pre toga je potrebno da potvrdite registraciju (koristeći sigurnosni kod) i kreirate vašu lozinku. Kliknite na dugme u nastavku i učinite baš to. Srećno.',
-
 	emailCateringConfirmationTitle: 'Uspešno plaćen Trilino Ketering',
 	emailCateringConfirmationText: 'Želimo da vas obavestimo da ste uspešno platili Trilino Ketering i da će paket koji ste naručili biti isporučen na vašu proslavu.',
 	emailCateringConfirmationSub: 'Podaci o narudžbini',
@@ -123,6 +125,16 @@ const serbian: LanguageInterface = {
 	emailCateringConfirmationDeal: 'Ketering paket:',
 	emailCateringConfirmationPrice: 'Cena:',
 	emailCateringConfirmationFinish: 'Uživajte u vašoj proslavi i hvala što koristite koristie usluge Trilino-a.',
+	emailUserReminderTitle: 'Da li ste spremni za sutrašnju proslavu?',
+	emailUserReminderText1: 'Koristimo ovu priliku da bismo Vas podsetili na rezervaciju koju ste kreirali koristeći našu internet stranicu.',
+	emailUserReminderText2: 'Sve informacije u vezi sa ovom rezervacijom možete pratiti preko Vašeg korisničkog profila.',
+	emailUserReminderText3: 'Želimo Vam uspešnu proslavu i nadamo se da ćete',
+	emailUserReminderText4: ', Vi kao i svi gosti biti veoma zadovoljni.',
+	emailUserReminderWhen: 'Kada? Sutra, ',
+	emailUserReminderWhere: 'Gde? ',
+	emailUserReminderFocus: 'Ko slavi rođendan?',
+	emailUserReminderButton: 'Vaš korisnički profil',
+	emailUserReminderPayment: 'Za plaćanje na licu mesta potrebno je da pripremite:',
 
 
 	homeTitle: 'Organizujte najlepšu proslavu za vaše dete',
@@ -983,7 +995,7 @@ const serbian: LanguageInterface = {
 	ratingEmailText1: 'Nadamo se da je jučerašnja proslava prošla baš onako kako ste želeli i da ste Vi, Vaše dete i Vaši gosti zadovoljni uslugom koju ste dobili.',
 	ratingEmailText2: 'U želji da Vam obezbedimo bolju uslugu, molimo Vas da izdvojite samo 2 minuta Vašeg vremena i popunite kratku anketu.',
 	ratingEmailText3: 'Vaši utisci pomoći će i drugim roditeljima u organizaciji dečijih rođendana.',
-	ratingEmailHello: 'Hvala unapred, Trilino tim',
+	ratingEmailHello: 'Srdačno, Vaš Trilino tim',
 	ratingEmailButton: 'Popunite anketu',
 	ratingNoRateTitle: 'Anketa više nije u funkciji',
 	ratingNoRateText: 'Koristite stari link koji vodi ka anketi koja je prethodno popunjena. Molimo vas da se vratite na vaš korisnički profil.',

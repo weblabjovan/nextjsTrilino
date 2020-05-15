@@ -100,6 +100,9 @@ export default interface LanguageInterface {
 	uniErrorHome: string;
 	uniScroll: string;
 
+	currencyPrices: string;
+	currency_rs: string;
+
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
 	emailPartnerRegisterText1: string;
@@ -115,7 +118,6 @@ export default interface LanguageInterface {
 	emailPartnerForgotPassButton: string;
 	emailUserRegisterTitle: string;
 	emailUserRegisterText: string;
-
 	emailCateringConfirmationTitle: string;
 	emailCateringConfirmationText: string;
 	emailCateringConfirmationSub: string;
@@ -123,6 +125,16 @@ export default interface LanguageInterface {
 	emailCateringConfirmationDeal: string;
 	emailCateringConfirmationPrice: string;
 	emailCateringConfirmationFinish: string;
+	emailUserReminderTitle: string;
+	emailUserReminderText1: string;
+	emailUserReminderText2: string;
+	emailUserReminderText3: string;
+	emailUserReminderText4: string;
+	emailUserReminderWhen: string;
+	emailUserReminderWhere: string;
+	emailUserReminderFocus: string;
+	emailUserReminderButton: string;
+	emailUserReminderPayment: string;
 
 	homeTitle: string;
 	homeImg_1: string;
