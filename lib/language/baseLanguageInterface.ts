@@ -135,6 +135,11 @@ export default interface LanguageInterface {
 	emailUserReminderFocus: string;
 	emailUserReminderButton: string;
 	emailUserReminderPayment: string;
+	emailCateringReminderTitle: string;
+	emailCateringReminderText1: string;
+	emailCateringReminderText2: string;
+	emailCateringReminderText3: string;
+	emailCateringReminderText4: string;
 
 	homeTitle: string;
 	homeImg_1: string;

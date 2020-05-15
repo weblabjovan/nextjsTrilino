@@ -250,9 +250,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
     priceCopy['addon'] = num;
     priceCopy['decoration'] = decorNum;
     priceCopy['addition'] = additioNum;
-
+    
     priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['trilinoCatering'] ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
     this.setState({ info: infoCopy, price: priceCopy }, () => {
       this.refreshInfoHeight();
@@ -283,7 +285,10 @@ class ReservationView extends React.Component <MyProps, MyState>{
       priceCopy['trilinoCatering'] = trilino;
 
       priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
+
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? trilino ? (priceCopy['total'] - trilino) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
       this.setState({ info: infoCopy, price: priceCopy},() => {
