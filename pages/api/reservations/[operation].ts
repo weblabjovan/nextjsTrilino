@@ -849,7 +849,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
         as: "userObj"
 			};
 			const ObjectId = mongoose.Types.ObjectId;
-			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "doubleNumber": 1, "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
 
 			if (reservations.length) {
 				for (var i = 0; i < reservations.length; ++i) {

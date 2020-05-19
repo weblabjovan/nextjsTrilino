@@ -52,6 +52,11 @@ interface MyState {
   date: Date;
   term: object;
   loader: boolean;
+  roomGalleryOpen: boolean;
+  roomGalleryName: string;
+  roomGalleryPhoto: string;
+  roomGalleryPhotoIndex: number;
+  roomPhotos: Array<any>;
 };
 
 class LocationView extends React.Component <MyProps, MyState>{
@@ -61,7 +66,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['closeGallery', 'openPhotoGallery', 'changeGalleryPhoto', 'selectRoom', 'formatDate','dateChange', 'makeReservation'];
+    const bindingFunctions = ['closeGallery', 'openPhotoGallery', 'changeGalleryPhoto', 'selectRoom', 'formatDate','dateChange', 'makeReservation', 'closeRoomGallery', 'openRoomGallery', 'changeRoomGalleryPhoto'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -82,10 +87,19 @@ class LocationView extends React.Component <MyProps, MyState>{
     date: this.props.date !== 'null' ? dateForSearch(this.props.date) : new Date(),
     term: {},
     loader: false,
+    roomGalleryOpen: false,
+    roomGalleryName: '',
+    roomGalleryPhoto: '',
+    roomGalleryPhotoIndex: 0,
+    roomPhotos: [],
   };
 
   closeGallery(){
     this.setState({ galleryOpen: false, galleryPhotoIndex: 0, galleryPhoto: '' });
+  }
+
+  closeRoomGallery(){
+    this.setState({ roomGalleryOpen: false, roomGalleryPhotoIndex: 0, roomGalleryPhoto: '', roomPhotos:[] });
   }
 
   openPhotoGallery(photo: string){
@@ -103,6 +117,30 @@ class LocationView extends React.Component <MyProps, MyState>{
       const galleryPhotoIndex = this.state.galleryPhotoIndex - 1 < 0 ? this.props.partner['photos'].length - 1 : this.state.galleryPhotoIndex - 1;
       const galleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + this.props.partner['photos'][galleryPhotoIndex]['name'];
       this.setState({ galleryPhotoIndex, galleryPhoto });
+    }
+  }
+
+  openRoomGallery(room: object){
+  	const photos = [];
+  	for (var i = 0; i < this.props.partner['photos'].length; i++) {
+  		if (this.props.partner['photos'][i]['room'] === room['regId']) {
+  			photos.push(this.props.partner['photos'][i]);
+  		}
+  	}
+  	const roomGalleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + photos[0]['name'];
+
+  	this.setState({ roomGalleryOpen: true, roomGalleryPhoto, roomGalleryPhotoIndex: 0, roomPhotos: photos, roomGalleryName: room['name'] });
+  }
+
+  changeRoomGalleryPhoto(action: string) {
+    if (action === 'next') {
+      const roomGalleryPhotoIndex = this.state.roomGalleryPhotoIndex + 1 < this.state.roomPhotos.length ? this.state.roomGalleryPhotoIndex + 1 : 0;
+      const roomGalleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + this.state.roomPhotos[roomGalleryPhotoIndex]['name'];
+      this.setState({ roomGalleryPhotoIndex, roomGalleryPhoto });
+    }else{
+      const roomGalleryPhotoIndex = this.state.roomGalleryPhotoIndex - 1 < 0 ? this.state.roomPhotos.length - 1 : this.state.roomGalleryPhotoIndex - 1;
+      const roomGalleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + this.state.roomPhotos[roomGalleryPhotoIndex]['name'];
+      this.setState({ roomGalleryPhotoIndex, roomGalleryPhoto });
     }
   }
 
@@ -185,6 +223,18 @@ class LocationView extends React.Component <MyProps, MyState>{
     		/>
     		<div className="location">
 	    		<GalleryModal 
+	          title={ this.state.roomGalleryName }
+	          isOpen={ this.state.roomGalleryOpen }
+	          toggle={ this.closeRoomGallery }
+	          photo={ this.state.roomGalleryPhoto }
+	          index={ this.state.roomGalleryPhotoIndex }
+	          max={ this.state.roomPhotos.length }
+	          text={this.state.dictionary['locationGalleryText']}
+	          from={this.state.dictionary['locationGalleryFrom']}
+	          changePhoto={ this.changeRoomGalleryPhoto }
+	        />
+
+	        <GalleryModal 
 	          title={this.props.partner['name']}
 	          isOpen={ this.state.galleryOpen }
 	          toggle={ this.closeGallery }
@@ -613,7 +663,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 						      			return(
 						      				(
 						      					<tr key={`term${index}`}>
-										          <th scope="row">{term['name']}</th>
+										          <th scope="row" onClick={ () => this.openRoomGallery(term)}>{term['name']}</th>
 										          <td>{`${term['size']}m2`}</td>
 										          <td>{`${term['capKids']} ${this.state.dictionary['locationAvailabilityKids']} ${term['capAdults']} ${this.state.dictionary['locationAvailabilityAdults']}`}</td>
 										          <td className="activeButtons">

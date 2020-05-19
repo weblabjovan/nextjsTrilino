@@ -3,7 +3,8 @@ import Select from 'react-select';
 import { Row, Col, Container, Button, CustomInput, Alert } from 'reactstrap';
 import { getLanguage } from '../../../lib/language';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber } from '../../../lib/helpers/specificPartnerFunctions';
+import { getArrayObjectByFieldValue } from '../../../lib/helpers/generalFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, getPartnerRooms } from '../../../lib/helpers/specificPartnerFunctions';
 import PlainInput from '../../form/input';
 import Keys from '../../../server/keys';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,6 +21,7 @@ interface MyProps {
   changeMainPhoto(event: any): void;
   changeSelectionPhoto(event: any): void;
   openConfirmationModal(photo: string): void;
+  changePhotoRoom(photo: string, select: any): void;
   mainPhotoError: boolean;
   selectionPhotoError: boolean;
   closeAlert():void;
@@ -109,7 +111,16 @@ export default class AdminPartnerPhoto extends React.Component <MyProps, MyState
                               <Col xs="6">
                                 <CustomInput type="checkbox" id={`photoSelect_${index}`} name={photo['name']} onChange={ (event) => this.props.changeSelectionPhoto(event)} label="Sporedna slika" checked={ photo['selection'] }  inline />
                               </Col>
-                              <Col xs="12">
+                              <Col xs="6">
+                                <Select 
+                                  options={getPartnerRooms(this.props.partner['general']['rooms'])} 
+                                  instanceId={`photoRooms_${index}`} 
+                                  value={ getArrayObjectByFieldValue(getPartnerRooms(this.props.partner['general']['rooms']), 'value', photo['room']) }
+                                  onChange={ (val) => this.props.changePhotoRoom(photo['name'], val)}
+                                  className="homeInput" 
+                                  placeholder={ this.state.dictionary['partnerProfileGeneralRoom'] }/>
+                              </Col>
+                              <Col xs="6">
                                 <div className="middle">
                                   <button className="deletBtn" onClick={ () => this.props.openConfirmationModal(photo['name']) } >obriši</button>
                                 </div>
