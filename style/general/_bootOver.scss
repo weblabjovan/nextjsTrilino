@@ -1,61 +1,61 @@
 .container{
-	max-width: 1400px;
+	max-width: 1400px !important;
 	margin: auto;
 
 	@media only screen and (max-width: 1600px) {
-		max-width: 1400px;
+		max-width: 1400px !important;
 	}
 
 	@media only screen and (max-width: 1400px) {
-		max-width: 1250px;
+		max-width: 1250px !important;
 	}
 
 	@media only screen and (max-width: 1300px) {
-		max-width: 1150px;
+		max-width: 1150px !important;
 	}
 
 	@media only screen and (max-width: 1200px) {
-		max-width: 95%;
+		max-width: 95% !important;
 	}
 
 
 
 	@media only screen and (max-width: 577px) {
-		max-width: 100%;
-		margin: 0px;
+		max-width: 100% !important;
+		margin: 0px !important;
 	}
 }
 
 .hidden-xs{
 
 	@media only screen and (max-width: 577px) {
-		display: none;
+		display: none !important;
 	}
 }
 
 .hidden-sm{
 
 	@media only screen and (max-width: 992px) {
-		display: none;
+		display: none !important;
 	}
 }
 
 .hidden-sm-up{
 
 	@media only screen and (min-width: 992px) {
-		display: none;
+		display: none !important;
 	}
 }
 
 .hidden-xs-up{
 
 	@media only screen and (min-width: 577px) {
-		display: none;
+		display: none !important;
 	}
 }
 
 .no-pading{
-	padding: 0px;
+	padding: 0px !important;
 }
 
 .DayPickerInput{
