@@ -146,6 +146,7 @@
 		.smallPhoto{
 			height: 220px;
 			cursor: pointer;
+			margin-bottom: 5px;
 		}
 
 		.fadedPrev{
@@ -177,6 +178,10 @@
 		
 		.photoBox{
     	margin-bottom: 15px;
+
+    	.custom-control-label{
+    		font-size: 14px;
+    	}
     }
 	}
 

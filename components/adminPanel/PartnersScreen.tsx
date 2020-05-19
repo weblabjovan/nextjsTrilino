@@ -85,7 +85,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo',];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'changePhotoRoom'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -238,6 +238,17 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     }
   }
 
+  changePhotoRoom(photo: string, select: any){
+    if (this.state.activePartner['photos'].length) {
+      const index = getArrayIndexByFieldValue(this.state.activePartner['photos'], 'name', photo);
+      const photos = [...this.state.activePartner['photos']];
+      photos[index]['room'] = select['value'];
+      const link = setUpLinkBasic(window.location.href);
+      this.props.openLoader();
+      this.props.adminSavePartnerPhoto(link, {partnerId: this.state.activePartner['_id'], photos}, this.props.token);
+    }
+  }
+
   changeSelectionAction(photo: string, outcome: boolean){
     if (this.state.activePartner['photos'].length) {
       const index = getArrayIndexByFieldValue(this.state.activePartner['photos'], 'name', photo);
@@ -372,6 +383,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           selectionPhotoError={ this.state.selectionPhotoError }
           openConfirmationModal={ this.openConfirmationModal }
           closeAlert={ this.closePhotoAlert }
+          changePhotoRoom={ this.changePhotoRoom }
         />
 
         <AdminPartnerInfo
