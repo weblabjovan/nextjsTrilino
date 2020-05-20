@@ -18,9 +18,6 @@ import Select from 'react-select';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import Keys from '../server/keys';
-import 'react-day-picker/lib/style.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

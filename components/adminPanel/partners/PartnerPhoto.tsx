@@ -7,8 +7,6 @@ import { getArrayObjectByFieldValue } from '../../../lib/helpers/generalFunction
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, getPartnerRooms } from '../../../lib/helpers/specificPartnerFunctions';
 import PlainInput from '../../form/input';
 import Keys from '../../../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../../style/style.scss';
 
 interface MyProps {
 	partner: null | object;

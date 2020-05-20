@@ -7,9 +7,6 @@ import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue
 import PlainInput from '../../form/input';
 import CheckBox from '../../form/checkbox';
 import Keys from '../../../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../../style/style.scss';
-
 interface MyProps {
 	partner: null | object;
   show: boolean;

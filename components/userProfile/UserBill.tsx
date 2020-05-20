@@ -2,8 +2,6 @@ import React from 'react';
 import { Container, Row, Col, Table } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import { getArrayObjectByFieldValue, currencyFormat } from '../../lib/helpers/generalFunctions';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

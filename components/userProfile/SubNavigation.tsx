@@ -1,8 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

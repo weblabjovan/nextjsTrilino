@@ -5,8 +5,6 @@ import PlainInput from '../form/input';
 import CheckBox from '../form/checkbox';
 import Select from 'react-select';
 import genOptions from '../../lib/constants/generalOptions';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

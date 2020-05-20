@@ -16,9 +16,6 @@ import { deleteReservation } from '../../../actions/reservation-actions';
 import { changeSinglePartnerField, getPartnerReservationTerms, savePartnerReservation, getPartnerReservations } from '../../../actions/partner-actions';
 import { isFieldInObject, getGeneralOptionLabelByValue, getRoomsSelector, isFree, prepareReservationObjectForSave, setDateToDayStart, addDaysToDate, getFieldValueByRegId, getFieldValueByRegIdForObjects } from '../../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-day-picker/lib/style.css';
-import '../../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

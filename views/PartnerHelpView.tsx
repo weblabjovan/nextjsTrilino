@@ -4,8 +4,6 @@ import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import PartnerHelpersr from '../components/help/partnerHelpsr';
 import PartnerHelperen from '../components/help/partnerHelpen';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

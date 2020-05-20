@@ -9,8 +9,6 @@ import { isMobile } from '../lib/helpers/generalFunctions';
 import AdminPanelScreen from '../components/adminPanel/adminPanelScreen';
 import AdminNavigationBar from '../components/navigation/adminNavbar';
 import Footer from '../components/navigation/partnerFooter';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

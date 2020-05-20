@@ -11,8 +11,6 @@ import RegistrationScreen from '../components/user/RegistrationScreen';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import Loader from '../components/loader';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

@@ -18,8 +18,6 @@ import AdminPartnerInfo from './partners/PartnerInfo';
 import GalleryModal from '../modals/GalleryModal';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import Keys from '../../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

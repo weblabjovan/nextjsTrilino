@@ -10,8 +10,6 @@ import { isMobile, setCookie, setUpLinkBasic, errorExecute } from '../lib/helper
 import PlainInput from '../components/form/input';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

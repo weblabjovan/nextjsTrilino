@@ -15,8 +15,6 @@ import { isEmail, isNumeric, isEmpty, isPib, isPhoneNumber, isInputValueMaliciou
 import Keys from '../server/keys';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

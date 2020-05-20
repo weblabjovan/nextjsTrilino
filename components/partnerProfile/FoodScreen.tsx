@@ -11,8 +11,6 @@ import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import { isNumeric } from '../../lib/helpers/validations';
 import PlainInput from '../form/input';
 import CateringDeal from './catering/CateringDeal';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
