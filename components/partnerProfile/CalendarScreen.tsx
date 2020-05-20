@@ -12,9 +12,6 @@ import { changeSinglePartnerField, getPartnerReservationTerms, getPartnerReserva
 import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, prepareDecorationDataForSave, getRoomsSelector, setDateToDayStart, getCurrentWeekStartAndEnd, addDaysToDate, getFieldValueByRegId } from '../../lib/helpers/specificPartnerFunctions';
 import { momentLocalize, getLocalMessages } from '../../lib/language/locale';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

@@ -4,9 +4,6 @@ import { getLanguage } from '../../../lib/language';
 import generalOptions from '../../../lib/constants/generalOptions';
 import PlainInput from '../../form/input';
 import Select from 'react-select';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../../style/style.scss';
-
 interface MyProps {
   // using `interface` is also ok
   key: string;

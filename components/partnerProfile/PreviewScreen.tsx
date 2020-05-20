@@ -8,8 +8,6 @@ import { changeSinglePartnerField } from '../../actions/partner-actions';
 import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, createDisplayPhotoListObject } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import Keys from '../../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

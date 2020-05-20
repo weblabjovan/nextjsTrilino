@@ -7,8 +7,6 @@ import { changeSinglePartnerField } from '../../../actions/partner-actions';
 import { getLanguage } from '../../../lib/language';
 import genOptions from '../../../lib/constants/generalOptions';
 import PlainInput from '../../form/input';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

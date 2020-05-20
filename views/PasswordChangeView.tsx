@@ -11,8 +11,6 @@ import { isMobile, setUpLinkBasic, errorExecute } from '../lib/helpers/generalFu
 import { isEmpty, isPib, isEmail } from '../lib/helpers/validations';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

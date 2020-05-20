@@ -14,10 +14,6 @@ import { addDaysToDate } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
-import 'react-day-picker/lib/style.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
-
 
 interface MyProps {
   // using `interface` is also ok

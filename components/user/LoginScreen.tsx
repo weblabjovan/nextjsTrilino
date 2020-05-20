@@ -2,9 +2,6 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import PlainInput from '../form/input';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
-
 interface MyProps {
   // using `interface` is also ok
   lang: string;

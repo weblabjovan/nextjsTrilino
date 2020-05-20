@@ -11,8 +11,6 @@ import { isMobile } from '../lib/helpers/generalFunctions';
 import PartnerNavigationBar from '../components/navigation/partnerNavbar';
 import PartnerProfileScreen from '../components/partnerProfile/partnerProfileScreen';
 import Footer from '../components/navigation/partnerFooter';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

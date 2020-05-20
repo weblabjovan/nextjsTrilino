@@ -6,8 +6,6 @@ import { getLanguage } from '../lib/language';
 import { isMobile, setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

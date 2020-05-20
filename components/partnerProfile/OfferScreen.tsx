@@ -8,8 +8,6 @@ import { changeSinglePartnerField, updateOfferPartner } from '../../actions/part
 import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, fillPickedOffers, generateString, makeRegIdsUniqueForArray } from '../../lib/helpers/specificPartnerFunctions';
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import PlainInput from '../form/input';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

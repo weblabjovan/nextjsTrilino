@@ -17,8 +17,6 @@ import PaymentModal from '../components/modals/PaymentModal';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import Keys from '../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok

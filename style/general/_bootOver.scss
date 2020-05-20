@@ -3,59 +3,59 @@
 	margin: auto;
 
 	@media only screen and (max-width: 1600px) {
-		max-width: 1400px !important;
+		max-width: 1400px;
 	}
 
 	@media only screen and (max-width: 1400px) {
-		max-width: 1250px !important;
+		max-width: 1250px;
 	}
 
 	@media only screen and (max-width: 1300px) {
-		max-width: 1150px !important;
+		max-width: 1150px;
 	}
 
 	@media only screen and (max-width: 1200px) {
-		max-width: 95% !important;
+		max-width: 95%;
 	}
 
 
 
 	@media only screen and (max-width: 577px) {
-		max-width: 100% !important;
-		margin: 0px !important;
+		max-width: 100%;
+		margin: 0px;
 	}
 }
 
 .hidden-xs{
 
 	@media only screen and (max-width: 577px) {
-		display: none !important;
+		display: none;
 	}
 }
 
 .hidden-sm{
 
 	@media only screen and (max-width: 992px) {
-		display: none !important;
+		display: none;
 	}
 }
 
 .hidden-sm-up{
 
 	@media only screen and (min-width: 992px) {
-		display: none !important;
+		display: none;
 	}
 }
 
 .hidden-xs-up{
 
 	@media only screen and (min-width: 577px) {
-		display: none !important;
+		display: none;
 	}
 }
 
 .no-pading{
-	padding: 0px !important;
+	padding: 0px;
 }
 
 .DayPickerInput{

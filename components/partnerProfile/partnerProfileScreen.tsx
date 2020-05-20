@@ -7,8 +7,6 @@ import OfferScreen from './OfferScreen';
 import FoodScreen from './FoodScreen';
 import DecorationScreen from './DecorationScreen';
 import CalendarScreen from './CalendarScreen';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
