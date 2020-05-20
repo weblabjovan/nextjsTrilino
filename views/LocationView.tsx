@@ -124,9 +124,15 @@ class LocationView extends React.Component <MyProps, MyState>{
   			photos.push(this.props.partner['photos'][i]);
   		}
   	}
-  	const roomGalleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + photos[0]['name'];
-
-  	this.setState({ roomGalleryOpen: true, roomGalleryPhoto, roomGalleryPhotoIndex: 0, roomPhotos: photos, roomGalleryName: room['name'] });
+  	if(photos.length){
+  		const roomGalleryPhoto = Keys.AWS_PARTNER_PHOTO_LINK + photos[0]['name'];
+			this.setState({ roomGalleryOpen: true, roomGalleryPhoto, roomGalleryPhotoIndex: 0, roomPhotos: photos, roomGalleryName: room['name'] });
+  	}else{
+  		if (this.props.partner['photos'].length && this.props.partner['general']['rooms'].length < 2) {
+  			const photo = this.props.partner['photos'][0]['name'];
+  			this.openPhotoGallery(photo);
+  		}
+  	}
   }
 
   changeRoomGalleryPhoto(action: string) {

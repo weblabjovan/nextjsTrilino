@@ -320,12 +320,12 @@ button:disabled{
       font-weight: 800;
       cursor: pointer;
       color: #fff;
-      opacity: 30%;
+      opacity: 0.35;
       text-shadow: 4px 2px 5px rgba(0, 0, 0, 1);
 
       @media only screen and (max-width: 768px) {
         font-size: 100px;
-        opacity: 60%;
+        opacity: 0.65;
       }
 
       @media only screen and (max-width: 577px) {
@@ -333,7 +333,7 @@ button:disabled{
       }
 
       &:hover{
-        opacity: 80%;
+        opacity: 0.8;
       }
     }
 
