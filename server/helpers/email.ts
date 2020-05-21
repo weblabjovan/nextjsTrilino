@@ -192,7 +192,7 @@ export const sendUserReminder =  async (reservation: object, host: string): Prom
 		text1: dictionary['emailUserReminderText1'], 
 		text2: dictionary['emailUserReminderText2'], 
 		text3: `${dictionary['emailUserReminderText3']}${myCriptor.decrypt(user['firstName'], true)} ${dictionary['emailUserReminderText4']}`, 
-		info1: `${dictionary['emailUserReminderWhen']} ${dateBase[0].split('-')[2]}.${dateBase[0].split('-')[1]}.${dateBase[0].split('-')[0]}.`,
+		info1: `${dictionary['emailUserReminderWhen']} ${dateBase[0].split('-')[2]}.${dateBase[0].split('-')[1]}.${dateBase[0].split('-')[0]}. ${reservation['from']}`,
 		info2: `${dictionary['emailUserReminderWhere']} ${partner['name']}, ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`,
 		info3: `${dictionary['emailUserReminderFocus']} ${myCriptor.decrypt(user['firstName'], true)}`,
 		info4: `${dictionary['emailUserReminderPayment']} ${currencyFormat(restPrice)} ${dictionary['currency_rs']}`,

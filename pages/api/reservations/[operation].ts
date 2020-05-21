@@ -662,7 +662,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			const dateHandler = new DateHandler();
 			const yesterday = dateHandler.getDateInThePast(1, 'code', true);
 			const rateLimitDate = dateHandler.getDateInTheFuture(10, 'date', false);
-			const base = await Reservation.updateMany({ date: yesterday, type: 'user', active: true, confirmed: true }, { rateLimitDate, forRating: true });
+			const base = await Reservation.updateMany({ "date": yesterday, "type": 'user', "active": true, "confirmed": true, "doubleNumber": 1, }, { rateLimitDate, forRating: true });
 			const lookup = { 
 				from: 'users', 
 				let: { user: '$user'}, //
@@ -676,7 +676,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
         ],
         as: "userObj"
 			};
-			const reservations = await Reservation.aggregate([{ $match: {"date": yesterday, "type": 'user', "active": true, "confirmed": true, "forRating": true} }, {$lookup: lookup}]);
+			const reservations = await Reservation.aggregate([{ $match: {"date": yesterday, "type": 'user', "active": true, "confirmed": true, "doubleNumber": 1, "forRating": true} }, {$lookup: lookup}]);
 
 			if (reservations.length) {
 				for (var i = 0; i < reservations.length; ++i) {
