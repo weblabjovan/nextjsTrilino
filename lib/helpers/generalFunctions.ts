@@ -393,3 +393,15 @@ export const sumOfRatingMarks = (rating: object): number => {
 
   return gen;
 }
+
+export const renderDate = (date: any): string => {
+  let base = [];
+  if (date instanceof Date) {
+    const d = date.toISOString();
+    base = d.split('T');
+  }else{
+    base = date.split('T');
+  }
+  
+  return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+}

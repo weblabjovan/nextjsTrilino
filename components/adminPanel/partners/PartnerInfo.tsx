@@ -7,17 +7,21 @@ import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue
 import PlainInput from '../../form/input';
 import CheckBox from '../../form/checkbox';
 import Keys from '../../../server/keys';
+
 interface MyProps {
 	partner: null | object;
   show: boolean;
   closeInfo(outcome: boolean, partner: string):void;
   saveMap(map: object):void;
+  saveBank(map: object):void;
 };
 interface MyState {
   dictionary: object;
   lang: string;
   lockMapFields: boolean;
   mapInfo: object;
+  bankInfo: object;
+  lockBankFields: boolean;
 };
 
 export default class AdminPartnerInfo extends React.Component <MyProps, MyState>{
@@ -27,7 +31,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['toggleMapLock', 'changeMap'];
+    const bindingFunctions = ['toggleLock', 'changeStateObj', 'closeInfo'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -41,25 +45,49 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
     dictionary: getLanguage('sr'),
     lang: 'sr',
     lockMapFields: true,
-    mapInfo: { lat: 0, lng: 0},
+    mapInfo: { lat: '', lng: ''},
+    bankInfo: {name: '', account: ''},
+    lockBankFields: true,
   };
 
-  toggleMapLock(){
-  	this.setState({lockMapFields: !this.state.lockMapFields});
+  toggleLock(field: string){
+     this.setState(prevState => ({
+      ...prevState,
+      [field]: !this.state[field] // No error here, but can't ensure that key is in StateKeys
+    }));
   }
 
-  changeMap(val: string, field: string){
-  	const mapCopy = JSON.parse(JSON.stringify(this.state.mapInfo));
-  	mapCopy[field] = parseFloat(val);
-  	this.setState({mapInfo: mapCopy});
+  changeStateObj(obj: string, val: string, field: string){
+  	const copy = JSON.parse(JSON.stringify(this.state[obj]));
+  	copy[field] = val;
+    this.setState(prevState => ({
+      ...prevState,
+      [obj]: copy // No error here, but can't ensure that key is in StateKeys
+    }));
+  }
+
+  closeInfo(){
+    this.setState({
+      dictionary: getLanguage('sr'),
+      lang: 'sr',
+      lockMapFields: true,
+      mapInfo: { lat: 0, lng: 0},
+      bankInfo: {name: '', account: ''},
+      lockBankFields: true,
+    }, () => {
+      this.props.closeInfo(false, '')
+    })
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
   	if (this.props.show && !prevProps.show) {
   		if (this.props.partner) {
   			if (this.props.partner['map']) {
-  				this.setState({mapInfo: this.props.partner['map']})
+  				this.setState({mapInfo: {lat: this.props.partner['map']['lat'].toString(), lng:this.props.partner['map']['lng'].toString() }})
   			}
+        if (this.props.partner['bank']) {
+          this.setState({bankInfo: this.props.partner['bank'] })
+        }
   		}
   	}
   }
@@ -75,7 +103,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
           <div className="partnerActions">
               <Container fluid>
                 <Row>
-                  <span className="icon closeIt absol" onClick={ () => this.props.closeInfo(false, '')}></span>
+                  <span className="icon closeIt absol" onClick={ this.closeInfo }></span>
                   <Col xs="10">
                     <div className="pageHeader">
                       <h2>Akcije</h2>
@@ -86,25 +114,25 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
 
                 <Row>
                 	<Col xs="12" lg="6">
-                		<Row className="maps">
+                		<Row className="section">
                 			<Col xs="12">
                 				<h4>Mape:</h4>
                 			</Col>
-                			<Col xs="12" lg="3">
+                			<Col xs="12" lg="4">
                 				<label>Geografska širina</label>
 					            	<PlainInput 
 					                placeholder="lat"
-					                onChange={(event) => this.changeMap(event.target.value, 'lat')} 
+					                onChange={(event) => this.changeStateObj('mapInfo', event.target.value, 'lat')} 
 					                value={this.state.mapInfo['lat']} 
 					                type="text"
 					                disabled={ this.state.lockMapFields }
 					                className="logInput" />
                 			</Col>
-                			<Col xs="12" lg="3">
+                			<Col xs="12" lg="4">
                 				<label>Geografska dužina</label>
                 				<PlainInput 
 					                placeholder="lng"
-					                onChange={(event) => this.changeMap(event.target.value, 'lng')} 
+					                onChange={(event) => this.changeStateObj('mapInfo', event.target.value, 'lng')} 
 					                value={this.state.mapInfo['lng']} 
 					                type="text"
 					                disabled={ this.state.lockMapFields }
@@ -117,16 +145,61 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                           disabled={ false }
                           checked={ this.state.lockMapFields }
                           field={ 'mapLock' }
-                          onChange={ this.toggleMapLock }
+                          onChange={ () => this.toggleLock('lockMapFields') }
                         />
                 			</Col>
 
-                			<Col xs="12" lg="4">
+                			<Col xs="12" lg="2">
                 				<Button color="success" onClick={ () => this.props.saveMap(this.state.mapInfo) }>Sačuvaj</Button>
                 			</Col>
                 		</Row>
                 	</Col>
                 </Row>
+
+                 <Row>
+                  <Col xs="12" lg="6">
+                    <Row className="section bank">
+                      <Col xs="12">
+                        <h4>Banka:</h4>
+                      </Col>
+                      <Col xs="12" lg="4">
+                        <label>Broj računa</label>
+                        <PlainInput 
+                          placeholder="račun"
+                          onChange={(event) => this.changeStateObj('bankInfo', event.target.value, 'account')} 
+                          value={this.state.bankInfo['account']} 
+                          type="text"
+                          disabled={ this.state.lockBankFields }
+                          className="logInput" />
+                      </Col>
+                      <Col xs="12" lg="4">
+                        <label>Naziv banke</label>
+                        <PlainInput 
+                          placeholder="naziv"
+                          onChange={(event) => this.changeStateObj('bankInfo', event.target.value, 'name')} 
+                          value={this.state.bankInfo['name']} 
+                          type="text"
+                          disabled={ this.state.lockBankFields }
+                          className="logInput" />
+                      </Col>
+                      
+                      <Col xs="12" lg="2" style={{'textAlign': 'center'}}>
+                        <label>Zaključaj</label>
+                        <CheckBox
+                          disabled={ false }
+                          checked={ this.state.lockBankFields }
+                          field={ 'bankLock' }
+                          onChange={ () => this.toggleLock('lockBankFields') }
+                        />
+                      </Col>
+
+                      <Col xs="12" lg="2">
+                        <Button color="success" onClick={ () => this.props.saveBank(this.state.bankInfo) }>Sačuvaj</Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
               </Container>    
           </div>
         </div>

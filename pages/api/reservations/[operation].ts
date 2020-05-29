@@ -312,8 +312,47 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).send({ endpoint: 'reservations', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 				}
 			}
+
+			if (type === 'financial') {
+				
+			}
 		}
 	}
+
+//////////////////////////////////////   GETFORFINANCIAL   ///////////////////////////////////////////////
+
+if (req.query.operation === 'getForFinancial') {
+	const token = req.headers.authorization;
+	if (!token) {
+		return res.status(401).json({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 4, error: 'auth error', message: 'unauthorized user'  });
+	}else{
+		if (!req.body['year'] || !req.body['month'] || !Number.isInteger(req.body['year']) || !Number.isInteger(req.body['month']) || !req.body['language']) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 5, error: 'basic validation error' });
+		}else{
+			try{
+				const {month, year, language} = req.body;
+				const dictionary = getLanguage(language);
+
+				const decoded = verifyToken(token);
+				const partnerId = encodeId(decoded['sub']);
+
+				await connectToDb(req.headers.host);
+				const partner = await Partner.findById(partnerId, '-password -photos');
+				if (partner) {
+					const dateHandler = new DateHandler();
+					const monthDates = dateHandler.getMonthStopStartDates(month, year);
+					const reservations = await Reservation.find({ 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partnerId, 'toDate': { '$gte': monthDates['start'], '$lt': monthDates['end'] }});
+					return res.status(200).json({ endpoint: 'reservations', operation: 'getForFinancial', success: true, code: 1, reservations });
+				}else{
+					return res.status(404).send({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 2, error: 'auth error', message: 'Partner token not valid'  });
+				}
+
+			}catch(err){
+				return res.status(500).send({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 3, error: 'db error', message: err  });
+			}
+		}
+	}
+}
 
 
 //////////////////////////////////////   GETFORUSER   ///////////////////////////////////////////////
@@ -849,7 +888,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
         as: "userObj"
 			};
 			const ObjectId = mongoose.Types.ObjectId;
-			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "doubleNumber": 1, "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "doubleNumber": 1, "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, {$lookup: lookupUser}]);
 
 			if (reservations.length) {
 				for (var i = 0; i < reservations.length; ++i) {

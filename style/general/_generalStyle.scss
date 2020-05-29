@@ -19,6 +19,18 @@ $darkGreyCol: #5f5f5f;
 	img{
 		max-width: 100%;
 	}
+
+  button{
+    outline: none;
+  }
+
+  input[type=text], input[type=password], input[type=number], textarea {
+
+    &:focus{
+      outline: none;
+      border: solid 1px $lightBlue;
+    } 
+  }
 }
 
 .textHighlightPurple{
