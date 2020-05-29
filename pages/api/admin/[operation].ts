@@ -12,6 +12,7 @@ import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, is
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
 import Keys from '../../../server/keys';
+import DateHandler from '../../../lib/classes/DateHandler';
 
 const s3 = new AWS.S3({
 	accessKeyId: Keys.AWS_PARTNER_PHOTO_ACCESS_KEY,
@@ -255,7 +256,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		}
 	}
 
-	if (req.query.operation === 'partnerMapSave') {
+	if (req.query.operation === 'partnerFieldObjectSave') {
 		const token = req.headers.authorization;
 		
 		if (!isEmpty(token)) {
@@ -264,12 +265,12 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const admin = encodeId(decoded['sub']); 
 				if ( admin === Keys.ADMIN_PASS) {
 
-					if (false) {
-						return res.status(404).json({ endpoint: 'admin', operation: 'partnerMapSave', success: false, code: 6, error: 'auth error', message: 'request data not valida' });
+					if (!req.body['partnerId'] || !req.body['field'] || !req.body['value']) {
+						return res.status(404).json({ endpoint: 'admin', operation: 'partnerMapSave', success: false, code: 6, error: 'auth error', message: 'request data not valid' });
 					}else{
-						const {partnerId, map } = req.body;
+						const {partnerId, field, value } = req.body;
 						await connectToDb(req.headers.host);
-						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { map } }, { new: true }).select('-password');
+						const partner = await Partner.findOneAndUpdate({ '_id': partnerId }, {"$set" : { [field]: value } }, { new: true }).select('-password');
 
 						if (partner) {
 							return res.status(200).json({ endpoint: 'admin', operation: 'partnerMapSave', success: true, code: 1, partner });
@@ -317,6 +318,57 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			}
 		}else{
 			return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 4, error: 'selection error', message:'no auth token' });
+		}
+	}
+
+
+	if (req.query.operation === 'searchFin') {
+		const token = req.headers.authorization;
+		
+		if (!isEmpty(token)) {
+			try{
+				const decoded = verifyToken(token);
+				const admin = encodeId(decoded['sub']); 
+				if ( admin === Keys.ADMIN_PASS) {
+					if (!req.body['year'] || !req.body['month'] || !req.body['type'] || !Number.isInteger(req.body['year']) || !Number.isInteger(req.body['month']) || !Number.isInteger(req.body['type'])) {
+						return res.status(404).json({ endpoint: 'admin', operation: 'searchFin', success: false, code: 5, error: 'data error', message: 'request data not valid' });
+					}else{
+						const {year, month, partner, type } = req.body;
+						await connectToDb(req.headers.host);
+						const dateHandler = new DateHandler();
+						const monthDates = dateHandler.getMonthStopStartDates(month, year);
+						let reservations = [];
+						const lookup = { 
+							from: 'partners', 
+							let: { partner: '$partner'}, //
+							pipeline: [
+								{ $addFields: { "partner": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$partner", "$partner" ] }
+			             }
+			          }
+			        ],
+			        as: "partnerObj"
+						};
+						const dateLook = type === 1 ? 'toDate' : 'createdAt';
+
+						if (partner) {
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partner, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : -1 } }]);
+						}else{
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : -1 } }]);
+						}
+
+						return res.status(200).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: true, code: 1, reservations });
+					}
+				}else{
+					return res.status(404).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 2, error: 'auth error', message: 'not valida admin' });
+				}
+			}catch(err){
+				return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 3, error: 'selection error', message:'verification problem' });
+			}
+		}else{
+			return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 4, error: 'auth error', message:'no auth token' });
 		}
 	}
 

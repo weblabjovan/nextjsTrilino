@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType, rateReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType, rateReservationActionType, getReservationsForFinancialActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -36,7 +36,13 @@ interface initialState {
   rateReservationError: object | boolean;
   rateReservationSuccess: null | number;
 
+  getFinReservationStart: boolean;
+  getFinReservationError: object | boolean;
+  getFinReservationSuccess: null | number;
+
   reservations: Array<object>;
+
+  finReservations: Array<object>;
 
   reservationGeneral: IreservationGeneral;
   reservationAdditional: object;
@@ -76,7 +82,13 @@ const initialState: initialState  = {
   rateReservationError: false,
   rateReservationSuccess: null,
 
+  getFinReservationStart: false,
+  getFinReservationError: false,
+  getFinReservationSuccess: null,
+
   reservations: [],
+
+  finReservations: [],
 
   reservationGeneral:{
     name: '',
@@ -280,6 +292,29 @@ const actionsMap = {
       ...state,
       rateReservationStart: false,
       rateReservationSuccess: action.payload.code,
+    };
+  },
+
+  [getReservationsForFinancialActionType.START]: (state) => {
+    return {
+      ...state,
+      getFinReservationStart: true,
+      getFinReservationSuccess: null,
+    };
+  },
+  [getReservationsForFinancialActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getFinReservationStart: false,
+      getFinReservationError: action.payload.response.body,
+    };
+  },
+  [getReservationsForFinancialActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getFinReservationStart: false,
+      getFinReservationSuccess: action.payload.code,
+      finReservations: action.payload.reservations,
     };
   },
   

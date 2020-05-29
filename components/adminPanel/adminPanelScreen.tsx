@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { getLanguage } from '../../lib/language';
 import PartnersScreen from './PartnersScreen';
+import FinancialScreen from './FinancialScreen';
 
 interface MyProps {
   // using `interface` is also ok
@@ -40,6 +41,18 @@ class AdminScreenView extends React.Component <MyProps, MyState>{
             (
               <PartnersScreen 
                 lang={this.props.lang}
+                token={ this.props.token }
+                closeLoader={ this.props.closeLoader }
+                openLoader={ this.props.openLoader }
+              />
+            )
+            :
+            this.props.screen === 'financial'
+            ?
+            (
+              <FinancialScreen 
+                lang={ this.props.lang }
+                link={ this.props.link }
                 token={ this.props.token }
                 closeLoader={ this.props.closeLoader }
                 openLoader={ this.props.openLoader }

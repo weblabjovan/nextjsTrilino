@@ -184,21 +184,44 @@ export function adminBasicDevLogin(link: object, data: object) {
 }
 
 
-export const adminSavePartnerMapActionTypes = {
-  START: 'ADMIN_PARTNER_MAP_SAVE_START',
-  ERROR: 'ADMIN_PARTNER_MAP_SAVE_ERROR',
-  SUCCESS: 'ADMIN_PARTNER_MAP_SAVE_SUCCESS',
+export const adminSavePartnerFieldActionTypes = {
+  START: 'ADMIN_PARTNER_FIELD_SAVE_START',
+  ERROR: 'ADMIN_PARTNER_FIELD_SAVE_ERROR',
+  SUCCESS: 'ADMIN_PARTNER_FIELD_SAVE_SUCCESS',
 };
 
-export function adminSavePartnerMap(link: object, data: object, auth: string) {
-  const endpoint = setApiBasLink(link, apiRoot.ADMIN_PARTNER_MAP_SAVE);
+export function adminSavePartnerField(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_PARTNER_FIELD_SAVE);
 
   return function (dispatch: dispatch) {
     apiEndpoint(
       dispatch,
       endpoint,
       data,
-      adminSavePartnerMapActionTypes,
+      adminSavePartnerFieldActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+export const adminFinancialSearchActionTypes = {
+  START: 'ADMIN_FINANCIAL_SEARCH_START',
+  ERROR: 'ADMIN_FINANCIAL_SEARCH_ERROR',
+  SUCCESS: 'ADMIN_FINANCIAL_SEARCH_SUCCESS',
+};
+
+export function adminFinancialSearch(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_FINANCIAL_SEARCH);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      adminFinancialSearchActionTypes,
       null,
       false,
       "POST",

@@ -73,9 +73,9 @@ export default class AdminNavigationBar extends React.Component <MyProps, MyStat
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      id="test"
+                      id="financial"
                       onClick={this.props.changeScreen}
-                    >Test</NavLink>
+                    >Finansije</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink onClick={this.logout}>Odjava</NavLink>
@@ -98,10 +98,10 @@ export default class AdminNavigationBar extends React.Component <MyProps, MyStat
                   onClick={this.props.changeScreen}
                   ><span className="icon general"></span>PARTNERI</li>
                  <li 
-                  className={this.props.activeScreen === 'test' ? 'active' : ''}
-                  id="test"
+                  className={this.props.activeScreen === 'financial' ? 'active' : ''}
+                  id="financial"
                   onClick={this.props.changeScreen}
-                  ><span className="icon general"></span>Test</li>
+                  ><span className="icon financial"></span>FINANSIJE</li>
                 <li 
                   onClick={this.logout}
                 ><span className="icon logout"></span>ODJAVA</li>

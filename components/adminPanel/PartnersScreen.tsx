@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Row, Col, Button, CustomInput } from 'reactstrap';
 import { setUserLanguage } from '../../actions/user-actions';
-import { adminGetPartners, activatePartner, preSignPhoto, putPartnerProfilePhoto, adminSavePartnerPhoto, adminDeletePartnerPhoto, adminSavePartnerMap } from '../../actions/admin-actions';
+import { adminGetPartners, activatePartner, preSignPhoto, putPartnerProfilePhoto, adminSavePartnerPhoto, adminDeletePartnerPhoto, adminSavePartnerField } from '../../actions/admin-actions';
 import { getLanguage } from '../../lib/language';
 import {  getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import {  getPhotoNumbers, setUpPhotosForSave, findPartnerFromTheList, getPartnerMainPhoto, getNumberOfPartnerSelectionPhotos, setPhotosForDelete } from '../../lib/helpers/specificAdminFunctions';
@@ -39,12 +39,12 @@ interface MyProps {
   adminDeletePartnerPhotoStart: boolean;
   adminDeletePartnerPhotoError: object | boolean;
   adminDeletePartnerPhotoSuccess: null | number;
-  adminSaveMapStart: boolean;
-  adminSaveMapError: boolean;
-  adminSaveMapSuccess: null | number;
+  adminSaveFieldStart: boolean;
+  adminSaveFieldError: boolean;
+  adminSaveFieldSuccess: null | number;
   adminPartners: Array<object>;
   partnerPhoto: null | object;
-  adminSavePartnerMap(link: object, data: object, auth: string): void;
+  adminSavePartnerField(link: object, data: object, auth: string): void;
   adminDeletePartnerPhoto(link: object, data: object, auth: string): void;
   adminSavePartnerPhoto(link: object, data: object, auth: string): void;
   adminGetPartners(link: object, data: object, auth: string): Array<object>;
@@ -83,7 +83,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'changePhotoRoom'];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'saveBankInfo', 'changePhotoRoom'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -286,7 +286,14 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   saveMapInfo(map: object){
     const link = setUpLinkBasic(window.location.href);
       this.props.openLoader();
-      this.props.adminSavePartnerMap(link, {partnerId: this.state.activePartner['_id'], map}, this.props.token);
+      const value = { lat: parseFloat(map['lat']), lng: parseFloat(map['lng'])};
+      this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value, field: 'map'}, this.props.token);
+  }
+
+  saveBankInfo(bank: object){
+    const link = setUpLinkBasic(window.location.href);
+      this.props.openLoader();
+      this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value: bank, field: 'bank'}, this.props.token);
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
@@ -306,7 +313,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
       })
     }
 
-    if (!this.props.adminSaveMapStart && prevProps.adminSaveMapStart && this.props.adminSaveMapSuccess) {
+    if (!this.props.adminSaveFieldStart && prevProps.adminSaveFieldStart && this.props.adminSaveFieldSuccess) {
       this.setState({ activePartner: findPartnerFromTheList(this.state.activePartner['_id'], this.props.adminPartners)}, () => {
         this.props.closeLoader();
       })
@@ -389,6 +396,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           partner={ this.state.activePartner }
           closeInfo={ this.toggleInfo }
           saveMap={ this.saveMapInfo }
+          saveBank={ this.saveBankInfo }
         />
     		<Row>
           <Col xs='12' className="middle">
@@ -488,9 +496,9 @@ const mapStateToProps = (state) => ({
   adminDeletePartnerPhotoError: state.AdminReducer.adminDeletePartnerPhotoError,
   adminDeletePartnerPhotoSuccess: state.AdminReducer.adminDeletePartnerPhotoSuccess,
 
-  adminSaveMapStart: state.AdminReducer.adminSaveMapStart,
-  adminSaveMapError: state.AdminReducer.adminSaveMapError,
-  adminSaveMapSuccess: state.AdminReducer.adminSaveMapSuccess,
+  adminSaveFieldStart: state.AdminReducer.adminSaveFieldStart,
+  adminSaveFieldError: state.AdminReducer.adminSaveFieldError,
+  adminSaveFieldSuccess: state.AdminReducer.adminSaveFieldSuccess,
 
   partnerPhoto: state.AdminReducer.partnerPhoto,
 
@@ -507,7 +515,7 @@ const matchDispatchToProps = (dispatch) => {
     putPartnerProfilePhoto,
     adminSavePartnerPhoto,
     adminDeletePartnerPhoto,
-    adminSavePartnerMap,
+    adminSavePartnerField,
   },
   dispatch);
 };

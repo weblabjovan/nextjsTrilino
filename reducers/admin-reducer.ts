@@ -1,5 +1,5 @@
 import {
-  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerMapActionTypes
+  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerFieldActionTypes, adminFinancialSearchActionTypes
 } from '../actions/admin-actions';
 
 import { decoratePartners, changePartnerListItem } from '../lib/helpers/specificAdminFunctions';
@@ -41,9 +41,14 @@ interface initialState {
   adminSaveMapError: boolean;
   adminSaveMapSuccess: null | number;
 
+  adminFinSearchStart: boolean;
+  adminFinSearchError: object | boolean;
+  adminFinSearchSuccess: null | number;
+
   partners: Array<object>;
   partnerPhoto: null | object;
   devAuth: string;
+  finSearchResult: Array<object>;
 }
 
 const initialState: initialState  = {
@@ -83,9 +88,14 @@ const initialState: initialState  = {
   adminSaveMapError: false,
   adminSaveMapSuccess: null,
 
+  adminFinSearchStart: false,
+  adminFinSearchError: false,
+  adminFinSearchSuccess: null,
+
   partners: [],
   partnerPhoto: null,
   devAuth: '',
+  finSearchResult: [],
 };
 
 const actionsMap = {
@@ -275,26 +285,49 @@ const actionsMap = {
     };
   },
 
-  [adminSavePartnerMapActionTypes.START]: (state) => {
+  [adminSavePartnerFieldActionTypes.START]: (state) => {
     return {
       ...state,
-      adminSaveMapStart: true,
-      adminSaveMapSuccess: null,
+      adminSaveFieldStart: true,
+      adminSaveFieldSuccess: null,
     };
   },
-  [adminSavePartnerMapActionTypes.ERROR]: (state, action) => {
+  [adminSavePartnerFieldActionTypes.ERROR]: (state, action) => {
     return {
       ...state,
-      adminSaveMapStart: false,
-      adminSaveMapError: action.payload.response.body,
+      adminSaveFieldStart: false,
+      adminSaveFieldError: action.payload.response.body,
     };
   },
-  [adminSavePartnerMapActionTypes.SUCCESS]: (state, action) => {
+  [adminSavePartnerFieldActionTypes.SUCCESS]: (state, action) => {
     return {
       ...state,
-      adminSaveMapSuccess: action.payload.code,
+      adminSaveFieldSuccess: action.payload.code,
       partners: changePartnerListItem(action.payload.partner, [...state['partners']]),
-      adminSaveMapStart: false,
+      adminSaveFieldStart: false,
+    };
+  },
+
+  [adminFinancialSearchActionTypes.START]: (state) => {
+    return {
+      ...state,
+      adminFinSearchStart: true,
+      adminFinSearchSuccess: null,
+    };
+  },
+  [adminFinancialSearchActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      adminFinSearchStart: false,
+      adminFinSearchError: action.payload.response.body,
+    };
+  },
+  [adminFinancialSearchActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      adminFinSearchSuccess: action.payload.code,
+      finSearchResult: action.payload.reservations,
+      adminFinSearchStart: false,
     };
   },
   

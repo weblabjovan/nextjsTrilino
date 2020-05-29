@@ -39,7 +39,12 @@ export default class DateHandler {
 		}
 		
 		return '1.1.1970';
+	}
 
+	public getMonthStopStartDates = (month: number, year: number): object => {
+		const start = new Date(year, month - 1, 1);
+		const end = month - 1 === this.now.getMonth() && year === this.now.getFullYear() ? new Date(year, month - 1, this.now.getDate()) : new Date(year, month, 1);
+		return { start, end };
 	}
 
 	public setNewDateString = (datestring: string): void => {

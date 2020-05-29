@@ -68,6 +68,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
+	navigationPartnerFinancial: string;
 	
 	
 	uniCity: string;
@@ -534,6 +535,21 @@ export default interface LanguageInterface {
 	partnerProfileReservationModalTitle: string;
 	partnerProfileReservationModalText: string;
 	partnerProfileReservationModalButtonText: string;
+	partnerProfileFinTitle: string;
+	partnerProfileFinDescription: string;
+	partnerProfileFinYearPlaceholder: string;
+	partnerProfileFinMonthPlaceholder: string;
+	partnerProfileFinTableColReservation: string;
+	partnerProfileFinTableColDate: string;
+	partnerProfileFinTableColPrice: string;
+	partnerProfileFinTableColDeposit: string;
+	partnerProfileFinTableColCommission: string;
+	partnerProfileFinTableColBank: string;
+	partnerProfileFinTableColTrilino: string;
+	partnerProfileFinTableColUser: string;
+	partnerProfileFinTableTotal: string;
+	partnerProfileFinTableNone: string;
+
 
 
 	searchFilterBasicCity: string;

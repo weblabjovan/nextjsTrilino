@@ -70,6 +70,7 @@ const english: LanguageInterface = {
 	navigationPartnerCalendar: 'Calendar',
 	navigationPartnerPreview: 'Preview',
 	navigationPartnerLogout: 'Logout',
+	navigationPartnerFinancial: 'Financial',
 	
 	uniCity: 'City',
 	uniDistrict: 'District',
@@ -540,6 +541,20 @@ const english: LanguageInterface = {
 	partnerProfileReservationModalTitle: 'Delete reservation',
 	partnerProfileReservationModalText: 'If you delete this reservation it will not be available and the term which was attached to it will be free. Are you sure you want to delete this reservation?',
 	partnerProfileReservationModalButtonText: 'Yes, delete this reservation',
+	partnerProfileFinTitle: 'Financial preview',
+	partnerProfileFinDescription: 'Bellow you can view and search your monthly financial results realized through Trilino reservations. Table shows done reservations on the monthly level. Data in the table can be changed by altering month and year in the dropdown menus.',
+	partnerProfileFinYearPlaceholder: 'Year',
+	partnerProfileFinMonthPlaceholder: 'Month',
+	partnerProfileFinTableColReservation: 'Reservation',
+	partnerProfileFinTableColDate: 'Date',
+	partnerProfileFinTableColPrice: 'Price',
+	partnerProfileFinTableColDeposit: 'Deposit',
+	partnerProfileFinTableColCommission: 'Commission',
+	partnerProfileFinTableColBank: 'Bank cost',
+	partnerProfileFinTableColTrilino: 'From Trilino',
+	partnerProfileFinTableColUser: 'From user',
+	partnerProfileFinTableNone: 'There are no finished reservations for chosen month',
+	partnerProfileFinTableTotal: 'Total',
 
 
 

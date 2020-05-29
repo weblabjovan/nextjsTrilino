@@ -7,6 +7,7 @@ import OfferScreen from './OfferScreen';
 import FoodScreen from './FoodScreen';
 import DecorationScreen from './DecorationScreen';
 import CalendarScreen from './CalendarScreen';
+import FinancialScreen from './FinancialScreen';
 
 interface MyProps {
   // using `interface` is also ok
@@ -102,6 +103,18 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
               <PreviewScreen
                 lang={this.props.lang}
                 closeLoader={this.props.closeLoader}
+              />
+            )
+            :
+             this.props.screen === 'financial'
+            ?
+            (
+              <FinancialScreen
+                lang={this.props.lang}
+                link={ this.props.link }
+                closeLoader={this.props.closeLoader}
+                openLoader={this.props.openLoader}
+                token={ this.props.token }
               />
             )
             :
