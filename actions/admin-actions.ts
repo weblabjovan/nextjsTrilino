@@ -229,3 +229,27 @@ export function adminFinancialSearch(link: object, data: object, auth: string) {
     );
   };
 }
+
+
+export const adminGenerateSerialsActionTypes = {
+  START: 'ADMIN_GENERATE_SERIALS_START',
+  ERROR: 'ADMIN_GENERATE_SERIALS_ERROR',
+  SUCCESS: 'ADMIN_GENERATE_SERIALS_SUCCESS',
+};
+
+export function adminGenerateSerials(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_GENERATE_SERIALS);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      adminGenerateSerialsActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

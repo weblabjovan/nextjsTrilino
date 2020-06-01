@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { datePickerLang } from '../../lib/language/dateLanguage';
 import { Container, Row, Col, Button, Table } from 'reactstrap';
-import { adminFinancialSearch, adminGetPartners } from '../../actions/admin-actions';
+import { adminFinancialSearch, adminGetPartners, adminGenerateSerials } from '../../actions/admin-actions';
 import { getLanguage } from '../../lib/language';
+import genOptions from '../../lib/constants/generalOptions';
 import {  getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import {  getPhotoNumbers } from '../../lib/helpers/specificAdminFunctions';
 import { renderDate, currencyFormat, getArrayObjectByFieldValue } from '../../lib/helpers/generalFunctions';
+import TableModal from '../modals/TableModal';
 
 interface MyProps {
   // using `interface` is also ok
@@ -20,6 +22,7 @@ interface MyProps {
   link: object;
   adminFinancialSearch(link: object, data: object, auth: string): void;
   adminGetPartners(link: object, data: object, auth: string): Array<object>;
+  adminGenerateSerials(link: object, data: object, auth: string): Array<object>;
   adminFinSearchStart: boolean;
   adminFinSearchError: object | boolean;
   adminFinSearchSuccess: null | number;
@@ -28,6 +31,9 @@ interface MyProps {
   adminGetPartnersError: object | boolean;
   adminGetPartnersSuccess: null | object;
   adminPartners: Array<object>;
+  adminGenerateSerialStart: boolean;
+  adminGenerateSerialError: object | boolean;
+  adminGenerateSerialSuccess: null | number;
 };
 interface MyState {
 	dictionary: object;
@@ -38,6 +44,8 @@ interface MyState {
 	type: number | object;
 	partnerOptions: Array<object>;
 	typeOptions: Array<object>;
+  infoModal: boolean;
+  infoData: object;
 };
 
 class PartnerScreen extends React.Component <MyProps, MyState>{
@@ -47,7 +55,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'setMonthOptions', 'setYearOptions', 'setPartnerOptions', 'searchFin', 'calculateFinancialSum'];
+    const bindingFunctions = ['handleInputChange', 'setMonthOptions', 'setYearOptions', 'setPartnerOptions', 'searchFin', 'calculateFinancialSum', 'generateNumbers', 'openInfo', 'toggleInfoModal'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -66,6 +74,8 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 		type: { "value": 1, "label" : 'Račun'},
 		partnerOptions: [],
 		typeOptions: [{ "value": 1, "label" : 'Račun'}, { "value": 2, "label" : 'Predračun'}],
+    infoModal: false,
+    infoData: {},
   };
 
   handleInputChange(field, value){
@@ -132,7 +142,36 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     }
 
     return result;
+  }
+
+  generateNumbers(){
+    if (this.props.finSearchResult.length && this.state.partner['value'] === 0) {
+      this.setState({ loader: true }, () => {
+        this.props.openLoader();
+        this.props.adminGenerateSerials(this.props.link, { year: this.state.year['value'], month: this.state.month['value'], partner: this.state.partner['value'], type: this.state.type['value'] }, this.props.token )
+      });
+    }
     
+  }
+
+  openInfo(index: number){
+    const obj = this.props.finSearchResult[index];
+    const result = {
+      name: { placeholder: 'Partner naziv:', value: obj['partnerObj'][0]['name']},
+      address: { placeholder: 'Partner adresa:', value: obj['partnerObj'][0]['general']['address']},
+      city: {placeholder: 'Partner grad:', value: getGeneralOptionLabelByValue(genOptions['cities'], obj['partnerObj'][0]['city']) }, 
+      pib: { placeholder: 'Partner PIB:', value: obj['partnerObj'][0]['taxNum']},
+      account: { placeholder: 'Račun:', value: obj['partnerObj'][0]['bank']['account']},
+      bank: { placeholder: 'Banka:', value: obj['partnerObj'][0]['bank']['name']},
+      invDate: { placeholder: 'Datum realizacije:', value: renderDate(obj['date']) },
+      pnvDate: { placeholder: 'Datum prometa:', value: renderDate(obj['createdAt']) },
+      invNum: { placeholder: 'Broj fakture:', value: obj['invoiceNumber'] },
+      pnvNum: { placeholder: 'Broj profakture:', value: obj['preInvoiceNumber']  },
+      reservation: { placeholder: 'Broj rezervacije:', value: obj['_id']  },
+      price: { placeholder: 'Iznos za uplatu:', value: currencyFormat(obj['deposit'] - (obj['termPrice'] * 0.1) - (obj['deposit'] * 0.025))},
+    }
+
+    this.setState({ infoModal: true, infoData: result })
   }
 
   searchFin(){
@@ -142,6 +181,10 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 		});
   }
 
+  toggleInfoModal(){
+    this.setState({ infoModal: !this.state.infoModal, infoData: {} });
+  }
+
   
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
@@ -149,6 +192,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     	this.setState({ loader: false }, () => {
     		this.props.closeLoader();
     	})
+    }
+
+    if (!this.props.adminGenerateSerialStart && prevProps.adminGenerateSerialStart && this.props.adminGenerateSerialSuccess && !prevProps.adminGenerateSerialSuccess && !this.props.adminGenerateSerialError) {
+      this.setState({ loader: false }, () => {
+        this.props.closeLoader();
+      })
     }
 
     if (!this.props.adminGetPartnersStart && prevProps.adminGetPartnersStart && this.props.adminGetPartnersSuccess) {
@@ -170,6 +219,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   render() {
     return(
     	<div className="adminScreen financial">
+
+      <TableModal
+        isOpen={ this.state.infoModal }
+        toggle={ this.toggleInfoModal }
+        data={ this.state.infoData }
+      />
         
     		<Row>
           <Col xs='12' className="middle">
@@ -233,8 +288,10 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           			<thead>
 					        <tr>
 					          <th>{this.state.dictionary['partnerProfileFinTableColReservation']}</th>
-					          <th>Izdato</th>
-					          <th>Dospeva</th>
+					          <th>Datum prometa</th>
+					          <th>Datum realizacije</th>
+                    <th>Račun</th>
+                    <th>Predračun</th>
 					          <th>Partner</th>
 					          <th>{this.state.dictionary['partnerProfileFinTableColPrice']}</th>
 					          <th>Uplata</th>
@@ -251,9 +308,11 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 					      		this.props.finSearchResult.map((reservation, index) => {
 					      			return(
 					      				<tr key={`finLine_${index}`}>
-								          <td>{reservation['_id']}</td>
+								          <td><a onClick={ () => this.openInfo(index) } className="tableLink">{reservation['_id']}</a></td>
 								          <td>{renderDate(reservation['createdAt'])}</td>
 								          <td>{renderDate(reservation['date'])}</td>
+                          <td>{reservation['invoiceNumber'] ? reservation['invoiceNumber'] : ''}</td>
+                          <td>{reservation['preInvoiceNumber'] ? reservation['preInvoiceNumber']  : ''}</td>
 								          <td>{reservation['partnerObj'][0]['name']}</td>
 								          <td>{currencyFormat(reservation['price'] - reservation['trilinoPrice'])}</td>
 								          <td>{currencyFormat(reservation['deposit'])}</td>
@@ -273,6 +332,8 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
                     (
                       <tr className="calcSum">
                         <th>Ukupno</th>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -301,6 +362,14 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           		}
           	</Col>
           </Row>
+
+          <Row>
+            <Col xs="12">
+              <div className="middle">
+                <button className="buttonGenerate" disabled={this.props.finSearchResult.length && this.state.partner['value'] === 0 ? false : true } onClick={ this.generateNumbers }>Generišite redne brojeve</button>
+              </div>
+            </Col>
+          </Row>
     		
     	</div>
     ) 
@@ -318,6 +387,10 @@ const mapStateToProps = (state) => ({
   adminGetPartnersError: state.AdminReducer.adminGetPartnersError,
   adminGetPartnersSuccess: state.AdminReducer.adminGetPartnersSuccess,
 
+  adminGenerateSerialStart: state.AdminReducer.adminGenerateSerialStart,
+  adminGenerateSerialError: state.AdminReducer.adminGenerateSerialError,
+  adminGenerateSerialSuccess: state.AdminReducer.adminGenerateSerialSuccess,
+
   finSearchResult: state.AdminReducer.finSearchResult,
   adminPartners: state.AdminReducer.partners,
 
@@ -328,6 +401,7 @@ const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({
     adminFinancialSearch,
     adminGetPartners,
+    adminGenerateSerials,
   },
   dispatch);
 };

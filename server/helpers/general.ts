@@ -1004,3 +1004,19 @@ export const sumOfRatingMarks = (rating: object): number => {
 
   return gen;
 }
+
+export const getBasicForSerialGenerator = (reservations: Array<object>, type: string): object => {
+  const ids = [];
+  let num = 0;
+
+  for (var i = 0; i < reservations.length; i++) {
+    if (!reservations[i][type]) {
+      ids.push(reservations[i]['_id'])
+    }else{
+      const n = reservations[i][type].split('-')[2];
+      num = parseInt(n) > num ? parseInt(n) : num;
+    }
+  }
+
+  return { ids, num };
+}

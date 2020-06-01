@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import Reservation from '../../../server/models/reservation';
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, getBasicForSerialGenerator }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerPhotoSaveDataValid, dataHasValidProperty, isPartnerMapSaveDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -354,23 +354,104 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						const dateLook = type === 1 ? 'toDate' : 'createdAt';
 
 						if (partner) {
-							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partner, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : -1 } }]);
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partner, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
 						}else{
-							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : -1 } }]);
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
 						}
 
-						return res.status(200).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: true, code: 1, reservations });
+						return res.status(200).json({ endpoint: 'admin', operation: 'searchFin', success: true, code: 1, reservations });
 					}
 				}else{
-					return res.status(404).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 2, error: 'auth error', message: 'not valida admin' });
+					return res.status(404).json({ endpoint: 'admin', operation: 'searchFin', success: false, code: 2, error: 'auth error', message: 'not valida admin' });
 				}
 			}catch(err){
-				return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 3, error: 'selection error', message:'verification problem' });
+				return res.status(500).json({ endpoint: 'admin', operation: 'searchFin', success: false, code: 3, error: 'selection error', message:'verification problem' });
 			}
 		}else{
-			return res.status(500).json({ endpoint: 'admin', operation: 'partnerPhotoSave', success: false, code: 4, error: 'auth error', message:'no auth token' });
+			return res.status(500).json({ endpoint: 'admin', operation: 'searchFin', success: false, code: 4, error: 'auth error', message:'no auth token' });
 		}
 	}
+
+
+	if (req.query.operation === 'generateSerialNums') {
+		const token = req.headers.authorization;
+		
+		if (!isEmpty(token)) {
+			try{
+				const decoded = verifyToken(token);
+				const admin = encodeId(decoded['sub']); 
+				if ( admin === Keys.ADMIN_PASS) {
+					if (!req.body['year'] || !req.body['month'] || !req.body['type'] || !Number.isInteger(req.body['year']) || !Number.isInteger(req.body['month']) || !Number.isInteger(req.body['type'])) {
+						return res.status(404).json({ endpoint: 'admin', operation: 'generateSerialNums', success: false, code: 6, error: 'data error', message: 'request data not valid' });
+					}else{
+						const {year, month, partner, type } = req.body;
+						await connectToDb(req.headers.host);
+						const dateHandler = new DateHandler();
+						const monthDates = dateHandler.getMonthStopStartDates(month, year);
+
+						const lookup = { 
+							from: 'partners', 
+							let: { partner: '$partner'}, //
+							pipeline: [
+								{ $addFields: { "partner": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$partner", "$partner" ] }
+			             }
+			          }
+			        ],
+			        as: "partnerObj"
+						};
+
+						const dateLook = type === 1 ? 'toDate' : 'createdAt';
+						const genType = type === 1 ? 'invoiceNumber' : 'preInvoiceNumber';
+						const prefix = type === 1 ? 'INV' : 'PNV';
+
+						const reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+						const genInfo = getBasicForSerialGenerator(reservations, genType);
+
+						if (genInfo['ids'].length) {
+							const ops = genInfo['ids'].map((item, index) => { 
+								const newNum = genInfo['num'] + index + 1;
+								const newgen = `${prefix}-${month}-${newNum}`;
+						    return { 
+					        "updateOne": { 
+				            "filter": { 
+				              "_id": item,
+				            },              
+				            "update": { "$set": { [genType]: newgen } } 
+					        }         
+						    }    
+							});
+
+							const callback = (err, r) => {
+								if (err) {
+									console.log(err);
+								}else{
+									// console.log(r.matchedCount);
+							  //   console.log(r.modifiedCount);
+								}  
+							}
+
+							await Reservation.bulkWrite(ops, callback);
+							const result = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 1, reservations: result });
+						}else{
+							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 2, reservations });
+						}
+					}
+				}else{
+					return res.status(404).json({ endpoint: 'admin', operation: 'generateSerialNums', success: false, code: 3, error: 'auth error', message: 'not valida admin' });
+				}
+			}catch(err){
+				return res.status(500).json({ endpoint: 'admin', operation: 'generateSerialNums', success: false, code: 4, error: 'selection error', message:'verification problem' });
+			}
+		}else{
+			return res.status(500).json({ endpoint: 'admin', operation: 'generateSerialNums', success: false, code: 5, error: 'auth error', message:'no auth token' });
+		}
+	}
+
+
 
 	process.on('unhandledRejection', function(err) {
 	    console.log(err);

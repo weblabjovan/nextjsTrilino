@@ -478,6 +478,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                   onChange={(val) => this.handleInputChange('sort', val)} 
                   instanceId="sortOptions" 
                   className="logInput" 
+                  isDisabled={true}
                   placeholder={ this.state.dictionary['searchResultsSortPlaceholder'] }/>
               </Col>
 
@@ -533,7 +534,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
                 <Row className="searchViewEnd">
                   <Col xs="12">
-                    <div className="middle">
+                    <div className="middle" hidden={true}>
                       <Button color="success">{ this.state.dictionary['searchResultsLoadButton'] }</Button>
                     </div>
                   </Col>

@@ -46,6 +46,8 @@ const reservationSchema = new Schema({
 	forRating: Boolean,
 	rateLimitDate: Date,
 	rating: Object,
+	preInvoiceNumber: String,
+	invoiceNumber: String,
 }, {timestamps: true});
 
 reservationSchema.index({'date': 1});
