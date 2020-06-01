@@ -1,5 +1,5 @@
 import {
-  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerFieldActionTypes, adminFinancialSearchActionTypes
+  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerFieldActionTypes, adminFinancialSearchActionTypes, adminGenerateSerialsActionTypes
 } from '../actions/admin-actions';
 
 import { decoratePartners, changePartnerListItem } from '../lib/helpers/specificAdminFunctions';
@@ -44,6 +44,10 @@ interface initialState {
   adminFinSearchStart: boolean;
   adminFinSearchError: object | boolean;
   adminFinSearchSuccess: null | number;
+
+  adminGenerateSerialStart: boolean;
+  adminGenerateSerialError: object | boolean;
+  adminGenerateSerialSuccess: null | number;
 
   partners: Array<object>;
   partnerPhoto: null | object;
@@ -91,6 +95,10 @@ const initialState: initialState  = {
   adminFinSearchStart: false,
   adminFinSearchError: false,
   adminFinSearchSuccess: null,
+
+  adminGenerateSerialStart: false,
+  adminGenerateSerialError: false,
+  adminGenerateSerialSuccess: null,
 
   partners: [],
   partnerPhoto: null,
@@ -328,6 +336,29 @@ const actionsMap = {
       adminFinSearchSuccess: action.payload.code,
       finSearchResult: action.payload.reservations,
       adminFinSearchStart: false,
+    };
+  },
+
+  [adminGenerateSerialsActionTypes.START]: (state) => {
+    return {
+      ...state,
+      adminGenerateSerialStart: true,
+      adminGenerateSerialSuccess: null,
+    };
+  },
+  [adminGenerateSerialsActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      adminGenerateSerialStart: false,
+      adminGenerateSerialError: action.payload.response.body,
+    };
+  },
+  [adminGenerateSerialsActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      adminGenerateSerialSuccess: action.payload.code,
+      finSearchResult: action.payload.reservations,
+      adminGenerateSerialStart: false,
     };
   },
   

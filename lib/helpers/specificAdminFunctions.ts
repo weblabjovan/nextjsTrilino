@@ -123,6 +123,7 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	if (host === 'dev' || host === 'test') {
 		const allCookies = nextCookie(context);
     	const devAuth = allCookies['trilino-dev-auth'];
+    	console.log(devAuth);
 	    if (devAuth) {
 	      try{
 	        const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/`;
@@ -132,7 +133,7 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	            Authorization: `${devAuth}`
 	          }
 	        });
-
+	        console.log(response['status']);
 	        if (response['status'] === 200) {
 	          return true;
 	        }else{
