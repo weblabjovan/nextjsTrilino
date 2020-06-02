@@ -155,23 +155,27 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
   }
 
   openInfo(index: number){
-    const obj = this.props.finSearchResult[index];
-    const result = {
-      name: { placeholder: 'Partner naziv:', value: obj['partnerObj'][0]['name']},
-      address: { placeholder: 'Partner adresa:', value: obj['partnerObj'][0]['general']['address']},
-      city: {placeholder: 'Partner grad:', value: getGeneralOptionLabelByValue(genOptions['cities'], obj['partnerObj'][0]['city']) }, 
-      pib: { placeholder: 'Partner PIB:', value: obj['partnerObj'][0]['taxNum']},
-      account: { placeholder: 'Račun:', value: obj['partnerObj'][0]['bank']['account']},
-      bank: { placeholder: 'Banka:', value: obj['partnerObj'][0]['bank']['name']},
-      invDate: { placeholder: 'Datum realizacije:', value: renderDate(obj['date']) },
-      pnvDate: { placeholder: 'Datum prometa:', value: renderDate(obj['createdAt']) },
-      invNum: { placeholder: 'Broj fakture:', value: obj['invoiceNumber'] },
-      pnvNum: { placeholder: 'Broj profakture:', value: obj['preInvoiceNumber']  },
-      reservation: { placeholder: 'Broj rezervacije:', value: obj['_id']  },
-      price: { placeholder: 'Iznos za uplatu:', value: currencyFormat(obj['deposit'] - (obj['termPrice'] * 0.1) - (obj['deposit'] * 0.025))},
-    }
+    if (this.state.partner['value'] === 0 && this.props.finSearchResult.length) {
+      const obj = this.props.finSearchResult[index];
+      const result = {
+        user: { placeholder: 'Korisnik:', value: obj['userName'] },
+        name: { placeholder: 'Partner naziv:', value: obj['partnerObj'][0]['name']},
+        address: { placeholder: 'Partner adresa:', value: obj['partnerObj'][0]['general']['address']},
+        city: {placeholder: 'Partner grad:', value: getGeneralOptionLabelByValue(genOptions['cities'], obj['partnerObj'][0]['city']) }, 
+        pib: { placeholder: 'Partner PIB:', value: obj['partnerObj'][0]['taxNum']},
+        account: { placeholder: 'Račun:', value: obj['partnerObj'][0]['bank']['account']},
+        bank: { placeholder: 'Banka:', value: obj['partnerObj'][0]['bank']['name']},
+        invDate: { placeholder: 'Datum realizacije:', value: renderDate(obj['date']) },
+        pnvDate: { placeholder: 'Datum prometa:', value: renderDate(obj['createdAt']) },
+        invNum: { placeholder: 'Broj fakture:', value: obj['invoiceNumber'] },
+        pnvNum: { placeholder: 'Broj profakture:', value: obj['preInvoiceNumber']  },
+        reservation: { placeholder: 'Broj rezervacije:', value: obj['_id']  },
+        price: { placeholder: 'Iznos za uplatu:', value: currencyFormat(obj['deposit'] - (obj['termPrice'] * 0.1) - (obj['deposit'] * 0.025))},
+      }
 
-    this.setState({ infoModal: true, infoData: result })
+      this.setState({ infoModal: true, infoData: result })
+    }
+    
   }
 
   searchFin(){

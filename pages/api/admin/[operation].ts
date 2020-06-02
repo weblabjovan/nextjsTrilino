@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import Reservation from '../../../server/models/reservation';
 import Partner from '../../../server/models/partner';
 import connectToDb  from '../../../server/helpers/db';
-import { generateString, encodeId, decodeId, setToken, verifyToken, getBasicForSerialGenerator }  from '../../../server/helpers/general';
+import { generateString, encodeId, decodeId, setToken, verifyToken, getBasicForSerialGenerator, setUserNameOnAdminFinObject }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
 import { isPartnerPhotoSaveDataValid, dataHasValidProperty, isPartnerMapSaveDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
@@ -351,15 +351,32 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			        ],
 			        as: "partnerObj"
 						};
+
+						const lookup1 = { 
+							from: 'users', 
+							let: { user: '$user'}, //
+							pipeline: [
+								{ $addFields: { "user": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$user", "$user" ] }
+			             }
+			          }
+			        ],
+			        as: "userObj"
+						};
+
 						const dateLook = type === 1 ? 'toDate' : 'createdAt';
 
 						if (partner) {
-							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partner, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partner, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$lookup: lookup1}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
 						}else{
-							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+							reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$lookup: lookup1}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
 						}
+						
+						const arr = setUserNameOnAdminFinObject(reservations);
 
-						return res.status(200).json({ endpoint: 'admin', operation: 'searchFin', success: true, code: 1, reservations });
+						return res.status(200).json({ endpoint: 'admin', operation: 'searchFin', success: true, code: 1, reservations: arr });
 					}
 				}else{
 					return res.status(404).json({ endpoint: 'admin', operation: 'searchFin', success: false, code: 2, error: 'auth error', message: 'not valida admin' });
@@ -403,11 +420,25 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 			        as: "partnerObj"
 						};
 
+						const lookup1 = { 
+							from: 'users', 
+							let: { user: '$user'}, //
+							pipeline: [
+								{ $addFields: { "user": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$user", "$user" ] }
+			             }
+			          }
+			        ],
+			        as: "userObj"
+						};
+
 						const dateLook = type === 1 ? 'toDate' : 'createdAt';
 						const genType = type === 1 ? 'invoiceNumber' : 'preInvoiceNumber';
 						const prefix = type === 1 ? 'INV' : 'PNV';
 
-						const reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+						const reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$lookup: lookup1}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
 						const genInfo = getBasicForSerialGenerator(reservations, genType);
 
 						if (genInfo['ids'].length) {
@@ -434,10 +465,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 							}
 
 							await Reservation.bulkWrite(ops, callback);
-							const result = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
-							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 1, reservations: result });
+							const result = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, [dateLook]: { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, {$lookup: lookup1}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, { $sort : { [dateLook] : 1 } }]);
+							const arr1 = setUserNameOnAdminFinObject(result);
+
+							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 1, reservations: arr1 });
 						}else{
-							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 2, reservations });
+							const arr = setUserNameOnAdminFinObject(reservations);
+							return res.status(200).json({ endpoint: 'admin', operation: 'generateSerialNums', success: true, code: 2, reservations: arr });
 						}
 					}
 				}else{

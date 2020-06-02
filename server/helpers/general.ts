@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
+import MyCriptor from './/MyCriptor';
 import { languageList } from '../../lib/language/locale';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
@@ -1019,4 +1020,16 @@ export const getBasicForSerialGenerator = (reservations: Array<object>, type: st
   }
 
   return { ids, num };
+}
+
+export const setUserNameOnAdminFinObject = (reservations: Array<object>): Array<object> => {
+  const myCriptor = new MyCriptor();
+
+  for (var i = 0; i < reservations.length; i++) {
+    if (reservations[i]['userObj']) {
+      reservations[i]['userName'] = `${myCriptor.decrypt(reservations[i]['userObj'][0]['firstName'], true)} ${myCriptor.decrypt(reservations[i]['userObj'][0]['lastName'], true)}`;
+    }
+  }
+
+  return reservations;
 }
