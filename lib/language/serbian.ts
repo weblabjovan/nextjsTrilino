@@ -575,6 +575,8 @@ const serbian: LanguageInterface = {
 	searchResultsItemKids: 'dece i',
 	searchResultsItemAdults: 'odraslih',
 	searchResultsLoadButton: 'Učitajte još rezultata',
+	searchResultsRated: 'ocenjeno',
+	searchResultsTimes: 'puta',
 
 
 
@@ -947,7 +949,7 @@ const serbian: LanguageInterface = {
 	userProfileListCateringModalText1: 'U okviru ove rezervacije postoji narudžbina za Trilino ketering paket:',
 	userProfileListCateringModalText2: 'sa ukupnom cenom od',
 	userProfileListCateringModalText3: 'Narudžbinu je potrebno platiti najkasnije do',
-	userProfileListCateringModalText4: 'nakon ovog datum ova narudžbina se automatski otkazuje. Ukoliko sada želite da platite ovu narudžbinu molimo vas saglasite se sa uslovima kupovine i nastavite na plaćanje.',
+	userProfileListCateringModalText4: 'nakon ovog datum ova narudžbina se automatski otkazuje. Ukoliko sada želite da platite ovu narudžbinu molimo vas saglasite se sa uslovima kupovine i nastavite na plaćanje. Napomena: ketering hrana može sadržati alergene, ukoliko je neko od gostiju alegričan na neke sastojke molimo vas da nam to javite na admin@trilino.com kako bismo iskoristili zamenske sastojke. U vašem email-u obavezno istaknite vaš broj narudžbine.',
 	userProfileBillTitle: 'Detaljne informacije',
 	userProfileBillPhone: 'Kontakt telefon:',
 	userProfileBillTotalPrice: 'Ukupna cena:',

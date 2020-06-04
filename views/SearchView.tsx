@@ -516,7 +516,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                                 ?
                                 <div>
                                   <h6> <span className="icon star"></span>{(sumOfRatingMarks(item['rating']) / 8 / item['numberOfRating']).toFixed(1)}</h6>
-                                  <p className="rates">{`${item['numberOfRating']} ocena`}</p>
+                                  <p className="rates">{`${this.state.dictionary['searchResultsRated']} ${item['numberOfRating']} ${this.state.dictionary['searchResultsTimes']}`}</p>
                                 </div>
                                 
                                 :

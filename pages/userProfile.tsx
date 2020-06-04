@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
+import { isDevEnvLogged, isDevEnvLoggedOutsideCall } from '../lib/helpers/specificAdminFunctions';
 import { validateRating } from '../lib/helpers/specificReservationFunctions';
-import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
+import { isUserLogged, getUserToken, isUserLoggedOutsideCall } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import UserProfileView from '../views/UserProfileView';
 
@@ -51,18 +51,28 @@ UserProfile.getInitialProps = async (ctx: any) => {
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let token = '';
   let ratingShow = null;
+  let devLog = null;
+  let userLog = null;
 
   try{
-    const devLog = await isDevEnvLogged(ctx);
 
-    if (!devLog) {
+    if (link['queryObject']['devAuth']) {
+      devLog = await isDevEnvLoggedOutsideCall(ctx);
+    }else{
+      devLog = await isDevEnvLogged(ctx);
+    }
+
+   if (!devLog) {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
-    const userLog = await isUserLogged(ctx);
 
-    console.log(userLog);
+    if (link['queryObject']['userAuth']) {
+      userLog = await isUserLoggedOutsideCall(ctx);
+    }else{
+      userLog = await isUserLogged(ctx);
+    }
 
     if (!userLog) {
       if (link['queryObject']['page'] === 'rating' && link['queryObject']['item']) {
