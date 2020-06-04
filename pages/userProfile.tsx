@@ -62,6 +62,8 @@ UserProfile.getInitialProps = async (ctx: any) => {
 
     const userLog = await isUserLogged(ctx);
 
+    console.log(userLog);
+
     if (!userLog) {
       if (link['queryObject']['page'] === 'rating' && link['queryObject']['item']) {
         ctx.res.writeHead(302, {Location: `/login?page=user&stage=login&language=${link['queryObject']['language']}&item=${link['queryObject']['item']}`});
@@ -74,7 +76,7 @@ UserProfile.getInitialProps = async (ctx: any) => {
 
     token = getUserToken(ctx);
 
-    if (link['queryObject']['page'] === 'rating') {
+    if (link['queryObject']['page'] === 'rating' && userLog) {
       const valid = await validateRating(ctx);
       const ratingValid = await valid.json();
 
