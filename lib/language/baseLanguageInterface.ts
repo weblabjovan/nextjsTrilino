@@ -572,6 +572,9 @@ export default interface LanguageInterface {
 	searchResultsItemKids: string;
 	searchResultsItemAdults: string;
 	searchResultsLoadButton: string;
+	searchResultsRated: string;
+	searchResultsTimes: string;
+
 
 
 	locationGalleryText: string;

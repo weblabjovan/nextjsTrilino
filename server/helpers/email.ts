@@ -2,7 +2,7 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 import Keys from '../keys';
 import MyCriptor from './MyCriptor';
 import { IemailGeneral } from '../../lib/constants/interfaces';
-import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString }  from './general';
+import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString }  from './general';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import DateHandler from '../../lib/classes/DateHandler';
@@ -162,7 +162,9 @@ export const sendRatingInvitationUser =  async (reservation: object, host: strin
 	const myCriptor = new MyCriptor();
 	const user = reservation['userObj'][0];
 	const dictionary = getLanguage(user['userlanguage']);
-	const link = `${host}/userProfile?page=rating&item=${reservation['_id']}&language=${user['userlanguage']}`;
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?page=rating&item=${reservation['_id']}&devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?page=rating&item=${reservation['_id']}&userAuth=${userAuth}&language=${user['userlanguage']}`;
 
 	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
 	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
@@ -179,7 +181,9 @@ export const sendUserReminder =  async (reservation: object, host: string): Prom
 	const user = reservation['userObj'][0];
 	const partner = reservation['partnerObj'][0];
 	const dictionary = getLanguage(user['userlanguage']);
-	const link = `${host}/userProfile?language=${user['userlanguage']}`;
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?language=${user['userlanguage']}&userAuth=${userAuth}`;
 	const dateBase = reservation['date'].split('T');
 	const restPrice = reservation['price'] - reservation['deposit'] - reservation['trilinoPrice'];
 
@@ -209,7 +213,9 @@ export const sendCateringReminder =  async (reservation: object, host: string): 
 	const myCriptor = new MyCriptor();
 	const user = reservation['userObj'][0];
 	const dictionary = getLanguage(user['userlanguage']);
-	const link = `${host}/userProfile?language=${user['userlanguage']}`;
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?language=${user['userlanguage']}&userAuth=${userAuth}`;
 
 	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
 	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];

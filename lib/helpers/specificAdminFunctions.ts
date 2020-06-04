@@ -123,8 +123,6 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	if (host === 'dev' || host === 'test') {
 		const allCookies = nextCookie(context);
     	const devAuth = allCookies['trilino-dev-auth'];
-    	console.log(devAuth);
-    	console.log(allCookies);
 	    if (devAuth) {
 	      try{
 	        const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/`;
@@ -134,7 +132,7 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	            Authorization: `${devAuth}`
 	          }
 	        });
-	        console.log(response['status']);
+	        // console.log(response['status']);
 	        if (response['status'] === 200) {
 	          return true;
 	        }else{
@@ -147,6 +145,29 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 	    }else{
 	    	return false;
 	    }
+	}else{
+		return true;
+	}
+}
+
+export const isDevEnvLoggedOutsideCall = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+	const host = getServerHost(link['host']);
+	
+	if (host === 'dev' || host === 'test') {
+    try{
+      const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/?devAuth=${link["queryObject"]["devAuth"]}`;
+      const response = await fetch(apiUrl);
+      // console.log(response['status']);
+      if (response['status'] === 200) {
+        return true;
+      }else{
+      	return false;
+      }
+
+    }catch(err){
+      return false;
+    }
 	}else{
 		return true;
 	}

@@ -216,7 +216,13 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 	if (req.query.operation === 'devAuth') {
-		const token = req.headers.authorization;
+		let token = null;
+
+		if (req['query']['devAuth']) {
+			token = req['query']['devAuth'].toString();
+		}else{
+			token = req.headers.authorization;
+		}
 		
 		if (!isEmpty(token)) {
 			try{

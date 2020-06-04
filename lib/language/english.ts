@@ -578,6 +578,8 @@ const english: LanguageInterface = {
 	searchResultsItemKids: 'kids and',
 	searchResultsItemAdults: 'adults',
 	searchResultsLoadButton: 'Load more results',
+	searchResultsRated: 'rated',
+	searchResultsTimes: 'times',
 
 
 	locationGalleryText: 'pictures',
@@ -947,7 +949,7 @@ const english: LanguageInterface = {
 	userProfileListCateringModalText1: 'Within this reservation there is an order for Trilino Catering deal: ',
 	userProfileListCateringModalText2: 'with the total price of ',
 	userProfileListCateringModalText3: '.This order has to be paid until',
-	userProfileListCateringModalText4: 'after this date the order will be canceled automaticaly. If you want to pay the order now, please confirm that you understand buying terms and that you are ready to pay.',
+	userProfileListCateringModalText4: 'after this date the order will be canceled automaticaly. If you want to pay the order now, please confirm that you understand buying terms and that you are ready to pay. Note: catering food may contain allergens, if any of the guests are allergic to some ingredients, please let us know at admin@trilino.com so that we can use substitute ingredients. Be sure to include your order number in your email.',
 	userProfileBillTitle: 'Detailed information',
 	userProfileBillPhone: 'Contact phone:',
 	userProfileBillTotalPrice: 'Total price:',
