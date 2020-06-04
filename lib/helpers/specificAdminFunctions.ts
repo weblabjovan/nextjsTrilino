@@ -124,6 +124,8 @@ export const isDevEnvLogged = async (context: any): Promise<boolean> => {
 		const allCookies = nextCookie(context);
     	const devAuth = allCookies['trilino-dev-auth'];
     	console.log(devAuth);
+    	console.log(allCookies);
+    	console.log(context);
 	    if (devAuth) {
 	      try{
 	        const apiUrl = `${link["protocol"]}${link["host"]}/api/admin/devAuth/`;
