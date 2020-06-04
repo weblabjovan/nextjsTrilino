@@ -2,7 +2,7 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 import Keys from '../keys';
 import MyCriptor from './MyCriptor';
 import { IemailGeneral } from '../../lib/constants/interfaces';
-import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString }  from './general';
+import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString, getServerHost }  from './general';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import DateHandler from '../../lib/classes/DateHandler';
