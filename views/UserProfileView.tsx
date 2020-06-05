@@ -229,7 +229,6 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     
 
     if (!this.props.ratingShow) {
-      console.log(this.props.token);
       this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
     }else{
       this.setState({reservationBillObject: this.props.ratingShow, loader: false });
