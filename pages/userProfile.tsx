@@ -57,10 +57,13 @@ UserProfile.getInitialProps = async (ctx: any) => {
   try{
 
     if (link['queryObject']['devAuth']) {
+      console.log('usao')
       devLog = await isDevEnvLoggedOutsideCall(ctx);
     }else{
       devLog = await isDevEnvLogged(ctx);
     }
+
+    console.log(devLog);
 
    if (!devLog) {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
