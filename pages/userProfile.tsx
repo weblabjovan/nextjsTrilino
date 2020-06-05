@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, setCookie } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isDevEnvLoggedOutsideCall } from '../lib/helpers/specificAdminFunctions';
 import { validateRating } from '../lib/helpers/specificReservationFunctions';
 import { isUserLogged, getUserToken, isUserLoggedOutsideCall } from '../lib/helpers/specificUserFunctions';
@@ -62,14 +62,18 @@ UserProfile.getInitialProps = async (ctx: any) => {
       devLog = await isDevEnvLogged(ctx);
     }
 
-   if (!devLog) {
+    if (!devLog) {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
+    if (devLog && link['queryObject']['devAuth']) {
+      setCookie(link['queryObject']['devAuth'],'trilino-dev-auth', 5);
+    }
 
     if (link['queryObject']['userAuth']) {
       userLog = await isUserLoggedOutsideCall(ctx);
+
     }else{
       userLog = await isUserLogged(ctx);
     }
@@ -82,6 +86,10 @@ UserProfile.getInitialProps = async (ctx: any) => {
         ctx.res.writeHead(302, {Location: `/login?page=user&stage=login&language=${link['queryObject']['language']}`});
         ctx.res.end();
       }
+    }
+
+    if (userLog && link['queryObject']['userAuth']) {
+      setCookie(link['queryObject']['userAuth'],'trilino-user-token', 5);
     }
 
     token = getUserToken(ctx);
