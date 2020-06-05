@@ -226,6 +226,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 	async componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
     if (!this.props.ratingShow) {
+      console.log(this.props.token);
       const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
       this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
     }else{
