@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import products from '../constants/products';
 import LinkClass from '../../lib/classes/Link';
 import DateHandler from '../../lib/classes/DateHandler';
+import MyCriptor from './/MyCriptor';
 import { languageList } from '../../lib/language/locale';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
@@ -679,11 +680,18 @@ const isReservationForRate = (reservation: object): boolean => {
 }
 
 export const getCancelPolicy = (reservation: object): object => {
+  const dateHandler = new DateHandler(reservation['date']);
+  dateHandler.setDateForServer('code');
+  
+  if (dateHandler.getDateDifferenceFromNow('day') < 1) {
+    return {cancel: false, free: false, days: 0};
+  }
+
   if (reservation['confirmed'] && !reservation['canceled']) {
     if (Array.isArray(reservation['partnerObj'])) {
       if (reservation['partnerObj'].length) {
         if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) > 0) {
-          const dateHandler = new DateHandler();
+          dateHandler.resetDate()
           const dateDiff = dateHandler.getDateDifference(reservation['fromDate'], 'day');
           if (parseInt(reservation['partnerObj'][0]['general']['cancelation']) + dateDiff < 1 ) {
             return {cancel: true, free: true, days: reservation['partnerObj'][0]['general']['cancelation'] ? parseInt(reservation['partnerObj'][0]['general']['cancelation']) : 0};
@@ -938,4 +946,90 @@ export const getServerHost = (host: string): string => {
   }
 
   return 'local';
+}
+
+export const generalizeRating = (rating: object): object => {
+  const newObj = JSON.parse(JSON.stringify(rating['rating']));
+  const result = {rating: newObj, comment: rating['comment']};
+
+  return result;
+}
+
+export const mergeRating = (newRate: object, oldRate: object, user: string): object => {
+  const result = {};
+  const dateHandler = new DateHandler();
+
+  for (let key in newRate['rating']) {
+    result[key] = parseInt(newRate['rating'][key]) + oldRate[key];
+  }
+
+  if (newRate['comment'].length > 3) {
+    if (oldRate['comment']) {
+      oldRate['comment'].push({text: newRate['comment'], user, date: dateHandler.getDateString()  });
+    }else{
+      result['comment'] = [{text: newRate['comment'], user, date: dateHandler.getDateString()  }];
+    }
+  }
+
+  if (oldRate['comment']) {
+    result['comment'] = oldRate['comment'];
+  }
+  
+  
+
+  return result;
+}
+
+export const setRating = (rating: object, user: string): object => {
+  const newObj = JSON.parse(JSON.stringify(rating['rating']));
+
+  for (let key in newObj) {
+    newObj[key] = parseInt(newObj[key]);
+  }
+
+  if (rating['comment'].length > 3) {
+    const dateHandler = new DateHandler();
+    newObj['comment'] = [{text: rating['comment'], user, date: dateHandler.getDateString() }];
+  }
+
+  return newObj;
+}
+
+export const sumOfRatingMarks = (rating: object): number => {
+  let gen = 0;
+  for (let key in rating) {
+    if (key !== 'comment') {
+      gen = gen + rating[key];
+    }
+  }
+
+  return gen;
+}
+
+export const getBasicForSerialGenerator = (reservations: Array<object>, type: string): object => {
+  const ids = [];
+  let num = 0;
+
+  for (var i = 0; i < reservations.length; i++) {
+    if (!reservations[i][type]) {
+      ids.push(reservations[i]['_id'])
+    }else{
+      const n = reservations[i][type].split('-')[2];
+      num = parseInt(n) > num ? parseInt(n) : num;
+    }
+  }
+
+  return { ids, num };
+}
+
+export const setUserNameOnAdminFinObject = (reservations: Array<object>): Array<object> => {
+  const myCriptor = new MyCriptor();
+
+  for (var i = 0; i < reservations.length; i++) {
+    if (reservations[i]['userObj']) {
+      reservations[i]['userName'] = `${myCriptor.decrypt(reservations[i]['userObj'][0]['firstName'], true)} ${myCriptor.decrypt(reservations[i]['userObj'][0]['lastName'], true)}`;
+    }
+  }
+
+  return reservations;
 }

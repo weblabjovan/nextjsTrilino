@@ -26,12 +26,13 @@ export default class ConfirmationModal extends React.Component <MyProps, MyState
       <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} className="galleryModal">
         <ModalHeader toggle={this.props.toggle}>{this.props.title}</ModalHeader>
         <ModalBody>
-          <div className="photo" style={ {'background': 'url('+this.props.photo+') center / cover no-repeat'}}></div>
+          <div className="photo" style={ {'background': 'url('+this.props.photo+') center / cover no-repeat'}}>
+            <span className="goBack" onClick={ () => this.props.changePhoto('back')}></span>
+            <span className="goNext" onClick={ () => this.props.changePhoto('next')}></span>
+          </div>
         </ModalBody>
         <ModalFooter>
         	<div className="actionHolder">
-        		<span className="goBack" onClick={ () => this.props.changePhoto('back')}></span>
-        		<span className="goNext" onClick={ () => this.props.changePhoto('next')}></span>
         	</div>
         	<span className="numbers">{`${this.props.index + 1} ${this.props.from} ${this.props.max} ${this.props.text}`}</span>
         </ModalFooter>

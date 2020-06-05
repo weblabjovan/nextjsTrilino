@@ -68,6 +68,7 @@ export default interface LanguageInterface {
 	navigationPartnerCalendar: string;
 	navigationPartnerPreview: string;
 	navigationPartnerLogout: string;
+	navigationPartnerFinancial: string;
 	
 	
 	uniCity: string;
@@ -100,6 +101,9 @@ export default interface LanguageInterface {
 	uniErrorHome: string;
 	uniScroll: string;
 
+	currencyPrices: string;
+	currency_rs: string;
+
 	emailPartnerRegisterTitle: string;
 	emailPartnerRegisterText: string;
 	emailPartnerRegisterText1: string;
@@ -115,7 +119,6 @@ export default interface LanguageInterface {
 	emailPartnerForgotPassButton: string;
 	emailUserRegisterTitle: string;
 	emailUserRegisterText: string;
-
 	emailCateringConfirmationTitle: string;
 	emailCateringConfirmationText: string;
 	emailCateringConfirmationSub: string;
@@ -123,6 +126,21 @@ export default interface LanguageInterface {
 	emailCateringConfirmationDeal: string;
 	emailCateringConfirmationPrice: string;
 	emailCateringConfirmationFinish: string;
+	emailUserReminderTitle: string;
+	emailUserReminderText1: string;
+	emailUserReminderText2: string;
+	emailUserReminderText3: string;
+	emailUserReminderText4: string;
+	emailUserReminderWhen: string;
+	emailUserReminderWhere: string;
+	emailUserReminderFocus: string;
+	emailUserReminderButton: string;
+	emailUserReminderPayment: string;
+	emailCateringReminderTitle: string;
+	emailCateringReminderText1: string;
+	emailCateringReminderText2: string;
+	emailCateringReminderText3: string;
+	emailCateringReminderText4: string;
 
 	homeTitle: string;
 	homeImg_1: string;
@@ -517,6 +535,21 @@ export default interface LanguageInterface {
 	partnerProfileReservationModalTitle: string;
 	partnerProfileReservationModalText: string;
 	partnerProfileReservationModalButtonText: string;
+	partnerProfileFinTitle: string;
+	partnerProfileFinDescription: string;
+	partnerProfileFinYearPlaceholder: string;
+	partnerProfileFinMonthPlaceholder: string;
+	partnerProfileFinTableColReservation: string;
+	partnerProfileFinTableColDate: string;
+	partnerProfileFinTableColPrice: string;
+	partnerProfileFinTableColDeposit: string;
+	partnerProfileFinTableColCommission: string;
+	partnerProfileFinTableColBank: string;
+	partnerProfileFinTableColTrilino: string;
+	partnerProfileFinTableColUser: string;
+	partnerProfileFinTableTotal: string;
+	partnerProfileFinTableNone: string;
+
 
 
 	searchFilterBasicCity: string;
@@ -539,6 +572,9 @@ export default interface LanguageInterface {
 	searchResultsItemKids: string;
 	searchResultsItemAdults: string;
 	searchResultsLoadButton: string;
+	searchResultsRated: string;
+	searchResultsTimes: string;
+
 
 
 	locationGalleryText: string;
@@ -571,6 +607,11 @@ export default interface LanguageInterface {
 	locationCancelationNone: string;
 	locationCancelationFirst: string;
 	locationCancelationSecond: string;
+	locationReviewTitle: string;
+	locationReviewNoGradesTitle: string;
+	locationReviewNoGradesText: string;
+	locationCommentTitle: string;
+	locationCommentNoGradesText: string;
 
 
 	reservationInfoTitle: string;
@@ -935,6 +976,41 @@ export default interface LanguageInterface {
 	faqAnswer2: string;
 	faqQuestion3: string;
 	faqAnswer3: string;
+
+	ratingHeadlineTitle: string;
+	ratingHeadlineReference1: string;
+	ratingHeadlineReference2: string;
+	ratingHeadlineReference3: string;
+	ratingHeadlineInstruction: string;
+	ratingHeadlineLink: string;
+	ratingFormOverall: string;
+	ratingFormOverallText: string;
+	ratingFormTrust: string;
+	ratingFormTrustText: string;
+	ratingFormSpace: string;
+	ratingFormSpaceText: string;
+	ratingFormHygiene: string;
+	ratingFormHygieneText: string;
+	ratingFormContent: string;
+	ratingFormContentText: string;
+	ratingFormStaff: string;
+	ratingFormStaffText: string;
+	ratingFormLocation: string;
+	ratingFormLocationText: string;
+	ratingFormValue: string;
+	ratingFormValueText: string;
+	ratingFormComment: string;
+	ratingFormCommentPlaceholder: string;
+	ratingAlert: string;
+	ratingEmailTitle: string;
+	ratingEmailText1: string;
+	ratingEmailText2: string;
+	ratingEmailText3: string;
+	ratingEmailHello: string;
+	ratingEmailButton: string;
+	ratingNoRateTitle: string;
+	ratingNoRateText: string;
+	ratingNoRateLink: string;
 
 
 

@@ -8,8 +8,8 @@ import Catering from '../../../server/models/trilinoCatering';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams }  from '../../../server/helpers/general';
-import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, senEmailCateringConfirmationUser }  from '../../../server/helpers/email';
+import { generateString, encodeId, decodeId, setToken, verifyToken, currencyFormat, extractRoomTerms, getFreeTerms, setReservationDateForBase, sortCateringTypes, prepareReservationsForUserList, setCateringString, setDecorationString, setAddonString, getCancelPolicy, setReservationTimeString, packReservationwithDouble, getConfirmationUserParams, getCateringConfirmationParams, mergeRating, setRating, generalizeRating, sumOfRatingMarks }  from '../../../server/helpers/general';
+import { sendEmail, sendEmailCancelReservationUser, sendEmailCancelReservationPartner, sendEmailReservationConfirmationUser, sendEmailReservationConfirmationPartner, sendEmailCateringConfirmationUser, sendRatingInvitationUser, sendUserReminder, sendCateringReminder }  from '../../../server/helpers/email';
 import { isReservationSaveDataValid,  isReservationStillAvailable, dataHasValidProperty, isReservationConfirmDataValid } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic, getArrayIndexByFieldValue, getArrayObjectByFieldValue, getObjectFieldByFieldValue } from '../../../lib/helpers/generalFunctions';
@@ -312,8 +312,47 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).send({ endpoint: 'reservations', operation: 'get', success: false, code: 3, error: 'db error', message: err  });
 				}
 			}
+
+			if (type === 'financial') {
+				
+			}
 		}
 	}
+
+//////////////////////////////////////   GETFORFINANCIAL   ///////////////////////////////////////////////
+
+if (req.query.operation === 'getForFinancial') {
+	const token = req.headers.authorization;
+	if (!token) {
+		return res.status(401).json({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 4, error: 'auth error', message: 'unauthorized user'  });
+	}else{
+		if (!req.body['year'] || !req.body['month'] || !Number.isInteger(req.body['year']) || !Number.isInteger(req.body['month']) || !req.body['language']) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 5, error: 'basic validation error' });
+		}else{
+			try{
+				const {month, year, language} = req.body;
+				const dictionary = getLanguage(language);
+
+				const decoded = verifyToken(token);
+				const partnerId = encodeId(decoded['sub']);
+
+				await connectToDb(req.headers.host);
+				const partner = await Partner.findById(partnerId, '-password -photos');
+				if (partner) {
+					const dateHandler = new DateHandler();
+					const monthDates = dateHandler.getMonthStopStartDates(month, year);
+					const reservations = await Reservation.find({ 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partnerId, 'toDate': { '$gte': monthDates['start'], '$lt': monthDates['end'] }});
+					return res.status(200).json({ endpoint: 'reservations', operation: 'getForFinancial', success: true, code: 1, reservations });
+				}else{
+					return res.status(404).send({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 2, error: 'auth error', message: 'Partner token not valid'  });
+				}
+
+			}catch(err){
+				return res.status(500).send({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 3, error: 'db error', message: err  });
+			}
+		}
+	}
+}
 
 
 //////////////////////////////////////   GETFORUSER   ///////////////////////////////////////////////
@@ -634,7 +673,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 						if (cateringCheck && reservation && partner && userObj) {
 							const catering = await Catering.findOneAndUpdate({"_id": id}, {"$set": { transactionId: transId, transactionAuthCode: transAuth, transactionProcReturnCode: transProc, transactionMdStatus: transMd, transactionDate: transDate, transactionResult: 'Accepted', status: 'paid' }}, { new: true});
 							const cateringParams = getCateringConfirmationParams({language, catering, reservation, partner })
-							await senEmailCateringConfirmationUser(userObj, cateringParams);
+							await sendEmailCateringConfirmationUser(userObj, cateringParams);
 							return res.status(200).json({ endpoint: 'reservations', operation: 'confirmCatering', success: true, code: 1, catering: cateringParams });
 						}else{
 							return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 2, error: 'selection error', message: 'invalid data sent, API can not confirm catering' });
@@ -646,8 +685,293 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 4, error: 'auth error', message: 'no token sent' });
 				}
 			}catch(err){
-				return res.status(404).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 5, error: 'db error', message: err });
+				return res.status(500).json({ endpoint: 'reservations', operation: 'confirmCatering', success: false, code: 5, error: 'db error', message: err });
 			}
+		}
+	}
+
+
+
+	//////////////////////////////////////   SET RATING  ///////////////////////////////////////////////
+
+	if (req.query.operation === 'startRating') {
+		// console.log(req.headers);
+		try{
+			await connectToDb(req.headers.host);
+			const dateHandler = new DateHandler();
+			const yesterday = dateHandler.getDateInThePast(1, 'code', true);
+			const rateLimitDate = dateHandler.getDateInTheFuture(10, 'date', false);
+			const base = await Reservation.updateMany({ "date": yesterday, "type": 'user', "active": true, "confirmed": true, "doubleNumber": 1, }, { rateLimitDate, forRating: true });
+			const lookup = { 
+				from: 'users', 
+				let: { user: '$user'}, //
+				pipeline: [
+					{ $addFields: { "user": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$user", "$user" ] }
+             }
+          }
+        ],
+        as: "userObj"
+			};
+			const reservations = await Reservation.aggregate([{ $match: {"date": yesterday, "type": 'user', "active": true, "confirmed": true, "doubleNumber": 1, "forRating": true} }, {$lookup: lookup}]);
+
+			if (reservations.length) {
+				for (var i = 0; i < reservations.length; ++i) {
+					await sendRatingInvitationUser(reservations[i], req.headers.host);
+				}
+			}
+			return res.status(200).json({ endpoint: 'reservations', operation: 'startRating', success: true, code: 1 });
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'startRating', success: false, code: 5, error: 'db error', message: err });
+		}
+	}
+
+
+	//////////////////////////////////////   VALIDATE RATING LINK  ///////////////////////////////////////////////
+
+	if (req.query.operation === 'ratingValidation') {
+		if (!req.query['reservation'] || !req.query['language']) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'ratingValidation', success: false, code: 7, error: 'basic validation error' });
+		}else{
+			const token = req.headers.authorization;
+
+			if (!isEmpty(token)) {
+				try{
+					const decoded = verifyToken(token);
+					const identifierId = encodeId(decoded['sub']);
+					await connectToDb(req.headers.host);
+					const lookup = { 
+						from: 'partners', 
+						let: { partner: '$partner'}, //
+						pipeline: [
+							{ $addFields: { "partner": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$partner", "$partner" ] }
+		             }
+		          }
+		        ],
+		        as: "partnerObj"
+					};
+
+					const ObjectId = mongoose.Types.ObjectId;
+					const reser = await Reservation.aggregate([{ $match: {"_id": ObjectId(req.query['reservation']) } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}]);
+					const reservation = reser[0];
+					if (reservation) {
+						if (identifierId === reservation['user']) {
+							if (reservation['rating'] === undefined && reservation['forRating']) {
+								return res.status(200).json({ endpoint: 'reservations', operation: 'ratingValidation', success: true, code: 1, reservation });
+							}else{
+								return res.status(200).json({ endpoint: 'reservations', operation: 'ratingValidation', success: true, code: 2, reservation });
+							}
+						}else{
+							return res.status(404).json({ endpoint: 'reservations', operation: 'ratingValidation', success: false, code: 3, error: 'auth error' });
+						}
+					}else{
+						return res.status(404).json({ endpoint: 'reservations', operation: 'ratingValidation', success: false, code: 4, error: 'invalid reservation id' });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'reservations', operation: 'ratingValidation', success: false, code: 5, error: 'db error', message: err });
+				}
+				
+			}else{
+				return res.status(404).json({ endpoint: 'reservations', operation: 'ratingValidation', success: false, code: 6, error: 'auth error' });
+			}
+		}
+	}
+
+
+	/////////////////////////////////////////   RATE  ///////////////////////////////////////////////
+
+	if (req.query.operation === 'rate') {
+		if (!req.body['reservation'] || !req.body['rating'] || !req.body['language']) {
+			return res.status(404).json({ endpoint: 'reservations', operation: 'rate', success: false, code: 5, error: 'basic validation error' });
+		}else{
+			const token = req.headers.authorization;
+			const { rating, reservation, language } = req.body;
+			if (!isEmpty(token)) {
+				try{
+					const decoded = verifyToken(token);
+					const identifierId = encodeId(decoded['sub']);
+					await connectToDb(req.headers.host);
+					const lookup = { 
+						from: 'partners', 
+						let: { partner: '$partner'}, //
+						pipeline: [
+							{ $addFields: { "partner": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$partner", "$partner" ] }
+		             }
+		          }
+		        ],
+		        as: "partnerObj"
+					};
+
+					const lookupUser = { 
+						from: 'users', 
+						let: { user: '$user'}, //
+						pipeline: [
+							{ $addFields: { "user": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$user", "$user" ] }
+		             }
+		          }
+		        ],
+		        as: "userObj"
+					};
+					const ObjectId = mongoose.Types.ObjectId;
+					const reser = await Reservation.aggregate([{ $match: {"_id": ObjectId(reservation) } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0,}}, {$lookup: lookupUser}]);
+
+					const reservationObj = reser[0];
+					if (reservationObj['user'] === identifierId) {
+						const myCriptor = new MyCriptor();
+						const ratingObj = generalizeRating(rating);
+						await Reservation.updateOne({"_id": reservation}, {"forRating": false, rating: ratingObj });
+						const numberOfRating = reservationObj['partnerObj'][0]['numberOfRating'] ? parseInt(reservationObj['partnerObj'][0]['numberOfRating']) + 1 : 1;
+						const partnerRating = reservationObj['partnerObj'][0]['rating'] ? mergeRating(ratingObj, reservationObj['partnerObj'][0]['rating'], myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true)) : setRating(ratingObj, myCriptor.decrypt(reservationObj['userObj'][0]['firstName'], true));
+						const ratingCalculation = numberOfRating * sumOfRatingMarks(partnerRating) / 100;
+
+						await Partner.updateOne({"_id": reservationObj['partner']}, {numberOfRating, "rating": partnerRating, ratingCalculation });
+
+						return res.status(200).json({ endpoint: 'reservations', operation: 'rate', success: true, code: 1 });
+					}else{
+						return res.status(404).json({ endpoint: 'reservations', operation: 'rate', success: false, code: 2, error: 'auth error' });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'reservations', operation: 'rate', success: false, code: 3, error: 'db error', message: err });
+				}
+			}else{
+				return res.status(404).json({ endpoint: 'reservations', operation: 'rate', success: false, code: 4, error: 'auth error' });
+			}
+		}
+	}
+
+
+	////////////////////////////////////////////   SEND REMINDER  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'sendReminder') {
+		try{
+			await connectToDb(req.headers.host);
+			const dateHandler = new DateHandler();
+			const tmr = dateHandler.getDateInTheFuture(1, 'date', true);
+			const tomorrow = tmr.toISOString().substring(0,19);
+
+			const lookup = { 
+				from: 'partners', 
+				let: { partner: '$partner'}, //
+				pipeline: [
+					{ $addFields: { "partner": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$partner", "$partner" ] }
+             }
+          }
+        ],
+        as: "partnerObj"
+			};
+
+			const lookupUser = { 
+				from: 'users', 
+				let: { user: '$user'}, //
+				pipeline: [
+					{ $addFields: { "user": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$user", "$user" ] }
+             }
+          }
+        ],
+        as: "userObj"
+			};
+			const ObjectId = mongoose.Types.ObjectId;
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "doubleNumber": 1, "date": tomorrow } }, {$lookup: lookup}, {$project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 }}, {$lookup: lookupUser}]);
+
+			if (reservations.length) {
+				for (var i = 0; i < reservations.length; ++i) {
+					await sendUserReminder(reservations[i], req.headers.host);
+				}
+			}
+			return res.status(200).json({ endpoint: 'reservations', operation: 'sendReminder', success: true, code: 1 });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'sendReminder', success: false, code: 3, error: 'db error', message: err });
+		}
+	}
+
+	////////////////////////////////////////////   SEND CATERING REMINDER  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'sendCateringReminder') {
+		try{
+			await connectToDb(req.headers.host);
+			const dateHandler = new DateHandler();
+			const trlDate = dateHandler.getDateInTheFuture(8, 'date', true);
+
+
+			const lookupCatering = { 
+				from: 'caterings', 
+				let: { reservationId: '$_id'}, //
+				pipeline: [
+					{ $addFields: { "reservationId": { "$toObjectId": "$reservation" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$reservationId", "$reservationId" ] }
+             }
+          }
+        ],
+        as: "cateringObj"
+			};
+
+			const lookupUser = { 
+				from: 'users', 
+				let: { user: '$user'}, //
+				pipeline: [
+					{ $addFields: { "user": { "$toString": "$_id" }}},
+          { $match:
+             { 
+             		$expr: { $eq: [ "$$user", "$user" ] }
+             }
+          }
+        ],
+        as: "userObj"
+			};
+			const ObjectId = mongoose.Types.ObjectId;
+			const reservations = await Reservation.aggregate([{ $match: {"active": true, "confirmed": true, "type": "user", "trilino": true, "date": trlDate.toISOString().substring(0,19), "trilinoPrice": {"$ne": 0} } }, {$lookup: lookupCatering}, {$project: {'transactionCard': 0}}, {$lookup: lookupUser}]);
+
+			if (reservations.length) {
+				for (var i = 0; i < reservations.length; ++i) {
+					if (reservations[i]['cateringObj'].length) {
+						if (reservations[i]['cateringObj'][0]['status'] !== 'paid') {
+							await sendCateringReminder(reservations[i], req.headers.host);
+						}
+					}
+				}
+			}
+			return res.status(200).json({ endpoint: 'reservations', operation: 'sendCateringReminder', success: true, code: 1 });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'sendCateringReminder', success: false, code: 3, error: 'db error', message: err });
+		}
+	}
+
+
+	////////////////////////////////////////////   DISABLE UNFINISHED  /////////////////////////////////////////////////
+
+	if (req.query.operation === 'disableUnfinished') {
+		try{
+			await connectToDb(req.headers.host);
+			const now = new Date();
+			const halfHourBack = new Date(now.getTime() - 30*60000);
+
+			const unfinished = await Reservation.updateMany({"active": true, "type": "user", "transactionDate": { "$exists": false}, "createdAt": { "$lte": halfHourBack} }, { active: false, confirmed: false });
+
+			return res.status(200).json({ endpoint: 'reservations', operation: 'disableUnfinished', success: true, code: 1, unfinished });
+
+		}catch(err){
+			return res.status(500).json({ endpoint: 'reservations', operation: 'disableUnfinished', success: false, code: 3, error: 'db error', message: err });
 		}
 	}
 

@@ -146,6 +146,7 @@
 		.smallPhoto{
 			height: 220px;
 			cursor: pointer;
+			margin-bottom: 5px;
 		}
 
 		.fadedPrev{
@@ -177,6 +178,10 @@
 		
 		.photoBox{
     	margin-bottom: 15px;
+
+    	.custom-control-label{
+    		font-size: 14px;
+    	}
     }
 	}
 
@@ -665,11 +670,13 @@
 			cursor: pointer;
 		}
 
-		.maps{
+		.section{
+			margin-bottom: 20px;
+
 			h4{
-				font-size: 20px;
+				font-size: 18px;
 				font-weight: 600;
-				margin-bottom: 10px;
+				margin-bottom: 5px;
 			}
 
 			label{
@@ -678,8 +685,103 @@
 			}
 
 			button{
-				margin-top: 10px;
+				margin-top: 15px;
+		    padding: 8px 15px;
+		    font-size: 14px;
+		    font-weight: 600;
+		    vertical-align: text-top;
+		    box-shadow: 4px 4px 6px 0px #3d3d3d;
+
+		    &:hover{
+		    	box-shadow: 6px 6px 8px 0px #3d3d3d;
+		    }
 			}
+		}
+
+		.bank{
+			.logInput{
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.adminScreen.financial{
+	h2{
+		margin-bottom: 30px;
+	}
+
+	.findOptions{
+		margin-top: 30px;
+
+		.buttonAdd{
+			text-align: center;
+			background-color: $actionCol;
+			text-transform: uppercase;
+			color: #fff;
+			font-weight: 600;
+			padding: 5px 15px;
+			border: solid 1px $actionCol;
+			border-radius: 20px;
+			margin-top: 20px;
+			margin-bottom: 25px;
+			-webkit-box-shadow: 2px 2px 6px 0px rgba(67,84,135,1);
+			-moz-box-shadow: 2px 2px 6px 0px rgba(67,84,135,1);
+			box-shadow: 2px 2px 6px 0px rgba(67,84,135,1);
+			transition: all 1s;
+
+			&:hover{
+				-webkit-box-shadow: 5px 5px 8px 0px rgba(67,84,135,1);
+				-moz-box-shadow: 5px 5px 8px 0px rgba(67,84,135,1);
+				box-shadow: 5px 5px 8px 0px rgba(67,84,135,1);
+			}
+		}
+	}
+
+	.table-responsive{
+		margin-top: 30px;
+		margin-bottom: 30px;
+
+		th, td{
+			font-size: 14px;
+		}
+
+		.calcSum{
+			border-top: 2px solid #000;
+    	background: #e8e8e8
+		}
+
+		.tableLink{
+			cursor: pointer;
+			color: $actionCol;
+			text-decoration: underline;
+		}
+	}
+
+		
+	.fadedPrev{
+		font-size: 22px;
+		margin-top: 20px;
+		margin-bottom: 30px;
+	}
+
+	.buttonGenerate{
+		text-align: center;
+		background-color: #fff;
+		text-transform: uppercase;
+		color: $actionCol;
+		font-size: 18px;
+		font-weight: 600;
+		padding: 5px 15px;
+		border: solid 1px $actionCol;
+		border-radius: 20px;
+		margin-top: 20px;
+		margin-bottom: 25px;
+		transition: all 1s;
+
+		&:hover{
+			background-color: $actionCol;
+			color: #fff;
 		}
 	}
 }

@@ -244,7 +244,7 @@
 			h6{
 				position: absolute;
 				right: 10px;
-				bottom: 10px;
+				bottom: 24px;
 				font-size: 24px;
 				line-height: 36px;
 				font-weight: 800;
@@ -256,6 +256,8 @@
 		    }
 				
 			}
+
+
 
 			p{
 				font-size: 16px;
@@ -315,7 +317,14 @@
 				}
 			}
 
-
+			.rates{
+				position: absolute;
+				right: 10px;
+				bottom: 10px;
+				font-size: 14px;
+				font-style: italic;
+				color: $purple;
+			}
 		}
 	}
 }

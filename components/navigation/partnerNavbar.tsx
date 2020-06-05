@@ -104,6 +104,12 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     >{this.state.dictionary['navigationPartnerPreview']}</NavLink>
                   </NavItem>
                   <NavItem>
+                    <NavLink
+                      id="financial"
+                      onClick={this.props.changeScreen}
+                    >{this.state.dictionary['navigationPartnerFinancial']}</NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink onClick={this.logout}>{this.state.dictionary['navigationPartnerLogout']}</NavLink>
                   </NavItem>
 
@@ -161,6 +167,11 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   id="preview"
                   onClick={this.props.changeScreen}
                   ><span className="icon preview"></span>{this.state.dictionary['navigationPartnerPreview'].toUpperCase()}</li>
+                <li 
+                  className={this.props.activeScreen === 'financial' ? 'active' : ''}
+                  id="financial"
+                  onClick={this.props.changeScreen}
+                  ><span className="icon financial"></span>{this.state.dictionary['navigationPartnerFinancial'].toUpperCase()}</li>
                 <li 
                   onClick={this.logout}
                 ><span className="icon logout"></span>{this.state.dictionary['navigationPartnerLogout'].toUpperCase()}</li>

@@ -1,6 +1,6 @@
 import { IreservationGeneral } from '../lib/constants/interfaces';
 import {
-  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType
+  changeSingleFieldActionType, deleteReservationActionType, getReservationsOnDateActionType, confirmReservationActionType, getReservationsForUserActionType, cancelReservationActionType, confirmCateringActionType, deactivateReservationActionType, rateReservationActionType, getReservationsForFinancialActionType
 } from '../actions/reservation-actions';
 
 interface initialState {
@@ -32,7 +32,17 @@ interface initialState {
   deactivateReservationError: object | boolean;
   deactivateReservationSuccess: null | object;
 
+  rateReservationStart: boolean;
+  rateReservationError: object | boolean;
+  rateReservationSuccess: null | number;
+
+  getFinReservationStart: boolean;
+  getFinReservationError: object | boolean;
+  getFinReservationSuccess: null | number;
+
   reservations: Array<object>;
+
+  finReservations: Array<object>;
 
   reservationGeneral: IreservationGeneral;
   reservationAdditional: object;
@@ -68,7 +78,17 @@ const initialState: initialState  = {
   deactivateReservationError: false,
   deactivateReservationSuccess: null,
 
+  rateReservationStart: false,
+  rateReservationError: false,
+  rateReservationSuccess: null,
+
+  getFinReservationStart: false,
+  getFinReservationError: false,
+  getFinReservationSuccess: null,
+
   reservations: [],
+
+  finReservations: [],
 
   reservationGeneral:{
     name: '',
@@ -250,6 +270,51 @@ const actionsMap = {
       ...state,
       deactivateReservationStart: false,
       deactivateReservationSuccess: action.payload.result,
+    };
+  },
+
+  [rateReservationActionType.START]: (state) => {
+    return {
+      ...state,
+      rateReservationStart: true,
+      deactivateReservationSuccess: null,
+    };
+  },
+  [rateReservationActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      rateReservationStart: false,
+      rateReservationError: action.payload.response.body,
+    };
+  },
+  [rateReservationActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      rateReservationStart: false,
+      rateReservationSuccess: action.payload.code,
+    };
+  },
+
+  [getReservationsForFinancialActionType.START]: (state) => {
+    return {
+      ...state,
+      getFinReservationStart: true,
+      getFinReservationSuccess: null,
+    };
+  },
+  [getReservationsForFinancialActionType.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getFinReservationStart: false,
+      getFinReservationError: action.payload.response.body,
+    };
+  },
+  [getReservationsForFinancialActionType.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getFinReservationStart: false,
+      getFinReservationSuccess: action.payload.code,
+      finReservations: action.payload.reservations,
     };
   },
   

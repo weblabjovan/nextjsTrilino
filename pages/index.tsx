@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { defineLanguage, setUpLinkBasic, getOrgPageName, getOrgHead } from '../lib/helpers/generalFunctions';
-import { isUserLogged } from '../lib/helpers/specificUserFunctions';
+import { isUserLogged, testForRes } from '../lib/helpers/specificUserFunctions';
 import { getLanguage } from '../lib/language';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
@@ -60,6 +60,13 @@ Home.getInitialProps = async (ctx: any) => {
     }
 
     const userLog = await isUserLogged(ctx);
+
+    // if (link['queryObject']['page'] === 'contact') {
+    //   const test = await testForRes(ctx);
+    //   const res = await test.json();
+    //   console.log(res);
+    // }
+
 
     if (userLog) {
       userIsLogged = true;

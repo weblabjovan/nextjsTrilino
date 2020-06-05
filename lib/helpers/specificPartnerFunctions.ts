@@ -1014,3 +1014,13 @@ export const setSearchData = (data: object): object => {
 
 	return result;
 }
+
+
+export const getPartnerRooms = (rooms: Array<object>): Array<object> => {
+	const res = [];
+	for (var i = 0; i < rooms.length; i++) {
+		res.push({label: rooms[i]['name'], value: rooms[i]['regId']})
+	}
+
+	return res;
+}

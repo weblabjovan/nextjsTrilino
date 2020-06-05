@@ -1105,4 +1105,36 @@
 			}
 		}
 	}	
+
+	.partnerProflePage.financial{
+
+		.findOptions{
+			margin-top: 30px;
+
+			.buttonAdd{
+				margin-top: 0px;
+			}
+		}
+		
+
+		.table-responsive{
+			margin-top: 30px;
+			margin-bottom: 30px;
+
+			th, td{
+				font-size: 14px;
+			}
+
+			.calcSum{
+				border-top: 2px solid #000;
+	    		background: #e8e8e8
+			}
+		}
+
+		.fadedPrev{
+			font-size: 22px;
+			margin-top: 20px;
+			margin-bottom: 30px;
+		}
+	}
 }

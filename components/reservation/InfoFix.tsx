@@ -71,7 +71,6 @@ export default class InfoFix extends React.Component <MyProps, MyState> {
   }
 
   render() {
-
     return (
         <Row className={`reservationFix ${!this.props.open ? 'fixMobile' : ''}`} id={`infoFixed_${this.props.num}`}>
           <Col xs="12" className="title">

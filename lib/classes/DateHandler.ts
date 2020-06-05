@@ -11,21 +11,40 @@ export default class DateHandler {
 		this.dateString = start as string;
 	}
 
-	public getDateString = (date: Date): string =>{
-		return this.formatDate(date, 'text');
+	public getDateString = (date?: Date): string =>{
+		if (date) {
+			return this.formatDate(date, 'text');
+		}
+		const d = new Date()
+		return this.formatDate(d, 'text');
+	}
+
+	public getDateInThePast = (days: number, format: string, begin: boolean): any => {
+		const date = begin ? this.setDayOnBegining(this.now) : this.now;
+		return this.getNewDateFor(date, 'before', days, format);
+	}
+
+	public getDateInTheFuture = (days: number, format: string, begin: boolean): any => {
+		const date = begin ? this.setDayOnBegining(this.now) : this.now;
+		return this.getNewDateFor(date, 'after', days, format);
 	}
 
 	public getNewDateFor = (date: Date, relation: string, days: number, format: string): any => {
 		if (relation === 'before') {
 			const a = new Date(date.setDate(date.getDate() - days));
-			return format === 'text' ? this.formatDate(a, format) : a;
+			return format !== 'date' ? this.formatDate(a, format) : a;
 		}else{
-			const b = new Date(date.setDate(date.getDate() - days));
-			return format === 'text' ? this.formatDate(b, format) : b;
+			const b = new Date(date.setDate(date.getDate() + days));
+			return format !== 'date' ? this.formatDate(b, format) : b;
 		}
 		
 		return '1.1.1970';
+	}
 
+	public getMonthStopStartDates = (month: number, year: number): object => {
+		const start = new Date(year, month - 1, 1);
+		const end = month - 1 === this.now.getMonth() && year === this.now.getFullYear() ? new Date(year, month - 1, this.now.getDate()) : new Date(year, month, 1);
+		return { start, end };
 	}
 
 	public setNewDateString = (datestring: string): void => {
@@ -164,7 +183,7 @@ export default class DateHandler {
 		this.date = res;
 	}
 
-	private setDateForServer = (origin?: string): void => {
+	public setDateForServer = (origin?: string): void => {
 		let strings = this.dateString.split('-')
 		if (origin === 'code') {
 			const first = this.dateString.split('T');
@@ -180,8 +199,9 @@ export default class DateHandler {
 	  	this.date = this.setDayOnBegining(d);
 	}
 
-	private resetDate = (): void => {
+	public resetDate = (): void => {
 		this.date = new Date();
+		this.now = new Date();
 	}
 
 	private setDayOnBegining = (date: Date): Date => {
@@ -207,6 +227,10 @@ export default class DateHandler {
 
 		if (type === 'url') {
 			return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
+		}
+
+		if (type === 'code') {
+			return d.substring(0,19);
 		}
 
 		return '1.1.1970';

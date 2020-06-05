@@ -2,7 +2,7 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 import Keys from '../keys';
 import MyCriptor from './MyCriptor';
 import { IemailGeneral } from '../../lib/constants/interfaces';
-import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString }  from './general';
+import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString, getServerHost }  from './general';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import DateHandler from '../../lib/classes/DateHandler';
@@ -146,7 +146,7 @@ export const sendEmailReservationConfirmationPartner = async (data: IemailGenera
 	return sendEmail(email);
 }
 
-export const senEmailCateringConfirmationUser =  async (user: object, cateringParams: object): Promise<any> => {
+export const sendEmailCateringConfirmationUser =  async (user: object, cateringParams: object): Promise<any> => {
 	const myCriptor = new MyCriptor();
 
 	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
@@ -155,5 +155,82 @@ export const senEmailCateringConfirmationUser =  async (user: object, cateringPa
 	const templateId = 10;
 
 	const email = { sender, to, bcc, templateId, params: cateringParams };
+	return sendEmail(email);
+}
+
+export const sendRatingInvitationUser =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?page=rating&item=${reservation['_id']}&devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?page=rating&item=${reservation['_id']}&userAuth=${userAuth}&language=${user['userlanguage']}`;
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 12;
+	const params = { title: dictionary['ratingEmailTitle'], text1: dictionary['ratingEmailText1'], text2: dictionary['ratingEmailText2'], text3: dictionary['ratingEmailText3'], button: dictionary['ratingEmailButton'], hello: dictionary['ratingEmailHello'], link};
+
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
+
+export const sendUserReminder =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const partner = reservation['partnerObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?language=${user['userlanguage']}&userAuth=${userAuth}`;
+	const dateBase = reservation['date'].split('T');
+	const restPrice = reservation['price'] - reservation['deposit'] - reservation['trilinoPrice'];
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 13;
+	const params = { 
+		title: dictionary['emailUserReminderTitle'], 
+		text1: dictionary['emailUserReminderText1'], 
+		text2: dictionary['emailUserReminderText2'], 
+		text3: `${dictionary['emailUserReminderText3']}${myCriptor.decrypt(user['firstName'], true)} ${dictionary['emailUserReminderText4']}`, 
+		info1: `${dictionary['emailUserReminderWhen']} ${dateBase[0].split('-')[2]}.${dateBase[0].split('-')[1]}.${dateBase[0].split('-')[0]}. ${reservation['from']}`,
+		info2: `${dictionary['emailUserReminderWhere']} ${partner['name']}, ${partner['general']['address']}, ${getGeneralOptionLabelByValue(generalOptions['cities'], partner['city'])}`,
+		info3: `${dictionary['emailUserReminderFocus']} ${myCriptor.decrypt(user['firstName'], true)}`,
+		info4: `${dictionary['emailUserReminderPayment']} ${currencyFormat(restPrice)} ${dictionary['currency_rs']}`,
+		button: dictionary['emailUserReminderButton'], 
+		hello: dictionary['ratingEmailHello'], 
+		link
+	};
+
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
+
+export const sendCateringReminder =  async (reservation: object, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+	const user = reservation['userObj'][0];
+	const dictionary = getLanguage(user['userlanguage']);
+	const userAuth = setToken('user', decodeId(generateString, user['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/userProfile?devAuth=${devAuth}&userAuth=${userAuth}&language=${user['userlanguage']}` : `${host}/userProfile?language=${user['userlanguage']}&userAuth=${userAuth}`;
+
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name: `${myCriptor.decrypt(user['firstName'], true)} ${myCriptor.decrypt(user['lastName'], true)}`, email: myCriptor.decrypt(user['contactEmail'], false) }];
+	const bcc = null;
+	const templateId = 14;
+	const params = { 
+		title: dictionary['emailCateringReminderTitle'], 
+		text1: dictionary['emailCateringReminderText1'], 
+		text2: `${dictionary['emailCateringReminderText2']} ${reservation['_id']} ${dictionary['emailCateringReminderText3']}`, 
+		text3: dictionary['emailCateringReminderText4'],
+		button: dictionary['emailUserReminderButton'], 
+		hello: dictionary['ratingEmailHello'], 
+		link
+	};
+
+	const email = { sender, to, bcc, templateId, params };
 	return sendEmail(email);
 }

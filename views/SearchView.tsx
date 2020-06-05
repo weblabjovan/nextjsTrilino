@@ -8,7 +8,7 @@ import { setUserLanguage } from '../actions/user-actions';
 import { adminBasicDevLogin } from '../actions/admin-actions';
 import { changeSinglePartnerField, getPartnersMultiple } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setUpLinkBasic, getArrayObjectByFieldValue, getArrayIndexByFieldValue, setUrlString, errorExecute, sumOfRatingMarks } from '../lib/helpers/generalFunctions';
 import { addDaysToDate, dateForSearch, createDisplayPhotoListObject, getGeneralOptionLabelByValue, setSearchData } from '../lib/helpers/specificPartnerFunctions';
 import genOptions from '../lib/constants/generalOptions';
 import PlainInput from '../components/form/input';
@@ -18,9 +18,6 @@ import Select from 'react-select';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import Keys from '../server/keys';
-import 'react-day-picker/lib/style.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
@@ -481,6 +478,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                   onChange={(val) => this.handleInputChange('sort', val)} 
                   instanceId="sortOptions" 
                   className="logInput" 
+                  isDisabled={true}
                   placeholder={ this.state.dictionary['searchResultsSortPlaceholder'] }/>
               </Col>
 
@@ -513,7 +511,18 @@ class SearchView extends React.Component <MyProps, MyState>{
                               <p><span className="icon room"></span>{item['general']['address']}</p>
                               <p><span className="icon group"></span>{`${item['general']['capacity']['sumKids']} ${this.state.dictionary['searchResultsItemKids']} ${item['general']['capacity']['sumAdults']} ${this.state.dictionary['searchResultsItemAdults']}`}</p>
                               <p><span className="icon house"></span>{`${item['general']['size']}m2`}</p>
-                              <h6> <span className="icon star"></span>4.5</h6>
+                              {
+                                item['rating']
+                                ?
+                                <div>
+                                  <h6> <span className="icon star"></span>{(sumOfRatingMarks(item['rating']) / 8 / item['numberOfRating']).toFixed(1)}</h6>
+                                  <p className="rates">{`${this.state.dictionary['searchResultsRated']} ${item['numberOfRating']} ${this.state.dictionary['searchResultsTimes']}`}</p>
+                                </div>
+                                
+                                :
+                                <p className="rates">{'trenutno neocenjeno'}</p>
+                              }
+                              
                             </div>
                           </div>
                         </Col>
@@ -525,7 +534,7 @@ class SearchView extends React.Component <MyProps, MyState>{
 
                 <Row className="searchViewEnd">
                   <Col xs="12">
-                    <div className="middle">
+                    <div className="middle" hidden={true}>
                       <Button color="success">{ this.state.dictionary['searchResultsLoadButton'] }</Button>
                     </div>
                   </Col>

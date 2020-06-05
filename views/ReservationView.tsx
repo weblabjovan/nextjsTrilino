@@ -22,8 +22,6 @@ import PaymentRoute from '../components/reservation/PaymentRoute';
 import NavigationBar from '../components/navigation/navbar';
 import Footer from '../components/navigation/footer';
 import Keys from '../server/keys';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
@@ -250,8 +248,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
     priceCopy['addon'] = num;
     priceCopy['decoration'] = decorNum;
     priceCopy['addition'] = additioNum;
-    priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    
+    priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['trilinoCatering'] ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
     this.setState({ info: infoCopy, price: priceCopy }, () => {
       this.refreshInfoHeight();
@@ -280,10 +281,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
       infoCopy['catering'] = arr;
       priceCopy['catering'] = num;
       priceCopy['trilinoCatering'] = trilino;
-      priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
 
-      priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? (priceCopy['total'] - priceCopy['trilinoCatering']) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
-      priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
+      priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+
+
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? trilino ? (priceCopy['total'] - trilino) * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
+
+    priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
       this.setState({ info: infoCopy, price: priceCopy},() => {
         this.refreshInfoHeight();
@@ -303,11 +307,11 @@ class ReservationView extends React.Component <MyProps, MyState>{
     infoCopy['general']['kidsNum'] = generalCopy['kidsNum'];
 
     if (generalCopy['double']) {
-      priceCopy['term'] = (this.props.partner['isReadyForDouble']['price'] + priceCopy['term']) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
+      priceCopy['term'] = (parseInt(this.props.partner['isReadyForDouble']['price']) + parseInt(priceCopy['term'])) * ((100 - parseInt(this.props.partner['general']['doubleDiscount']))/100);
     }
 
-    priceCopy['total'] = priceCopy['term'] + priceCopy['catering'] + priceCopy['addon'];
-    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : priceCopy['term'] * (parseInt(this.props.partner['general']['depositPercent'])/100);
+    priceCopy['total'] = parseInt(priceCopy['term']) + parseInt(priceCopy['catering']) + parseInt(priceCopy['addon']);
+    priceCopy['deposit'] = this.props.partner['general']['despositNumber'] === '1' ? priceCopy['total'] * (parseInt(this.props.partner['general']['depositPercent'])/100) : parseInt(priceCopy['term']) * (parseInt(this.props.partner['general']['depositPercent'])/100);
     priceCopy['deposit'] = this.props.partner['general']['minimalDeposit'] ?  priceCopy['deposit'] < parseInt(this.props.partner['general']['minimalDeposit']) ? parseInt(this.props.partner['general']['minimalDeposit']) : priceCopy['deposit'] : priceCopy['deposit'];
 
     this.setState({ info: infoCopy, price: priceCopy});
@@ -377,7 +381,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
       if (step === 2) {
         const rows = this.props.partner['catering']['deals'].length;
-        console.log(this.props.partner['catering']['deals'].length);
+        // console.log(this.props.partner['catering']['deals'].length);
         return `${rows * 500 + 130 }px`;
       }
 
@@ -667,7 +671,6 @@ class ReservationView extends React.Component <MyProps, MyState>{
   }
 
   paymentFunction(){
-    
     if (!this.state.readyToPay) {
       const errorCopy = JSON.parse(JSON.stringify(this.state.paymentRouteErrors));
       errorCopy['show'] = true;
@@ -693,13 +696,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
           id: '',
           showPrice: true,
           potentialDouble: this.props.partner['isReadyForDouble'] ? this.props.partner['isReadyForDouble'] : null,
-          termPrice: this.state.price['term'].toFixed(2),
-          animationPrice: this.state.price['addition'].toFixed(2),
-          decorationPrice: this.state.price['decoration'].toFixed(2),
-          foodPrice: this.state.price['catering'].toFixed(2),
-          price: this.state.price['total'].toFixed(2),
-          deposit: this.state.price['deposit'].toFixed(2),
-          trilinoPrice: this.state.price['trilinoCatering'].toFixed(2),
+          termPrice: parseInt(this.state.price['term']),
+          animationPrice: parseInt(this.state.price['addition']),
+          decorationPrice: parseInt(this.state.price['decoration']),
+          foodPrice: parseInt(this.state.price['catering']),
+          price: parseInt(this.state.price['total']),
+          deposit: parseInt(this.state.price['deposit']),
+          trilinoPrice: parseInt(this.state.price['trilinoCatering']),
         };
         const tkn = this.props.token ? this.props.token : this.state.token;
         const data = {language: this.props.lang, reservation: userReservation, type: 'user'};
@@ -745,9 +748,12 @@ class ReservationView extends React.Component <MyProps, MyState>{
           }
         }
       } else {
-        if (header.classList.contains("fix")) {
-          header.classList.remove("fix");
+        if (header) {
+           if (header.classList.contains("fix")) {
+            header.classList.remove("fix");
+          }
         }
+       
       }
     }
 
@@ -763,7 +769,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     if (!this.props.userSaveReservationStart && this.props.userSaveReservationSuccess && !prevProps.userSaveReservationSuccess) {
       this.setState({ loader: false });
-      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${this.state.price['deposit'].toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
+      const plainText = `${Keys.NEST_PAY_CLIENT_ID}|${this.props.userSaveReservationSuccess[0]['_id']}|${parseInt(this.state.price['deposit']).toFixed(2)}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationFailure&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}|Auth||${Keys.NEST_PAY_RANDOM}||||941|${Keys.NEST_PAY_STORE_KEY}`;
       const hash = setNestPayHash(plainText);
 
       const mydiv = document.getElementById('myformcontainer').innerHTML = `<form id="reviseCombi" method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate"> 
@@ -771,7 +777,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       <input type="hidden" name="storetype" value="3d_pay_hosting" />  
       <input type="hidden" name="hash" value="${hash}" /> 
       <input type="hidden" name="trantype" value="Auth" /> 
-      <input type="hidden" name="amount" value="${this.state.price['deposit'].toFixed(2)}" /> 
+      <input type="hidden" name="amount" value="${parseInt(this.state.price['deposit']).toFixed(2)}" /> 
       <input type="hidden" name="currency" value="941" /> 
       <input type="hidden" name="oid" value="${this.props.userSaveReservationSuccess[0]['_id']}" /> 
       <input type="hidden" name="okUrl" value="${this.props.link['protocol']}${this.props.link['host']}/payment?page=reservationSuccess&reservation=${this.props.userSaveReservationSuccess[0]['_id']}&language=${this.props.lang}"/> 

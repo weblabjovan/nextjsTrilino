@@ -180,3 +180,51 @@ export function deactivateReservation(link: object, data: object, auth: string) 
     );
   };
 }
+
+
+export const rateReservationActionType = {
+  START: 'RATE_RESERVATION_START',
+  ERROR: 'RATE_RESERVATION_ERROR',
+  SUCCESS: 'RATE_RESERVATION_SUCCESS',
+};
+
+export function rateReservation(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_RATE);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      rateReservationActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+
+export const getReservationsForFinancialActionType = {
+  START: 'GET_RESERVATIONS_FOR_FINANCIAL_START',
+  ERROR: 'GET_RESERVATIONS_FOR_FINANCIAL_ERROR',
+  SUCCESS: 'GET_RESERVATIONS_FOR_FINANCIAL_SUCCESS',
+};
+
+export function getReservationsForFin(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.RESERVATIONS_GETFORFINANCIAL);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getReservationsForFinancialActionType,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

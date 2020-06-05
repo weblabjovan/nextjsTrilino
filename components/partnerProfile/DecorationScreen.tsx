@@ -9,8 +9,6 @@ import { isFieldInObject, getGeneralOptionLabelByValue, getOnlyValues, prepareDe
 import { setUpLinkBasic } from '../../lib/helpers/generalFunctions';
 import PlainInput from '../form/input';
 import CheckBox from '../form/checkbox';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../style/style.scss';
 
 interface MyProps {
   // using `interface` is also ok
