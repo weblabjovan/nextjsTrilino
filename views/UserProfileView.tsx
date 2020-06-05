@@ -107,7 +107,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
       this.setState({ activeScreen: 'reservation', reservationBillObject: null })
     }else{
       this.setState({ loader: true, activeScreen: 'reservation', reservationBillObject: null }, () => {
-        const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+        const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
         this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
       })
     }
@@ -149,7 +149,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   activateCancelReservation(){
     this.setState({loader: true}, () => {
-      const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
       this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, token);
     })
   }
@@ -197,7 +197,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   prepareRatingDataForSend(ratingData: object){
     this.setState({ loader: true }, () => {
       const data = {rating: ratingData, reservation: this.state.reservationBillObject['_id'], language: this.props.lang };
-      const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
       this.props.rateReservation(this.props.link, data, token);
     })
   }
@@ -206,7 +206,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     errorExecute(window, this.props.globalError);
 
     if (!this.props.cancelReservationStart && prevProps.cancelReservationStart && !this.props.cancelReservationError && this.props.cancelReservationSuccess && !prevProps.cancelReservationSuccess) {
-      const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
       this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
     }
 
@@ -216,7 +216,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     if (!this.props.rateReservationStart && prevProps.rateReservationStart && !this.props.rateReservationError && this.props.rateReservationSuccess && !prevProps.rateReservationSuccess) {
       this.setState({ activeScreen: 'reservation', reservationBillObject: null }, () => {
-        const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+        const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
         this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
       });
     }
@@ -226,7 +226,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 	async componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
     if (!this.props.ratingShow) {
-      const token = this.props.link['userAuth'] ? this.props.link['userAuth'] : this.props.token;
+      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
       this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
     }else{
       this.setState({reservationBillObject: this.props.ratingShow, loader: false });
