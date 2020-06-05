@@ -6,7 +6,7 @@ import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getReservationsForUser, cancelReservation, rateReservation } from '../actions/reservation-actions';
 import { setUserLanguage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
-import { isMobile, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
+import { isMobile, setCookie, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { setNestPayHash } from '../server/helpers/general';
 import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
@@ -107,8 +107,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
       this.setState({ activeScreen: 'reservation', reservationBillObject: null })
     }else{
       this.setState({ loader: true, activeScreen: 'reservation', reservationBillObject: null }, () => {
-        const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
+        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
       })
     }
   }
@@ -149,8 +148,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   activateCancelReservation(){
     this.setState({loader: true}, () => {
-      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-      this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, token);
+      this.props.cancelReservation(this.props.link, {language: this.props.lang, doubleReference: this.state.reservationBillObject['doubleReference'], id: this.state.reservationBillObject['_id']}, this.props.token);
     })
   }
 
@@ -197,8 +195,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
   prepareRatingDataForSend(ratingData: object){
     this.setState({ loader: true }, () => {
       const data = {rating: ratingData, reservation: this.state.reservationBillObject['_id'], language: this.props.lang };
-      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-      this.props.rateReservation(this.props.link, data, token);
+      this.props.rateReservation(this.props.link, data, this.props.token);
     })
   }
 
@@ -206,8 +203,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     errorExecute(window, this.props.globalError);
 
     if (!this.props.cancelReservationStart && prevProps.cancelReservationStart && !this.props.cancelReservationError && this.props.cancelReservationSuccess && !prevProps.cancelReservationSuccess) {
-      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
+      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
     }
 
     if (!this.props.getUserReservationStart && prevProps.getUserReservationStart && !this.props.getUserReservationError && this.props.getUserReservationSuccess && !prevProps.getUserReservationSuccess) {
@@ -216,8 +212,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     if (!this.props.rateReservationStart && prevProps.rateReservationStart && !this.props.rateReservationError && this.props.rateReservationSuccess && !prevProps.rateReservationSuccess) {
       this.setState({ activeScreen: 'reservation', reservationBillObject: null }, () => {
-        const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
+        this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
       });
     }
 
@@ -225,10 +220,17 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
 	async componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
+    if (this.props.link['queryObject']['devAuth']) {
+      setCookie(this.props.link['queryObject']['devAuth'],'trilino-dev-auth', 5);
+    }
+    if (this.props.link['queryObject']['userAuth']) {
+      setCookie(this.props.link['queryObject']['userAuth'],'trilino-user-token', 5);
+    }
+    
+
     if (!this.props.ratingShow) {
       console.log(this.props.token);
-      const token = this.props.link['queryObject']['userAuth'] ? this.props.link['queryObject']['userAuth'] : this.props.token;
-      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, token);
+      this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
     }else{
       this.setState({reservationBillObject: this.props.ratingShow, loader: false });
     }

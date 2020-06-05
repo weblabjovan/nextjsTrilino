@@ -67,10 +67,6 @@ UserProfile.getInitialProps = async (ctx: any) => {
       ctx.res.end();
     }
 
-    if (devLog && link['queryObject']['devAuth']) {
-      setCookie(link['queryObject']['devAuth'],'trilino-dev-auth', 5);
-    }
-
     if (link['queryObject']['userAuth']) {
       userLog = await isUserLoggedOutsideCall(ctx);
 
@@ -88,11 +84,7 @@ UserProfile.getInitialProps = async (ctx: any) => {
       }
     }
 
-    if (userLog && link['queryObject']['userAuth']) {
-      setCookie(link['queryObject']['userAuth'],'trilino-user-token', 5);
-    }
-
-    token = getUserToken(ctx);
+    token = link['queryObject']['userAuth'] ? link['queryObject']['userAuth'] : getUserToken(ctx);
 
     if (link['queryObject']['page'] === 'rating' && userLog) {
       const valid = await validateRating(ctx);
