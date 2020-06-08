@@ -100,6 +100,7 @@ export default interface LanguageInterface {
 	uniErrorGoBack: string;
 	uniErrorHome: string;
 	uniScroll: string;
+	uniAll: string;
 
 	currencyPrices: string;
 	currency_rs: string;
