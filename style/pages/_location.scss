@@ -49,7 +49,7 @@
 
 		@media only screen and (max-width: 768px) {
 			padding-left: 60px;
-			padding-right: 15px;
+			padding-right: 60px;
 		}
 
 		@media only screen and (max-width: 577px) {
@@ -118,6 +118,15 @@
 			margin-top: 15px;
 		}
 
+		.smallColPadd{
+		
+
+			@media only screen and (max-width: 577px) {
+				padding-left: 7.5px;
+				padding-right: 7.5px;
+			}
+		}
+
 		p{
 			font-size: 16px;
 		    line-height: 26px;
@@ -167,6 +176,10 @@
 				@media only screen and (max-width: 768px) {
 					font-size: 16px;
 				}
+
+				@media only screen and (max-width: 420px) {
+					font-size: 14px;
+				}
 			}
 
 			.parking:before{
@@ -210,9 +223,6 @@
 
 	.generalSecond{
 		margin-top: 30px;
-		@media only screen and (max-width: 768px) {
-			margin-top: 15px;
-		}
 		@media only screen and (max-width: 577px) {
 			margin-top: 25px;
 		}
@@ -222,24 +232,27 @@
     		margin-bottom: 5px;
     		border-bottom: solid 1px #ccc;
 
+    		 @media only screen and (max-width: 577px) {
+				border-bottom: none;
+			}
+
     		h5{
-    			line-height: 50px;
-			    font-size: 16px;
+    			line-height: 40px;
+			    font-size: 18px;
 			    font-weight: 400;
 			    margin: 0px;
 			    text-align: center;
 			    display: inline-block;
-			    margin-left: 15px;
+			    margin-left: 5px;
 			    vertical-align: top;
-			    @media only screen and (max-width: 768px) {
-					display: block;
-					line-height: 25px;
-				}
+
 			    @media only screen and (max-width: 577px) {
 					display: block;
-					font-size: 15px;
+					font-size: 16px;
 					margin-left: 0px;
-					line-height: 30px;
+					line-height: 26px;
+					font-style: italic;
+					text-align: left;
 				}
     		}
 
@@ -247,18 +260,15 @@
 				display: inline-block;
 				text-align: center;
 				font-family: 'Material Icons';
-		        font-size: 45px;
-		        line-height: 50px;
+		        font-size: 25px;
+		        line-height: 40px;
 		        color: $purple;
 		         @media only screen and (max-width: 768px) {
-					display: block;
-					line-height: 45px;
+					line-height: 40px;
 				}
 
 		        @media only screen and (max-width: 577px) {
-					display: block;
-					font-size: 40px;
-		        	line-height: 40px;
+					display: none;
 				}
 			}
 
@@ -323,6 +333,10 @@
 			        font-weight: 600;
 			        line-height: 30px;
 			        color: $purple;
+
+			        @media only screen and (max-width: 577px) {
+				      display: none;
+				    }
 				}
 
 				.check:before{
@@ -336,7 +350,9 @@
 					text-transform: uppercase;
 					margin-left: 5px;
 					@media only screen and (max-width: 577px) {
-				      font-size: 12px;
+				      font-size: 10px;
+				      vertical-align: bottom;
+				      line-height: 25px;
 				    }
 				}
 
@@ -359,7 +375,7 @@
 	.availabilityTable{
 		margin-top: 30px;
 		@media only screen and (max-width: 577px) {
-	      margin-top: 15px;
+	      margin-top: 0px;
 	    }
 
 		.headline{
@@ -459,6 +475,7 @@
 			    }
 
 				span{
+					display: block;
 					font-size: 14px;
 					font-weight: 600;
 					margin-left: 10px;
@@ -499,7 +516,7 @@
 			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				 transition: all 1s;
+				 transition: all 600ms;
 
 				&:hover{
 					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
@@ -521,7 +538,7 @@
 			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				 transition: all 1s;
+				 transition: all 600ms;
 
 				&:hover{
 					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
@@ -597,6 +614,9 @@
 			}
 			@media only screen and (max-width: 577px) {
 				padding-left: 0px;
+			    display: inline-block;
+			    margin-right: 10px;
+			    margin-left: 10px;
 			}
 
 			h3{
@@ -605,6 +625,7 @@
 			    font-weight: 600;
 			    margin-bottom: 0px;
 			    @media only screen and (max-width: 577px) {
+			    	text-align: center;
 			    }
 			}
 
@@ -615,6 +636,8 @@
 			    margin-left: 10px;
 
 			    @media only screen and (max-width: 577px) {
+			    	margin-left: 0px;
+			    	text-align: center;
 			    }
 			}
 		}
@@ -627,6 +650,11 @@
 			font-weight: 300;
 			color: $darkGreyCol;
 			text-align: center;
+
+			@media only screen and (max-width: 577px) {
+		    	font-size: 18px;
+		    	text-align: justify;
+		    }
 		}
 	}
 
@@ -705,6 +733,10 @@
 					font-size: 12px;
 				    font-style: italic;
 				    line-height: 14px;
+
+				    @media only screen and (max-width: 350px) {
+				      display: none;
+				    }
 				}
 
 				.marks{
@@ -713,6 +745,10 @@
 					line-height: 38px;
 					color: $darkGreyCol;
 					margin: 0px;
+
+					@media only screen and (max-width: 350px) {
+				      font-size: 20px;
+				    }
 				}
 				.line{
 					width: 100%;
@@ -754,11 +790,22 @@
 				margin-top: -60px;
 				font-size: 40px;
 				margin-bottom: 30px;
+
+				@media only screen and (max-width: 577px) {
+			      font-size: 30px;
+			      margin-bottom: 20px;
+			      margin-top: 15px;
+			    }
 			}
 
 			.list{
 				height: 480px;
 				overflow-y: scroll;
+
+				@media only screen and (max-width: 577px) {
+			      height: auto;
+			    }
+
 				.item{
 					padding: 15px 20px;
 					border-bottom: solid 1px #ccc;
