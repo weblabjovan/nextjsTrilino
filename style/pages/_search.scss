@@ -59,7 +59,12 @@
 			    -webkit-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
 				-moz-box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
 				box-shadow: 7px 7px 10px 0px rgba(28,59,122,1);
-				 transition: all 1s;
+				 transition: all 600ms;
+
+				 @media only screen and (max-width: 768px){
+					padding: 10px 15px;
+					font-size: 12px;
+		    }
 
 				&:hover{
 					-webkit-box-shadow: 10px 10px 5px 0px rgba(28,59,122,1);
@@ -201,11 +206,25 @@
 
 	.searchItem{
 		cursor: pointer;
-		margin-bottom: 20px;
-		border-radius: 8px;
-		-webkit-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
-		-moz-box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
-		box-shadow: 8px 8px 12px 0px rgba(71,71,71,1);
+		margin-bottom: 30px;
+    border-radius: 8px;
+		-webkit-box-shadow: 5px 5px 12px 0px #c1c1c1;
+		-moz-box-shadow: 5px 5px 12px 0px #c1c1c1;
+		box-shadow: 5px 5px 12px 0px #c1c1c1;
+		transition: all 500ms;
+
+		@media only screen and (max-width: 577px){
+			margin-bottom: 30px;
+			box-shadow: 0px 2px 10px 0px #c1c1c1;
+			-webkit-box-shadow: 0px 2px 10px 0px #c1c1c1;
+			-moz-box-shadow: 0px 2px 10px 0px #c1c1c1;
+	  }
+
+	  &:hover{
+	  	-webkit-box-shadow: 8px 8px 15px 0px #afafaf;
+			-moz-box-shadow: 8px 8px 15px 0px #afafaf;
+			box-shadow: 8px 8px 15px 0px #afafaf;
+	  }
 
 		.photo{
 			width: 100%;
@@ -343,7 +362,9 @@
 	    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 		-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 		box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-		 transition: all 1s;
+		 transition: all 600ms;
+
+		 
 
 		&:hover{
 			-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);

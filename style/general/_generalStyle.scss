@@ -222,11 +222,16 @@ button:disabled{
     z-index: 9999;
 
     .spinerHolder{
-        width: 300px;
+      width: 300px;
 	    margin: auto;
 	    position: absolute;
+      text-align: center;
 	    top: 46%;
-	    left: 46%;
+	    left: calc(50% - 150px);
+      @media only screen and (max-width: 577px) {
+        width: 100px;
+        left: calc(50% - 50px);
+      }
     }
 
 }

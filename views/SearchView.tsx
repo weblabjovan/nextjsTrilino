@@ -225,7 +225,7 @@ class SearchView extends React.Component <MyProps, MyState>{
                 <Col xs='4' sm="2">
     							<label>{ this.state.dictionary['searchFilterBasicDistrict'] }</label>
                 	<Select 
-	                  options={[...genOptions['quarter'][this.state.city ? this.state.city['value'].toString() : 0], {value: 0, label: this.state.dictionary['uniAll']}]} 
+	                  options={this.state.city ? [...genOptions['quarter'][this.state.city ? this.state.city['value'].toString() : 0], {value: 0, label: this.state.dictionary['uniAll']}] : []} 
 	                  value={ this.state.district } 
 	                  onChange={(val) => this.handleInputChange('district', val)} 
 	                  instanceId="homeDistrict" 
