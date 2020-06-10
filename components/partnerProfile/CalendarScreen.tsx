@@ -150,7 +150,10 @@ class CalendarScreen extends React.Component <MyProps, MyState>{
       }else{
         let dates = {};
         if (event.length > 1) {
-          dates = {start: event[0], end: event[event.length - 1]};
+          const newD = event[event.length - 1].setDate(event[event.length - 1].getDate() + 1);
+          const endD = new Date(newD);
+
+          dates = {start: event[0], end: endD};
         }else{
           dates = {start: event[0], end: addDaysToDate(event[0], 1)};
         }

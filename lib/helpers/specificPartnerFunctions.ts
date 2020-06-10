@@ -188,7 +188,6 @@ const isDaysTermValid = (day: Array<object>, duration: string, alternative: stri
 
 	const loop = () => {
 		for (var i = 0; i < day.length; ++i) {
-			console.log(getNumberOfEmpty(day[i]) > 0);
 			if (getNumberOfEmpty(day[i]) > 0) {
 				return {success: false, message: 'error_no_1'};
 			}
@@ -704,7 +703,7 @@ export const getCurrentWeekStartAndEnd = (): object => {
 	const week = 604800 * 1000;
 	const weekDay = curr.getDay() === 0 ? 7 : curr.getDay();
 	const startTimestamp = curr.getTime() - ((weekDay-1) * day);
-	const endTimestamp = startTimestamp + week - 1000;
+	const endTimestamp = startTimestamp + week;
 
 	const start = new Date(startTimestamp).toUTCString();
 	const end = new Date(endTimestamp).toUTCString();
@@ -865,7 +864,7 @@ const isCateringDealPresent = (partner: object): boolean => {
 			if (Array.isArray(partner['catering']['deals'])) {
 				if (partner['catering']['deals'].length) {
 					for (var i = 0; i < partner['catering']['deals'].length; ++i) {
-							if (!partner['catering']['deals'][i]['type'] || !partner['catering']['deals'][i]['min'] || !partner['catering']['deals'][i]['price'] || !partner['catering']['deals'][i]['regId'] || partner['catering']['deals'][i]['items'].length < 5) {
+							if (!partner['catering']['deals'][i]['type'] || !partner['catering']['deals'][i]['min'] || !partner['catering']['deals'][i]['price'] || !partner['catering']['deals'][i]['regId'] || partner['catering']['deals'][i]['items'].length < 1) {
 							return false;
 						}
 					}
