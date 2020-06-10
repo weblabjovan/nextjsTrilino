@@ -365,15 +365,15 @@
 			    outline: none;
 			    color: #ffffff;
 			    font-weight: 700;
-			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				 transition: all 1s;
+			    -webkit-box-shadow: 5px 5px 8px 0px #b7b7b7;
+				-moz-box-shadow: 5px 5px 8px 0px #b7b7b7;
+				box-shadow: 5px 5px 8px 0px #b7b7b7;
+				 transition: all 600ms;
 
 				&:hover{
-					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
-					-moz-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
-					box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
+					-webkit-box-shadow: 7px 7px 11px 0px #a0a0a0;
+					-moz-box-shadow: 7px 7px 11px 0px #a0a0a0;
+					box-shadow: 7px 7px 11px 0px #a0a0a0;
 				}
 
 				@media only screen and (max-width: 577px) {
@@ -674,7 +674,7 @@
 			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				 transition: all 1s;
+				 transition: all 600ms;
 
 				&:hover{
 					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);
@@ -716,7 +716,7 @@
 			    -webkit-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				-moz-box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
 				box-shadow: 5px 5px 8px 0px rgba(56,56,56,1);
-				 transition: all 1s;
+				 transition: all 600ms;
 
 				&:hover{
 					-webkit-box-shadow: 8px 8px 12px 0px rgba(56,56,56,1);

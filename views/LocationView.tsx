@@ -293,7 +293,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          </Row>
 
 	          <Row>
-	          	<Col xs="12" sm="6">
+	          	<Col xs="12" lg="6">
 
 	              <div className="icon-section">
 	              	<p>{this.props.partner['general']['description']}</p>
@@ -304,7 +304,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['parking'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon parking" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconParking']}</p>
@@ -321,7 +321,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['yard'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon yard" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconYard']}</p>
@@ -338,7 +338,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['balcon'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon balcon" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconBalcon']}</p>
@@ -355,7 +355,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['pool'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon pool" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconPool']}</p>
@@ -372,7 +372,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['wifi'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon wifi" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconWifi']}</p>
@@ -389,7 +389,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['animator'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon animator" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconAnimator']}</p>
@@ -406,7 +406,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['movie'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon movie" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconMovie']}</p>
@@ -423,7 +423,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['gaming'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon gaming" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconGaming']}</p>
@@ -440,7 +440,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['food'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder" >
 				                  <span className="icon food" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconFood']}</p>
@@ -457,7 +457,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['drink'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon drink" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconDrink']}</p>
@@ -474,7 +474,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              ?
 				              this.props.partner['general']['smoking'] === '1'
 				              ?
-				              (<Col xs="6" sm="4" lg="2" className="smallColPadd">
+				              (<Col xs="3" sm="2" lg="2" className="smallColPadd">
 				                <div className="iconHolder">
 				                  <span className="icon smoking" />
 				                  <p>{this.state.dictionary['partnerProfilePreviewIconSmoking']}</p>
@@ -488,7 +488,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 				          </Row>
 			          </div>
 	          	</Col>
-	          	<Col xs="12" sm="6" className="bigColPaddLeft">
+	          	<Col xs="12" lg="6" className="bigColPaddLeft">
 	          		<div className="generalSecond">
 	          			<Row className="item">
 		          			<Col xs="12"><span className="icon range" /> <h5>{`${this.state.dictionary['locationRangeFirst']} ${this.props.partner['general']['ageFrom']} ${this.state.dictionary['locationRangeSecond']} ${this.props.partner['general']['ageTo']} ${this.state.dictionary['locationRangeThird']}`}</h5></Col>

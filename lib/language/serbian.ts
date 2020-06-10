@@ -100,6 +100,7 @@ const serbian: LanguageInterface = {
 	uniErrorGoBack: 'Vratite se na ',
 	uniErrorHome: 'naslovnu stranicu',
 	uniScroll: 'Skrolujte',
+	uniAll: 'Sve',
 
 	currencyPrices: 'Sve cene izražene su u: ',
 	currency_rs:'RSD',
@@ -585,7 +586,7 @@ const serbian: LanguageInterface = {
 	locationRangeFirst: 'Primereno za uzrast od',
 	locationRangeSecond: 'do',
 	locationRangeThird: 'godina',
-	locationSizeFirst: 'Veličine prostora',
+	locationSizeFirst: 'Veličina prostora',
 	locationPlaySizeFirst: 'Veličina prostora za igru',
 	locationSelfFoodTrue: 'Dozvoljeno donošenje svoje hrane',
 	locationSelfFoodFalse: 'Donošenje svoje hrane nije dozvoljeno',

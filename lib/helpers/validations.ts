@@ -91,9 +91,28 @@ export const isLessThan = (value: string, limit: number): boolean =>{
 }
 
 export const isOfRightCharacter = (pass: string): boolean => {
-	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm;
+	let upperCase = 0;
+	let lowerCase = 0;
+	let character = 0;
 
-	return regex.test(pass);
+	for (var i = 0; i < pass.length; i++) {
+		const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+		if (format.test(pass[i])) {
+			character = character + 1;
+		}else{
+			if (pass[i].toUpperCase() === pass[i]) {
+				upperCase = upperCase + 1;
+			}else{
+				lowerCase = lowerCase + 1;
+			}
+		}
+	}
+
+	if (upperCase > 0 && lowerCase > 0 && character > 0) {
+		return true;
+	}
+
+	return false;
 }
 
 export const isMatch = (one: string, two: string): boolean => {

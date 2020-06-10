@@ -101,6 +101,7 @@ const english: LanguageInterface = {
 	uniErrorGoBack: 'Go back to ',
 	uniErrorHome: 'homepage',
 	uniScroll: 'Scroll',
+	uniAll: 'All',
 
 	currencyPrices: 'All prices are in: ',
 	currency_rs:'RSD',
