@@ -405,3 +405,10 @@ export const renderDate = (date: any): string => {
   
   return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
 }
+
+export const renderDateWithTime = (date: any): string => {
+  const dateStr = renderDate(date);
+  const timeStr = date.toString().substr(16, 5);
+
+  return `${dateStr} - ${timeStr}`;
+}

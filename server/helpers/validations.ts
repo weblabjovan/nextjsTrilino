@@ -432,3 +432,19 @@ export const isPaymentResponseValid = (response: object, id: string, req: object
   
   return false;
 }
+
+export const isConversationMessageLimited = (conversation: object, sender: string): boolean => {
+	let n = 0;
+
+	for (var i = 0; i < conversation['messages'].length; i++) {
+		if (conversation['messages'][i]['sender'] === sender) {
+			n = n + 1;
+		}
+	}
+
+	if (n < 10) {
+		return false;
+	}
+
+	return true;
+}

@@ -1,5 +1,5 @@
 import {
-  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes, saveReservationUserActionTypes, errorHandlerActions
+  userDeviceActionTypes, userLanguageActionTypes, changeSingleFieldActionType, registrateUserActionTypes, passChangeUserActionTypes, loginUserActionTypes, passChangeRequestUserActionTypes, saveReservationUserActionTypes, errorHandlerActions, getConversationsUserActionTypes, sendMessageUserActionTypes
 } from '../actions/user-actions';
 
 interface initialState {
@@ -27,7 +27,16 @@ interface initialState {
   userSaveReservationError: boolean | object;
   userSaveReservationSuccess: null | object;
 
+  userGetConversationsStart: boolean;
+  userGetConversationsError: boolean | object;
+  userGetConversationsSuccess: null | number;
+
+  userSendMessageStart: boolean;
+  userSendMessageError: boolean | object;
+  userSendMessageSuccess: null | number;
+
   activeUser: null | object;
+  conversations: Array<object>;
 }
 
 const initialState: initialState  = {
@@ -55,7 +64,17 @@ const initialState: initialState  = {
   userSaveReservationError: false,
   userSaveReservationSuccess: null,
 
+  userGetConversationsStart: false,
+  userGetConversationsError: false,
+  userGetConversationsSuccess: null,
+
+  userSendMessageStart: false,
+  userSendMessageError: false,
+  userSendMessageSuccess: null,
+
+  
   activeUser: null,
+  conversations: [],
 
 };
 
@@ -205,6 +224,55 @@ const actionsMap = {
       userSaveReservationStart: false,
     };
   },
+
+  [getConversationsUserActionTypes.START]: (state) => {
+    return {
+      ...state,
+      userGetConversationsStart: true,
+      userGetConversationsSuccess: null,
+      userGetConversationsError: false,
+    };
+  },
+  [getConversationsUserActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      userGetConversationsStart: false,
+      userGetConversationsError: action.payload.response.body,
+    };
+  },
+  [getConversationsUserActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      userGetConversationsSuccess: action.payload.code,
+      userGetConversationsStart: false,
+      conversations: action.payload.conversations,
+    };
+  },
+
+  [sendMessageUserActionTypes.START]: (state) => {
+    return {
+      ...state,
+      userSendMessageStart: true,
+      userSendMessageSuccess: null,
+      userSendMessageError: false,
+    };
+  },
+  [sendMessageUserActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      userSendMessageStart: false,
+      userSendMessageError: action.payload.response.body,
+    };
+  },
+  [sendMessageUserActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      userSendMessageSuccess: action.payload.code,
+      userSendMessageStart: false,
+      conversations: action.payload.conversations,
+    };
+  },
+
 
 };
 

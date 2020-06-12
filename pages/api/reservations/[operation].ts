@@ -5,6 +5,7 @@ import Reservation from '../../../server/models/reservation';
 import Partner from '../../../server/models/partner';
 import User from '../../../server/models/users';
 import Catering from '../../../server/models/trilinoCatering';
+import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import generalOptions from '../../../lib/constants/generalOptions';
@@ -622,6 +623,8 @@ if (req.query.operation === 'getForFinancial') {
 						
 						
 						if (flag) {
+							const conversation = new Conversation({ reservation: id, user: identifierId, partner: partner['_id'], partnerName: partner['name'], messages: [], validUntil: one['date'], status: 'active'});
+							await conversation.save();
 							const userParams = getConfirmationUserParams({language, reservation: one, partner, double});
 							await sendEmailReservationConfirmationUser(user, userParams);
 							if (confirm) {

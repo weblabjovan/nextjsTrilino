@@ -86,7 +86,6 @@ export default class UserBill extends React.Component <MyProps, MyState>{
   }
 
   
-
   rateSingle(event){
   	const obj = event.target.getAttribute('data-object');
   	const num = event.target.getAttribute('data-num');
