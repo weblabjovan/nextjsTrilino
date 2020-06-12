@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col, Button, Alert } from 'reactstrap';
 import { getReservationsForUser, cancelReservation, rateReservation } from '../actions/reservation-actions';
-import { setUserLanguage } from '../actions/user-actions';
+import { setUserLanguage, getUserConversations, sendUserMessage } from '../actions/user-actions';
 import { getLanguage } from '../lib/language';
 import { isMobile, setCookie, unsetCookie, setUpLinkBasic, currencyFormat, errorExecute } from '../lib/helpers/generalFunctions';
 import { setNestPayHash } from '../server/helpers/general';
@@ -12,6 +12,7 @@ import PlainInput from '../components/form/input';
 import UserSubNavigation from '../components/userProfile/SubNavigation';
 import UserBill from '../components/userProfile/UserBill';
 import RatingScreen from '../components/userProfile/RatingScreen';
+import MessageScreen from '../components/userProfile/MessageScreen';
 import Modal from '../components/modals/ConfirmationModal';
 import PaymentModal from '../components/modals/PaymentModal';
 import NavigationBar from '../components/navigation/navbar';
@@ -21,18 +22,27 @@ import Keys from '../server/keys';
 interface MyProps {
   // using `interface` is also ok
   userLanguage: string;
+  userSendMessageStart: boolean;
+  userSendMessageError: boolean | object;
+  userSendMessageSuccess: null | number;
+  userGetConversationsStart: boolean;
+  userGetConversationsError: boolean | object;
+  userGetConversationsSuccess: null | number;
   globalError: boolean;
   getUserReservationStart: boolean;
   getUserReservationError: object | boolean;
   getUserReservationSuccess: null | number;
   reservations: Array<object>;
+  conversations: Array<object>;
   cancelReservationStart: boolean;
   cancelReservationError: object | boolean;
   cancelReservationSuccess: null | object;
   rateReservationStart: boolean;
   rateReservationError: object | boolean;
   rateReservationSuccess: null | number;
-  rateReservation(link: object, data: object, auth: string)
+  sendUserMessage(link: object, data: object, auth: string): void;
+  getUserConversations(link: object, data: object, auth: string): void;
+  rateReservation(link: object, data: object, auth: string): void;
   cancelReservation(link: object, data: object, auth: string): void;
   getReservationsForUser(link: object, data: object, auth: string): void;
   setUserDevice(userAgent: string): boolean;
@@ -67,7 +77,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation', 'togglePaymentModal','activatePayCatering', 'prepareRatingDataForSend', 'goBackFromRating', 'openRating'];
+    const bindingFunctions = ['changeScreen', 'openUserBill', 'closeUserBill', 'toggleModal', 'activateCancelReservation', 'togglePaymentModal','activatePayCatering', 'prepareRatingDataForSend', 'goBackFromRating', 'openRating', 'getMyConversations', 'sendMyMessage'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -199,6 +209,18 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     })
   }
 
+  getMyConversations(){
+    this.setState({ loader: true}, () => {
+      this.props.getUserConversations(this.props.link, {language: this.props.lang}, this.props.token);
+    });
+  }
+
+  sendMyMessage( data: object){
+    this.setState({ loader: true}, () => {
+      this.props.sendUserMessage(this.props.link, data, this.props.token);
+    });
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){ 
     errorExecute(window, this.props.globalError);
 
@@ -214,6 +236,14 @@ class UserProfileView extends React.Component <MyProps, MyState>{
       this.setState({ activeScreen: 'reservation', reservationBillObject: null }, () => {
         this.props.getReservationsForUser(this.props.link, {language: this.props.lang, type: 'user'}, this.props.token);
       });
+    }
+
+    if (!this.props.userGetConversationsStart && prevProps.userGetConversationsStart && !this.props.userGetConversationsError && this.props.userGetConversationsSuccess && !prevProps.userGetConversationsSuccess) {
+      this.setState({loader: false });
+    }
+
+    if (!this.props.userSendMessageStart && prevProps.userSendMessageStart && !this.props.userSendMessageError && this.props.userSendMessageSuccess && !prevProps.userSendMessageSuccess) {
+      this.setState({loader: false });
     }
 
   }
@@ -392,11 +422,13 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                   this.state.activeScreen === 'message'
                   ?
                   (
-                    <Col xs='12'>
-                      <div className="middle">
-                        <h2>Ovde su korisničke poruke</h2>
-                      </div>
-                    </Col>
+                    <MessageScreen
+                      lang={ this.props.lang }
+                      isMobile={ this.state.isMobile }
+                      getConversations={ this.getMyConversations }
+                      conversations={ this.props.conversations }
+                      sendMessage={ this.sendMyMessage }
+                    />
                   )
                   :
                   null
@@ -476,7 +508,16 @@ const mapStateToProps = (state) => ({
   rateReservationError: state.ReservationReducer.rateReservationError,
   rateReservationSuccess: state.ReservationReducer.rateReservationSuccess,
 
+  userGetConversationsStart: state.UserReducer.userGetConversationsStart,
+  userGetConversationsError: state.UserReducer.userGetConversationsError,
+  userGetConversationsSuccess: state.UserReducer.userGetConversationsSuccess,
+
+  userSendMessageStart: state.UserReducer.userSendMessageStart,
+  userSendMessageError: state.UserReducer.userSendMessageError,
+  userSendMessageSuccess: state.UserReducer.userSendMessageSuccess,
+
   reservations: state.ReservationReducer.reservations,
+  conversations: state.UserReducer.conversations,
 });
 
 
@@ -486,6 +527,8 @@ const matchDispatchToProps = (dispatch) => {
     getReservationsForUser,
     cancelReservation,
     rateReservation,
+    getUserConversations,
+    sendUserMessage,
   },
   dispatch);
 };

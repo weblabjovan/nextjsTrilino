@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Reservation from '../../../server/models/reservation';
 import User from '../../../server/models/users';
+import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import { generateString, encodeId, decodeId, setToken, verifyToken, defineUserLanguage }  from '../../../server/helpers/general';
 import { sendEmail }  from '../../../server/helpers/email';
-import { isUserRegDataValid, dataHasValidProperty } from '../../../server/helpers/validations';
+import { isUserRegDataValid, dataHasValidProperty, isConversationMessageLimited } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
@@ -178,6 +179,89 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 
 
+	//////////////////////////////////////   GET MY CONVERSATIONS   ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'getMyConversations') {
+		if (!dataHasValidProperty(req.body, ['language'])) {
+			return res.status(500).send({ endpoint: 'users', operation: 'getMyConversations', success: false, code: 10, error: 'basic validation error'  });
+		}else{
+			const token = req.headers.authorization;
+			const userlanguage = defineUserLanguage(req.body['language']);
+			const dictionary = getLanguage(userlanguage);
+
+			if (!isEmpty(token)) {
+				
+				try{
+					await connectToDb(req.headers.host);
+					const decoded = verifyToken(token);
+					const userId = encodeId(decoded['sub']); 
+					const user = await User.findById(userId, '-password');
+					const today = new Date();
+
+					if (user) {
+						const conversations = await Conversation.find({ user: userId, status: 'active', validUntil: { "$gt": today }});
+						return res.status(200).json({ endpoint: 'users', operation: 'getMyConversations', success: true, code: 1, conversations });
+					}else{
+						return res.status(404).json({ endpoint: 'users', operation: 'getMyConversations', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'users', operation: 'getMyConversations', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+				}
+			
+			}else{
+				return res.status(404).json({ endpoint: 'users', operation: 'getMyConversations', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+	}
+
+
+
+	//////////////////////////////////////   USER SEND MESSAGE   ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'sendMessage') {
+		if (!dataHasValidProperty(req.body, ['language', 'time', 'message', 'id'])) {
+			return res.status(500).send({ endpoint: 'users', operation: 'sendMessage', success: false, code: 10, error: 'basic validation error'  });
+		}else{
+			const  {language, time, message, id} = req.body;
+			const token = req.headers.authorization;
+			const userlanguage = defineUserLanguage(language);
+			const dictionary = getLanguage(userlanguage);
+			const today = new Date();
+
+			if (!isEmpty(token)) {
+				try{
+					await connectToDb(req.headers.host);
+					const decoded = verifyToken(token);
+					const userId = encodeId(decoded['sub']); 
+					const user = await User.findById(userId, '-password');
+
+					if (user) {
+						const converItem = await Conversation.findById(id);
+						if (!isConversationMessageLimited(converItem, 'sender')) {
+							console.log('ovde završim');
+							await Conversation.findOneAndUpdate({"_id": id}, { "$push": {"messages": {"sender": 'user', "time": time, "message": message}}});
+						}
+						const conversations = await Conversation.find({ user: userId, status: 'active', validUntil: { "$gt": today }});
+						return res.status(200).json({ endpoint: 'users', operation: 'sendMessage', success: true, code: 1, conversations });
+					}else{
+						return res.status(404).json({ endpoint: 'users', operation: 'sendMessage', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'users', operation: 'sendMessage', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+				}
+			
+			}else{
+				return res.status(404).json({ endpoint: 'users', operation: 'sendMessage', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+	}
+
+
+
+
+
 	//////////////////////////////////////   LOGIN   ///////////////////////////////////////////////
 
 
@@ -250,16 +334,16 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 				const userId = encodeId(decoded['sub']); 
 				const user = await User.findById(userId, '-password');
 				if (user) {
-					return res.status(200).json({ endpoint: 'partners', operation: 'auth', success: true, code: 1, message: dictionary['apiPartnerAuthCode1'] });
+					return res.status(200).json({ endpoint: 'users', operation: 'auth', success: true, code: 1, message: dictionary['apiPartnerAuthCode1'] });
 				}else{
-					return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					return res.status(500).json({ endpoint: 'users', operation: 'auth', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 				}
 			}catch(err){
-				return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+				return res.status(500).json({ endpoint: 'users', operation: 'auth', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 			}
 			
 		}else{
-			return res.status(500).json({ endpoint: 'partners', operation: 'auth', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			return res.status(500).json({ endpoint: 'users', operation: 'auth', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
 		}
 	}
 

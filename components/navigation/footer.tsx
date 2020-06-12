@@ -66,15 +66,15 @@ export default class Footer extends React.Component <MyProps, MyState> {
 	        			<img src="/static/amex.svg" alt="american express" title="american express" className="amex"></img>
 	        		</Col>
 	        		<Col xs="12" sm="3" lg="4" className="banks">
-	        			<a href="https://www.bancaintesa.rs/pocetna.1.html" target="_blank">
+	        			<a href="https://www.bancaintesa.rs/pocetna.1.html" target="_blank" rel="noreferrer">
 	        				<img src="/static/banca-intesa.svg" alt="banka intesa" title="banka intesa"></img>
 	        			</a>
 	        		</Col>
 	        		<Col xs="12" sm="3" lg="4" className="security">
-	        			<a href="https://www.mastercard.rs/sr-rs/consumers/find-card-products/credit-cards.html" target="_blank">
+	        			<a href="https://www.mastercard.rs/sr-rs/consumers/find-card-products/credit-cards.html" target="_blank" rel="noreferrer">
 	        				<img src="/static/mastercardsec.svg" alt="mastercard security" title="mastercard security"></img>
 	        			</a>
-	        			<a href="https://rs.visa.com/pay-with-visa/security-and-assistance/protected-everywhere.html" target="_blank">
+	        			<a href="https://rs.visa.com/pay-with-visa/security-and-assistance/protected-everywhere.html" target="_blank" rel="noreferrer">
 	        				<img src="/static/verified-by-visa.svg" alt="verified-by-visa" title="verified by visa"></img>
 	        			</a>
 	        		</Col>
