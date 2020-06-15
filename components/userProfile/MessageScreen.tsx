@@ -11,6 +11,7 @@ interface MyProps {
   getConversations(): void;
   sendMessage(data:object):void;
   conversations?: Array<object>;
+  target: string;
 };
 
 interface MyState {
@@ -23,9 +24,10 @@ interface MyState {
 	hiddenConversations: object;
 	activeMessages: Array<object>;
 	error: boolean;
+	nameCatcher: string;
 };
 
-export default class UserBill extends React.Component <MyProps, MyState>{
+export default class MessageScreen extends React.Component <MyProps, MyState>{
 
 	constructor(props){
     super(props);
@@ -52,6 +54,7 @@ export default class UserBill extends React.Component <MyProps, MyState>{
     hiddenConversations: {},
     activeMessages: [],
     error: false,
+    nameCatcher: this.props.target === 'partner' ? 'userName' : 'partnerName',
   };
 
 
@@ -121,6 +124,7 @@ export default class UserBill extends React.Component <MyProps, MyState>{
 	  		id: this.state.activeConversationObj['_id'],
 	  		time: renderDateWithTime(now),
 	  		message: this.state.messageTxt,
+	  		sender: this.props.target,
 	  	}
 
 	  	const activeConversationObjCopy = JSON.parse(JSON.stringify(this.state.activeConversationObj));
@@ -187,8 +191,8 @@ export default class UserBill extends React.Component <MyProps, MyState>{
 			        			this.state.activeMessages.map( (item, index) => {
 			        				return(
 			        					<div className="message" key={`message_${index}`}>
-			        						<div className={`content ${item['sender'] === 'partner'  ? 'notYou' : '' }`}>
-			        							<span>{`${item['sender'] === 'partner' ? this.state.activeConversationObj['partnerName'] : 'You' } ${item['time']}`}</span>
+			        						<div className={`content ${item['sender'] !== this.props.target  ? 'notYou' : '' }`}>
+			        							<span>{`${item['sender'] !== this.props.target ? this.state.activeConversationObj[this.state.nameCatcher] : 'You' } ${item['time']}`}</span>
 						        				<p>{item['message']}</p>
 			        						</div>
 						        			<br/>

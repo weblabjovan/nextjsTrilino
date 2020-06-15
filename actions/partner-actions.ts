@@ -347,3 +347,51 @@ export function getPartnerReservations(link: object, data: object) {
     );
   };
 }
+
+
+export const partnerGetConversationsActionTypes = {
+  START: 'PARTNER_GET_CONVERSATIONS_START',
+  ERROR: 'PARTNER_GET_CONVERSATIONS_ERROR',
+  SUCCESS: 'PARTNER_GET_CONVERSATIONS_SUCCESS',
+};
+
+export function getPartnerConversations(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_GET_CONVERSATIONS);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      partnerGetConversationsActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+
+export const partnerSendMessageActionTypes = {
+  START: 'PARTNER_SEND_MESSAGE_START',
+  ERROR: 'PARTNER_SEND_MESSAGE_ERROR',
+  SUCCESS: 'PARTNER_SEND_MESSAGE_SUCCESS',
+};
+
+export function sendPartnerMessage(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.PARTNERS_SEND_MESSAGE);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      partnerSendMessageActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

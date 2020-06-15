@@ -239,8 +239,7 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
 					if (user) {
 						const converItem = await Conversation.findById(id);
-						if (!isConversationMessageLimited(converItem, 'sender')) {
-							console.log('ovde završim');
+						if (!isConversationMessageLimited(converItem, 'user')) {
 							await Conversation.findOneAndUpdate({"_id": id}, { "$push": {"messages": {"sender": 'user', "time": time, "message": message}}});
 						}
 						const conversations = await Conversation.find({ user: userId, status: 'active', validUntil: { "$gt": today }});

@@ -110,6 +110,12 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                     >{this.state.dictionary['navigationPartnerFinancial']}</NavLink>
                   </NavItem>
                   <NavItem>
+                    <NavLink
+                      id="message"
+                      onClick={this.props.changeScreen}
+                    >{this.state.dictionary['userProfileSubNavMessage']}</NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink onClick={this.logout}>{this.state.dictionary['navigationPartnerLogout']}</NavLink>
                   </NavItem>
 
@@ -172,6 +178,11 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   id="financial"
                   onClick={this.props.changeScreen}
                   ><span className="icon financial"></span>{this.state.dictionary['navigationPartnerFinancial'].toUpperCase()}</li>
+                  <li 
+                  className={this.props.activeScreen === 'message' ? 'active' : ''}
+                  id="message"
+                  onClick={this.props.changeScreen}
+                  ><span className="icon message"></span>{this.state.dictionary['userProfileSubNavMessage'].toUpperCase()}</li>
                 <li 
                   onClick={this.logout}
                 ><span className="icon logout"></span>{this.state.dictionary['navigationPartnerLogout'].toUpperCase()}</li>
