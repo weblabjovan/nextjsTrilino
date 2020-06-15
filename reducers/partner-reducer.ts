@@ -1,5 +1,5 @@
 import {
-  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes, getPartnersMultipleActionTypes
+  registratePartnerActionTypes, getPartnerActionTypes, verificationPartnerActionTypes, passChangePartnerActionTypes, changeSingleFieldActionType, loginPartnerActionTypes, passChangeRequestPartnerActionTypes, updateGeneralPartnerActionTypes, getPartnerProfileActionTypes, updateOfferPartnerActionTypes, updateCateringPartnerActionTypes, updateDecorationgPartnerActionTypes, getReservationTermsActionTypes, saveReservationActionTypes, getReservationsActionTypes, getPartnersMultipleActionTypes, partnerGetConversationsActionTypes, partnerSendMessageActionTypes
 } from '../actions/partner-actions';
 import { IpartnerRoomItem, IpartnerGeneral, IpartnerCatering, IpartnerDecoration, IpartnerReservation } from '../lib/constants/interfaces';
 import { setUpGeneralRoomsForFront, setUpMainGeneralState, setArrayWithLabelAndValue, setUpMainCateringState, buildPartnerDecorationObject, generateString, createReservationTermsArray, formatReservations, calculateActivationProcess} from '../lib/helpers/specificPartnerFunctions';
@@ -64,6 +64,14 @@ interface initialState {
   getPartnersMultipleError: object | boolean;
   getPartnersMultipleSuccess: null | number;
 
+  getPartnersConversationsStart: boolean;
+  getPartnersConversationsError: object | boolean;
+  getPartnersConversationsSuccess: null | number;
+
+  sendPartnerMessageStart: boolean;
+  sendPartnerMessageError: object | boolean;
+  sendPartnerMessageSuccess: null | number;
+
   forActivation: boolean;
   activationAlert: boolean;
   activationProcessPercent: number;
@@ -85,6 +93,8 @@ interface initialState {
   partnerReservationsList: Array<object>;
 
   searchResults: Array<object>;
+
+  conversations: Array<object>;
   
 }
 
@@ -146,6 +156,14 @@ const initialState: initialState  = {
   getPartnersMultipleStart: false,
   getPartnersMultipleError: false,
   getPartnersMultipleSuccess: null,
+
+  getPartnersConversationsStart: false,
+  getPartnersConversationsError: false,
+  getPartnersConversationsSuccess: null,
+
+  sendPartnerMessageStart: false,
+  sendPartnerMessageError: false,
+  sendPartnerMessageSuccess: null,
 
   forActivation: false,
   activationAlert: false,
@@ -285,6 +303,8 @@ const initialState: initialState  = {
   partnerReservationsList: [],
 
   searchResults: [],
+
+  conversations: [],
 
 };
 
@@ -623,6 +643,52 @@ const actionsMap = {
       getPartnersMultipleSuccess: action.payload.code,
       searchResults: action.payload.partners,
       getPartnersMultipleStart: false,
+    };
+  },
+
+  [partnerGetConversationsActionTypes.START]: (state) => {
+    return {
+      ...state,
+      getPartnersConversationsStart: true,
+      getPartnersConversationsSuccess: null,
+    };
+  },
+  [partnerGetConversationsActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      getPartnersConversationsStart: false,
+      getPartnersConversationsError: action.payload.response.body,
+    };
+  },
+  [partnerGetConversationsActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      getPartnersConversationsSuccess: action.payload.code,
+      conversations: action.payload.conversations,
+      getPartnersConversationsStart: false,
+    };
+  },
+
+  [partnerSendMessageActionTypes.START]: (state) => {
+    return {
+      ...state,
+      sendPartnerMessageStart: true,
+      sendPartnerMessageSuccess: null,
+    };
+  },
+  [partnerSendMessageActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      sendPartnerMessageStart: false,
+      sendPartnerMessageError: action.payload.response.body,
+    };
+  },
+  [partnerSendMessageActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      sendPartnerMessageSuccess: action.payload.code,
+      conversations: action.payload.conversations,
+      sendPartnerMessageStart: false,
     };
   },
 

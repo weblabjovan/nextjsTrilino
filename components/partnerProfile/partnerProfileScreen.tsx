@@ -8,6 +8,7 @@ import FoodScreen from './FoodScreen';
 import DecorationScreen from './DecorationScreen';
 import CalendarScreen from './CalendarScreen';
 import FinancialScreen from './FinancialScreen';
+import MessageScreen from '../userProfile/MessageScreen';
 
 interface MyProps {
   // using `interface` is also ok
@@ -17,7 +18,11 @@ interface MyProps {
   closeLoader(): void;
   openLoader(): void;
   token?: string | undefined;
+  isMobile: boolean;
   loader: boolean;
+  getConversationFunc(): void;
+  partnerConversations: Array<object>;
+  sendPartnerMessage(data: object): void;
 };
 interface MyState {
   dictionary: object;
@@ -115,6 +120,19 @@ class PartnerScreenView extends React.Component <MyProps, MyState>{
                 closeLoader={this.props.closeLoader}
                 openLoader={this.props.openLoader}
                 token={ this.props.token }
+              />
+            )
+            :
+             this.props.screen === 'message'
+            ?
+            (
+              <MessageScreen
+                lang={ this.props.lang }
+                isMobile={ this.props.isMobile }
+                getConversations={ this.props.getConversationFunc }
+                conversations={ this.props.partnerConversations }
+                sendMessage={ this.props.sendPartnerMessage }
+                target="partner"
               />
             )
             :

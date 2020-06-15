@@ -428,6 +428,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                       getConversations={ this.getMyConversations }
                       conversations={ this.props.conversations }
                       sendMessage={ this.sendMyMessage }
+                      target="user"
                     />
                   )
                   :

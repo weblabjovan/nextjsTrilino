@@ -623,7 +623,8 @@ if (req.query.operation === 'getForFinancial') {
 						
 						
 						if (flag) {
-							const conversation = new Conversation({ reservation: id, user: identifierId, partner: partner['_id'], partnerName: partner['name'], messages: [], validUntil: one['date'], status: 'active'});
+							const myCriptor = new MyCriptor();
+							const conversation = new Conversation({ reservation: id, user: identifierId, partner: partner['_id'], partnerName: partner['name'], userName: myCriptor.decrypt(user['firstName'], true), messages: [], validUntil: one['date'], status: 'active'});
 							await conversation.save();
 							const userParams = getConfirmationUserParams({language, reservation: one, partner, double});
 							await sendEmailReservationConfirmationUser(user, userParams);
