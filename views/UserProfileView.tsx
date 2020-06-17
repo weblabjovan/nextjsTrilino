@@ -344,9 +344,10 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                           this.props.reservations.length
                           ?
                           this.props.reservations.map((reser, index) => {
+                            const ending = new Date(reser['toDate']);
                             return(
                               <Col xs="12" sm="6" lg="4" key={`resKEy_${index}`}>
-                                <div className="item">
+                                <div className="item" style={ending.getTime() < Date.now() ? {"opacity": 0.6 } : null }>
                                   <div className={`outcome ${reser['status']}`}>
                                     <p>{ reser['status'] === 'accepted' ? this.state.dictionary['paymentUserEmailPaymentStatusTrue'] : reser['status'] === 'declined' ? this.state.dictionary['paymentUserEmailPaymentStatusFalse'] : this.state.dictionary['paymentUserEmailPaymentStatusCancel']}</p>
                                   </div>
