@@ -13,4 +13,8 @@ const conversationSchema = new Schema({
 
 }, {timestamps: true});
 
+conversationSchema.index({'user': 1});
+conversationSchema.index({'partner': 1});
+conversationSchema.index({'reservation': 1});
+
 export default mongoose.models.Conversation || mongoose.model('Conversation', conversationSchema);

@@ -535,6 +535,7 @@ if (req.query.operation === 'getForFinancial') {
 						if (result['_id'] == id) {
 							const partner = await Partner.findById(result['partner'], '-password -passSafetyCode -passProvided -verified');
 							if (partner) {
+								await Conversation.findOneAndUpdate({"reservation": id}, {"$set" : {status: 'canceled'} });
 								const policy = getCancelPolicy(result);
 								const cancel = await Reservation.where({ 'user': userObj['_id'], doubleReference: result['doubleReference'] }).updateMany({ $set: { active: false, canceled: true, cancelDate: today, return: policy['free'], returnPrice: policy['free'] ? (result['deposit'] * 0.95) : 0 }});
 								if (result['trilino']) {
