@@ -46,6 +46,7 @@
     "superagent": "^5.1.0",
     "url-parse": "^1.4.7",
     "urlencoded-body-parser": "^3.0.0",
+    "viber-bot": "^1.0.16",
     "wait-on": "^3.3.0"
   },
   "devDependencies": {
