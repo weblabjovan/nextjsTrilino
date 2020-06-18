@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Reservation from '../../../server/models/reservation';
+import Partner from '../../../server/models/partner';
 import {Bot, Events, Message} from 'viber-bot';
 import User from '../../../server/models/users';
 import Conversation from '../../../server/models/conversation';
@@ -274,20 +275,19 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		});
 
 		// Perfect! Now here's the key part:
-		bot.on(BotEvents.MESSAGE_RECEIVED, (message, response) => {
+		bot.on(Events.MESSAGE_RECEIVED, async (message, response) => {
 			let myMsg = '';
+			let id = '';
 			if (message['message']['text'].substr(0,4) === 'USER') {
-				const id = message['message']['text'].substr(5);
+				id = message['message']['text'].substr(5);
 				myMsg = 'Na žalost rezervacija sa ovim brojem narudžbine nije pronadjena. Molimo vas pokušajte kasnije.';
 				try{
 					await connectToDb(req.headers.host);
 					const reservation = await Reservation.findById(id);
-					if (reservation) {
-						if (reservation['active']) {
-							const user = await User.findOneAndUpdate({"id": reservation['user'], {"$set":{ "viber": message['sender']}}, {new: true});
-							if (user['viber']) {
-								myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.'
-							}
+					if (reservation['active']) {
+						const user = await User.findOneAndUpdate({"_id": reservation['user']}, { "$set" : { viber: message['sender']}}, { new: true });
+						if (user['viber']) {
+							myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.';
 						}
 					}
 
@@ -295,16 +295,16 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					return res.status(500).send({ endpoint: 'users', operation: 'viber', success: false, code: 6, error: 'db error', message: err  });
 				}
 			}else if (message['message']['text'].substr(0,4) === 'PART') {
-				const id = message['message']['text'].substr(5);
+				id = message['message']['text'].substr(5);
 				myMsg = 'Na žalost partner sa ovim id-jem nije pronadjen u našoj bazi.';
 
 				try{
 					await connectToDb(req.headers.host);
-					const partner = await Partner.findById(id);
-					if (partner) {
-						const update = await Partner.findOneAndUpdate({"id": reservation['partner'], {"$set":{ "viber": message['sender']}}, {new: true});
-						if (user['viber']) {
-							update = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.'
+					const partnerObj = await Partner.findById(id);
+					if (partnerObj) {
+						const update = await Partner.findOneAndUpdate({"_id": id}, {"$set" : { viber: message['sender']}}, { new: true });
+						if (update['viber']) {
+							myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.';
 						}
 					}
 
