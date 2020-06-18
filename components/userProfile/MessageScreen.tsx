@@ -160,7 +160,7 @@ export default class MessageScreen extends React.Component <MyProps, MyState>{
 		        		<span onClick={ this.toggleExplain }>Pogledajte objašnjenje</span>
 		        		<p style={!this.state.viewExplain && this.props.isMobile ? {"display": "none"} : {"display": "block"} }>Opcija poruka služi da biste sa prostorom gde se organizuje proslava (prostor) razmenili ključne informacije u vezi sa eventualnim promenama na aktivnoj rezervaciji. Kao i da bi o nekom potencijalnom dogovoru postojao pismeni trag u našem sistemu. Kada poruku pošaljete, prostor odmah dobija njenu sadržinu i potrudiće se da odgovori u najkraćem mogućem roku. Na raspolaganju vam je 10 poruka po aktivnoj rezervaciji, iskoristite ih samo za one najbitnije informacije. Ukoliko vam ovih 10 poruka nije dovoljno detaljnom pregledu vaše rezervacije možete videti kontakt telefon prostora.</p>
 		        		<span className="backIcon" id="backToConversationID" onClick={ this.getBackToCon }></span>
-		        		<a href="viber://pa?chatURI=trilino">Viber bot</a>
+		        		<a href="viber://pa?chatURI=trilinobot">Viber bot</a>
 		        	</Col>
 		        </Row>
 

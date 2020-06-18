@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Reservation from '../../../server/models/reservation';
+import {Bot, Events, Message} from 'viber-bot';
 import User from '../../../server/models/users';
 import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
@@ -12,6 +13,7 @@ import { isUserRegDataValid, dataHasValidProperty, isConversationMessageLimited 
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import { getLanguage } from '../../../lib/language';
+import Keys from '../../../server/keys';
 
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
 
@@ -257,6 +259,68 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		}
 	}
 
+
+	//////////////////////////////////////   VIBER   ///////////////////////////////////////////////
+
+	if (req.query.operation === 'viber') {
+		const TextMessage = Message['Text'];
+
+		console.log(req.body);
+
+		const bot = new Bot({
+			authToken: Keys['VIBER_BOT_TOKEN'],
+			name: "Trilino",
+			avatar: "https://www.trilino.com/static/logo_bottom.jpg" // It is recommended to be 720x720, and no more than 100kb.
+		});
+
+		// Perfect! Now here's the key part:
+		bot.on(BotEvents.MESSAGE_RECEIVED, (message, response) => {
+			let myMsg = '';
+			if (message['message']['text'].substr(0,4) === 'USER') {
+				const id = message['message']['text'].substr(5);
+				myMsg = 'Na žalost rezervacija sa ovim brojem narudžbine nije pronadjena. Molimo vas pokušajte kasnije.';
+				try{
+					await connectToDb(req.headers.host);
+					const reservation = await Reservation.findById(id);
+					if (reservation) {
+						if (reservation['active']) {
+							const user = await User.findOneAndUpdate({"id": reservation['user'], {"$set":{ "viber": message['sender']}}, {new: true});
+							if (user['viber']) {
+								myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.'
+							}
+						}
+					}
+
+				}catch(err){
+					return res.status(500).send({ endpoint: 'users', operation: 'viber', success: false, code: 6, error: 'db error', message: err  });
+				}
+			}else if (message['message']['text'].substr(0,4) === 'PART') {
+				const id = message['message']['text'].substr(5);
+				myMsg = 'Na žalost partner sa ovim id-jem nije pronadjen u našoj bazi.';
+
+				try{
+					await connectToDb(req.headers.host);
+					const partner = await Partner.findById(id);
+					if (partner) {
+						const update = await Partner.findOneAndUpdate({"id": reservation['partner'], {"$set":{ "viber": message['sender']}}, {new: true});
+						if (user['viber']) {
+							update = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.'
+						}
+					}
+
+				}catch(err){
+					return res.status(500).send({ endpoint: 'users', operation: 'viber', success: false, code: 6, error: 'db error', message: err  });
+				}
+			}else{
+				myMsg = 'Poruka koju ste poslali nije validna, molimo vas pokušajte ponovo.';
+			}
+			
+			
+			response.send(new TextMessage(myMsg));
+		});
+
+		return res.status(200).send({ endpoint: 'users', operation: 'viber', success: true, code: 1  });
+	}
 
 
 
