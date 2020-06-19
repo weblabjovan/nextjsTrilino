@@ -30,7 +30,6 @@ const partnerSchema = new Schema({
 	numberOfRating: Number,
 	ratingCalculation: Number,
 	bank: Object,
-	viber: Object,
 }, {timestamps: true});
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);

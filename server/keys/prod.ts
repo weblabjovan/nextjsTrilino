@@ -17,7 +17,6 @@ type keyType = {
 	NEST_PAY_CLIENT_ID: string;
 	NEST_PAY_RANDOM: string;
 	NEST_PAY_STORE_KEY: string;
-	VIBER_BOT_TOKEN: string;
 }
 
 const keys: keyType = {
@@ -37,8 +36,7 @@ const keys: keyType = {
 	CRYPTO_SECOND: process.env.CRYPTO_SECOND,
 	NEST_PAY_CLIENT_ID: process.env.NEST_PAY_CLIENT_ID,
 	NEST_PAY_RANDOM: process.env.NEST_PAY_RANDOM,
-	NEST_PAY_STORE_KEY: process.env.NEST_PAY_STORE_KEY,
-	VIBER_BOT_TOKEN: process.env.VIBER_BOT_TOKEN
+	NEST_PAY_STORE_KEY: process.env.NEST_PAY_STORE_KEY
 }
 
 export default keys;

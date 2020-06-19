@@ -16,8 +16,7 @@
 		"CRYPTO_SECOND":"@crypto-second",
 		"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
 		"NEST_PAY_RANDOM":"@nest-pay-random",
-		"NEST_PAY_STORE_KEY":"@nest-pay-store-key",
-		"VIBER_BOT_TOKEN":"@viber-bot-token"
+		"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	},
 	"build": {
 	    "env": {
@@ -37,8 +36,7 @@
 			"CRYPTO_SECOND":"@crypto-second",
 			"NEST_PAY_CLIENT_ID":"@nest-pay-client-id",
 			"NEST_PAY_RANDOM":"@nest-pay-random",
-			"NEST_PAY_STORE_KEY":"@nest-pay-store-key",
-			"VIBER_BOT_TOKEN":"@viber-bot-token"
+			"NEST_PAY_STORE_KEY":"@nest-pay-store-key"
 	    }
 	}
 }

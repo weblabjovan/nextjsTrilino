@@ -15,7 +15,6 @@ const userSchema = new Schema({
 	userlanguage: {type: String, required: true},
 	verified: {type: Boolean, required: true},
 	origin: String,
-	viber: Object,
 }, {timestamps: true});
 
 userSchema.index({'email': 1});

@@ -943,6 +943,22 @@ export const isPartnerLogged = async (context: any): Promise<boolean> => {
   }
 }
 
+export const isPartnerLoggedOutsideCall = async (context: any): Promise<boolean> => {
+	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
+
+  try{
+    const apiUrl = `${link["protocol"]}${link["host"]}/api/partners/auth/?partnerAuth=${link['queryObject']['userAuth']}&language=${link['queryObject']['language']}`;
+      const response = await fetch(apiUrl);
+    if (response.status === 200) {
+    	return true;
+    }else{
+    	return false;
+    }
+  }catch(err){
+    return false;
+  }
+}
+
 export const getSinglePartner = async (context: any, encoded: boolean): Promise<any> => {
 	const link = setUpLinkBasic({path: context.asPath, host: context.req.headers.host});
 	const date = link['queryObject']['date'] ? link['queryObject']['date'] : 'null';

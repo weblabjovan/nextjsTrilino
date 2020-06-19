@@ -2,14 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Reservation from '../../../server/models/reservation';
-import Partner from '../../../server/models/partner';
-import {Bot, Events, Message} from 'viber-bot';
 import User from '../../../server/models/users';
 import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
 import MyCriptor from '../../../server/helpers/MyCriptor';
 import { generateString, encodeId, decodeId, setToken, verifyToken, defineUserLanguage }  from '../../../server/helpers/general';
-import { sendEmail }  from '../../../server/helpers/email';
+import { sendEmail, sendMessageNotification }  from '../../../server/helpers/email';
 import { isUserRegDataValid, dataHasValidProperty, isConversationMessageLimited } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
@@ -241,9 +239,39 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const user = await User.findById(userId, '-password');
 
 					if (user) {
-						const converItem = await Conversation.findById(id);
-						if (!isConversationMessageLimited(converItem, 'user')) {
+						const lookupPar = { 
+							from: 'partners', 
+							let: { partner: '$partner'}, //
+							pipeline: [
+								{ $addFields: { "partner": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$partner", "$partner" ] }
+			             }
+			          }
+			        ],
+			        as: "partnerObj"
+						};
+
+						const lookupRes = { 
+							from: 'reservations', 
+							let: { reservation: '$reservation'}, //
+							pipeline: [
+								{ $addFields: { "reservation": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$reservation", "$reservation" ] }
+			             }
+			          }
+			        ],
+			        as: "reservationObj"
+						};
+
+						const ObjectId = mongoose.Types.ObjectId;
+						const converItem = await Conversation.aggregate([{ $match: {"_id": ObjectId(id) }}, {$lookup: lookupPar}, {$project: {'password': 0}}, {$lookup: lookupRes}]);
+						if (!isConversationMessageLimited(converItem[0], 'user')) {
 							await Conversation.findOneAndUpdate({"_id": id}, { "$push": {"messages": {"sender": 'user', "time": time, "message": message}}});
+							await sendMessageNotification('partner', converItem[0], message, req.headers.host);
 						}
 						const conversations = await Conversation.find({ user: userId, status: 'active', validUntil: { "$gt": today }});
 						return res.status(200).json({ endpoint: 'users', operation: 'sendMessage', success: true, code: 1, conversations });
@@ -261,73 +289,9 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 
-	//////////////////////////////////////   VIBER   ///////////////////////////////////////////////
-
-	if (req.query.operation === 'viber') {
-		const TextMessage = Message['Text'];
-
-		console.log(req.body);
-
-		const bot = new Bot({
-			authToken: Keys['VIBER_BOT_TOKEN'],
-			name: "Trilino",
-			avatar: "https://www.trilino.com/static/logo_bottom.jpg" // It is recommended to be 720x720, and no more than 100kb.
-		});
-
-		// Perfect! Now here's the key part:
-		bot.on(Events.MESSAGE_RECEIVED, async (message, response) => {
-			let myMsg = '';
-			let id = '';
-			if (message['message']['text'].substr(0,4) === 'USER') {
-				id = message['message']['text'].substr(5);
-				myMsg = 'Na žalost rezervacija sa ovim brojem narudžbine nije pronadjena. Molimo vas pokušajte kasnije.';
-				try{
-					await connectToDb(req.headers.host);
-					const reservation = await Reservation.findById(id);
-					if (reservation['active']) {
-						const user = await User.findOneAndUpdate({"_id": reservation['user']}, { "$set" : { viber: message['sender']}}, { new: true });
-						if (user['viber']) {
-							myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.';
-						}
-					}
-
-				}catch(err){
-					return res.status(500).send({ endpoint: 'users', operation: 'viber', success: false, code: 6, error: 'db error', message: err  });
-				}
-			}else if (message['message']['text'].substr(0,4) === 'PART') {
-				id = message['message']['text'].substr(5);
-				myMsg = 'Na žalost partner sa ovim id-jem nije pronadjen u našoj bazi.';
-
-				try{
-					await connectToDb(req.headers.host);
-					const partnerObj = await Partner.findById(id);
-					if (partnerObj) {
-						const update = await Partner.findOneAndUpdate({"_id": id}, {"$set" : { viber: message['sender']}}, { new: true });
-						if (update['viber']) {
-							myMsg = 'Čestitamo, uspešno ste se prijavili za korišćenje Trilino Bota.';
-						}
-					}
-
-				}catch(err){
-					return res.status(500).send({ endpoint: 'users', operation: 'viber', success: false, code: 6, error: 'db error', message: err  });
-				}
-			}else{
-				myMsg = 'Poruka koju ste poslali nije validna, molimo vas pokušajte ponovo.';
-			}
-			
-			
-			response.send(new TextMessage(myMsg));
-		});
-
-		return res.status(200).send({ endpoint: 'users', operation: 'viber', success: true, code: 1  });
-	}
-
-
 
 
 	//////////////////////////////////////   LOGIN   ///////////////////////////////////////////////
-
-
 
 
 

@@ -1025,6 +1025,22 @@ const serbian: LanguageInterface = {
 	ratingNoRateLink: 'Vaš korisnički profil',
 
 
+	messageScreenTitle: 'Poruke',
+	messageScreenExplainUser: 'Opcija poruka služi da biste sa prostorom gde se organizuje proslava (prostor) razmenili ključne informacije u vezi sa eventualnim promenama na aktivnoj rezervaciji. Kao i da bi o nekom potencijalnom dogovoru postojao pismeni trag u našem sistemu. Kada poruku pošaljete, prostor odmah dobija njenu sadržinu i potrudiće se da odgovori u najkraćem mogućem roku. Na raspolaganju vam je 10 poruka po aktivnoj rezervaciji, iskoristite ih samo za one najbitnije informacije. Ukoliko vam ovih 10 poruka nije dovoljno detaljnom pregledu vaše rezervacije možete videti kontakt telefon prostora.',
+	messageScreenExplainPartner: 'Opcija poruka služi da biste sa korisnikom razmenili ključne informacije u vezi sa eventualnim promenama na aktivnoj rezervaciji. Kao i da bi o nekom potencijalnom dogovoru postojao pismeni trag u našem sistemu. Kada poruku pošaljete, korisnik odmah dobija njenu sadržinu i potrudiće se da odgovori u najkraćem mogućem roku. Na raspolaganju vam je 10 poruka po aktivnoj rezervaciji, iskoristite ih samo za one najbitnije informacije.',
+	messageScreenShowExplain: 'Pogledajte objašnjenje',
+	messageScreenNoActiveRes: 'Trenutno ne postoji nijedna aktivna rezervacija',
+	messageScreenYourside: 'Vi',
+	messageScreenNoMessages: 'Trenutno ne postoji nijedna poruka u vezi sa ovom rezervacijom',
+	messageScreenChooseConvers: 'Izaberite rezervaciju za koju želite da vidite poruke',
+	messageScreenTextPlaceholder: 'Vaša poruke (maks. 256 karaktera)',
+	messageScreenAlertText: 'Iskoristili ste 10 poruka koje ste imali na raspolaganju. Na žalost ne možete da pošaljete više poruka.',
+	messageEmailTitle: 'Nova poruka za narudzbinu ',
+	messageEmailIntro: 'Dobili ste novu poruku. Ona se odnosi na rezervaciju koja će se održati ',
+	messageEmailIntro1: 'i gosta ',
+	messageEmailIntro2: 'Ukoliko želite da odgovorite to možete uraditi preko vašeg profila, klikom na dugme u nastavku.',
+	messageEmailButton: 'Vaš Profil',
+
 	//////////////////////API
 
 
