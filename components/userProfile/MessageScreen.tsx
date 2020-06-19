@@ -174,7 +174,7 @@ export default class MessageScreen extends React.Component <MyProps, MyState>{
   render() {
     return(
 
-    	<Container>
+    	<Container fluid style={this.props.target === 'partner' && this.props.isMobile ? {"padding":"0px"} : null }>
     		{
     			<div className="messageScreen">
 
@@ -189,6 +189,13 @@ export default class MessageScreen extends React.Component <MyProps, MyState>{
 
 		        <Row className="conversation">
 		        	<Col xs="12" sm="4" className="conversationList">
+                {
+                  !this.state.activeConversation && this.props.isMobile
+                  ?
+                  <p className="mobileChoose">Izaberite rezervaciju</p>
+                  :
+                  null
+                }
 		        		{
 		        			this.props.conversations.length
 		        			?
@@ -244,7 +251,7 @@ export default class MessageScreen extends React.Component <MyProps, MyState>{
 										max={256} 		
 		        			/>
 
-		        			<div className="sndText" onClick={ this.goSendMessage }>
+		        			<div className="sndText" onClick={ this.goSendMessage } style={this.props.target === 'partner' && this.props.isMobile ? {"marginBottom":"20px"} : null }>
 		        				<span></span>
 		        			</div>
 		        		</div>
