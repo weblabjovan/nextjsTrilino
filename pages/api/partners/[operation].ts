@@ -6,7 +6,7 @@ import Reservation from '../../../server/models/reservation';
 import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage, getNextTerm }  from '../../../server/helpers/general';
-import { sendEmail }  from '../../../server/helpers/email';
+import { sendEmail, sendMessageNotification }  from '../../../server/helpers/email';
 import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid, isReservationAlreadyMade, isConversationMessageLimited } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
@@ -531,9 +531,39 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 					const partner = await Partner.findById(partnerId, '-password');
 
 					if (partner) {
-						const converItem = await Conversation.findById(id);
-						if (!isConversationMessageLimited(converItem, 'partner')) {
+						const lookupUser = { 
+							from: 'users', 
+							let: { user: '$user'}, //
+							pipeline: [
+								{ $addFields: { "user": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$user", "$user" ] }
+			             }
+			          }
+			        ],
+			        as: "userObj"
+						};
+
+						const lookupRes = { 
+							from: 'reservations', 
+							let: { reservation: '$reservation'}, //
+							pipeline: [
+								{ $addFields: { "reservation": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$reservation", "$reservation" ] }
+			             }
+			          }
+			        ],
+			        as: "reservationObj"
+						};
+
+						const ObjectId = mongoose.Types.ObjectId;
+						const converItem = await Conversation.aggregate([{ $match: {"_id": ObjectId(id) }}, {$lookup: lookupUser}, {$project: {'password': 0}}, {$lookup: lookupRes}]);
+						if (!isConversationMessageLimited(converItem[0], 'partner')) {
 							await Conversation.findOneAndUpdate({"_id": id}, { "$push": {"messages": {"sender": 'partner', "time": time, "message": message}}});
+							await sendMessageNotification('user', converItem[0], message, req.headers.host);
 						}
 						const conversations = await Conversation.find({ partner: partnerId, status: 'active', validUntil: { "$gt": today }});
 						return res.status(200).json({ endpoint: 'partners', operation: 'sendMessage', success: true, code: 1, conversations });
@@ -607,7 +637,14 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const userlanguage = defineUserLanguage(req['query']['language']);
 		const dictionary = getLanguage(userlanguage);
 
-		const token = req.headers.authorization;
+		let token = null;
+
+		if (req['query']['partnerAuth']) {
+			token = req['query']['partnerAuth'];
+		}else{
+			token = req.headers.authorization;
+		}
+
 		if (!isEmpty(token)) {
 				
 			try{

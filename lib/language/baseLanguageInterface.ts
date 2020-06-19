@@ -1014,6 +1014,23 @@ export default interface LanguageInterface {
 	ratingNoRateLink: string;
 
 
+	messageScreenTitle: string;
+	messageScreenExplainUser: string;
+	messageScreenExplainPartner: string;
+	messageScreenShowExplain: string;
+	messageScreenNoActiveRes: string;
+	messageScreenYourside: string;
+	messageScreenNoMessages: string;
+	messageScreenChooseConvers: string;
+	messageScreenTextPlaceholder: string;
+	messageScreenAlertText: string;
+	messageEmailTitle: string;
+	messageEmailIntro: string;
+	messageEmailIntro1: string;
+	messageEmailIntro2: string;
+	messageEmailButton: string;
+
+
 
 	//////////////////////API
 
