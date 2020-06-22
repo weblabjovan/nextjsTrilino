@@ -25,6 +25,7 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.logout = this.logout.bind(this);
+    this.mobileChangeScreen = this.mobileChangeScreen.bind(this);
    
   }
 
@@ -37,6 +38,11 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
     this.setState({
       collapsed: !this.state.collapsed
     });
+  }
+
+  mobileChangeScreen(event: any){
+    this.setState({ collapsed: true});
+    this.props.changeScreen(event);
   }
 
   logout() {
@@ -70,49 +76,49 @@ export default class NavigationBar extends React.Component <MyProps, MyState> {
                   <NavItem>
                     <NavLink
                       id="general"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerGeneral']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="catering"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerCatering']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="decoration"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerDecoration']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="offer"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerOffer']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="calendar"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerCalendar']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="preview"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerPreview']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="financial"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['navigationPartnerFinancial']}</NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       id="message"
-                      onClick={this.props.changeScreen}
+                      onClick={(e) => this.mobileChangeScreen(e)}
                     >{this.state.dictionary['userProfileSubNavMessage']}</NavLink>
                   </NavItem>
                   <NavItem>
