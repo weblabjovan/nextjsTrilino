@@ -53,7 +53,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['closeAlert', 'handleSend', 'validateRegistrationData', 'validateLoginData', 'sendRegistrationData', 'sendLoginData'];
+    const bindingFunctions = ['closeAlert', 'handleSend', 'validateRegistrationData', 'validateLoginData', 'sendRegistrationData', 'sendLoginData', 'scrollToAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -136,7 +136,9 @@ class UserLoginView extends React.Component <MyProps, MyState>{
          data['origin'] = 'regpage';
         this.props.registrateUser(data, this.props.link);
       })
-     }
+    }else{
+      this.scrollToAlert()
+    }
   }
 
   validateLoginData(data: object){
@@ -174,6 +176,8 @@ class UserLoginView extends React.Component <MyProps, MyState>{
          data['language'] = this.props.lang;
         this.props.loginUser(data, this.props.link);
       })
+    }else{
+      this.scrollToAlert()
     }
   }
 
@@ -185,6 +189,13 @@ class UserLoginView extends React.Component <MyProps, MyState>{
   	if (type === 'login') {
   		this.validateLoginData(data);
   	}
+  }
+
+  scrollToAlert(){
+    const res = document.getElementById(`alertUserReg`);
+    setTimeout(() => {
+      res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+    }, 300);
   }
 
   closeAlert(){
@@ -257,7 +268,7 @@ class UserLoginView extends React.Component <MyProps, MyState>{
           <Container>
           	<Row>
           		<Col xs="12">
-          			<Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
+          			<Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} id="alertUserReg">
                   <p hidden={ !this.state.errorMessages['fields']['firstName']} >{ this.state.dictionary['userLoginAlertFirst'] }</p>
                   <p hidden={ !this.state.errorMessages['fields']['lastName']} >{ this.state.dictionary['userLoginAlertLast'] }</p>
                   <p hidden={ !this.state.errorMessages['fields']['email']} >{ this.state.dictionary['userLoginAlertEmail'] }</p>

@@ -65,7 +65,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handlelogTaxChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData', 'sendLoginData', 'handleCheckBox'];
+    const bindingFunctions = ['handleRegistration', 'handleLogin', 'handleInputChange', 'handleNameChange', 'handleTaxChange', 'handleCityChange', 'handlePersonChange', 'handleEmailChange', 'handlePhoneChange', 'validateFormData', 'handlelogTaxChange', 'handleLogPassChange', 'closeAlert', 'sendRegistrationData', 'sendLoginData', 'handleCheckBox', 'scrollToAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -223,6 +223,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
         }
         this.props.loginPartner(data, this.props.link);
       })
+     }else{
+       this.scrollToAlert();
      }
    }
 
@@ -245,6 +247,8 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
         }
         this.props.registratePartner(data, this.props.link);
       })
+     }else{
+       this.scrollToAlert();
      }
    }
 
@@ -289,6 +293,13 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     this.handleInputChange('logPass', event.target.value);
   }
 
+  scrollToAlert(){
+    const res = document.getElementById(`alertParReg`);
+    setTimeout(() => {
+      res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+    }, 300);
+  }
+
   closeAlert(){
     const errorCopy = JSON.parse(JSON.stringify(this.state.errorMessages));
     errorCopy['show'] = false;
@@ -319,7 +330,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     				<Container>
     					<Row>
 			              <Col xs='12'>
-                      <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
+                      <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} id="alertParReg">
                         <p hidden={ !this.state.errorMessages['fields']['name']} >{ this.state.dictionary['partnerRegAlertName'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['taxNum']} >{ this.state.dictionary['partnerRegAlertTax'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['city']} >{ this.state.dictionary['partnerRegAlertCity'] }</p>
@@ -410,7 +421,7 @@ class PartnershipLoginView extends React.Component <MyProps, MyState>{
     				<Container>
     					<Row>
 			              <Col xs='12'>
-                      <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} >
+                      <Alert color="danger" isOpen={ this.state.errorMessages["show"] } toggle={this.closeAlert} id="alertParReg">
                         <p hidden={ !this.state.errorMessages['fields']['logTax']} >{ this.state.dictionary['partnerRegAlertTax'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['logPass']} >{ this.state.dictionary['partnerLogAlertPass'] }</p>
                         <p hidden={ !this.state.errorMessages['fields']['baseError']} >{this.state.baseErrorMessage}</p>

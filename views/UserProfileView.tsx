@@ -69,6 +69,7 @@ interface MyState {
   userBillShow: boolean;
   modal: boolean;
   paymentModal: boolean;
+  start: boolean;
 };
 
 class UserProfileView extends React.Component <MyProps, MyState>{
@@ -99,6 +100,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     userBillShow: false,
     modal: false,
     paymentModal: false,
+    start: true,
   };
 
   logout() {
@@ -108,7 +110,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
 
   changeScreen(screen: string){
     if (screen !== this.state.activeScreen) {
-      this.setState({ activeScreen: screen });
+      this.setState({ activeScreen: screen, start: true });
     }
   }
 
@@ -229,7 +231,7 @@ class UserProfileView extends React.Component <MyProps, MyState>{
     }
 
     if (!this.props.getUserReservationStart && prevProps.getUserReservationStart && !this.props.getUserReservationError && this.props.getUserReservationSuccess && !prevProps.getUserReservationSuccess) {
-      this.setState({loader: false, modal: false, reservationBillObject: null });
+      this.setState({loader: false, modal: false, reservationBillObject: null, start: false });
     }
 
     if (!this.props.rateReservationStart && prevProps.rateReservationStart && !this.props.rateReservationError && this.props.rateReservationSuccess && !prevProps.rateReservationSuccess) {
@@ -346,6 +348,8 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                           this.props.reservations.map((reser, index) => {
                             const ending = new Date(reser['toDate']);
                             return(
+
+                              
                               <Col xs="12" sm="6" lg="4" key={`resKEy_${index}`}>
                                 <div className="item" style={ending.getTime() < Date.now() ? {"opacity": 0.6 } : null }>
                                   <div className={`outcome ${reser['status']}`}>
@@ -403,11 +407,57 @@ class UserProfileView extends React.Component <MyProps, MyState>{
                             )
                           })
                           :
+
                           <Col xs="12">
-                            <div className="middle">
-                              <h4 className="noMatch">{this.state.dictionary['userProfileListNoList']}</h4>
-                            </div>
-                            
+                            <Row>
+                            {
+                              this.state.start
+                              ?
+                              [1,2,3,4,5,6].map(item => {
+                                return(
+                                  <Col xs="12" sm="6" lg="4" key={`dummyRes_${item}`}>
+                                    <div className="dummyResItem">
+                                      <div className={`outcome`}>
+                                        <p></p>
+                                      </div>
+                                      <div className="info">
+                                        <Row>
+                                          <Col xs="12" sm="8">
+                                            <div className="thinLine"></div>
+                                            <div className="thinLine"></div>
+                                            <div className="thinLine"></div>
+                                            <div className="thinLine"></div>
+                                          </Col>
+                                          <Col xs="12" sm="4">
+                                            <div className="actions">
+                                              <div className="btnWrapper">
+                                                <div className="dummyButton"></div>
+                                              </div>
+                                               <div className="btnWrapper">
+                                                <div className="dummyButton"></div>
+                                              </div>
+                                               <div className="btnWrapper">
+                                                <div className="dummyButton"></div>
+                                              </div>
+                                              
+                                             </div>
+                                          </Col>
+                                        </Row>
+                                        
+                                      </div>
+                                     
+                                    </div>
+                                  </Col>
+                                )
+                              })
+                              :
+                              <Col xs="12">
+                                 <div className="middle">
+                                  <h4 className="noMatch">{this.state.dictionary['userProfileListNoList']}</h4>
+                                </div>
+                              </Col>
+                            }
+                            </Row>
                           </Col>
                         }
 

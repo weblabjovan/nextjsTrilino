@@ -74,7 +74,18 @@ export const prepareObjForUserReservation = (obj: string, data: Array<object>): 
 
 	if (obj === 'catering') {
 		for (var i = 0; i < data.length; ++i) {
-			result[data[i]['regId']] = data[i]['quantity'].toString();
+			if (typeof data[i]['quantity'] === 'string') {
+				if (parseInt(data[i]['quantity']) > 0) {
+					result[data[i]['regId']] = data[i]['quantity'];
+				}
+			}
+
+			if (typeof data[i]['quantity'] === 'number') {
+				if (data[i]['quantity'] > 0) {
+					result[data[i]['regId']] = data[i]['quantity'].toString();
+				}
+			}
+			
 		}
 	}else{
 		for (var i = 0; i < data.length; ++i) {

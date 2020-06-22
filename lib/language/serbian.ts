@@ -244,11 +244,11 @@ const serbian: LanguageInterface = {
 	confirmPartnerRegContent: 'Pre nego što počnete da koristite sve fukncionalnosti koje su dostupne Trilino partnerima potrebno je da verifikujete vašu registraciju. Naime, na kontakt email koji ste prethodno upisali poslali smo vam verifikacioni link. Klikom na taj link izvršićete verifikaciju vaše registracije i dobićete pristup vašem partnerskom profilu.',
 
 	passwordTitle: 'Nova lozinka',
-	passwordExplanation: 'Ukucajte novu lozinku u drugo polje a u trećem polju je ponovite. Vaša lozinka može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Sadržaj drugog i trećeg polja mora biti isti.',
+	passwordExplanation: 'Ukucajte novu lozinku u drugo polje a u trećem polju je ponovite. Vaša lozinka može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slovo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Sadržaj drugog i trećeg polja mora biti isti.',
 	passwordUpdateTitle: 'Vaša nova lozinka je uspešno sačuvana',
 	passwordUpdateExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na link u nastavku i prijavite se koristeći novu lozinku.',
 	passwordUpdateUserExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na korisničku ikonicu u gornjem desnom uglu.',
-	passwordAlertPass: 'Lozinka je obavezno polje i može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Molimo vas unesite validnu lozinku.',
+	passwordAlertPass: 'Lozinka je obavezno polje i može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slovo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Molimo vas unesite validnu lozinku.',
 	passwordAlertCode: 'Sigurnosni kod je obavezno polje. Molimo vas unesite sigurnosni kod koji vam je poslat na email.',
 	passwordAlertConfirm: 'Potvrda lozinke je obavezno polje i njen sadržaj mora biti isti kao i sadržaj polja lozinka. Molimo vas potvrdite lozinku.',
 
