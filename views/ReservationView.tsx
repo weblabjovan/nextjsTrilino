@@ -84,7 +84,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady', 'fixOnScroll'];
+    const bindingFunctions = [ 'uniInputHandler', 'checkTheBox', 'toggleSteps', 'calculateStepHeight', 'openNextSection', 'validateSection', 'generalSectionValidation', 'closeAlert', 'changeCateringNumber', 'cateringSectionValidation', 'setGeneral', 'setCatering', 'setAddon', 'checkingAddonBox', 'checkingDecorationBox', 'refreshInfoHeight', 'checkDouble', 'handleLogDataSend', 'changePaymentRouteStage', 'validateRegistrationData', 'validateLoginData', 'validatePasswordData', 'sendLoginData', 'sendRegistrationData', 'closePaymentRouteAlert', 'sendUserPass', 'paymentFunction', 'changePaymentReady', 'fixOnScroll', 'scrollToAlert'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -147,7 +147,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
             errorsCopy['fields']['catering'] = true;
             errorsCopy['fields'][objCopy[key]['regId']] = true;
           }else{
-            if (parseInt(objCopy[key]['num']) < objCopy[key]['min']) {
+            if (parseInt(objCopy[key]['num']) !== 0 && parseInt(objCopy[key]['num']) < objCopy[key]['min']) {
               errorsCopy['flag'] = true;
               errorsCopy['fields']['catering'] = true;
               errorsCopy['fields'][objCopy[key]['regId']] = true;
@@ -158,8 +158,16 @@ class ReservationView extends React.Component <MyProps, MyState>{
     }else{
       Object.keys(objCopy).map(key => {
         if (!isEmpty(objCopy[key]['num'])) {
-          errorsCopy['flag'] = true;
-          errorsCopy['fields']['cateringTime'] = true;
+          if(isNumeric(objCopy[key]['num'])){
+            if (parseInt(objCopy[key]['num']) !== 0) {
+              errorsCopy['flag'] = true;
+              errorsCopy['fields']['cateringTime'] = true;
+            }
+          }else{
+            errorsCopy['flag'] = true;
+            errorsCopy['fields']['cateringTime'] = true;
+          }
+          
         }
       });
     }
@@ -168,6 +176,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
       if (!this.state.errors['flag']) {
         this.setCatering();
         this.openNextSection(2);
+      }else{
+        this.scrollToAlert();
       }
     });
   }
@@ -207,6 +217,8 @@ class ReservationView extends React.Component <MyProps, MyState>{
       if (!this.state.errors['flag']) {
         this.setGeneral();
         this.openNextSection(1);
+      }else{
+        this.scrollToAlert();
       }
     });
   }
@@ -354,6 +366,13 @@ class ReservationView extends React.Component <MyProps, MyState>{
         
       })
     }
+  }
+
+  scrollToAlert(){
+    const res = document.getElementById(`alertId`);
+    setTimeout(() => {
+      res.scrollIntoView({ behavior: "smooth", block: "start", inline: "start"});
+    }, 300);
   }
 
   calculateStepHeight(step: number){
@@ -886,7 +905,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                   />
                 </Col>*/}
                 <Col xs='12' lg="7">
-                  <Alert color="danger" isOpen={ this.state.errors["flag"] } toggle={this.closeAlert} >
+                  <Alert color="danger" isOpen={ this.state.errors["flag"] } toggle={this.closeAlert} id="alertId">
                     <p hidden={ !this.state.errors['fields']['generalName']} >{this.state.dictionary['reservationAlertGeneralName']}</p>
                     <p hidden={ !this.state.errors['fields']['generalAdults']} >{this.state.dictionary['reservationAlertGeneralAdults']}</p>
                     <p hidden={ !this.state.errors['fields']['generalAdutsSize']} >{this.state.dictionary['reservationAlertGeneralAdutsSize']}</p>

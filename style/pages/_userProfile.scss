@@ -321,6 +321,68 @@
 					}
 				}
 			}
+		}
+
+		.dummyResItem{
+			margin-bottom: 20px;
+			background: #fff;
+			border-radius: 8px;
+			-webkit-box-shadow: 4px 4px 10px 0px #c1c1c1;
+			-moz-box-shadow: 4px 4px 10px 0px #c1c1c1;
+			box-shadow: 4px 4px 10px 0px #c1c1c1;
+
+
+			@media only screen and (max-width: 577px) {
+				margin-bottom: 20px;
+			}
+
+			.outcome{
+				padding: 5px;
+				background: #a5a5a5;
+				border: solid 1px #a5a5a5;
+				border-bottom: none;
+				border-top-right-radius: 8px;
+				border-top-left-radius: 8px;
+				height: 40px;
+			}
+
+			.info{
+				padding: 10px 15px;
+				padding-left: 20px;
+				border: solid 1px $greyCol;
+				height: 175px;
+				border-bottom-right-radius: 8px;
+				border-bottom-left-radius: 8px;
+				border-top: none;
+
+				@media only screen and (max-width: 577px) {
+					height: auto;
+				}
+
+				.thinLine{
+			    	width: 100%;
+			    	height: 22px;
+			    	background: #ccc;
+			    	margin-bottom: 10px;
+			    }
+
+
+				.actions{
+					.btnWrapper{
+						width: 100%;
+						margin-bottom: 6px;
+
+						.dummyButton{
+							width: 75%;
+							height: 28px;
+							border-radius: 15px;
+							background: #ccc;
+							margin: auto;
+						}
+					}
+					
+				}
+			}
 
 			
 		}
