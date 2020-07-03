@@ -412,3 +412,13 @@ export const renderDateWithTime = (date: any): string => {
 
   return `${dateStr} - ${timeStr}`;
 }
+
+export const isLinkSecure = (link: object): boolean => {
+  if (link['host'] !== 'localhost:3000') {
+    if (link['protocol'] === 'http://') {
+      return false;
+    }
+  }
+
+  return true
+}
