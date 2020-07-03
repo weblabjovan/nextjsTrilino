@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
-import { setUpLinkBasic, defineLanguage, isLinkSecure } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure, isWWWLink, setProperLink } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isAdminLogged, getAdminToken } from '../lib/helpers/specificAdminFunctions';
 import Head from '../components/head';
 import AdminPanelView from '../views/AdminPanelView';
@@ -37,6 +37,12 @@ Login.getInitialProps = async (ctx: any) => {
   try{
     if (!isLinkSecure(link)) {
       ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
       ctx.res.end();
     }
 

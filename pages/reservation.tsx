@@ -4,7 +4,7 @@ import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import { getSinglePartnerForReservation } from '../lib/helpers/specificPartnerFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { setUpLinkBasic, defineLanguage, isLinkSecure } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure, isWWWLink, setProperLink } from '../lib/helpers/generalFunctions';
 import { isUserLogged, getUserToken } from '../lib/helpers/specificUserFunctions';
 import Head from '../components/head';
 import ReservationView from '../views/ReservationView';
@@ -53,6 +53,12 @@ Reservation.getInitialProps = async (ctx) => {
   try{
     if (!isLinkSecure(link)) {
       ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
       ctx.res.end();
     }
 
