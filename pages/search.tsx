@@ -4,7 +4,7 @@ import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import SearchView from '../views/SearchView';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { isPartnerLogged, getPartners } from '../lib/helpers/specificPartnerFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
@@ -50,6 +50,12 @@ Search.getInitialProps = async (ctx: any) => {
   let userIsLogged = false;
 
   try{
+
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
