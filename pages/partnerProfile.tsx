@@ -4,7 +4,7 @@ import { isPartnerLogged, getPartnerToken, isPartnerLoggedOutsideCall } from '..
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnerProfileView from '../views/PartnerProfileView';
 
@@ -44,6 +44,10 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
   let partnerLog = null;
 
   try{
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
 
     if (link['queryObject']['devAuth']) {
       devLog = await isDevEnvLoggedOutsideCall(ctx);

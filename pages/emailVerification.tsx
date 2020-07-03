@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import EmailVerificationView from '../views/EmailVerificationView';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { getLanguage } from '../lib/language';
 
@@ -48,6 +48,11 @@ EmailVerification.getInitialProps = async (ctx: any) => {
   let resolution = 0;
 
   try{
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
