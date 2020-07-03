@@ -44,8 +44,7 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 Password.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const link = setUpLinkBasic(req.url);
-	const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 	let verifyObject = { };
 	let error = true;
 
@@ -61,8 +60,6 @@ Password.getInitialProps = async (ctx: any) => {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
-
-    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
     const partnerLog = await isPartnerLogged(ctx);
     if (partnerLog) {
@@ -83,7 +80,7 @@ Password.getInitialProps = async (ctx: any) => {
 
 	if (link['queryObject']['type'] === 'partner') {
     try{
-      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
+      const res = await fetch(`${link['protocol']}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         error = false;
@@ -96,7 +93,7 @@ Password.getInitialProps = async (ctx: any) => {
 
   if (link['queryObject']['type'] === 'user') {
     try{
-      const res = await fetch(`${protocol}${req.headers.host}/api/users/get/?user=${link['queryObject']['page']}&encoded=true&type=verification`);
+      const res = await fetch(`${link['protocol']}${req.headers.host}/api/users/get/?user=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         error = false;
