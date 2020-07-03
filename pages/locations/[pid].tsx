@@ -54,6 +54,7 @@ Location.getInitialProps = async (ctx: any) => {
   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   let result = { partner: null};
   let userIsLogged = false;
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
   try{
     if (!isLinkSecure(link)) {
