@@ -340,9 +340,23 @@ if (req.query.operation === 'getForFinancial') {
 				await connectToDb(req.headers.host);
 				const partner = await Partner.findById(partnerId, '-password -photos');
 				if (partner) {
+					const lookup = { 
+						from: 'partners', 
+						let: { partner: '$partner'}, //
+						pipeline: [
+							{ $addFields: { "partner": { "$toString": "$_id" }}},
+		          { $match:
+		             { 
+		             		$expr: { $eq: [ "$$partner", "$partner" ] }
+		             }
+		          }
+		        ],
+		        as: "partnerObj"
+					};
 					const dateHandler = new DateHandler();
 					const monthDates = dateHandler.getMonthStopStartDates(month, year);
-					const reservations = await Reservation.find({ 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partnerId, 'toDate': { '$gte': monthDates['start'], '$lt': monthDates['end'] }});
+					const reservations = await Reservation.aggregate([{ $match: { 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partnerId, 'toDate': { '$gte': monthDates['start'], '$lt': monthDates['end'] }}}, {$lookup: lookup}, { $project: {'transactionCard': 0, 'partnerObj.password': 0, 'partnerObj.contactEmail': 0, 'partnerObj.contactPerson': 0, 'partnerObj.taxNum': 0, 'partnerObj.photos': 0, 'partnerObj.passSafetyCode': 0, 'partnerObj.map': 0 } }]).sort({fromDate: -1});
+					// const reservations = await Reservation.find({ 'type': 'user', 'doubleNumber': 1, 'active': true, 'confirmed': true, 'partner': partnerId, 'toDate': { '$gte': monthDates['start'], '$lt': monthDates['end'] }});
 					return res.status(200).json({ endpoint: 'reservations', operation: 'getForFinancial', success: true, code: 1, reservations });
 				}else{
 					return res.status(404).send({ endpoint: 'reservations', operation: 'getForFinancial', success: false, code: 2, error: 'auth error', message: 'Partner token not valid'  });
