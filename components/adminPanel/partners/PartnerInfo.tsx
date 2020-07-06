@@ -2,9 +2,11 @@ import React from 'react';
 import Select from 'react-select';
 import { Row, Col, Container, Button } from 'reactstrap';
 import { getLanguage } from '../../../lib/language';
+import { datePickerLang } from '../../../lib/language/dateLanguage';
 import generalOptions from '../../../lib/constants/generalOptions';
-import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber } from '../../../lib/helpers/specificPartnerFunctions';
+import { isFieldInObject, getGeneralOptionLabelByValue, isolateByArrayFieldValue, getLayoutNumber, addDaysToDate } from '../../../lib/helpers/specificPartnerFunctions';
 import PlainInput from '../../form/input';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import CheckBox from '../../form/checkbox';
 import Keys from '../../../server/keys';
 
@@ -13,7 +15,8 @@ interface MyProps {
   show: boolean;
   closeInfo(outcome: boolean, partner: string):void;
   saveMap(map: object):void;
-  saveBank(map: object):void;
+  saveBank(bank: object):void;
+  activatePromotion(bank: object):void;
 };
 interface MyState {
   dictionary: object;
@@ -22,6 +25,7 @@ interface MyState {
   mapInfo: object;
   bankInfo: object;
   lockBankFields: boolean;
+  promoDeadline: Date;
 };
 
 export default class AdminPartnerInfo extends React.Component <MyProps, MyState>{
@@ -31,7 +35,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['toggleLock', 'changeStateObj', 'closeInfo'];
+    const bindingFunctions = ['toggleLock', 'changeStateObj', 'closeInfo', 'formatDate'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -48,6 +52,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
     mapInfo: { lat: '', lng: ''},
     bankInfo: {name: '', account: ''},
     lockBankFields: true,
+    promoDeadline: new Date,
   };
 
   toggleLock(field: string){
@@ -77,6 +82,14 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
     }, () => {
       this.props.closeInfo(false, '')
     })
+  }
+
+  formatDate(date, format, locale) {
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  }
+
+  dateChange = date => {
+    this.setState({ promoDeadline: date });
   }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
@@ -156,7 +169,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                 	</Col>
                 </Row>
 
-                 <Row>
+                <Row>
                   <Col xs="12" lg="6">
                     <Row className="section bank">
                       <Col xs="12">
@@ -195,6 +208,46 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
 
                       <Col xs="12" lg="2">
                         <Button color="success" onClick={ () => this.props.saveBank(this.state.bankInfo) }>Sačuvaj</Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col xs="12" lg="6">
+                    <Row className="section bank">
+                      <Col xs="12">
+                        <h4>Promocija:</h4>
+                      </Col>
+                      <Col xs="12" lg="6">
+                        <label>{this.props.partner['promotion'] ? 'Ovaj partner ima aktiviranu promociju koja traje do datuma iskazanog u polju rok. Promena roka nije moguća.' : 'Ovaj partner nema aktiviranu promociju. Ukoliko želite da je aktivirate u polju rok označite do kada će promocija biti aktivna i kliknite na dugme AKTIVIRAJ' }.</label>
+                      </Col>
+                      <Col xs="12" lg="4">
+                        <label>Rok</label>
+                        <DayPickerInput 
+                            inputProps={{ disabled: this.props.partner['promotion'] ? true : false }}
+                            value={ this.state.promoDeadline }
+                            formatDate={ this.formatDate }
+                            placeholder="Izaberite datum"
+                            onDayChange= { this.dateChange }
+                            format="dd/mm/yyyy"
+                            hideOnDayClick={ true }
+                            keepFocus={ false }
+                            dayPickerProps={{
+                              disabledDays: {
+                                  before: new Date(),
+                                  after: addDaysToDate(null, 365),
+                              },
+                              todayButton: datePickerLang[this.state.lang]['today'],
+                              selectedDays: [ this.state.promoDeadline ],
+                              weekdaysShort: datePickerLang[this.state.lang]['daysShort'],
+                              months: datePickerLang[this.state.lang]['months']
+                            }}
+                           />
+                      </Col>
+
+                      <Col xs="12" lg="2">
+                        <Button color="success" onClick={ () => this.props.activatePromotion({initialDeadline: this.state.promoDeadline}) }>Aktiviraj</Button>
                       </Col>
                     </Row>
                   </Col>
