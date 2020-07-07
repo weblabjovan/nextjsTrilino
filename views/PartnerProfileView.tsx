@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../components/loader';
 import { Container, Row, Col } from 'reactstrap';
 import { setUserLanguage } from '../actions/user-actions';
-import { getPartnerProfile, changeSinglePartnerField } from '../actions/partner-actions';
+import { getPartnerProfile, changeSinglePartnerField, getPartnerConversations, sendPartnerMessage } from '../actions/partner-actions';
 import { getLanguage } from '../lib/language';
 import { setUpLinkBasic } from '../lib/helpers/generalFunctions';
 import { isMobile } from '../lib/helpers/generalFunctions';
@@ -19,6 +19,15 @@ interface MyProps {
   setUserLanguage(language: string): string;
   changeSinglePartnerField(field: string, value: any): any;
   getPartnerProfile(link: object, auth: string): object;
+  getPartnerConversations(link: object, data: object, auth: string): void;
+  sendPartnerMessage(link: object, data: object, auth: string): void;
+  getPartnersConversationsStart: boolean;
+  getPartnersConversationsError: object | boolean;
+  getPartnersConversationsSuccess: null | number;
+  sendPartnerMessageStart: boolean;
+  sendPartnerMessageError: object | boolean;
+  sendPartnerMessageSuccess: null | number;
+  conversations: Array<object>;
   userAgent: string;
   path: string;
   fullPath: string;
@@ -42,7 +51,7 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['changeScreen', 'changeLanguage', 'openLoader', 'closeLoader' ];
+    const bindingFunctions = ['changeScreen', 'changeLanguage', 'openLoader', 'closeLoader', 'getMyPartnerConversations', 'sendMessage' ];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -87,6 +96,32 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
     this.setState({ loader: false});
   }
 
+  getMyPartnerConversations(){
+    this.setState({ loader: true}, () => {
+      if (this.props.token) {
+        this.props.getPartnerConversations(this.props.link, {language: this.props.lang}, this.props.token);
+      }
+    })
+  }
+
+  sendMessage(data: object){
+    this.setState({ loader: true}, () => {
+      if (this.props.token) {
+        this.props.sendPartnerMessage(this.props.link, data, this.props.token);
+      }
+    })
+  }
+
+  componentDidUpdate(prevProps: MyProps, prevState:  MyState){
+    if (!this.props.getPartnersConversationsStart && prevProps.getPartnersConversationsStart && this.props.getPartnersConversationsSuccess && !prevProps.getPartnersConversationsSuccess && !this.props.getPartnersConversationsError) {
+      this.setState({ loader: false });
+    }
+
+    if (!this.props.sendPartnerMessageStart && prevProps.sendPartnerMessageStart && this.props.sendPartnerMessageSuccess && !prevProps.sendPartnerMessageSuccess && !this.props.sendPartnerMessageError) {
+      this.setState({ loader: false });
+    }
+  }
+
 	componentDidMount(){
     const link = setUpLinkBasic(window.location.href);
     this.props.getPartnerProfile(link, this.props.token)
@@ -115,6 +150,10 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
           closeLoader={ this.closeLoader }
           token={ this.props.token }
           loader={ this.state.loader }
+          isMobile={ this.state.isMobile }
+          getConversationFunc={ this.getMyPartnerConversations }
+          partnerConversations={ this.props.conversations }
+          sendPartnerMessage={ this.sendMessage }
         />
 
 		    <Footer 
@@ -130,6 +169,15 @@ class PartnerProfileView extends React.Component <MyProps, MyState>{
 const mapStateToProps = (state) => ({
   userLanguage: state.UserReducer.language,
   partnerObject: state.PartnerReducer.partner,
+  conversations: state.PartnerReducer.conversations,
+
+  getPartnersConversationsStart: state.PartnerReducer.getPartnersConversationsStart,
+  getPartnersConversationsError: state.PartnerReducer.getPartnersConversationsError,
+  getPartnersConversationsSuccess: state.PartnerReducer.getPartnersConversationsSuccess,
+
+  sendPartnerMessageStart: state.PartnerReducer.sendPartnerMessageStart,
+  sendPartnerMessageError: state.PartnerReducer.sendPartnerMessageError,
+  sendPartnerMessageSuccess: state.PartnerReducer.sendPartnerMessageSuccess,
 });
 
 
@@ -138,6 +186,8 @@ const matchDispatchToProps = (dispatch) => {
     setUserLanguage,
     getPartnerProfile,
     changeSinglePartnerField,
+    getPartnerConversations,
+    sendPartnerMessage,
   },
   dispatch);
 };

@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { defineLanguage, setUpLinkBasic, getOrgPageName, getOrgHead } from '../lib/helpers/generalFunctions';
+import { defineLanguage, setUpLinkBasic, getOrgPageName, getOrgHead, isLinkSecure, isWWWLink, setProperLink } from '../lib/helpers/generalFunctions';
 import { isUserLogged, testForRes } from '../lib/helpers/specificUserFunctions';
 import { getLanguage } from '../lib/language';
 import { useRouter } from 'next/router';
@@ -44,14 +44,22 @@ Home.getInitialProps = async (ctx: any) => {
    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
    let userIsLogged = false;
 
-   // const myCriptor = new MyCriptor();
-
-
   if (userAgent === undefined) {
     userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36';
   }
 
   try{
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
+      ctx.res.end();
+    }
+    
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
@@ -60,13 +68,6 @@ Home.getInitialProps = async (ctx: any) => {
     }
 
     const userLog = await isUserLogged(ctx);
-
-    // if (link['queryObject']['page'] === 'contact') {
-    //   const test = await testForRes(ctx);
-    //   const res = await test.json();
-    //   console.log(res);
-    // }
-
 
     if (userLog) {
       userIsLogged = true;

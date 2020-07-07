@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
-import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
-import { isPartnerLogged, getPartnerToken } from '../lib/helpers/specificPartnerFunctions';
+import { isDevEnvLogged, isDevEnvLoggedOutsideCall } from '../lib/helpers/specificAdminFunctions';
+import { isPartnerLogged, getPartnerToken, isPartnerLoggedOutsideCall } from '../lib/helpers/specificPartnerFunctions';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure, isWWWLink, setProperLink  } from '../lib/helpers/generalFunctions';
 import Head from '../components/head';
 import PartnerProfileView from '../views/PartnerProfileView';
 
@@ -40,24 +40,44 @@ PartnerProfile.getInitialProps = async (ctx: any) => {
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
   const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
   let token = '';
+  let devLog = null;
+  let partnerLog = null;
 
   try{
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
 
-    const devLog = await isDevEnvLogged(ctx);
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
+      ctx.res.end();
+    }
+
+    if (link['queryObject']['devAuth']) {
+      devLog = await isDevEnvLoggedOutsideCall(ctx);
+    }else{
+      devLog = await isDevEnvLogged(ctx);
+    }
 
     if (!devLog) {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
 
-    const partnerLog = await isPartnerLogged(ctx);
+    if (link['queryObject']['userAuth']) {
+      partnerLog = await isPartnerLoggedOutsideCall(ctx);
+    }else{
+      partnerLog = await isPartnerLogged(ctx);
+    }
     
     if (!partnerLog) {
-      // ctx.res.writeHead(302, {Location: `/login?page=partner&stage=loginlanguage=${link['queryObject']['language']}&page=login`});
-      // ctx.res.end();
+      ctx.res.writeHead(302, {Location: `/login?page=partner&stage=login&language=${link['queryObject']['language']}`});
+      ctx.res.end();
     }
 
-    token = getPartnerToken(ctx);
+    token = link['queryObject']['userAuth'] ? link['queryObject']['userAuth'] : getPartnerToken(ctx);
 
   }catch(err){
     console.log(err);

@@ -2,7 +2,7 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 import Keys from '../keys';
 import MyCriptor from './MyCriptor';
 import { IemailGeneral } from '../../lib/constants/interfaces';
-import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString, getServerHost }  from './general';
+import { getArrayObjectByFieldValue, setReservationTimeString, currencyFormat, setCateringString, setDecorationString, setAddonString, decodeId, setToken, generateString, getServerHost, renderDate }  from './general';
 import { getLanguage } from '../../lib/language';
 import { getGeneralOptionLabelByValue } from '../../lib/helpers/specificPartnerFunctions';
 import DateHandler from '../../lib/classes/DateHandler';
@@ -227,6 +227,41 @@ export const sendCateringReminder =  async (reservation: object, host: string): 
 		text2: `${dictionary['emailCateringReminderText2']} ${reservation['_id']} ${dictionary['emailCateringReminderText3']}`, 
 		text3: dictionary['emailCateringReminderText4'],
 		button: dictionary['emailUserReminderButton'], 
+		hello: dictionary['ratingEmailHello'], 
+		link
+	};
+
+	const email = { sender, to, bcc, templateId, params };
+	return sendEmail(email);
+}
+
+
+export const sendMessageNotification =  async (type: string, conversation: object, message: string, host: string): Promise<any> => {
+	const myCriptor = new MyCriptor();
+
+	const recieverObj = type === 'partner' ? conversation['partnerObj'][0] : conversation['userObj'][0];
+	const userlanguage = type === 'partner' ? 'sr' : recieverObj['userlanguage'];
+	
+	const dictionary = type === 'partner' ? getLanguage('sr') : getLanguage(recieverObj['userlanguage']);
+	const userAuth = setToken(type, decodeId(generateString, recieverObj['_id']));
+	const devAuth = setToken('admin', decodeId(generateString, Keys.ADMIN_BASIC_DEV_KEY));
+
+	const path = type === 'partner' ? 'partnerProfile' : 'userProfile';
+	const name = type === 'partner' ? recieverObj['name'] : `${myCriptor.decrypt(recieverObj['firstName'], true)} ${myCriptor.decrypt(recieverObj['lastName'], true)}`;
+	const toEmail = type === 'partner' ? recieverObj['contactEmail'] : myCriptor.decrypt(recieverObj['contactEmail'], false);
+	const link = getServerHost(host) === 'dev' || getServerHost(host) === 'test' ? `${host}/${path}?devAuth=${devAuth}&userAuth=${userAuth}&language=${userlanguage}` : `${host}/${path}?language=${userlanguage}&userAuth=${userAuth}`;
+	const dateTime = `${renderDate(conversation['reservationObj'][0]['date'])} ${conversation['reservationObj'][0]['from']}-${conversation['reservationObj'][0]['to']}`;
+	
+	const sender = {name:'Trilino', email:'no.reply@trilino.com'};
+	const to = [{name, email: toEmail }];
+	const bcc = null;
+	const templateId = 15;
+	const params = { 
+		title: `${dictionary['messageEmailTitle']} ${conversation['reservation']}`, 
+		intro: `${dictionary['messageEmailIntro']} ${dateTime} ${dictionary['messageEmailIntro1']} ${conversation['reservationObj'][0]['guest']}.`, 
+		message, 
+		preButton: dictionary['messageEmailIntro2'],
+		button: dictionary['messageEmailButton'], 
 		hello: dictionary['ratingEmailHello'], 
 		link
 	};

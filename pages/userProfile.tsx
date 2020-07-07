@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
-import { setUpLinkBasic, defineLanguage, setCookie } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, setCookie, isLinkSecure, isWWWLink, setProperLink } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isDevEnvLoggedOutsideCall } from '../lib/helpers/specificAdminFunctions';
 import { validateRating } from '../lib/helpers/specificReservationFunctions';
 import { isUserLogged, getUserToken, isUserLoggedOutsideCall } from '../lib/helpers/specificUserFunctions';
@@ -55,6 +55,17 @@ UserProfile.getInitialProps = async (ctx: any) => {
   let userLog = null;
 
   try{
+
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
+      ctx.res.end();
+    }
 
     if (link['queryObject']['devAuth']) {
       devLog = await isDevEnvLoggedOutsideCall(ctx);

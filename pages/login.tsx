@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
-import { setUpLinkBasic, defineLanguage, getOrgHead } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, getOrgHead, isLinkSecure, isWWWLink, setProperLink  } from '../lib/helpers/generalFunctions';
 import { isDevEnvLogged, isAdminLogged } from '../lib/helpers/specificAdminFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
@@ -49,11 +49,19 @@ Login.getInitialProps = async (ctx: any) => {
   let userIsLogged = false;
 
   try{
+
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+    
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
+      ctx.res.end();
+    }
+
     const devLog = await isDevEnvLogged(ctx);
-
-    
-
-    
 
     if (link['queryObject']['page'] === 'dev') {
       if (devLog) {

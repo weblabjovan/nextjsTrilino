@@ -153,3 +153,49 @@ export function saveUserReservation(link: object, data: object, auth: string) {
     );
   };
 }
+
+
+export const getConversationsUserActionTypes = {
+  START: 'USER_GET_CONVERSATIONS_START',
+  ERROR: 'USER_GET_CONVERSATIONS_ERROR',
+  SUCCESS: 'USER_GET_CONVERSATIONS_SUCCESS',
+};
+
+export function getUserConversations(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.USERS_GET_CONVERSATIONS);
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      getConversationsUserActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
+
+
+export const sendMessageUserActionTypes = {
+  START: 'USER_SEND_MESSAGE_START',
+  ERROR: 'USER_SEND_MESSAGE_ERROR',
+  SUCCESS: 'USER_SEND_MESSAGE_SUCCESS',
+};
+
+export function sendUserMessage(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.USERS_SEND_MESSAGE);
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      sendMessageUserActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}

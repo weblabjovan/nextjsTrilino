@@ -124,6 +124,7 @@ class CateringDeal extends React.Component <MyProps, MyState>{
                 value={ this.props.currentItem }
                 onChange={ (event) => this.props.changeDealField(this.props.index, 'currentItem', event.target.value) }
                 type="text"
+                max={ 3000 }
                 className="logInput" />
             </Col>
 

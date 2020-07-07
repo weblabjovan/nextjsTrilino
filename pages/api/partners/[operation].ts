@@ -3,10 +3,11 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'; 
 import Partner from '../../../server/models/partner';
 import Reservation from '../../../server/models/reservation';
+import Conversation from '../../../server/models/conversation';
 import connectToDb  from '../../../server/helpers/db';
 import { generateString, encodeId, decodeId, setToken, verifyToken, createSearchQuery, getFreeTermPartners, calculatePartnerCapacity, preparePartnerForLocation, preparePartnerForReservation, isUrlTermValid, defineUserLanguage, getNextTerm }  from '../../../server/helpers/general';
-import { sendEmail }  from '../../../server/helpers/email';
-import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid, isReservationAlreadyMade } from '../../../server/helpers/validations';
+import { sendEmail, sendMessageNotification }  from '../../../server/helpers/email';
+import { isPartnerRegDataValid, isGeneralDataValid, isCateringDataValid, isDecorationDataValid, isPartnerForActivation, dataHasValidProperty, isReservationPartnerDataValid, isGetMultiplePartnersDataValid, isGetSinglePartnerDataValid, isReservationAlreadyMade, isConversationMessageLimited } from '../../../server/helpers/validations';
 import { isEmpty, isMoreThan, isLessThan, isOfRightCharacter, isMatch, isPib, isEmail } from '../../../lib/helpers/validations';
 import { setUpLinkBasic } from '../../../lib/helpers/generalFunctions';
 import DateHandler from '../../../lib/classes/DateHandler';
@@ -470,6 +471,116 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 	}
 
 
+	//////////////////////////////////////   GET CONVERSATIONS   ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'getConversations') {
+		if (!dataHasValidProperty(req.body, ['language'])) {
+			return res.status(404).json({ endpoint: 'partners', operation: 'getConversations', success: false, code: 10, error: 'basic validation error' });
+		}else{
+			const token = req.headers.authorization;
+			const userlanguage = defineUserLanguage(req.body['language']);
+			const dictionary = getLanguage(userlanguage);
+
+			if (!isEmpty(token)) {
+				
+				try{
+					await connectToDb(req.headers.host);
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']); 
+					const partner = await Partner.findById(partnerId, '-password');
+					const today = new Date();
+
+					if (partner) {
+						const conversations = await Conversation.find({ partner: partnerId, status: 'active', validUntil: { "$gt": today }});
+						return res.status(200).json({ endpoint: 'partners', operation: 'getConversations', success: true, code: 1, conversations });
+					}else{
+						return res.status(404).json({ endpoint: 'partners', operation: 'getConversations', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'partners', operation: 'getConversations', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+				}
+			
+			}else{
+				return res.status(404).json({ endpoint: 'partners', operation: 'getConversations', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+	}
+
+
+
+
+		//////////////////////////////////////   PARTNER SEND MESSAGE   ///////////////////////////////////////////////
+
+
+	if (req.query.operation === 'sendMessage') {
+		if (!dataHasValidProperty(req.body, ['language', 'time', 'message', 'id'])) {
+			return res.status(500).send({ endpoint: 'partners', operation: 'sendMessage', success: false, code: 10, error: 'basic validation error'  });
+		}else{
+			const  {language, time, message, id} = req.body;
+			const token = req.headers.authorization;
+			const userlanguage = defineUserLanguage(language);
+			const dictionary = getLanguage(userlanguage);
+			const today = new Date();
+
+			if (!isEmpty(token)) {
+				try{
+					await connectToDb(req.headers.host);
+					const decoded = verifyToken(token);
+					const partnerId = encodeId(decoded['sub']); 
+					const partner = await Partner.findById(partnerId, '-password');
+
+					if (partner) {
+						const lookupUser = { 
+							from: 'users', 
+							let: { user: '$user'}, //
+							pipeline: [
+								{ $addFields: { "user": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$user", "$user" ] }
+			             }
+			          }
+			        ],
+			        as: "userObj"
+						};
+
+						const lookupRes = { 
+							from: 'reservations', 
+							let: { reservation: '$reservation'}, //
+							pipeline: [
+								{ $addFields: { "reservation": { "$toString": "$_id" }}},
+			          { $match:
+			             { 
+			             		$expr: { $eq: [ "$$reservation", "$reservation" ] }
+			             }
+			          }
+			        ],
+			        as: "reservationObj"
+						};
+
+						const ObjectId = mongoose.Types.ObjectId;
+						const converItem = await Conversation.aggregate([{ $match: {"_id": ObjectId(id) }}, {$lookup: lookupUser}, {$project: {'password': 0}}, {$lookup: lookupRes}]);
+						if (!isConversationMessageLimited(converItem[0], 'partner')) {
+							await Conversation.findOneAndUpdate({"_id": id}, { "$push": {"messages": {"sender": 'partner', "time": time, "message": message}}});
+							await sendMessageNotification('user', converItem[0], message, req.headers.host);
+						}
+						const conversations = await Conversation.find({ partner: partnerId, status: 'active', validUntil: { "$gt": today }});
+						return res.status(200).json({ endpoint: 'partners', operation: 'sendMessage', success: true, code: 1, conversations });
+					}else{
+						return res.status(404).json({ endpoint: 'partners', operation: 'sendMessage', success: false, code: 2, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+					}
+				}catch(err){
+					return res.status(500).json({ endpoint: 'partners', operation: 'sendMessage', success: false, code: 3, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+				}
+			
+			}else{
+				return res.status(404).json({ endpoint: 'partners', operation: 'sendMessage', success: false, code: 4, error: 'selection error', message: dictionary['apiPartnerAuthCode2'] });
+			}
+		}
+	}
+
+
 
 	//////////////////////////////////////   LOGIN   ///////////////////////////////////////////////
 
@@ -526,7 +637,14 @@ export default async (req: NextApiRequest, res: NextApiResponse ) => {
 		const userlanguage = defineUserLanguage(req['query']['language']);
 		const dictionary = getLanguage(userlanguage);
 
-		const token = req.headers.authorization;
+		let token = null;
+
+		if (req['query']['partnerAuth']) {
+			token = req['query']['partnerAuth'];
+		}else{
+			token = req.headers.authorization;
+		}
+
 		if (!isEmpty(token)) {
 				
 			try{

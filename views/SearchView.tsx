@@ -66,6 +66,7 @@ interface MyState {
   priceTo: null | object;
   name: string;
   sort: null | object;
+  start: boolean;
 
 };
 
@@ -111,6 +112,7 @@ class SearchView extends React.Component <MyProps, MyState>{
   	priceTo: null,
   	name: '',
   	sort: null,
+    start: true,
   };
 
   handleInputChange(field, value){
@@ -178,14 +180,20 @@ class SearchView extends React.Component <MyProps, MyState>{
     errorExecute(window, this.props.globalError);
     
   	if (!this.props.getPartnersMultipleStart && prevProps.getPartnersMultipleStart && !this.props.getPartnersMultipleError && this.props.getPartnersMultipleSuccess) {
-    	this.setState({loader: false });
+      console.log('ovde');
+    	this.setState({loader: false, start: false });
     }
   }
 
 	componentDidMount(){
 		this.props.setUserLanguage(this.props.lang);
 		this.props.changeSinglePartnerField('searchResults', this.props.partners);
-    this.setState({loader: false });
+    if (this.props.searchResults.length) {
+      this.setState({loader: false });
+    }else{
+      this.setState({loader: false, start: false });
+    }
+    
 	}
 	
   render() {
@@ -542,16 +550,34 @@ class SearchView extends React.Component <MyProps, MyState>{
                 
               </div>
               :
-              <Row>
-                <Col xs="12">
-                  <div className="middle">
-                    <h3 className="noMatch">Trenutno nema rezultata koji odgovaraju vašim kriterijumima pretrage</h3>
-                  </div>
-                </Col>
-                
+              <Row className="searchDummy">
+                {
+                  this.state.start
+                  ?
+                  [1,2,3,4,5,6,7,8].map((item) => {
+                  return(
+                      <Col xs="12" sm="6" lg="4" xl="3" key={`resultDummy_${item}`}>
+                        <div className="searchItemDummy">
+                          <div className="photo"></div>
+                          <div className="info">
+                            <div className="thickLine"></div>
+                            <div className="thinLine"></div>
+                            <div className="thinLine"></div>
+                            <div className="thinLine"></div>
+                          </div>
+                        </div>
+                      </Col>
+                    )
+                  })
+                  :
+                   <Col xs="12">
+                    <div className="middle">
+                      <h3 className="noMatch">Trenutno nema rezultata koji odgovaraju vašim kriterijumima pretrage</h3>
+                    </div>
+                  </Col>
+                }
               </Row>
             }
-
             
         	</Container>
             

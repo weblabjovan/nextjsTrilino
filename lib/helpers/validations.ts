@@ -39,12 +39,9 @@ export const isPhoneNumber = (value: any, country: string): boolean => {
 	const num = value.toString();
 	if (country === 'sr') {
 		if (value) {
-			if (!isNaN(value)) {
-				if (num.length > 8 && num.length < 13) {
-					return true;
-				}
-
-				return false;
+			const rgx = /((0)(65|64|63|62|69|66|67|60|61)|(65|64|63|62|69|66|67|60|61))([0-9][0-9][0-9][0-9][0-9][0-9][0-9]|[0-9][0-9][0-9][0-9][0-9][0-9])/g;
+			if (value.match(rgx)) {
+				return true;
 			}
 			return false;
 		}

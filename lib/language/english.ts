@@ -1026,6 +1026,23 @@ const english: LanguageInterface = {
 	ratingNoRateLink: 'Your user profile',
 
 
+	messageScreenTitle: 'Messages',
+	messageScreenExplainUser: 'The messages option is used to exchange key information with the space where the celebration is organized (space) regarding possible changes to the active reservation. Also with these messages you are sure that there is a written trace of a the communication in our system. When you send a message, the space will immediately receive its content and will try to respond as soon as possible. There are 10 messages available per active reservation, use them only for the most important information. If these 10 messages are not enough for managing your reservation, you can see the contact number of the space in the reservation details.',
+	messageScreenExplainPartner: 'The messages option is used to exchange key information with the user regarding possible changes to the active reservation. Also with these messages you are sure that there is a written trace of a the communication in our system. When you send a message, the user immediately receives its content and will do his best to respond as soon as possible. There are 10 messages available per active reservation, use them only for the most important info.',
+	messageScreenShowExplain: 'See the explanation',
+	messageScreenNoActiveRes: 'There are no active reservations yet',
+	messageScreenYourside: 'You',
+	messageScreenNoMessages: 'There are no messages in regards to this reservation',
+	messageScreenChooseConvers: 'To see messages first choose the reservation',
+	messageScreenTextPlaceholder: 'Your message (max 256 characters)',
+	messageScreenAlertText: 'You have used your 10 available messages. Unfortunatly, you can not send more messages anymore.',
+	messageEmailTitle: 'New message for the order ',
+	messageEmailIntro: 'You have got a new message for the reservation that will be held on ',
+	messageEmailIntro1: 'and guest ',
+	messageEmailIntro2: 'If you want to respond to this message you can do it from your profile. Click on the buton bellow.',
+	messageEmailButton: 'Your Profile',
+
+
 
 	//////////////////////API
 

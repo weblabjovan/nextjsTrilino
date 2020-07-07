@@ -405,3 +405,36 @@ export const renderDate = (date: any): string => {
   
   return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
 }
+
+export const renderDateWithTime = (date: any): string => {
+  const dateStr = renderDate(date);
+  const timeStr = date.toString().substr(16, 5);
+
+  return `${dateStr} - ${timeStr}`;
+}
+
+export const isLinkSecure = (link: object): boolean => {
+  if (link['host'] !== 'localhost:3000') {
+    if (link['protocol'] === 'http://') {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export const isWWWLink = (link: object): boolean => {
+  if (link['host'] !== 'localhost:3000') {
+    if (link['host'].substr(0,4) === 'www.') {
+      return true;
+    }
+  }else{
+    return true;
+  }
+
+  return false;
+}
+
+export const setProperLink = (link: object): string => {
+  return `${link['protocol']}www.${link['host']}${link['fullPath']}?${link['queryString']}`;
+}

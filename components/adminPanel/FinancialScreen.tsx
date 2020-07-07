@@ -55,7 +55,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'setMonthOptions', 'setYearOptions', 'setPartnerOptions', 'searchFin', 'calculateFinancialSum', 'generateNumbers', 'openInfo', 'toggleInfoModal'];
+    const bindingFunctions = ['handleInputChange', 'setMonthOptions', 'setYearOptions', 'setPartnerOptions', 'searchFin', 'calculateFinancialSum', 'generateNumbers', 'openInfo', 'toggleInfoModal', 'isForCommission'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -135,9 +135,9 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
       for (var i = 0; i < this.props.finSearchResult.length; i++) {
         result['price'] = result['price'] + (this.props.finSearchResult[i]['price'] - this.props.finSearchResult[i]['trilinoPrice']);
         result['deposit'] = result['deposit'] + this.props.finSearchResult[i]['deposit'];
-        result['commission'] = result['commission'] + (this.props.finSearchResult[i]['termPrice'] * 0.1);
+        result['commission'] = this.isForCommission(this.props.finSearchResult[i]) ? result['commission'] + (this.props.finSearchResult[i]['termPrice'] * 0.1) : result['commission'];
         result['bank'] = result['bank'] + (this.props.finSearchResult[i]['deposit'] * 0.025);
-        result['payout'] = result['payout'] + (this.props.finSearchResult[i]['deposit'] - (this.props.finSearchResult[i]['termPrice'] * 0.1) - (this.props.finSearchResult[i]['deposit'] * 0.025));
+        result['payout'] = this.isForCommission(this.props.finSearchResult[i]) ? result['payout'] + (this.props.finSearchResult[i]['deposit'] - (this.props.finSearchResult[i]['termPrice'] * 0.1) - (this.props.finSearchResult[i]['deposit'] * 0.025)) : result['payout'] + (this.props.finSearchResult[i]['deposit'] - (this.props.finSearchResult[i]['deposit'] * 0.025));
       }
     }
 
@@ -189,7 +189,19 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
     this.setState({ infoModal: !this.state.infoModal, infoData: {} });
   }
 
-  
+  isForCommission(reservation: object){
+    const isAfterDeadline = (deadline: string, date: string): boolean => {
+      const deadlineDate = new Date(deadline);
+      const dateDate = new Date(date);
+      if (deadlineDate.getTime() < dateDate.getTime()) {
+        return true;
+      }
+      return false;
+    }
+    const isCommission = reservation['partnerObj'] ? reservation['partnerObj'][0]['promotion'] ? isAfterDeadline(reservation['partnerObj'][0]['promotion']['initialDeadline'], reservation['toDate']) ? true : false : true : true;
+
+    return isCommission;
+  }
 
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
     if (!this.props.adminFinSearchStart && prevProps.adminFinSearchStart && this.props.adminFinSearchSuccess && !prevProps.adminFinSearchSuccess && !this.props.adminFinSearchError) {
@@ -320,9 +332,9 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 								          <td>{reservation['partnerObj'][0]['name']}</td>
 								          <td>{currencyFormat(reservation['price'] - reservation['trilinoPrice'])}</td>
 								          <td>{currencyFormat(reservation['deposit'])}</td>
-								          <td>{currencyFormat(reservation['termPrice'] * 0.1) }</td>
+								          <td>{this.isForCommission(reservation) === true ? currencyFormat(reservation['termPrice'] * 0.1) : currencyFormat(0) }</td>
 								          <td>{currencyFormat(reservation['deposit'] * 0.025) }</td>
-								          <td>{currencyFormat(reservation['deposit'] - (reservation['termPrice'] * 0.1) - (reservation['deposit'] * 0.025)) }</td>
+								          <td>{this.isForCommission(reservation) === true ? currencyFormat(reservation['deposit'] - (reservation['termPrice'] * 0.1) - (reservation['deposit'] * 0.025)) : currencyFormat(reservation['deposit'] - (reservation['deposit'] * 0.025)) }</td>
 								        </tr>
 					      			)
 					      		})

@@ -5,7 +5,7 @@ import { isDevEnvLogged } from '../lib/helpers/specificAdminFunctions';
 import { withRedux } from '../lib/redux';
 import { getLanguage } from '../lib/language';
 import Head from '../components/head';
-import { setUpLinkBasic, defineLanguage } from '../lib/helpers/generalFunctions';
+import { setUpLinkBasic, defineLanguage, isLinkSecure, isWWWLink, setProperLink } from '../lib/helpers/generalFunctions';
 import { isPartnerLogged } from '../lib/helpers/specificPartnerFunctions';
 import { isUserLogged } from '../lib/helpers/specificUserFunctions';
 import PasswordView from '../views/PasswordView';
@@ -44,20 +44,28 @@ const Password : NextPage<Props> = ({ userAgent, verifyObject, error }) => {
 Password.getInitialProps = async (ctx: any) => {
   const { req } = ctx;
 	const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
-  const link = setUpLinkBasic(req.url);
-	const protocol = req.headers.host === 'localhost:3000' ? 'http://' : 'https://';
+  const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 	let verifyObject = { };
 	let error = true;
 
   try{
+    if (!isLinkSecure(link)) {
+      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+      ctx.res.end();
+    }
+
+    if (!isWWWLink(link)) {
+      const properLink = setProperLink(link);
+      ctx.res.writeHead(302, {Location: properLink});
+      ctx.res.end();
+    }
+
     const devLog = await isDevEnvLogged(ctx);
 
     if (!devLog) {
       ctx.res.writeHead(302, {Location: `/login?page=dev&stage=login`});
       ctx.res.end();
     }
-
-    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
 
     const partnerLog = await isPartnerLogged(ctx);
     if (partnerLog) {
@@ -78,7 +86,7 @@ Password.getInitialProps = async (ctx: any) => {
 
 	if (link['queryObject']['type'] === 'partner') {
     try{
-      const res = await fetch(`${protocol}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
+      const res = await fetch(`${link['protocol']}${req.headers.host}/api/partners/get/?partner=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         error = false;
@@ -91,7 +99,7 @@ Password.getInitialProps = async (ctx: any) => {
 
   if (link['queryObject']['type'] === 'user') {
     try{
-      const res = await fetch(`${protocol}${req.headers.host}/api/users/get/?user=${link['queryObject']['page']}&encoded=true&type=verification`);
+      const res = await fetch(`${link['protocol']}${req.headers.host}/api/users/get/?user=${link['queryObject']['page']}&encoded=true&type=verification`);
       verifyObject = await res.json();
       if (verifyObject['success']) {
         error = false;

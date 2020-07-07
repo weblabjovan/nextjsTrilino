@@ -244,11 +244,11 @@ const serbian: LanguageInterface = {
 	confirmPartnerRegContent: 'Pre nego što počnete da koristite sve fukncionalnosti koje su dostupne Trilino partnerima potrebno je da verifikujete vašu registraciju. Naime, na kontakt email koji ste prethodno upisali poslali smo vam verifikacioni link. Klikom na taj link izvršićete verifikaciju vaše registracije i dobićete pristup vašem partnerskom profilu.',
 
 	passwordTitle: 'Nova lozinka',
-	passwordExplanation: 'Ukucajte novu lozinku u drugo polje a u trećem polju je ponovite. Vaša lozinka može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Sadržaj drugog i trećeg polja mora biti isti.',
+	passwordExplanation: 'Ukucajte novu lozinku u drugo polje a u trećem polju je ponovite. Vaša lozinka može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slovo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Sadržaj drugog i trećeg polja mora biti isti.',
 	passwordUpdateTitle: 'Vaša nova lozinka je uspešno sačuvana',
 	passwordUpdateExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na link u nastavku i prijavite se koristeći novu lozinku.',
 	passwordUpdateUserExplanation: 'Ukoliko želite da pristupite vašem profilu kliknite na korisničku ikonicu u gornjem desnom uglu.',
-	passwordAlertPass: 'Lozinka je obavezno polje i može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slobo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Molimo vas unesite validnu lozinku.',
+	passwordAlertPass: 'Lozinka je obavezno polje i može imati najmanje 8 a najviše 16 znakova, može sadržati najmanje 1 malo slovo, 1 veliko slovo, 1 broj, i 1 specijalni znak. Molimo vas unesite validnu lozinku.',
 	passwordAlertCode: 'Sigurnosni kod je obavezno polje. Molimo vas unesite sigurnosni kod koji vam je poslat na email.',
 	passwordAlertConfirm: 'Potvrda lozinke je obavezno polje i njen sadržaj mora biti isti kao i sadržaj polja lozinka. Molimo vas potvrdite lozinku.',
 
@@ -1024,6 +1024,22 @@ const serbian: LanguageInterface = {
 	ratingNoRateText: 'Koristite stari link koji vodi ka anketi koja je prethodno popunjena. Molimo vas da se vratite na vaš korisnički profil.',
 	ratingNoRateLink: 'Vaš korisnički profil',
 
+
+	messageScreenTitle: 'Poruke',
+	messageScreenExplainUser: 'Opcija poruka služi da biste sa prostorom gde se organizuje proslava (prostor) razmenili ključne informacije u vezi sa eventualnim promenama na aktivnoj rezervaciji. Kao i da bi o nekom potencijalnom dogovoru postojao pismeni trag u našem sistemu. Kada poruku pošaljete, prostor odmah dobija njenu sadržinu i potrudiće se da odgovori u najkraćem mogućem roku. Na raspolaganju vam je 10 poruka po aktivnoj rezervaciji, iskoristite ih samo za one najbitnije informacije. Ukoliko vam ovih 10 poruka nije dovoljno detaljnom pregledu vaše rezervacije možete videti kontakt telefon prostora.',
+	messageScreenExplainPartner: 'Opcija poruka služi da biste sa korisnikom razmenili ključne informacije u vezi sa eventualnim promenama na aktivnoj rezervaciji. Kao i da bi o nekom potencijalnom dogovoru postojao pismeni trag u našem sistemu. Kada poruku pošaljete, korisnik odmah dobija njenu sadržinu i potrudiće se da odgovori u najkraćem mogućem roku. Na raspolaganju vam je 10 poruka po aktivnoj rezervaciji, iskoristite ih samo za one najbitnije informacije.',
+	messageScreenShowExplain: 'Pogledajte objašnjenje',
+	messageScreenNoActiveRes: 'Trenutno ne postoji nijedna aktivna rezervacija',
+	messageScreenYourside: 'Vi',
+	messageScreenNoMessages: 'Trenutno ne postoji nijedna poruka u vezi sa ovom rezervacijom',
+	messageScreenChooseConvers: 'Izaberite rezervaciju za koju želite da vidite poruke',
+	messageScreenTextPlaceholder: 'Vaša poruke (maks. 256 karaktera)',
+	messageScreenAlertText: 'Iskoristili ste 10 poruka koje ste imali na raspolaganju. Na žalost ne možete da pošaljete više poruka.',
+	messageEmailTitle: 'Nova poruka za narudzbinu ',
+	messageEmailIntro: 'Dobili ste novu poruku. Ona se odnosi na rezervaciju koja će se održati ',
+	messageEmailIntro1: 'i gosta ',
+	messageEmailIntro2: 'Ukoliko želite da odgovorite to možete uraditi preko vašeg profila, klikom na dugme u nastavku.',
+	messageEmailButton: 'Vaš Profil',
 
 	//////////////////////API
 

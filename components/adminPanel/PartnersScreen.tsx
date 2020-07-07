@@ -83,7 +83,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'saveBankInfo', 'changePhotoRoom'];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'saveBankInfo', 'changePhotoRoom', 'activatePromotion'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -296,6 +296,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
       this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value: bank, field: 'bank'}, this.props.token);
   }
 
+  activatePromotion(promotion: object){
+    const link = setUpLinkBasic(window.location.href);
+    this.props.openLoader();
+    this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value: promotion, field: 'promotion'}, this.props.token);
+  }
+
   componentDidUpdate(prevProps: MyProps, prevState:  MyState){
     if (this.props.adminGetPartnersStart) {
       this.props.openLoader();
@@ -397,6 +403,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           closeInfo={ this.toggleInfo }
           saveMap={ this.saveMapInfo }
           saveBank={ this.saveBankInfo }
+          activatePromotion={ this.activatePromotion }
         />
     		<Row>
           <Col xs='12' className="middle">

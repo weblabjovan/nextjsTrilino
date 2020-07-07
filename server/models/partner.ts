@@ -25,11 +25,12 @@ const partnerSchema = new Schema({
 	forActivation: {type: Boolean, required: true, default: false},
 	active: {type: Boolean, required: true, default: false},
 	map: { type: Object},
-	activationDate: String,
+	activationDate: Date,
 	rating: { type: Object},
 	numberOfRating: Number,
 	ratingCalculation: Number,
 	bank: Object,
+	promotion: Object,
 }, {timestamps: true});
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);
