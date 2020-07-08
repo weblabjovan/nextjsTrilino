@@ -101,6 +101,11 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
         if (this.props.partner['bank']) {
           this.setState({bankInfo: this.props.partner['bank'] })
         }
+
+        if (this.props.partner['promotion']) {
+          const d = new Date(this.props.partner['promotion']['initialDeadline']);
+          this.setState({promoDeadline: d })
+        }
   		}
   	}
   }
@@ -247,7 +252,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                       </Col>
 
                       <Col xs="12" lg="2">
-                        <Button color="success" onClick={ () => this.props.activatePromotion({initialDeadline: this.state.promoDeadline}) }>Aktiviraj</Button>
+                        <Button color="success" disabled={ this.props.partner['promotion'] ? true : false } onClick={ () => this.props.activatePromotion({initialDeadline: this.state.promoDeadline}) }>Aktiviraj</Button>
                       </Col>
                     </Row>
                   </Col>
