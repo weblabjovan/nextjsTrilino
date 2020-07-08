@@ -78,6 +78,12 @@ export default class AdminNavigationBar extends React.Component <MyProps, MyStat
                     >Finansije</NavLink>
                   </NavItem>
                   <NavItem>
+                    <NavLink
+                      id="overview"
+                      onClick={this.props.changeScreen}
+                    >Pregled</NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink onClick={this.logout}>Odjava</NavLink>
                   </NavItem>
 
@@ -102,6 +108,11 @@ export default class AdminNavigationBar extends React.Component <MyProps, MyStat
                   id="financial"
                   onClick={this.props.changeScreen}
                   ><span className="icon financial"></span>FINANSIJE</li>
+                  <li 
+                  className={this.props.activeScreen === 'overview' ? 'active' : ''}
+                  id="overview"
+                  onClick={this.props.changeScreen}
+                  ><span className="icon overview"></span>PREGLED</li>
                 <li 
                   onClick={this.logout}
                 ><span className="icon logout"></span>ODJAVA</li>
