@@ -1,5 +1,5 @@
 import {
-  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerFieldActionTypes, adminFinancialSearchActionTypes, adminGenerateSerialsActionTypes
+  adminLoginActionTypes, adminGetPartnersActionTypes, activatePartnerActionTypes, preSignPhotoActionTypes, putPartnerProfilePhotoActionTypes, adminSavePartnerPhotoActionTypes, adminDeletePartnerPhotoActionTypes, adminBasicDevLoginActionTypes, adminSavePartnerFieldActionTypes, adminFinancialSearchActionTypes, adminGenerateSerialsActionTypes, adminOverviewSearchActionTypes
 } from '../actions/admin-actions';
 
 import { decoratePartners, changePartnerListItem } from '../lib/helpers/specificAdminFunctions';
@@ -45,6 +45,10 @@ interface initialState {
   adminFinSearchError: object | boolean;
   adminFinSearchSuccess: null | number;
 
+  adminOverviewSearchStart: boolean;
+  adminOverviewSearchError: object | boolean;
+  adminOverviewSearchSuccess: null | number;
+
   adminGenerateSerialStart: boolean;
   adminGenerateSerialError: object | boolean;
   adminGenerateSerialSuccess: null | number;
@@ -53,6 +57,7 @@ interface initialState {
   partnerPhoto: null | object;
   devAuth: string;
   finSearchResult: Array<object>;
+  overviewSearchResult: Array<object>;
 }
 
 const initialState: initialState  = {
@@ -96,6 +101,10 @@ const initialState: initialState  = {
   adminFinSearchError: false,
   adminFinSearchSuccess: null,
 
+  adminOverviewSearchStart: false,
+  adminOverviewSearchError: false,
+  adminOverviewSearchSuccess: null,
+
   adminGenerateSerialStart: false,
   adminGenerateSerialError: false,
   adminGenerateSerialSuccess: null,
@@ -104,6 +113,7 @@ const initialState: initialState  = {
   partnerPhoto: null,
   devAuth: '',
   finSearchResult: [],
+  overviewSearchResult: [],
 };
 
 const actionsMap = {
@@ -359,6 +369,29 @@ const actionsMap = {
       adminGenerateSerialSuccess: action.payload.code,
       finSearchResult: action.payload.reservations,
       adminGenerateSerialStart: false,
+    };
+  },
+
+  [adminOverviewSearchActionTypes.START]: (state) => {
+    return {
+      ...state,
+      adminOverviewSearchStart: true,
+      adminOverviewSearchSuccess: null,
+    };
+  },
+  [adminOverviewSearchActionTypes.ERROR]: (state, action) => {
+    return {
+      ...state,
+      adminOverviewSearchStart: false,
+      adminOverviewSearchError: action.payload.response.body,
+    };
+  },
+  [adminOverviewSearchActionTypes.SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      adminOverviewSearchSuccess: action.payload.code,
+      overviewSearchResult: action.payload.reservations,
+      adminOverviewSearchStart: false,
     };
   },
   

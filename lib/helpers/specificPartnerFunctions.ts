@@ -720,6 +720,16 @@ export const addDaysToDate = (date: string | null, days: number): Date => {
   return newDate;
 }
 
+export const subtractDaysToDate = (date: string | null, days: number): Date => {
+	let newDate = new Date();
+	if (date) {
+		newDate = new Date(date);
+	}
+  newDate.setDate(newDate.getDate() - days);
+
+  return newDate;
+}
+
 export const getFieldValueByRegId = (arr: Array<object>, regId: string, field: string): string => {
 	for (var i = 0; i < arr.length; ++i) {
 		if (arr[i]['regId'] === regId) {

@@ -48,7 +48,7 @@ interface MyState {
   infoData: object;
 };
 
-class PartnerScreen extends React.Component <MyProps, MyState>{
+class FinancialScreen extends React.Component <MyProps, MyState>{
 
 	constructor(props){
     super(props);
@@ -422,4 +422,4 @@ const matchDispatchToProps = (dispatch) => {
   dispatch);
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(PartnerScreen)
+export default connect(mapStateToProps, matchDispatchToProps)(FinancialScreen)

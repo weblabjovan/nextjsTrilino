@@ -1045,3 +1045,43 @@ export const renderDate = (date: any): string => {
   
   return `${base[0].split('-')[2]}.${base[0].split('-')[1]}.${base[0].split('-')[0]}`;
 }
+
+
+export const organizeOverviewSearchResults = (reservations: Array<object>, from: Date, to: Date): object => {
+  const result = {};
+  const isInRange = (date: Date, fromD: Date, toD: Date): boolean => {
+    if (date.getTime() > fromD.getTime() && date.getTime() < toD.getTime()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  for (var i = 0; i < reservations.length; i++) {
+    const heldType = isInRange(reservations[i]['toDate'], from, to);
+    const createType = isInRange(reservations[i]['createdAt'], from, to);
+    let createdPartner = 0;
+    let createdUser = 0;
+    let heldPartner = 0;
+    let heldUser = 0;
+
+   
+
+    if (result[reservations[i]['partner']]) {
+      createdPartner = createType ? reservations[i]['type'] === 'partner' ? result[reservations[i]['partner']]['createdPartner'] + 1 : result[reservations[i]['partner']]['createdPartner'] : result[reservations[i]['partner']]['createdPartner'];
+      createdUser = createType ?  reservations[i]['type'] === 'user' ? result[reservations[i]['partner']]['createdUser'] + 1 : result[reservations[i]['partner']]['createdUser'] : result[reservations[i]['partner']]['createdUser'];
+      heldPartner = heldType ? reservations[i]['type'] === 'partner' ? result[reservations[i]['partner']]['heldPartner'] + 1 : result[reservations[i]['partner']]['heldPartner'] : result[reservations[i]['partner']]['heldPartner'];
+      heldUser = heldType ?  reservations[i]['type'] === 'user' ? result[reservations[i]['partner']]['heldUser'] + 1 : result[reservations[i]['partner']]['heldUser'] : result[reservations[i]['partner']]['heldUser'];
+      
+    }else{
+      createdPartner = reservations[i]['type'] === 'partner' ? createType ? 1 : 0 : 0;
+      createdUser = reservations[i]['type'] === 'user' ?  createType ? 1 : 0 : 0;
+      heldPartner = reservations[i]['type'] === 'partner' ? heldType ? 1 : 0 : 0;
+      heldUser = reservations[i]['type'] === 'user' ? heldType ? 1 : 0 : 0;
+    }
+
+    result[reservations[i]['partner']] = { name: reservations[i]['partnerObj'][0]['name'], createdPartner, createdUser, heldPartner, heldUser, contact: `${reservations[i]['partnerObj'][0]['contactPerson']}: ${reservations[i]['partnerObj'][0]['contactPhone']}` };
+  }
+
+  return result;
+}

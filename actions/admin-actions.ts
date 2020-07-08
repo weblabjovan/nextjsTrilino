@@ -253,3 +253,27 @@ export function adminGenerateSerials(link: object, data: object, auth: string) {
     );
   };
 }
+
+
+export const adminOverviewSearchActionTypes = {
+  START: 'ADMIN_OVERVIEW_SEARCH_START',
+  ERROR: 'ADMIN_OVERVIEW_SEARCH_ERROR',
+  SUCCESS: 'ADMIN_OVERVIEW_SEARCH_SUCCESS',
+};
+
+export function adminOverviewSearch(link: object, data: object, auth: string) {
+  const endpoint = setApiBasLink(link, apiRoot.ADMIN_OVERVIEW_SEARCH);
+
+  return function (dispatch: dispatch) {
+    apiEndpoint(
+      dispatch,
+      endpoint,
+      data,
+      adminOverviewSearchActionTypes,
+      null,
+      false,
+      "POST",
+      auth
+    );
+  };
+}
