@@ -730,6 +730,10 @@
 			box-shadow: 2px 2px 6px 0px rgba(67,84,135,1);
 			transition: all 600ms;
 
+			&.nonMargin{
+				margin: 0px;
+			}
+
 			&:hover{
 				-webkit-box-shadow: 5px 5px 8px 0px rgba(67,84,135,1);
 				-moz-box-shadow: 5px 5px 8px 0px rgba(67,84,135,1);
