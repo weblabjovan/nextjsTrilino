@@ -51,16 +51,16 @@ PasswordChange.getInitialProps = async (ctx: any) => {
 	let error = false;
 
   try{
-    if (!isLinkSecure(link)) {
-      ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
-      ctx.res.end();
-    }
+    // if (!isLinkSecure(link)) {
+    //   ctx.res.writeHead(302, {Location: `https://${link['host']}${link['fullPath']}?${link['queryString']}`});
+    //   ctx.res.end();
+    // }
 
-    if (!isWWWLink(link)) {
-      const properLink = setProperLink(link);
-      ctx.res.writeHead(302, {Location: properLink});
-      ctx.res.end();
-    }
+    // if (!isWWWLink(link)) {
+    //   const properLink = setProperLink(link);
+    //   ctx.res.writeHead(302, {Location: properLink});
+    //   ctx.res.end();
+    // }
 
     const devLog = await isDevEnvLogged(ctx);
 

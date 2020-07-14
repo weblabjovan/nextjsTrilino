@@ -31,6 +31,8 @@ const partnerSchema = new Schema({
 	ratingCalculation: Number,
 	bank: Object,
 	promotion: Object,
+	isAllInclusive: Boolean,
+	inclusiveFix: Number
 }, {timestamps: true});
 
 export default mongoose.models.Partner || mongoose.model('Partner', partnerSchema);
