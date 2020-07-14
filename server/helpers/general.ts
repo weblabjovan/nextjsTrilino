@@ -447,7 +447,8 @@ export const preparePartnerForReservation = (partner: object, data: object): obj
   const day = dateHandler.getDayFromDate();
   let partnerCopy = JSON.parse(JSON.stringify(partner));
   partnerCopy['reservation'] = setUserReservation(partner['general']['rooms'], day, data['room'], data['from']);
-  if (partner['general']['selfFood'] === '1') {
+  const allInclusive = partner['allInclusive'] ? partner['allInclusive']['inclusive'] ? true : false : false;
+  if (partner['general']['selfFood'] === '1' && !allInclusive) {
     partnerCopy['catering'] = setPartnerCatering(partner['catering']);
   }
   

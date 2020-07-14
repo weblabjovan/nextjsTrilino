@@ -394,6 +394,7 @@ const english: LanguageInterface = {
 	partnerProfilePreviewIconDrink: 'Drinks',
 	partnerProfilePreviewIconCake: 'Cake',
 	partnerProfilePreviewIconSmoking: 'Zone',
+	partnerProfilePreviewIconAllinclusive: 'All inclusive',
 	partnerProfilePreviewSelfremarkFoodYes: 'This venue does allow celebration organizers to bring their own food.',
 	partnerProfilePreviewSelfremarkFoodNo: 'This venue does not allow celebration organizers to bring their own food. You have to use their food.',
 	partnerProfilePreviewSelfremarkDrinkYes: 'This venue does allow celebration organizers to bring their own drinks.',
@@ -611,6 +612,7 @@ const english: LanguageInterface = {
 	locationChooseTermAfter: 'Chosen term:',
 	locationButtonReserve: 'Reserve',
 	locationCancelationNone: 'Free cancelation of your celebration is not available at this location.',
+	locationAllInclusiveTrue: "This is all inclusive location, to reserve your term you need to choose one of offered caterings during the reservation process.",
 	locationCancelationFirst: 'You can cancel your reservation for free ',
 	locationCancelationSecond: ' days before the celebration start at latest.',
 	locationReviewTitle: 'Reviews',
@@ -669,6 +671,8 @@ const english: LanguageInterface = {
 	reservationCateringPayNotePartner: '*Catering is payed on day of celebration on the spot.',
 	reservationSectionInfoClickTrue: '*This step is mandatory, you have to fill out the fields before you click on the button bellow.',
 	reservationSectionInfoClickFalse: '*This step is can be skiped, you can click on the button bellow without filling/checking any of the inputs.',
+	reservationSectionInfoClickAllInclusive: '*This step is mandatory, you have to choose a catering deal before you click on the button bellow.',
+	reservationSectionAllInclusiveFor: 'For:',
 
 
 	loginTitle: 'This is Login Page',

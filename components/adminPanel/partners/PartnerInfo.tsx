@@ -16,7 +16,8 @@ interface MyProps {
   closeInfo(outcome: boolean, partner: string):void;
   saveMap(map: object):void;
   saveBank(bank: object):void;
-  activatePromotion(bank: object):void;
+  activatePromotion(promotion: object):void;
+  saveAllInclusive(allInclusive: object):void;
 };
 interface MyState {
   dictionary: object;
@@ -26,6 +27,9 @@ interface MyState {
   bankInfo: object;
   lockBankFields: boolean;
   promoDeadline: Date;
+  allInclusive: boolean;
+  inclusiveFix: number | null;
+  lockInclusive: boolean;
 };
 
 export default class AdminPartnerInfo extends React.Component <MyProps, MyState>{
@@ -35,7 +39,7 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['toggleLock', 'changeStateObj', 'closeInfo', 'formatDate'];
+    const bindingFunctions = ['toggleLock', 'changeStateObj', 'closeInfo', 'formatDate', 'changeStateField'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -53,12 +57,22 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
     bankInfo: {name: '', account: ''},
     lockBankFields: true,
     promoDeadline: new Date,
+    allInclusive: false,
+    inclusiveFix: null,
+    lockInclusive: false,
   };
 
   toggleLock(field: string){
      this.setState(prevState => ({
       ...prevState,
       [field]: !this.state[field] // No error here, but can't ensure that key is in StateKeys
+    }));
+  }
+
+  changeStateField(val: string, field: string){
+    this.setState(prevState => ({
+      ...prevState,
+      [field]: val // No error here, but can't ensure that key is in StateKeys
     }));
   }
 
@@ -105,6 +119,10 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
         if (this.props.partner['promotion']) {
           const d = new Date(this.props.partner['promotion']['initialDeadline']);
           this.setState({promoDeadline: d })
+        }
+
+        if (this.props.partner['allInclusive']) {
+          this.setState({allInclusive: this.props.partner['allInclusive']['inclusive'], inclusiveFix: this.props.partner['allInclusive']['fix'], lockInclusive: true })
         }
   		}
   	}
@@ -228,20 +246,20 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                       <Col xs="12" lg="4">
                         <label>All inclusive partner</label>
                         <CheckBox
-                          disabled={ false }
-                          checked={ this.state.lockBankFields }
-                          field={ 'bankLock' }
-                          onChange={ () => this.toggleLock('lockBankFields') }
+                          disabled={ this.state.lockInclusive }
+                          checked={ this.state.allInclusive }
+                          field={ 'allInclusive' }
+                          onChange={ () => this.toggleLock('allInclusive') }
                         />
                       </Col>
                       <Col xs="12" lg="4">
                         <label>Fixna provizija</label>
                         <PlainInput 
                           placeholder="provizija"
-                          onChange={(event) => this.changeStateObj('bankInfo', event.target.value, 'name')} 
-                          value={this.state.bankInfo['name']} 
+                          onChange={(event) => this.changeStateField(event.target.value, 'inclusiveFix')} 
+                          value={this.state.inclusiveFix} 
                           type="text"
-                          disabled={ this.state.lockBankFields }
+                          disabled={ this.state.lockInclusive }
                           className="logInput" />
                       </Col>
                       
@@ -249,14 +267,14 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                         <label>Zaključaj</label>
                         <CheckBox
                           disabled={ false }
-                          checked={ this.state.lockBankFields }
-                          field={ 'bankLock' }
-                          onChange={ () => this.toggleLock('lockBankFields') }
+                          checked={ this.state.lockInclusive }
+                          field={ 'inclusiveLock' }
+                          onChange={ () => this.toggleLock('lockInclusive') }
                         />
                       </Col>
 
                       <Col xs="12" lg="2">
-                        <Button color="success" onClick={ () => this.props.saveBank(this.state.bankInfo) }>Sačuvaj</Button>
+                        <Button color="success" onClick={ () => this.props.saveAllInclusive({ inclusive: this.state.allInclusive, fix: this.state.inclusiveFix }) }>Sačuvaj</Button>
                       </Col>
                     </Row>
                   </Col>
