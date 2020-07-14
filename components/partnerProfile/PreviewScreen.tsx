@@ -369,6 +369,23 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               null
             }
 
+            {
+              this.props.partnerObject['allInclusive'] 
+              ? 
+              this.props.partnerObject['allInclusive']['inclusive'] 
+              ?
+              (<Col xs="4" sm="2" lg="1" className="smallColPadd">
+                <div className="iconHolder">
+                  <span className="icon allInclusive" />
+                  <p>{this.state.dictionary['partnerProfilePreviewIconAllinclusive']}</p>
+                </div>
+              </Col>)
+              :
+              null
+              :
+              null
+            }
+
           </Row>
 
           <Row className="selfRemarks">
@@ -378,7 +395,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               this.props.partnerObject['general']['selfFood'] === '1'
               ?
               (<Col xs="12" sm="6">
-                <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes']}</h5>
+                <h5>{this.props.partnerObject['allInclusive'] ? this.props.partnerObject['allInclusive']['inclusive'] ? this.state.dictionary['partnerProfilePreviewSelfremarkFoodNo'] : this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes'] : this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes'] }</h5>
               </Col>)
               :
               (<Col xs="12" sm="6">
@@ -394,7 +411,7 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               this.props.partnerObject['general']['selfDrink'] === '1'
               ?
               (<Col xs="12" sm="6">
-                <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes']}</h5>
+                <h5>{this.props.partnerObject['allInclusive'] ? this.props.partnerObject['allInclusive']['inclusive'] ? this.state.dictionary['partnerProfilePreviewSelfremarkDrinkNo'] : this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes'] : this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes']}</h5>
               </Col>)
               :
               (<Col xs="12" sm="6">
@@ -416,6 +433,20 @@ class PreviewScreen extends React.Component <MyProps, MyState>{
               (<Col xs="12" sm="6">
                 <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkAnimatorNo']}</h5>
               </Col>)
+              :
+              null
+            }
+
+            {
+              this.props.partnerObject['allInclusive'] 
+              ? 
+              this.props.partnerObject['allInclusive']['inclusive'] 
+              ?
+              (<Col xs="12" sm="6">
+                <h5>{this.state.dictionary['locationAllInclusiveTrue']}</h5>
+              </Col>)
+              :
+              null
               :
               null
             }

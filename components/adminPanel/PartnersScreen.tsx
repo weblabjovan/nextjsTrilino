@@ -83,7 +83,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
 
     this.componentObjectBinding = this.componentObjectBinding.bind(this);
 
-    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'saveBankInfo', 'changePhotoRoom', 'activatePromotion'];
+    const bindingFunctions = ['handleInputChange', 'searchPartners', 'partnerActivation', 'toggleProfile', 'togglePhoto', 'onPhotoChange', 'handlePhotoSave', 'closeGallery', 'changeGalleryPhoto', 'openPhotoGallery', 'changeSelectionPhoto', 'changeMainPhoto', 'changeMainAction', 'changeSelectionAction', 'toggleConfirmationModal', 'activateDeletePhoto', 'openConfirmationModal', 'closePhotoAlert', 'toggleInfo', 'saveMapInfo', 'saveBankInfo', 'changePhotoRoom', 'activatePromotion', 'saveAllInclusive'];
     this.componentObjectBinding(bindingFunctions);
   }
 
@@ -296,6 +296,12 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
       this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value: bank, field: 'bank'}, this.props.token);
   }
 
+  saveAllInclusive(allInclusive: object){
+    const link = setUpLinkBasic(window.location.href);
+      this.props.openLoader();
+      this.props.adminSavePartnerField(link, {partnerId: this.state.activePartner['_id'], value: allInclusive, field: 'allInclusive'}, this.props.token);
+  }
+
   activatePromotion(promotion: object){
     const link = setUpLinkBasic(window.location.href);
     this.props.openLoader();
@@ -404,6 +410,7 @@ class PartnerScreen extends React.Component <MyProps, MyState>{
           saveMap={ this.saveMapInfo }
           saveBank={ this.saveBankInfo }
           activatePromotion={ this.activatePromotion }
+          saveAllInclusive={ this.saveAllInclusive }
         />
     		<Row>
           <Col xs='12' className="middle">

@@ -485,6 +485,23 @@ class LocationView extends React.Component <MyProps, MyState>{
 				              :
 				              null
 				            }
+
+                    {
+                      this.props.partner['allInclusive'] 
+                      ? 
+                      this.props.partner['allInclusive']['inclusive'] 
+                      ?
+                      (<Col xs="4" sm="2" lg="2" className="smallColPadd">
+                        <div className="iconHolder">
+                          <span className="icon allInclusive" />
+                          <p>{this.state.dictionary['partnerProfilePreviewIconAllinclusive']}</p>
+                        </div>
+                      </Col>)
+                      :
+                      null
+                      :
+                      null
+                    }
 				          </Row>
 			          </div>
 	          	</Col>
@@ -507,7 +524,17 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          				this.props.partner['general']['selfFood'] === '1'
 		          				?
 		          				<Col xs="12">
-		          					<span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfFoodTrue']}`}</h5>
+                        {
+                          this.props.partner['allInclusive']
+                          ?
+                          this.props.partner['allInclusive']['inclusive']
+                          ?
+                          (<span><span className="icon block" /> <h5>{`${this.state.dictionary['locationSelfFoodFalse']}`}</h5></span>)
+                          :
+                          (<span><span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfFoodTrue']}`}</h5></span>)
+                          :
+  		          					(<span><span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfFoodTrue']}`}</h5></span>)
+                        }
 		          				</Col>
 		          				:
 		          				<Col xs="12">
@@ -521,7 +548,17 @@ class LocationView extends React.Component <MyProps, MyState>{
 		          				this.props.partner['general']['selfDrink'] === '1'
 		          				?
 		          				<Col xs="12">
-		          					<span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfDrinkTrue']}`}</h5>
+                        {
+                          this.props.partner['allInclusive']
+                          ?
+                          this.props.partner['allInclusive']['inclusive']
+                          ?
+                          (<span><span className="icon block" /> <h5>{`${this.state.dictionary['locationSelfDrinkFalse']}`}</h5></span>)
+                          :
+                          (<span><span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfDrinkTrue']}`}</h5></span>)
+                          :
+                          (<span><span className="icon add" /> <h5>{`${this.state.dictionary['locationSelfDrinkTrue']}`}</h5></span>)
+                        }
 		          				</Col>
 		          				:
 		          				<Col xs="12">
@@ -552,6 +589,7 @@ class LocationView extends React.Component <MyProps, MyState>{
 	          <Row>
 	          	<Col xs="12" className="cancelation">
 	          		<h5><strong>*</strong>{this.props.partner['general']['cancelation'] === '0' ? `${this.state.dictionary['locationCancelationNone']}` : `${this.state.dictionary['locationCancelationFirst']} ${this.props.partner['general']['cancelation']} ${this.state.dictionary['locationCancelationSecond']}`}</h5>
+                <h5><strong>*</strong>{this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? this.state.dictionary['locationAllInclusiveTrue'] : null : null}</h5>
 	          	</Col>
 	          </Row>
 
