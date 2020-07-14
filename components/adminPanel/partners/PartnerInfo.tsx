@@ -218,6 +218,51 @@ export default class AdminPartnerInfo extends React.Component <MyProps, MyState>
                   </Col>
                 </Row>
 
+
+                <Row>
+                  <Col xs="12" lg="6">
+                    <Row className="section bank">
+                      <Col xs="12">
+                        <h4>All inclusive:</h4>
+                      </Col>
+                      <Col xs="12" lg="4">
+                        <label>All inclusive partner</label>
+                        <CheckBox
+                          disabled={ false }
+                          checked={ this.state.lockBankFields }
+                          field={ 'bankLock' }
+                          onChange={ () => this.toggleLock('lockBankFields') }
+                        />
+                      </Col>
+                      <Col xs="12" lg="4">
+                        <label>Fixna provizija</label>
+                        <PlainInput 
+                          placeholder="provizija"
+                          onChange={(event) => this.changeStateObj('bankInfo', event.target.value, 'name')} 
+                          value={this.state.bankInfo['name']} 
+                          type="text"
+                          disabled={ this.state.lockBankFields }
+                          className="logInput" />
+                      </Col>
+                      
+                      <Col xs="12" lg="2" style={{'textAlign': 'center'}}>
+                        <label>Zaključaj</label>
+                        <CheckBox
+                          disabled={ false }
+                          checked={ this.state.lockBankFields }
+                          field={ 'bankLock' }
+                          onChange={ () => this.toggleLock('lockBankFields') }
+                        />
+                      </Col>
+
+                      <Col xs="12" lg="2">
+                        <Button color="success" onClick={ () => this.props.saveBank(this.state.bankInfo) }>Sačuvaj</Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
+
                 <Row>
                   <Col xs="12" lg="6">
                     <Row className="section bank">
