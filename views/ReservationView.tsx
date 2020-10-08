@@ -75,6 +75,7 @@ interface MyState {
   paymentRouteStage: string;
   readyToPay: boolean;
   token: string;
+  inclusivePack: string;
 };
 
 class ReservationView extends React.Component <MyProps, MyState>{
@@ -113,6 +114,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
       paymentRouteStage: this.props.token ? 'payment' : 'login',
       readyToPay: false,
       token: '',
+      inclusivePack: '',
     };
   
 
@@ -136,41 +138,53 @@ class ReservationView extends React.Component <MyProps, MyState>{
     const errorsCopy = JSON.parse(JSON.stringify(this.state.errors));
     const objCopy = JSON.parse(JSON.stringify(this.props.reservationCatering));
     const timeDiff = isTrilinoCateringOrdered(objCopy) ? 24*8 : 24*2;
+    const allInclusive = this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? true : false : false;
     errorsCopy['fields'] = {};
     errorsCopy['flag'] = false;
-    
-    if (isDateDifferenceValid((timeDiff), this.props.router['query']['date'], this.props.router['query']['from'])) {
-      Object.keys(objCopy).map(key => {
-        if (!isEmpty(objCopy[key]['num'])) {
-          if (!isNumeric(objCopy[key]['num'])) {
-            errorsCopy['flag'] = true;
-            errorsCopy['fields']['catering'] = true;
-            errorsCopy['fields'][objCopy[key]['regId']] = true;
-          }else{
-            if (parseInt(objCopy[key]['num']) !== 0 && parseInt(objCopy[key]['num']) < objCopy[key]['min']) {
+
+
+    if (allInclusive) {
+      if (!Object.keys(objCopy).length) {
+        errorsCopy['flag'] = true;
+        errorsCopy['fields']['allInclusive'] = true;
+      }
+    }else{
+
+      if (isDateDifferenceValid((timeDiff), this.props.router['query']['date'], this.props.router['query']['from'])) {
+        Object.keys(objCopy).map(key => {
+          if (!isEmpty(objCopy[key]['num'])) {
+            if (!isNumeric(objCopy[key]['num'])) {
               errorsCopy['flag'] = true;
               errorsCopy['fields']['catering'] = true;
               errorsCopy['fields'][objCopy[key]['regId']] = true;
+            }else{
+              if (parseInt(objCopy[key]['num']) !== 0 && parseInt(objCopy[key]['num']) < objCopy[key]['min']) {
+                errorsCopy['flag'] = true;
+                errorsCopy['fields']['catering'] = true;
+                errorsCopy['fields'][objCopy[key]['regId']] = true;
+              }
             }
           }
-        }
-      });
-    }else{
-      Object.keys(objCopy).map(key => {
-        if (!isEmpty(objCopy[key]['num'])) {
-          if(isNumeric(objCopy[key]['num'])){
-            if (parseInt(objCopy[key]['num']) !== 0) {
+        });
+      }else{
+        Object.keys(objCopy).map(key => {
+          if (!isEmpty(objCopy[key]['num'])) {
+            if(isNumeric(objCopy[key]['num'])){
+              if (parseInt(objCopy[key]['num']) !== 0) {
+                errorsCopy['flag'] = true;
+                errorsCopy['fields']['cateringTime'] = true;
+              }
+            }else{
               errorsCopy['flag'] = true;
               errorsCopy['fields']['cateringTime'] = true;
             }
-          }else{
-            errorsCopy['flag'] = true;
-            errorsCopy['fields']['cateringTime'] = true;
+            
           }
-          
-        }
-      });
+        });
+      }
     }
+    
+    
 
     this.setState({ errors: errorsCopy}, () => {
       if (!this.state.errors['flag']) {
@@ -422,6 +436,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
 
   changeCateringNumber(num: string, regId: string, index: number){
     const cateringCopy = JSON.parse(JSON.stringify(this.props.reservationCatering));
+    const allInclusive = this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? true : false : false;
 
     if (num) {
       if (cateringCopy[regId]) {
@@ -442,9 +457,20 @@ class ReservationView extends React.Component <MyProps, MyState>{
       delete cateringCopy[regId];
     }
 
+    if (allInclusive) {
+      const inclusivePack = this.state.inclusivePack === regId ? '' : regId;
+      this.setState({ inclusivePack }, () => {
+        if (inclusivePack) {
+          this.props.changeSingleReservationField('reservationCatering', {[inclusivePack]: cateringCopy[inclusivePack]});
+        }else{
+          this.props.changeSingleReservationField('reservationCatering', {});
+        }
+        
+      })
+    }else{
+      this.props.changeSingleReservationField('reservationCatering', cateringCopy);
+    }
     
-
-    this.props.changeSingleReservationField('reservationCatering', cateringCopy);
   }
 
   checkingDecorationBox(item: any){
@@ -696,37 +722,45 @@ class ReservationView extends React.Component <MyProps, MyState>{
       errorCopy['fields']['readyToPay'] = true;
       this.setState({ paymentRouteErrors: errorCopy });
     }else{
-      const dateHandler = new DateHandler(this.props.router['query']['date'])
-      this.setState({ loader: true }, () => {
-        const userReservation = {
-          partner: this.props.partner['_id'],
-          type: 'user',
-          room: this.props.partner['reservation']['id'],
-          date: dateHandler.getDateForServer(),
-          from: this.props.router['query']['from'],
-          to: this.props.router['query']['to'],
-          double: this.props.reservationGeneral['double'],
-          guest: this.state.info['general']['name'],
-          food: prepareObjForUserReservation('catering', this.state.info['catering']),
-          animation: prepareObjForUserReservation('addition', this.state.info['addon']),
-          decoration: prepareObjForUserReservation('decoration', this.state.info['addon']),
-          comment: '',
-          edit: false,
-          id: '',
-          showPrice: true,
-          potentialDouble: this.props.partner['isReadyForDouble'] ? this.props.partner['isReadyForDouble'] : null,
-          termPrice: parseInt(this.state.price['term']),
-          animationPrice: parseInt(this.state.price['addition']),
-          decorationPrice: parseInt(this.state.price['decoration']),
-          foodPrice: parseInt(this.state.price['catering']),
-          price: parseInt(this.state.price['total']),
-          deposit: parseInt(this.state.price['deposit']),
-          trilinoPrice: parseInt(this.state.price['trilinoCatering']),
-        };
-        const tkn = this.props.token ? this.props.token : this.state.token;
-        const data = {language: this.props.lang, reservation: userReservation, type: 'user'};
-        this.props.saveUserReservation(this.props.link, data, tkn);
-      })
+      const errorsCopy = JSON.parse(JSON.stringify(this.state.errors));
+      if (Object.keys(errorsCopy['fields']).length) {
+        errorsCopy['flag'] = true;
+        this.setState({errors: errorsCopy}, () => {
+          this.scrollToAlert();
+        })
+      }else{
+        const dateHandler = new DateHandler(this.props.router['query']['date'])
+        this.setState({ loader: true }, () => {
+          const userReservation = {
+            partner: this.props.partner['_id'],
+            type: 'user',
+            room: this.props.partner['reservation']['id'],
+            date: dateHandler.getDateForServer(),
+            from: this.props.router['query']['from'],
+            to: this.props.router['query']['to'],
+            double: this.props.reservationGeneral['double'],
+            guest: this.state.info['general']['name'],
+            food: prepareObjForUserReservation('catering', this.state.info['catering']),
+            animation: prepareObjForUserReservation('addition', this.state.info['addon']),
+            decoration: prepareObjForUserReservation('decoration', this.state.info['addon']),
+            comment: '',
+            edit: false,
+            id: '',
+            showPrice: true,
+            potentialDouble: this.props.partner['isReadyForDouble'] ? this.props.partner['isReadyForDouble'] : null,
+            termPrice: parseInt(this.state.price['term']),
+            animationPrice: parseInt(this.state.price['addition']),
+            decorationPrice: parseInt(this.state.price['decoration']),
+            foodPrice: parseInt(this.state.price['catering']),
+            price: parseInt(this.state.price['total']),
+            deposit: parseInt(this.state.price['deposit']),
+            trilinoPrice: parseInt(this.state.price['trilinoCatering']),
+          };
+          const tkn = this.props.token ? this.props.token : this.state.token;
+          const data = {language: this.props.lang, reservation: userReservation, type: 'user'};
+          this.props.saveUserReservation(this.props.link, data, tkn);
+        })
+      }
     }
   }
 
@@ -913,6 +947,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                     <p hidden={ !this.state.errors['fields']['generalKidsSize']} >{this.state.dictionary['reservationAlertGeneralKidsSize']}</p>
                     <p hidden={ !this.state.errors['fields']['catering']} >{this.state.dictionary['reservationAlertCatering']}</p>
                     <p hidden={ !this.state.errors['fields']['cateringTime']} >{this.state.dictionary['reservationAlertCateringTime']}</p>
+                    <p hidden={ !this.state.errors['fields']['allInclusive']} >Ovo ne može ovako ovo je all inclusive partner</p>
                   </Alert>
                   <ResStep
                     num={ 1 }
@@ -1005,12 +1040,32 @@ class ReservationView extends React.Component <MyProps, MyState>{
                        this.props.partner['catering']['deals'].map( (deal, index) => {
                          return(
                            <Row className="cateringDeal" key={`cateringKey_${index}`}>
-                            <Col xs="12" sm="5">
-                              <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
-                              <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
-                              <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
-                              <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
-                            </Col>
+                             {
+                               this.props.partner['allInclusive']
+                               ?
+                               this.props.partner['allInclusive']['inclusive']
+                               ?
+                               <Col xs="12" sm="5">
+                                <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
+                                <p>{`${this.state.dictionary['reservationSectionAllInclusiveFor']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
+                                <p>{`${this.state.dictionary['reservationFormAddonPrice']}: ${ currencyFormat(parseInt(deal['min']) * parseInt(deal['price']))}`}</p>
+                                <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
+                              </Col>
+                              :
+                              <Col xs="12" sm="5">
+                                <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
+                                <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
+                                <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
+                                <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
+                              </Col>
+                              :
+                              <Col xs="12" sm="5">
+                                <p className="strong">{deal['name'] ? deal['name'] : `${this.state.dictionary['reservationFormCateringPartnerDeal']} ${index + 1}`}</p>
+                                <p>{`${this.state.dictionary['reservationFormCateringPerPrice']} ${ currencyFormat(parseInt(deal['price']))}`}</p>
+                                <p>{`${this.state.dictionary['reservationFormCateringMin']} ${deal['min']} ${this.state.dictionary['reservationFormCateringPerson']}`}</p>
+                                <p className="payNote">{deal['regId'].length < 13 ? this.state.dictionary['reservationCateringPayNotePartner'] : this.state.dictionary['reservationCateringPayNoteTrilino'] }</p>
+                              </Col>
+                             }
 
                             <Col xs="12" sm="7">
                               <Row className="cateringMenu">
@@ -1030,16 +1085,37 @@ class ReservationView extends React.Component <MyProps, MyState>{
                             </Col>
 
                             <Col xs="12">
-                              <div className="mobileWrapper">
-                                <label className="strong">{this.state.dictionary['reservationFormCateringNumLabel']}</label>
-                                <PlainInput
-                                  placeholder={ this.state.dictionary['reservationFormBasicKidsNumPlaceholder'] }
-                                  onChange={(event) => this.changeCateringNumber(event.target.value, deal['regId'], index)} 
-                                  value={this.props.reservationCatering[deal['regId']] ? this.props.reservationCatering[deal['regId']]['num'] : ''}
-                                  className={`${this.state.errors['fields'][deal['regId']] || this.state.errors['fields']['cateringTime'] ? "borderWarrning" : ''} logInput`}
-                                  type="text"
-                                />
-                              </div>
+                              {
+                                this.props.partner['allInclusive']
+                                ?
+                                this.props.partner['allInclusive']['inclusive']
+                                ?
+                                <div className="mobileWrapper">
+                                  <button className={`${this.state.inclusivePack === deal['regId'] ? 'active' : null} inclusiveButton`} onClick={(event) => this.changeCateringNumber(deal['min'], deal['regId'], index)} >Izaberite</button>
+                                </div>
+                                :
+                                <div className="mobileWrapper">
+                                  <label className="strong">{this.state.dictionary['reservationFormCateringNumLabel']}</label>
+                                  <PlainInput
+                                    placeholder={ this.state.dictionary['reservationFormBasicKidsNumPlaceholder'] }
+                                    onChange={(event) => this.changeCateringNumber(event.target.value, deal['regId'], index)} 
+                                    value={this.props.reservationCatering[deal['regId']] ? this.props.reservationCatering[deal['regId']]['num'] : ''}
+                                    className={`${this.state.errors['fields'][deal['regId']] || this.state.errors['fields']['cateringTime'] ? "borderWarrning" : ''} logInput`}
+                                    type="text"
+                                  />
+                                </div>
+                                :
+                                <div className="mobileWrapper">
+                                  <label className="strong">{this.state.dictionary['reservationFormCateringNumLabel']}</label>
+                                  <PlainInput
+                                    placeholder={ this.state.dictionary['reservationFormBasicKidsNumPlaceholder'] }
+                                    onChange={(event) => this.changeCateringNumber(event.target.value, deal['regId'], index)} 
+                                    value={this.props.reservationCatering[deal['regId']] ? this.props.reservationCatering[deal['regId']]['num'] : ''}
+                                    className={`${this.state.errors['fields'][deal['regId']] || this.state.errors['fields']['cateringTime'] ? "borderWarrning" : ''} logInput`}
+                                    type="text"
+                                  />
+                                </div>
+                              }
                             </Col>
                           </Row>
                           )
@@ -1048,7 +1124,7 @@ class ReservationView extends React.Component <MyProps, MyState>{
                       <Row>
                         <Col xs="12">
                           <div className="middle">
-                            <p className="littleInfo">{this.state.dictionary['reservationSectionInfoClickFalse']}</p>
+                            <p className="littleInfo">{this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? this.state.dictionary['reservationSectionInfoClickAllInclusive'] : this.state.dictionary['reservationSectionInfoClickFalse'] : this.state.dictionary['reservationSectionInfoClickFalse']}</p>
                             <button className="next" onClick={() => this.validateSection(2)} >{this.state.dictionary['uniSave']}</button>
                           </div>
                         </Col>

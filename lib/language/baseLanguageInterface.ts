@@ -392,6 +392,7 @@ export default interface LanguageInterface {
 	partnerProfilePreviewIconDrink: string;
 	partnerProfilePreviewIconCake: string;
 	partnerProfilePreviewIconSmoking: string;
+	partnerProfilePreviewIconAllinclusive: string;
 	partnerProfilePreviewSelfremarkFoodYes: string;
 	partnerProfilePreviewSelfremarkFoodNo: string;
 	partnerProfilePreviewSelfremarkDrinkYes: string;
@@ -606,6 +607,7 @@ export default interface LanguageInterface {
 	locationChooseTermAfter: string;
 	locationButtonReserve: string;
 	locationCancelationNone: string;
+	locationAllInclusiveTrue: string;
 	locationCancelationFirst: string;
 	locationCancelationSecond: string;
 	locationReviewTitle: string;
@@ -664,6 +666,8 @@ export default interface LanguageInterface {
 	reservationCateringPayNotePartner: string;
 	reservationSectionInfoClickTrue: string;
 	reservationSectionInfoClickFalse: string;
+	reservationSectionInfoClickAllInclusive: string;
+	reservationSectionAllInclusiveFor: string;
 
 	
 	loginTitle: string;

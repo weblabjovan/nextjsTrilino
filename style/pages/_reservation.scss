@@ -485,6 +485,32 @@
 					@media only screen and (max-width: 577px) {
 						margin-top: 15px;
 					}
+
+					.inclusiveButton{
+						width: 120px;
+					    margin: auto;
+					    display: block;
+					    font-size: 14px;
+					    font-weight: 700;
+					    background: #325390;
+					    color: #fff;
+					    padding: 5px;
+					    text-transform: uppercase;
+					    border: solid 1px #325390;
+					    border-radius: 25px;
+					    margin-bottom: 15px;
+					    transition: all 600ms;
+
+					    &:hover{
+					    	background: #5b92f8;
+					    	border: solid 1px #5b92f8;
+					    }
+
+					    &.active{
+					    	background: #fff;
+					    	color: #325390;
+					    }
+					}
 				}
 			}
 

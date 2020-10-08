@@ -395,6 +395,7 @@ const serbian: LanguageInterface = {
 	partnerProfilePreviewIconDrink: 'Piće',
 	partnerProfilePreviewIconCake: 'Torta',
 	partnerProfilePreviewIconSmoking: 'Zona',
+	partnerProfilePreviewIconAllinclusive: 'Pun pansion',
 	partnerProfilePreviewSelfremarkFoodYes: 'Ovaj lokal dozvoljava organizatorima proslave da donose svoju hranu na proslavu.',
 	partnerProfilePreviewSelfremarkFoodNo: 'Ovaj lokal ne dozvoljava organizatorima proslave da donose svoju hranu na proslavu. Morate koristiti njihovu hranu.',
 	partnerProfilePreviewSelfremarkDrinkYes: 'Ovaj lokal dozvoljava organizatorima proslave da donose svoje piće na proslavu.',
@@ -609,6 +610,7 @@ const serbian: LanguageInterface = {
 	locationChooseTermAfter: 'Izabrali ste termin:',
 	locationButtonReserve: 'Rezervišite',
 	locationCancelationNone: 'Besplatno otkazivanje rezervacije nije dostupno na ovoj lokaciji.',
+	locationAllInclusiveTrue: "Ovo je lokal punog pansiona, da biste rezervisali termin potrebno je da pri rezervaciji odaberete jedan od njihovih ketering paketa",
 	locationCancelationFirst: 'Rezervacije proslava na ovoj lokaciji moguće je otkazati besplatno najkasnije ',
 	locationCancelationSecond: ' dana pre zakazanog početka.',
 	locationReviewTitle: 'Ocene',
@@ -667,6 +669,8 @@ const serbian: LanguageInterface = {
 	reservationCateringPayNotePartner: '*Ketering se plaća na licu mesta, na dan proslave.',
 	reservationSectionInfoClickTrue: '*Ovaj deo je obavezan, potrebno je popuniti polja pre klika na dugme ispod.',
 	reservationSectionInfoClickFalse: '*Ovaj deo nije obavezan, na dugme ispod možete kliknuti ukoliko ne označite ništa.',
+	reservationSectionInfoClickAllInclusive: '*Ovaj deo je obavezan, potrebno je izabrati ketering paket pre klika na dugme ispod.',
+	reservationSectionAllInclusiveFor: 'Za:',
 
 
 

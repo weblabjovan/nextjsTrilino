@@ -327,6 +327,23 @@ export default class AdminPartnerProfile extends React.Component <MyProps, MySta
                     null
                   }
 
+                  {
+                    this.props.partner['allInclusive'] 
+                    ? 
+                    this.props.partner['allInclusive']['inclusive'] 
+                    ?
+                    (<Col xs="4" sm="2" lg="1" className="smallColPadd">
+                      <div className="iconHolder">
+                        <span className="icon allInclusive" />
+                        <p>{this.state.dictionary['partnerProfilePreviewIconAllinclusive']}</p>
+                      </div>
+                    </Col>)
+                    :
+                    null
+                    :
+                    null
+                  }
+
                 </Row>
 
                 <Row className="selfRemarks">
@@ -336,7 +353,7 @@ export default class AdminPartnerProfile extends React.Component <MyProps, MySta
                     this.props.partner['general']['selfFood'] === '1'
                     ?
                     (<Col xs="12" sm="6">
-                      <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes']}</h5>
+                      <h5>{this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? this.state.dictionary['partnerProfilePreviewSelfremarkFoodNo'] : this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes'] : this.state.dictionary['partnerProfilePreviewSelfremarkFoodYes'] }</h5>
                     </Col>)
                     :
                     (<Col xs="12" sm="6">
@@ -352,7 +369,7 @@ export default class AdminPartnerProfile extends React.Component <MyProps, MySta
                     this.props.partner['general']['selfDrink'] === '1'
                     ?
                     (<Col xs="12" sm="6">
-                      <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes']}</h5>
+                      <h5>{this.props.partner['allInclusive'] ? this.props.partner['allInclusive']['inclusive'] ? this.state.dictionary['partnerProfilePreviewSelfremarkDrinkNo'] : this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes'] : this.state.dictionary['partnerProfilePreviewSelfremarkDrinkYes']}</h5>
                     </Col>)
                     :
                     (<Col xs="12" sm="6">
@@ -374,6 +391,20 @@ export default class AdminPartnerProfile extends React.Component <MyProps, MySta
                     (<Col xs="12" sm="6">
                       <h5>{this.state.dictionary['partnerProfilePreviewSelfremarkAnimatorNo']}</h5>
                     </Col>)
+                    :
+                    null
+                  }
+
+                  {
+                    this.props.partner['allInclusive'] 
+                    ? 
+                    this.props.partner['allInclusive']['inclusive'] 
+                    ?
+                    (<Col xs="12" sm="6">
+                      <h5>{this.state.dictionary['locationAllInclusiveTrue']}</h5>
+                    </Col>)
+                    :
+                    null
                     :
                     null
                   }

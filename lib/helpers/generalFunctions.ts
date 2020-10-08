@@ -24,19 +24,17 @@ export const isMobile = (userAgent: string): boolean => {
 }
 
 export const changeLanguagePath = (path: string, lang: string, newLang: string): string =>{
-	if (path === '/') {
-		return `/?language=${newLang}`;
+	if (path.indexOf('language=') === -1) {
+		return path === '/' || path === '/?' ? `/?language=${newLang}` : `${path}&language=${newLang}`;
 	}else{
 		let newPath = path;
 
-		if (path.indexOf('language=') !== -1) {
-			if (lang === 'sr') {
-				newPath = path.replace("language=sr", `language=${newLang}`);
-			}
-			if (lang === 'en') {
-				newPath = path.replace("language=en", `language=${newLang}`);
-			}
-		}
+    if (lang === 'sr') {
+      newPath = path.replace("language=sr", `language=${newLang}`);
+    }
+    if (lang === 'en') {
+      newPath = path.replace("language=en", `language=${newLang}`);
+    }
 
 		return newPath;
 	} 
