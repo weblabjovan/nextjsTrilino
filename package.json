@@ -1,7 +1,7 @@
 {
   "name": "create-next-example-app",
   "engines": {
-    "node": "10.x"
+    "node": "14.x"
   },
   "scripts": {
     "postinstall": "npm rebuild node-sass",
