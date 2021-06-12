@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { withRedux } from '../lib/redux';
 import Head from '../components/head';
 import HomeOrganization from '../organizations/HomeOrganization';
+import Keys from '../server/keys';
 // import MyCriptor from '../server/helpers/MyCriptor';
 interface Props {
   userAgent?: string;
@@ -43,6 +44,7 @@ Home.getInitialProps = async (ctx: any) => {
    let userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
    const link = setUpLinkBasic({path: ctx.asPath, host: req.headers.host});
    let userIsLogged = false;
+   console.log(Keys);
 
   if (userAgent === undefined) {
     userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36';
